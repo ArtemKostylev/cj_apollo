@@ -1,6 +1,7 @@
 //TODO implement menu component
 import React from "react";
 import "../styles/Menu.css";
+import { Link } from "react-router-dom";
 
 export default class Menu extends React.Component {
   constructor(props) {
@@ -19,7 +20,9 @@ export default class Menu extends React.Component {
             Закрыть
           </div>
         </div>
-        {this.state.itemNames.map((i) => MenuItem({ i: i }))}
+        {this.state.itemNames.map((item) =>
+          MenuItem({ ...item, close: this.props.close })
+        )}
       </div>
     );
   }
@@ -27,17 +30,27 @@ export default class Menu extends React.Component {
 
 const MenuItem = (props) => {
   return (
-    <div className="item_container" key={props.key}>
-      <p className="item_text">{props.i}</p>
+    <div className="item_container" key={props.name}>
+      <Link
+        to={props.path}
+        style={{ textDecoration: "none", color: "inherit" }}
+        onClick={props.close}
+      >
+        <p className="item_text">{props.title}</p>
+      </Link>
     </div>
   );
 };
 
 const itemNamesFull = [
-  "Раздел 1",
-  "Раздел 2",
-  "Раздел 3",
-  "Раздел 4",
-  "Раздел 5",
-  "Раздел 6",
+  {
+    name: "Journal",
+    path: "/journal",
+    title: "Классный журнал",
+  },
+  {
+    name: "Compensation",
+    path: "/compensation",
+    title: "Возмещение",
+  },
 ];

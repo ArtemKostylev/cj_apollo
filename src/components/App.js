@@ -3,7 +3,7 @@ import "../styles/App.css";
 import Menu from "./Menu";
 import Header from "./Header";
 import Table from "./Table";
-import Other from "./Other";
+import Compensation from "./Compensation";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -27,6 +27,7 @@ export default class App extends React.Component {
         <Menu visible={this.state.menuVisible} close={this.menuClick}></Menu>
         <div
           className={`Cover ${this.state.menuVisible ? "menuVisible" : ""}`}
+          onClick={this.menuClick}
         />
         <div
           className={`Content ${this.state.menuVisible ? "menuVisible" : ""}`}
@@ -34,7 +35,7 @@ export default class App extends React.Component {
           <Header menuClick={this.menuClick}></Header>
           <Switch>
             <Route path="/jounal" component={Table} />
-            <Route path="/other" component={Other} />
+            <Route path="/compensation" component={Compensation} />
             <Redirect from="/" to="/jounal" />
           </Switch>
         </div>
