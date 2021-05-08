@@ -1,0 +1,47 @@
+.group_wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group_list {
+  align-items: center;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+}
+
+.group_list .group_header {
+  width: 30vw;
+  text-align: center;
+  display: block;
+  align-items: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item p{
+  margin-right: 2rem;
+  font-size: large;
+  width: 15vw;
+  text-align: left;
+}
+
+.item label {
+  margin-right: 1rem;
+}
+
+.item input {
+  outline: none;
+  border: none;
+  border-bottom: 2px solid black;
+  text-align: center;
+  width: 2ch;
+}

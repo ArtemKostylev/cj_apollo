@@ -3,14 +3,43 @@
   width: 100vw;
   align-items: center;
   line-height: 78px;
-  display: block;
+  flex-direction: row;
+  height: 78px;
   border-bottom: 1px solid #e6eaea;
+  font-family: "IBM Plex Serif", serif;
 }
 
-.menuButton {
+.menu_button {
   width: 10vw;
   height: 78px;
   min-width: 115px;
   cursor: pointer;
   border-right: 1px solid #e6eaea;
+}
+
+.header_title {
+  width: 80vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.header_title h1 {
+  display: inline-block;
+  margin: 0;
+  font-weight: normal;
+}
+
+.header_title p {
+  display: inline-block;
+  margin: 0;
+  font-size: 0.7rem;
+  margin-left: 3px;
+}
+
+.exit_button {
+  border-left: 1px solid #e6eaea;
+  width: 10vw;
+  cursor: pointer;
 }

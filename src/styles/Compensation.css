@@ -1,0 +1,29 @@
+.compensation_table {
+  border-top: none;
+  border: 1px solid #d6d8d8;
+  border-collapse: collapse;
+  min-height: 100px;
+  width: 100%;
+  overflow: hidden;
+  line-height: 50px;
+  empty-cells: show;
+}
+
+.compensation_table th {
+  line-height: 50px;
+  empty-cells: show;
+  border-top: none;
+  border: 1px solid #d6d8d8;
+  border-collapse: collapse;
+  background-color: #eff0f0;
+}
+
+.compensation_table .name_cell {
+  cursor: default;
+}
+
+.compensation_table .name_column {
+  max-width: 400px;
+  min-width: 250px;
+  border: none;
+}

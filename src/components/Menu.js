@@ -2,30 +2,37 @@
 import React from "react";
 import "../styles/Menu.css";
 import { Link } from "react-router-dom";
+import { useAuth } from "../scripts/use-auth";
 
-export default class Menu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      itemNames: itemNamesFull,
-    };
+export default function Menu(props) {
+  const auth = useAuth();
+
+  const subRoute = {
+    name: "Subgroups",
+    path: "/subgroups",
+    title: "Группы",
+  };
+
+  var itemNames = auth.user.roleId === 1 ? adminItems : userItems;
+
+  if (
+    auth.user.courses.find((course) => course.group) &&
+    itemNames.length < 5
+  ) {
+    itemNames.push(subRoute);
   }
 
-  render() {
-    return (
-      <div className={`main ${this.props.visible ? "opened" : ""}`}>
-        <div className="item_container top">
-          <div className="item_text top">МЕНЮ</div>
-          <div className="close_button" onClick={this.props.close}>
-            Закрыть
-          </div>
+  return (
+    <div className={`main ${props.visible ? "opened" : ""}`}>
+      <div className="item_container top">
+        <div className="item_text top">МЕНЮ</div>
+        <div className="close_button" onClick={props.close}>
+          Закрыть
         </div>
-        {this.state.itemNames.map((item) =>
-          MenuItem({ ...item, close: this.props.close })
-        )}
       </div>
-    );
-  }
+      {itemNames.map((item) => MenuItem({ ...item, close: props.close }))}
+    </div>
+  );
 }
 
 const MenuItem = (props) => {
@@ -42,15 +49,38 @@ const MenuItem = (props) => {
   );
 };
 
-const itemNamesFull = [
+const userItems = [
   {
     name: "Journal",
     path: "/journal",
     title: "Классный журнал",
   },
   {
+    name: "Consult",
+    path: "/consult",
+    title: "Консультации",
+  },
+  {
     name: "Compensation",
     path: "/compensation",
     title: "Возмещение",
+  },
+  {
+    name: "Notes",
+    path: "/notes",
+    title: "Заметки",
+  },
+];
+
+const adminItems = [
+  {
+    name: "Journals",
+    path: "/journals",
+    title: "Журналы",
+  },
+  {
+    name: "DataPage",
+    path: "/data",
+    title: "Изменение данных",
   },
 ];

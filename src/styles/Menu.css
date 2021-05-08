@@ -1,12 +1,13 @@
 .main {
   width: 20vw;
-  height: 100vh;
+  height: 100%;
   background-color: #f4f7f6;
   box-shadow: 4px 5px 5px lightgray;
   line-height: 78px;
   transform: translateX(-20vw);
   transition: transform 0.5s;
   margin: 0px;
+  font-family: "IBM Plex Serif", serif;
 }
 
 .main.opened {

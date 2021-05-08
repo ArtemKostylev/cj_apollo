@@ -4,6 +4,8 @@ import "./styles/index.css";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { ProvideAuth } from "./scripts/use-auth.js";
+import { setContext } from "@apollo/client/link/context";
 
 import {
   ApolloProvider,
@@ -11,21 +13,36 @@ import {
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { USER } from "./scripts/constants";
+
+const authLink = setContext((_, { headers }) => {
+  const user = JSON.parse(localStorage.getItem(USER));
+  const token = user ? user.token : false;
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
+  uri: "http://46.183.163.216/:4000",
 });
 
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
-
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ApolloProvider client={client}>
+      <ProvideAuth>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ProvideAuth>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
