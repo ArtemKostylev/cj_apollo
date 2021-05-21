@@ -13,6 +13,7 @@
   width: 100%;
   flex-direction: column;
   direction: ltr;
+  background-color: white;
 }
 
 .change_item .text_panel {
@@ -22,7 +23,6 @@
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  background-color: #f6f6f6;
   font-size: 1.3rem;
   width: 100%;
   z-index: 1;
@@ -63,6 +63,11 @@
   visibility: visible;
 }
 
+.change_item:hover {
+  background-color: #f6f6f6;
+}
+
+
 .change_item .expanded {
 
 }
@@ -83,27 +88,14 @@
   direction: ltr;
   display: none;
   position: fixed;
-  overflow-y: hidden;
+  overflow-y: scroll;
   height: inherit;
   width: 33%;
-  background-color: gainsboro;
 }
 
 .changes_block.left{
   left: 0;
   width: calc(100% / 3);
-}
-
-.changes_block.left:hover {
-  overflow-y: scroll;
-}
-
-.changes_block.center:hover {
-  overflow-y: scroll;
-}
-
-.changes_block.right:hover {
-  overflow-y: scroll;
 }
 
 .changes_block.right{
@@ -114,6 +106,17 @@
   left: calc(100% / 3);
   width: calc(100% / 3);
 }
+
+.changes_block .block_header {
+  position: sticky;
+  height: 40px;
+  width: 100%;
+  top: 0;
+  line-height: 40px;
+  z-index: 99;
+  background-color: violet;
+}
+
 
 .changes_block.visible {
   display: inline-block;

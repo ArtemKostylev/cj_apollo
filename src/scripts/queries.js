@@ -175,3 +175,38 @@ export const FETCH_COURSES_QUERY = gql`
     }
   }
 `;
+
+export const FETCH_FULL_INFO = gql`
+  query fetchFullInfo {
+    fetchFullInfo {
+      teachers {
+        id
+        name
+        surname
+      }
+      courses {
+        id
+        name
+        group
+      }
+      students {
+        id
+        name
+        surname
+        class
+        program
+      }
+      relations {
+        teacher {
+          id
+        }
+        student {
+          id
+        }
+        course {
+          id
+        }
+      }
+    }
+  }
+`
