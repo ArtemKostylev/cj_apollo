@@ -8,23 +8,30 @@ import moment from "moment";
 import "moment/locale/ru";
 import { EditableCell } from "./EditableCell";
 import { TableControls } from "./TableControls";
-import { useMutation, useQuery, NetworkStatus, useApolloClient } from "@apollo/client";
+import {
+  useMutation,
+  useQuery,
+  NetworkStatus,
+  useApolloClient,
+} from "@apollo/client";
 import { FETCH_JOURNAL_QUERY } from "../scripts/queries";
 import { useAuth } from "../scripts/use-auth";
+import { UPDATE_JOURNAL_MUTATION } from "../scripts/mutations";
 import {
-  UPDATE_JOURNAL_MUTATION,
-} from "../scripts/mutations";
-import { PROGRAMS, GROUP_PERIODS, QUATER_END, QUATERS_RU } from "../scripts/constants";
+  PROGRAMS,
+  GROUP_PERIODS,
+  QUATER_END,
+  QUATERS_RU,
+} from "../scripts/constants";
 import { EditableDateCell } from "./EditableDateCell";
 import { useHistory } from "react-router-dom";
-import { Prompt } from 'react-router';
+import { Prompt } from "react-router";
 
 export default function Journal(props) {
   moment.locale("ru");
 
   let auth = useAuth();
   let history = useHistory();
-  let client = useApolloClient();
 
   const [month, setMonth] = React.useState(moment().month());
   const [course, setCourse] = useState(0);
@@ -37,16 +44,20 @@ export default function Journal(props) {
   const listener = (event) => {
     if (changed) {
       event.preventDefault();
-      let confirm = window.confirm("Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.")
+      let confirm = window.confirm(
+        "Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны."
+      );
       if (!confirm) event.stopImmediatePropagation();
     }
-  }
+  };
 
   useEffect(() => {
-    props.menuRef?.current.addEventListener('click', listener)
+    props.menuRef?.current.addEventListener("click", listener);
 
-    return () => { props.menuRef?.current?.removeEventListener('click', listener) }
-  })
+    return () => {
+      props.menuRef?.current?.removeEventListener("click", listener);
+    };
+  });
 
   const startDate = moment().month(month);
 
@@ -61,7 +72,6 @@ export default function Journal(props) {
         alert("Пожалуйста, заполните дату");
         return false;
       }
-
     } else {
       date = parsedDates[column].format("YYYY-MM-DD");
     }
@@ -242,7 +252,6 @@ export default function Journal(props) {
   const [update] = useMutation(UPDATE_JOURNAL_MUTATION);
 
   const save = async () => {
-
     await update({
       variables: {
         data: {
@@ -250,8 +259,8 @@ export default function Journal(props) {
           updatePeriod: createQuaterData(),
           deleteCasual: createClearData(),
           deletePeriod: createQuaterClearData(),
-        }
-      }
+        },
+      },
     });
 
     refetch();
@@ -329,7 +338,6 @@ export default function Journal(props) {
     var result = [];
     const len = period.id === 0 ? 20 : 24;
     if (dates[0].length === 0) {
-
       var counter = 1;
       for (var i = 0; i < len; i++) {
         var border = month_id === 1 ? 4 : 5;
@@ -423,8 +431,9 @@ export default function Journal(props) {
                 <tr className="group_row">
                   <th colSpan={period.id === 0 ? "23" : "28"}>
                     <div>
-                      <p>{`Класс:  ${groupedData[g_index].class}${PROGRAMS[`${groupedData[g_index].program}`]
-                        }`}</p>
+                      <p>{`Класс:  ${groupedData[g_index].class}${
+                        PROGRAMS[`${groupedData[g_index].program}`]
+                      }`}</p>
                       <p>{`Группа: ${groupedData[g_index].subgroup}`}</p>
                     </div>
                   </th>
@@ -525,10 +534,10 @@ export default function Journal(props) {
       const mark = item.quaterMark.find(
         (mark) => mark.period === QUATER_END[month]
       );
-      const year = month === 4 ? item.quaterMark.find(
-        (mark) => mark.period === 'year'
-      ) : null;
-
+      const year =
+        month === 4
+          ? item.quaterMark.find((mark) => mark.period === "year")
+          : null;
 
       return (
         <>
@@ -538,12 +547,16 @@ export default function Journal(props) {
             column={mark ? mark.period : QUATER_END[month]}
             updateMyData={updateQuaterData}
           />
-          {year !== null ? <EditableCell
-            value={year ? year.mark : ""}
-            row={item.student.id}
-            column={year ? year.period : "year"}
-            updateMyData={updateQuaterData}
-          /> : ""}
+          {year !== null ? (
+            <EditableCell
+              value={year ? year.mark : ""}
+              row={item.student.id}
+              column={year ? year.period : "year"}
+              updateMyData={updateQuaterData}
+            />
+          ) : (
+            ""
+          )}
         </>
       );
     }
@@ -595,8 +608,9 @@ export default function Journal(props) {
           {studentData.map((item) => (
             <tr>
               <td className="name_cell">{`${item.student.surname} ${item.student.name}`}</td>
-              <td className="name_cell">{`${item.student.class}${PROGRAMS[`${item.student.program}`]
-                }`}</td>
+              <td className="name_cell">{`${item.student.class}${
+                PROGRAMS[`${item.student.program}`]
+              }`}</td>
               {parsedDates.map((date, index) => (
                 <EditableCell
                   value={findMark(date, item.journalEntry)}

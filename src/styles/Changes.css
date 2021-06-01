@@ -3,7 +3,7 @@
   align-items: center;
 }
 
-.list_wrapper ul{
+.list_wrapper ul {
   margin: 0;
   padding: 0;
 }
@@ -26,7 +26,6 @@
   font-size: 1.3rem;
   width: 100%;
   z-index: 1;
-  
 }
 
 .change_item .text_panel.visible {
@@ -41,15 +40,18 @@
 
 .change_item .edit_panel.visible {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-.change_item .arrow_icon_container.visible{
+.change_item .arrow_icon_container.visible {
   visibility: visible;
 }
 
 .change_item .edit_panel input {
   margin: 1rem 1rem;
+
 }
 
 .change_item .arrow_icon_container {
@@ -61,27 +63,19 @@
 
 .change_item:hover .arrow_icon_container {
   visibility: visible;
+  flex: 1;
 }
 
 .change_item:hover {
   background-color: #f6f6f6;
 }
 
-
-.change_item .expanded {
-
+.change_item .text_active {
+  color: red;
 }
 
-.student {
-
-}
-
-.course {
-
-}
-
-.teacher {
-
+.change_item .text {
+  color: black;
 }
 
 .changes_block {
@@ -93,30 +87,34 @@
   width: 33%;
 }
 
-.changes_block.left{
+.changes_block.left {
   left: 0;
   width: calc(100% / 3);
 }
 
-.changes_block.right{
+.changes_block.right {
   left: calc(100% / 3 * 2);
   width: calc(100% / 3);
 }
-.changes_block.center{
+.changes_block.center {
   left: calc(100% / 3);
   width: calc(100% / 3);
 }
 
 .changes_block .block_header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   position: sticky;
   height: 40px;
   width: 100%;
   top: 0;
   line-height: 40px;
   z-index: 99;
-  background-color: violet;
+  background-color: white;
+  border-bottom: 1px solid #f6f6f6;
 }
-
 
 .changes_block.visible {
   display: inline-block;

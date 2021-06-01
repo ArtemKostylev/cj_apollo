@@ -8,7 +8,7 @@ import Login from "./Login";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useAuth } from "../scripts/use-auth.js";
 import Journals from "./Journals";
-import DataPage from "./DataPage";
+import DataPageApollo from "./DataPageApollo";
 import { Notes } from "./Notes";
 import { Consult } from "./Consult";
 import { Subgroups } from "./Subgroups";
@@ -47,7 +47,7 @@ const Content = () => {
   const adminBoard = (
     <Switch>
       <Route path="/journals" component={Journals} />
-      <Route path="/data" component={DataPage} />
+      <Route path="/data" component={DataPageApollo} />
       <Redirect from="/" to="/journals" />
     </Switch>
   );
