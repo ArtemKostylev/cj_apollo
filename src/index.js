@@ -25,9 +25,11 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
+//const path = "http://46.183.163.216:4000";
+const path = "http://localhost:4000";
 
 const httpLink = createHttpLink({
-  uri: "http://46.183.163.216:4000",
+  uri: path,
 });
 
 const client = new ApolloClient({

@@ -45,6 +45,7 @@ export default function DataPageController(props) {
     teacher: el.teacher.id,
     course: el.course.id,
     student: el.student.id,
+    archived: el.archived,
   }));
 
   const update = async (type, values) => {

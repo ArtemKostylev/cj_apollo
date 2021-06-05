@@ -206,7 +206,8 @@ export const FETCH_FULL_INFO = gql`
         course {
           id
         }
+        archived
       }
     }
   }
-`
+`;

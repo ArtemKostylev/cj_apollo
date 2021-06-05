@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Children } from "react";
 import { PROGRAMS } from "../scripts/constants";
 import "../styles/Changes.css";
 import {
@@ -7,7 +7,9 @@ import {
   BsPlusSquare,
   BsPencilSquare,
   BsTrash,
+  BsCheck,
 } from "react-icons/bs";
+
 import ReactModal from "react-modal";
 
 export default function DataPageView({
@@ -30,6 +32,10 @@ export default function DataPageView({
   const [activeCourses, setActiveCourses] = useState(new Set());
   const [activeStudents, setActiveStudents] = useState(new Set());
 
+  const [modalType, setModalType] = useState("teacher");
+  const [courseMode, setCourseMode] = useState(false);
+  const [studentMode, setStudentMode] = useState(false);
+
   const labels = {
     name: "Имя",
     surname: "Фамилия",
@@ -40,8 +46,9 @@ export default function DataPageView({
   //creates a list of higlited items based on current values and relations, passed from apollo.
   useEffect(() => {
     let relationsByTeacher = relations.filter(
-      (element) => element.teacher === currentTeacher
+      (element) => element.teacher === currentTeacher && !element.archived
     );
+    console.log(relationsByTeacher);
     setActiveCourses(new Set(relationsByTeacher?.map((el) => el.course)));
     if (currentCourse) {
       let relationsByCourse = currentCourse
@@ -53,34 +60,12 @@ export default function DataPageView({
     }
   }, [relations, currentCourse, currentTeacher]);
 
-  const createCoditionalState = (type, data = {}) => {
-    switch (type) {
-      case "teacher":
-        return {
-          name: data.name || "",
-          surname: data.surname || "",
-        };
-      case "course":
-        return {
-          name: data.name || "",
-          group: data.group || false,
-        };
-      case "student":
-        return {
-          name: data.name || "",
-          surname: data.surname || "",
-          class: data.class || "", //TODO add programm dropdown later
-        };
-      default:
-        return {};
-    }
-  };
-
-  const ChangesItem = ({ type, mode, data, onTextClick }) => {
+  const ChangesItem = ({ type, mode, data, active }) => {
     const [formState, setFormState] = useState(
       createCoditionalState(type, data)
     );
     const [editVisible, setEditVisible] = useState(false);
+    const [checked, setChecked] = useState(active);
 
     const expand = () => {
       setEditVisible((val) => !val);
@@ -90,18 +75,34 @@ export default function DataPageView({
       <li className="change_item">
         <div className={`text_panel ${editVisible ? "visible" : ""}`}>
           <span
-            onClick={() => (onTextClick ? onTextClick(data.id) : "")}
+            onClick={() => {
+              if (type === "teacher") {
+                setCurrentTeacher(data.id);
+              } else if (type === "course") {
+                setCurrentCourse(data.id);
+              }
+            }}
             style={{ flex: 5, textAlign: "left" }}
           >
-            <p>{`${data.name} ${data.surname || ""}`}</p>{" "}
+            <p className={` ${active ? "text_active" : "text"}`}>{`${
+              data.name
+            } ${data.surname || ""}`}</p>{" "}
           </span>
 
-          <span
-            className={`arrow_icon_container ${editVisible ? "visible" : ""}`}
-            onClick={expand}
-          >
-            {editVisible ? <BsChevronUp /> : <BsChevronDown />}
-          </span>
+          {mode ? (
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => setChecked((prev) => !prev)}
+            />
+          ) : (
+            <span
+              className={`arrow_icon_container ${editVisible ? "visible" : ""}`}
+              onClick={expand}
+            >
+              {editVisible ? <BsChevronUp /> : <BsChevronDown />}
+            </span>
+          )}
         </div>
         <div className={`edit_panel ${editVisible ? "visible" : ""}`}>
           {Object.keys(formState).map((key) => (
@@ -127,6 +128,29 @@ export default function DataPageView({
         </div>
       </li>
     );
+  };
+
+  const createCoditionalState = (type, data = {}) => {
+    switch (type) {
+      case "teacher":
+        return {
+          name: data.name || "",
+          surname: data.surname || "",
+        };
+      case "course":
+        return {
+          name: data.name || "",
+          group: data.group || false,
+        };
+      case "student":
+        return {
+          name: data.name || "",
+          surname: data.surname || "",
+          class: data.class || "", //TODO add programm dropdown later
+        };
+      default:
+        return {};
+    }
   };
 
   const ModalContent = ({ type, close }) => {
@@ -254,78 +278,108 @@ export default function DataPageView({
     );
   };
 
-  const ChangesBlock = React.memo(function ChangesBlock({
-    headerText,
-    position,
-    input,
-    type,
-    onTextClick,
-  }) {
-    const [showModal, setShowModal] = useState(false);
-    const [mode, setMode] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-    const addNew = () => {
-      setShowModal(true);
-    };
+  const updateCourseRelations = () => {};
 
-    return (
-      <div className={`changes_block ${position}  visible`}>
-        <div className="block_header">
-          <h2 style={{ flex: "15" }}>{headerText}</h2>
-          <BsPlusSquare
-            style={{ "margin-right": "10px", flex: "1" }}
-            onClick={addNew}
-          />
-          <BsPencilSquare
-            style={{ "margin-right": "10px", flex: "1" }}
-            onClick={() => setMode((prev) => !prev)}
-          />
-        </div>
-        <div className="list_wrapper">
-          <ul>
-            {input.map((item) => (
-              <ChangesItem
-                type={type}
-                mode={mode}
-                data={item}
-                onTextClick={onTextClick}
-              />
-            ))}
-          </ul>
-        </div>
-        <ReactModal isOpen={showModal}>
-          <ModalContent type={type} close={setShowModal} />
-        </ReactModal>
-      </div>
-    );
-  });
-
-  const teacherClick = React.useCallback(
-    (value) => setCurrentTeacher(value),
-    []
-  );
+  const coursesRef = React.useRef();
 
   return (
     <div className="page">
-      <ChangesBlock
-        position="left"
-        headerText="Учителя"
-        type="teacher"
-        input={teachers}
-        onTextClick={teacherClick}
-      />
-      <ChangesBlock
-        position="center"
-        headerText="Предметы"
-        type="course"
-        input={courses}
-      />
-      <ChangesBlock
-        position="right"
-        headerText="Ученики"
-        type="student"
-        input={students}
-      />
+      <div className={`changes_block left visible`}>
+        <div className="block_header">
+          <h2 style={{ flex: "15" }}>Учителя</h2>
+          <BsPlusSquare
+            style={{ "margin-right": "10px", flex: "1" }}
+            onClick={() => {
+              setShowModal(true);
+              setModalType("teacher");
+            }}
+          />
+        </div>
+        <ul>
+          {teachers.map((item) => (
+            <ChangesItem type="teacher" data={item} />
+          ))}
+        </ul>
+      </div>
+      <div className={`changes_block center visible`}>
+        <div className="block_header">
+          <h2 style={{ flex: "15" }}>Учителя</h2>
+          <BsPlusSquare
+            style={{ "margin-right": "10px", flex: "1" }}
+            onClick={() => {
+              setShowModal(true);
+              setModalType("course");
+            }}
+          />
+          {currentTeacher ? (
+            courseMode ? (
+              <BsCheck onClick={() => setCourseMode(false)} />
+            ) : (
+              <BsPencilSquare
+                style={{ "margin-right": "10px", flex: "1" }}
+                onClick={() => setCourseMode(true)}
+              />
+            )
+          ) : (
+            ""
+          )}
+        </div>
+        <ul ref={coursesRef}>
+          {courses
+            .filter((item) => activeCourses.has(item.id))
+            .map((item) => (
+              <ChangesItem
+                type="course"
+                data={item}
+                active={true}
+                mode={courseMode}
+              />
+            ))}
+          {courses
+            .filter((item) => !activeCourses.has(item.id))
+            .map((item) => (
+              <ChangesItem type="course" data={item} mode={courseMode} />
+            ))}
+        </ul>
+      </div>
+      <div className={`changes_block right visible`}>
+        <div className="block_header">
+          <h2 style={{ flex: "15" }}>Учителя</h2>
+          <BsPlusSquare
+            style={{ "margin-right": "10px", flex: "1" }}
+            onClick={() => {
+              setShowModal(true);
+              setModalType("student");
+            }}
+          />
+          <BsPencilSquare
+            style={{ "margin-right": "10px", flex: "1" }}
+            onClick={() => setStudentMode((prev) => !prev)}
+          />
+        </div>
+        <ul>
+          {students
+            .filter((item) => activeStudents.has(item.id))
+            .map((item) => (
+              <ChangesItem
+                type="student"
+                data={item}
+                active={true}
+                mode={studentMode}
+              />
+            ))}
+          {students
+            .filter((item) => !activeStudents.has(item.id))
+            .map((item) => (
+              <ChangesItem type="student" data={item} mode={studentMode} />
+            ))}
+        </ul>
+        <ReactModal isOpen={showModal}>
+          <ModalContent type={modalType} close={setShowModal} />
+        </ReactModal>
+      </div>
     </div>
   );
 }

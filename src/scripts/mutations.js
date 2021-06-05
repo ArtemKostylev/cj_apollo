@@ -149,3 +149,12 @@ export const DELETE_STUDENT_MUTATION = gql`
     deleteStudent(id: $id)
   }
 `;
+
+export const UPDATE_COURSE_REALRIONS_MUTATION = gql`
+  mutation updateCourseRelationsMutation(
+    $teacher: Int
+    $courses: [CourseRelationInput]
+  ) {
+    updateCourseRelations(teacher: $teacher, courses: $courses)
+  }
+`;
