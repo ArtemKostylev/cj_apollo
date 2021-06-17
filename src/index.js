@@ -37,15 +37,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <ProvideAuth>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ProvideAuth>
-    </ApolloProvider>
-  </React.StrictMode>,
+  <ApolloProvider client={client}>
+    <ProvideAuth>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ProvideAuth>
+  </ApolloProvider>,
   document.getElementById("root")
 );
 

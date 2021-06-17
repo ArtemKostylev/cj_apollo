@@ -150,11 +150,25 @@ export const DELETE_STUDENT_MUTATION = gql`
   }
 `;
 
-export const UPDATE_COURSE_REALRIONS_MUTATION = gql`
+export const UPDATE_COURSE_RELATIONS_MUTATION = gql`
   mutation updateCourseRelationsMutation(
     $teacher: Int
     $courses: [CourseRelationInput]
   ) {
     updateCourseRelations(teacher: $teacher, courses: $courses)
+  }
+`;
+
+export const UPDATE_STUDENT_RELATIONS_MUTATION = gql`
+  mutation updateStudentRelationsMutation(
+    $teacher: Int
+    $course: Int
+    $students: [StudentRelationInput]
+  ) {
+    updateCourseRelations(
+      teacher: $teacher
+      course: $course
+      students: $students
+    )
   }
 `;

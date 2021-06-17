@@ -9,7 +9,9 @@ import {
   DELETE_STUDENT_MUTATION,
   DELETE_TEACHER_MUTATION,
   UPDATE_COURSE_MUTATION,
+  UPDATE_COURSE_RELATIONS_MUTATION,
   UPDATE_STUDENT_MUTATION,
+  UPDATE_STUDENT_RELATIONS_MUTATION,
   UPDATE_TEACHER_MUTATION,
 } from "../scripts/mutations";
 
@@ -34,6 +36,11 @@ export default function DataPageController(props) {
   const [deleteCourse] = useMutation(DELETE_COURSE_MUTATION);
   const [deleteStudent] = useMutation(DELETE_STUDENT_MUTATION);
 
+  const [updateCourseRelations] = useMutation(UPDATE_COURSE_RELATIONS_MUTATION);
+  const [updateStudentRelations] = useMutation(
+    UPDATE_STUDENT_RELATIONS_MUTATION
+  );
+
   const spinner = <div>Загрузка</div>;
 
   if (loading) return spinner;
@@ -44,7 +51,7 @@ export default function DataPageController(props) {
   relations = relations.map((el) => ({
     teacher: el.teacher.id,
     course: el.course.id,
-    student: el.student.id,
+    student: el.student?.id || 0,
     archived: el.archived,
   }));
 
@@ -124,6 +131,26 @@ export default function DataPageController(props) {
     refetch();
   };
 
+  const updateCourseRelationsMutation = async (teacher, courses) => {
+    await updateCourseRelations({
+      variables: {
+        teacher: teacher,
+        courses: courses,
+      },
+    });
+    refetch();
+  };
+
+  const updateStudentRelationsMutation = async (teacher, course, students) => {
+    await updateStudentRelations({
+      variables: {
+        teacher: teacher,
+        course: course,
+        students: students,
+      },
+    });
+  };
+
   return (
     <DataPageView
       teachers={teachers}
@@ -136,6 +163,8 @@ export default function DataPageController(props) {
       createTeacher={createTeacher}
       createCourse={createCourse}
       createStudent={createStudent}
+      updateCourseRelations={updateCourseRelationsMutation}
+      updateStudentRelations={updateStudentRelationsMutation}
     />
   );
 }

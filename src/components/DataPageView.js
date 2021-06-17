@@ -23,6 +23,8 @@ export default function DataPageView({
   createStudent,
   clear,
   refetch,
+  updateCourseRelations,
+  updateStudentRelations,
 }) {
   //this state controls which item is active now
   const [currentTeacher, setCurrentTeacher] = useState(0);
@@ -35,6 +37,9 @@ export default function DataPageView({
   const [modalType, setModalType] = useState("teacher");
   const [courseMode, setCourseMode] = useState(false);
   const [studentMode, setStudentMode] = useState(false);
+
+  const [checkedCourses, setCheckedCourses] = useState(0);
+  const [checkedStudents, setCheckedStudents] = useState(0);
 
   const labels = {
     name: "Имя",
@@ -71,6 +76,23 @@ export default function DataPageView({
       setEditVisible((val) => !val);
     };
 
+    const onChecked = () => {
+      if (type === "course") {
+        setCheckedCourses((prev) => {
+          let id = prev.findIndex((el) => el === data.id);
+          id > -1 ? prev.splice(id, 1) : prev.push(data.id);
+          return prev;
+        });
+      } else if (type === "student") {
+        setCheckedStudents((prev) => {
+          let id = prev.findIndex((el) => el === data.id);
+          id ? prev.splice(id, 1) : prev.push(data.id);
+          return prev;
+        });
+      }
+      setChecked((prev) => !prev);
+    };
+
     return (
       <li className="change_item">
         <div className={`text_panel ${editVisible ? "visible" : ""}`}>
@@ -93,7 +115,7 @@ export default function DataPageView({
             <input
               type="checkbox"
               checked={checked}
-              onChange={() => setChecked((prev) => !prev)}
+              onChange={() => onChecked()}
             />
           ) : (
             <span
@@ -278,11 +300,26 @@ export default function DataPageView({
     );
   };
 
+  const computeUpdateList = (oldList, newList) => {
+    console.log(oldList, newList);
+    let added = newList.map((course) => {
+      if (!oldList.find((el) => el === course)) {
+        return { id: course, archived: false };
+      }
+    });
+
+    let removed = oldList.map((course) => {
+      if (!newList.find((el) => el === course)) {
+        return { id: course, archived: true };
+      }
+    });
+
+    let result = [...added, ...removed];
+
+    return result.filter((el) => el !== undefined);
+  };
+
   const [showModal, setShowModal] = useState(false);
-
-  const updateCourseRelations = () => {};
-
-  const coursesRef = React.useRef();
 
   return (
     <div className="page">
@@ -315,18 +352,37 @@ export default function DataPageView({
           />
           {currentTeacher ? (
             courseMode ? (
-              <BsCheck onClick={() => setCourseMode(false)} />
+              <BsCheck
+                onClick={() => {
+                  setCourseMode(false);
+                  if (
+                    JSON.stringify(checkedCourses) !==
+                    JSON.stringify(activeCourses)
+                  ) {
+                    updateCourseRelations(
+                      currentTeacher,
+                      computeUpdateList(
+                        Array.from(activeCourses),
+                        checkedCourses
+                      )
+                    );
+                  }
+                }}
+              />
             ) : (
               <BsPencilSquare
                 style={{ "margin-right": "10px", flex: "1" }}
-                onClick={() => setCourseMode(true)}
+                onClick={() => {
+                  setCheckedCourses(Array.from(activeCourses));
+                  setCourseMode(true);
+                }}
               />
             )
           ) : (
             ""
           )}
         </div>
-        <ul ref={coursesRef}>
+        <ul>
           {courses
             .filter((item) => activeCourses.has(item.id))
             .map((item) => (
@@ -354,10 +410,38 @@ export default function DataPageView({
               setModalType("student");
             }}
           />
-          <BsPencilSquare
-            style={{ "margin-right": "10px", flex: "1" }}
-            onClick={() => setStudentMode((prev) => !prev)}
-          />
+          {currentCourse ? (
+            studentMode ? (
+              <BsCheck
+                onClick={() => {
+                  setStudentMode(false);
+                  if (
+                    JSON.stringify(checkedStudents) !==
+                    JSON.stringify(activeStudents)
+                  ) {
+                    updateStudentRelations(
+                      currentTeacher,
+                      currentCourse,
+                      computeUpdateList(
+                        Array.from(activeStudents),
+                        checkedStudents
+                      )
+                    );
+                  }
+                }}
+              />
+            ) : (
+              <BsPencilSquare
+                style={{ "margin-right": "10px", flex: "1" }}
+                onClick={() => {
+                  setCheckedStudents(Array.from(activeStudents));
+                  setStudentMode(true);
+                }}
+              />
+            )
+          ) : (
+            ""
+          )}
         </div>
         <ul>
           {students
