@@ -165,10 +165,16 @@ export const UPDATE_STUDENT_RELATIONS_MUTATION = gql`
     $course: Int
     $students: [StudentRelationInput]
   ) {
-    updateCourseRelations(
+    updateStudentRelations(
       teacher: $teacher
       course: $course
       students: $students
     )
+  }
+`;
+
+export const UPLOAD_FROM_FILE = gql`
+  mutation uploadFromFileMutation($type: String, $file: Upload!) {
+    uploadFromFile(type: $type, file: $file)
   }
 `;

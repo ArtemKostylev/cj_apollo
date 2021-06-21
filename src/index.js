@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ProvideAuth } from "./scripts/use-auth.js";
 import { setContext } from "@apollo/client/link/context";
+import { createUploadLink } from "apollo-upload-client";
 
 import {
   ApolloProvider,
@@ -25,10 +26,10 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-//const path = "http://46.183.163.216:4000";
-const path = "http://localhost:4000";
+const path = "http://178.21.8.167:4000";
+//const path = "http://localhost:4000";
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: path,
 });
 

@@ -10,7 +10,13 @@ import {
   BsCheck,
 } from "react-icons/bs";
 
+import { IoMdListBox } from "react-icons/io";
+
 import ReactModal from "react-modal";
+import { useMutation } from "@apollo/client";
+import { UPLOAD_FROM_FILE } from "../scripts/mutations";
+
+import { useFilePicker } from "use-file-picker";
 
 export default function DataPageView({
   teachers,
@@ -38,8 +44,11 @@ export default function DataPageView({
   const [courseMode, setCourseMode] = useState(false);
   const [studentMode, setStudentMode] = useState(false);
 
-  const [checkedCourses, setCheckedCourses] = useState(0);
-  const [checkedStudents, setCheckedStudents] = useState(0);
+  const [checkedCourses, setCheckedCourses] = useState([]);
+  const [checkedStudents, setCheckedStudents] = useState([]);
+
+  const [filePickerShown, setFilePickerShown] = useState(false);
+  const [fileType, setFileType] = useState();
 
   const labels = {
     name: "Имя",
@@ -53,7 +62,6 @@ export default function DataPageView({
     let relationsByTeacher = relations.filter(
       (element) => element.teacher === currentTeacher && !element.archived
     );
-    console.log(relationsByTeacher);
     setActiveCourses(new Set(relationsByTeacher?.map((el) => el.course)));
     if (currentCourse) {
       let relationsByCourse = currentCourse
@@ -61,7 +69,9 @@ export default function DataPageView({
             (element) => element.course === currentCourse
           )
         : undefined;
-      setActiveStudents(new Set(relationsByCourse?.map((el) => el.student)));
+      if (relationsByCourse[0].student !== undefined) {
+        setActiveStudents(new Set(relationsByCourse?.map((el) => el.student)));
+      }
     }
   }, [relations, currentCourse, currentTeacher]);
 
@@ -86,7 +96,7 @@ export default function DataPageView({
       } else if (type === "student") {
         setCheckedStudents((prev) => {
           let id = prev.findIndex((el) => el === data.id);
-          id ? prev.splice(id, 1) : prev.push(data.id);
+          id > -1 ? prev.splice(id, 1) : prev.push(data.id);
           return prev;
         });
       }
@@ -100,6 +110,8 @@ export default function DataPageView({
             onClick={() => {
               if (type === "teacher") {
                 setCurrentTeacher(data.id);
+                setCurrentCourse(0);
+                setActiveStudents(new Set());
               } else if (type === "course") {
                 setCurrentCourse(data.id);
               }
@@ -301,7 +313,8 @@ export default function DataPageView({
   };
 
   const computeUpdateList = (oldList, newList) => {
-    console.log(oldList, newList);
+    console.log("oldList", oldList);
+    console.log("newList", newList);
     let added = newList.map((course) => {
       if (!oldList.find((el) => el === course)) {
         return { id: course, archived: false };
@@ -314,6 +327,9 @@ export default function DataPageView({
       }
     });
 
+    console.log("added", added);
+    console.log("removed", removed);
+
     let result = [...added, ...removed];
 
     return result.filter((el) => el !== undefined);
@@ -321,11 +337,40 @@ export default function DataPageView({
 
   const [showModal, setShowModal] = useState(false);
 
+  const FilePicker = ({ type, close, title }) => {
+    const [send] = useMutation(UPLOAD_FROM_FILE);
+
+    const onChange = ({
+      target: {
+        validity,
+        files: [file],
+      },
+    }) => {
+      console.log(file);
+      send({ variables: { type, file } });
+    };
+
+    return (
+      <div>
+        <h1>{`Загрузка списка ${title} из файла`}</h1>
+        <input type="file" required onChange={onChange} />
+        <button onClick={() => close()}>Закрыть</button>
+      </div>
+    );
+  };
+
   return (
     <div className="page">
       <div className={`changes_block left visible`}>
         <div className="block_header">
           <h2 style={{ flex: "15" }}>Учителя</h2>
+          <IoMdListBox
+            style={{ "margin-right": "10px", flex: "1" }}
+            onClick={() => {
+              setFilePickerShown(true);
+              setFileType("teacher");
+            }}
+          />
           <BsPlusSquare
             style={{ "margin-right": "10px", flex: "1" }}
             onClick={() => {
@@ -342,7 +387,7 @@ export default function DataPageView({
       </div>
       <div className={`changes_block center visible`}>
         <div className="block_header">
-          <h2 style={{ flex: "15" }}>Учителя</h2>
+          <h2 style={{ flex: "15" }}>Предметы</h2>
           <BsPlusSquare
             style={{ "margin-right": "10px", flex: "1" }}
             onClick={() => {
@@ -402,7 +447,7 @@ export default function DataPageView({
       </div>
       <div className={`changes_block right visible`}>
         <div className="block_header">
-          <h2 style={{ flex: "15" }}>Учителя</h2>
+          <h2 style={{ flex: "15" }}>Ученики</h2>
           <BsPlusSquare
             style={{ "margin-right": "10px", flex: "1" }}
             onClick={() => {
@@ -434,7 +479,7 @@ export default function DataPageView({
               <BsPencilSquare
                 style={{ "margin-right": "10px", flex: "1" }}
                 onClick={() => {
-                  setCheckedStudents(Array.from(activeStudents));
+                  setCheckedStudents(Array.from(activeStudents) || []);
                   setStudentMode(true);
                 }}
               />
@@ -462,6 +507,13 @@ export default function DataPageView({
         </ul>
         <ReactModal isOpen={showModal}>
           <ModalContent type={modalType} close={setShowModal} />
+        </ReactModal>
+        <ReactModal isOpen={filePickerShown}>
+          <FilePicker
+            type={fileType}
+            close={setFilePickerShown}
+            title="учителей"
+          />
         </ReactModal>
       </div>
     </div>

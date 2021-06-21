@@ -51,7 +51,7 @@ export default function DataPageController(props) {
   relations = relations.map((el) => ({
     teacher: el.teacher.id,
     course: el.course.id,
-    student: el.student?.id || 0,
+    student: el.student?.id || undefined,
     archived: el.archived,
   }));
 
