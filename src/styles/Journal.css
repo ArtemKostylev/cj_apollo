@@ -90,6 +90,12 @@ td p:hover {
 
 .dropdown.visible {
   display: block;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  border-radius: 10px;
+}
+
+.dropdown.inverted {
+  transform: translateY(-100%);
 }
 
 .dropdown ul {
@@ -101,21 +107,27 @@ td p:hover {
 }
 
 .dropdown li {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
   text-align: center;
   padding: 0;
 }
 
-.dropdown li:hover {
+.dropdown p:hover {
   background-color: #ddd;
 }
 
+.dropdown li p {
+  width: 50%;
+  margin: 0;
+}
 .controls_wrapper {
   width: 100vw;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   line-height: 40px;
 
   border-bottom: 1px solid #e6eaea;
@@ -152,7 +164,7 @@ td p:hover {
   padding: 2px;
   width: 10vw;
   margin: 0px;
-  text-align:center;
+  text-align: center;
 }
 
 .month_dropdown li {

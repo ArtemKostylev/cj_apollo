@@ -1,50 +1,36 @@
-import { useAuth } from "../scripts/use-auth";
-import { PERIODS, QUATERS_RU } from "../scripts/constants";
-
-import "../styles/Notes.css";
-import Controls from "./Controls";
+import { useAuth } from "../../../scripts/use-auth";
+import "../../../styles/Notes.css";
+import Controls from "../../../components/Controls";
 import { useEffect, useState } from "react";
-import { getQuater } from "../scripts/utils";
-import moment from "moment";
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
-import { FETCH_NOTES_QUERY } from "../scripts/queries";
-import { UPDATE_NOTE_MUTATION } from "../scripts/mutations";
+import { FETCH_NOTES_QUERY } from "../../../scripts/queries";
+import { UPDATE_NOTE_MUTATION } from "../../../scripts/mutations";
+import moment from "moment";
 
 export const Notes = (props) => {
   const auth = useAuth();
 
-
-
   const listener = (event) => {
     if (changed) {
       event.preventDefault();
-      let confirm = window.confirm("Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.")
+      let confirm = window.confirm(
+        "Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны."
+      );
       !confirm ? event.stopImmediatePropagation() : setChanged(false);
     }
-  }
+  };
 
   useEffect(() => {
-    props.menuRef?.current.addEventListener('click', listener)
+    props.menuRef?.current.addEventListener("click", listener);
 
-    return () => { props.menuRef?.current?.removeEventListener('click', listener) }
-  })
+    return () => {
+      props.menuRef?.current?.removeEventListener("click", listener);
+    };
+  });
 
-  const [year, setYear] = useState(2021);
-  const [period, setPeriod] = useState(getQuater(moment().month()));
+  const year = moment().month() > 7 ? moment().year() : moment().year() - 1;
   const [course, setCourse] = useState(0);
   const [changed, setChanged] = useState(false);
-
-  const getYear = (e) => {
-    setYear(e.target.value);
-    setValue("");
-    refetch();
-  };
-
-  const getPeriod = (e) => {
-    setPeriod(e.target.getAttribute("data-index"));
-    setValue("");
-    refetch();
-  };
 
   const getCourse = (e) => {
     setCourse(e.target.getAttribute("data-index"));
@@ -60,24 +46,26 @@ export const Notes = (props) => {
         data: {
           id: data.fetchNotes ? data.fetchNotes.id : 0,
           text: value,
-          period: PERIODS[period],
-          teacherId: props.id ? props.id : auth.user.teacher,
-          courseId: auth.user.courses[course].id,
+          teacherId: props.location.state?.teacher || auth.user.teacher,
+          courseId:
+            props.location.state?.courses[course].id ||
+            auth.user.courses[course].id,
           year: year,
         },
       },
     });
     refetch();
-    setChanged(false)
+    setChanged(false);
   };
 
   const { loading, data, error, refetch, networkStatus } = useQuery(
     FETCH_NOTES_QUERY,
     {
       variables: {
-        teacherId: props.id ? props.id : auth.user.teacher,
-        courseId: auth.user.courses[course].id,
-        period: PERIODS[period],
+        teacherId: props.location.state?.teacher || auth.user?.teacher,
+        courseId:
+          props.location.state?.courses[course].id ||
+          auth.user.courses[course].id,
         year: parseInt(year),
       },
       notifyOnNetworkStatusChange: true,
@@ -90,15 +78,24 @@ export const Notes = (props) => {
   const items = [
     {
       type: "dropdown",
-      data: auth.user.courses.map((course) => course.name),
+      data:
+        props.location.state?.courses.map((course) => course.name) ||
+        auth.user.courses.map((course) => course.name),
       label: "Предмет :",
-      text: auth.user.courses[course].name,
+      text:
+        props.location.state?.courses[course].name ||
+        auth.user.courses[course].name,
       onClick: getCourse,
     },
     {
       type: "button",
       text: "Сохранить",
       onClick: save,
+    },
+    {
+      type: "button",
+      text: "Отменить изменения",
+      onClick: () => refetch(),
     },
   ];
 
@@ -107,13 +104,20 @@ export const Notes = (props) => {
   if (loading) return spinner;
   if (networkStatus === NetworkStatus.refetch) return spinner;
 
-  if (value === "" && data.fetchNotes && data.fetchNotes.text !== "" && !changed)
+  if (error) throw new Error(503);
+
+  if (
+    value === "" &&
+    data.fetchNotes &&
+    data.fetchNotes.text !== "" &&
+    !changed
+  )
     setValue(data.fetchNotes.text);
 
   const change = (e) => {
     setChanged(true);
     setValue(e.target.value);
-  }
+  };
 
   return (
     <div className="notes_container">

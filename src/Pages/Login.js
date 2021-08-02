@@ -33,6 +33,7 @@ const Login = () => {
         alert("Неправильное имя пользователя");
       if (error.message === "Invalid password")
         alert("Неправильно введен пароль");
+      else alert("Сервер недоступен");
     },
   });
 

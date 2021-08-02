@@ -1,13 +1,13 @@
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
-import React, { useState } from "react";
-import { UPDATE_REPLACEMENTS_MUTATION } from "../scripts/mutations";
-import { FETCH_REPLACEMENTS_QUERY } from "../scripts/queries";
-import { useAuth } from "../scripts/use-auth";
-import { EditableCell } from "./EditableCell";
-import { EditableDateCell } from "./EditableDateCell";
-import { TableControls } from "./TableControls";
-import "../styles/Compensation.css";
+import React, { useState, Fragment } from "react";
+import { UPDATE_REPLACEMENTS_MUTATION } from "../../../scripts/mutations";
+import { FETCH_REPLACEMENTS_QUERY } from "../../../scripts/queries";
+import { useAuth } from "../../../scripts/use-auth";
+import EditableDateCell from "../../../components/EditableDateCell";
+import TableControls from "../../../components/TableControls";
+import { getYear } from "../../../scripts/utils";
+import "../../../styles/Compensation.css";
 
 export default function Compensation(props) {
   let auth = useAuth();
@@ -15,14 +15,19 @@ export default function Compensation(props) {
   const [course, setCourse] = useState(0);
   const [month, setMonth] = useState(moment().month());
 
+  const year = getYear(month);
+
   var { loading, data, error, refetch, networkStatus } = useQuery(
     FETCH_REPLACEMENTS_QUERY,
     {
       variables: {
-        teacherId: props.id ? props.id : auth.user.teacher,
-        courseId: auth.user.courses[course].id,
+        teacherId: props.location.state?.teacher || auth.user.teacher,
+        courseId:
+          props.location.state?.courses[course].id ||
+          auth.user.courses[course].id,
         date_gte: moment()
           .month(month)
+          .year(year)
           .clone()
           .startOf("month")
           .utc()
@@ -30,6 +35,7 @@ export default function Compensation(props) {
           .concat("Z"),
         date_lte: moment()
           .month(month)
+          .year(year)
           .clone()
           .endOf("month")
           .utc()
@@ -44,7 +50,6 @@ export default function Compensation(props) {
   const [update] = useMutation(UPDATE_REPLACEMENTS_MUTATION);
 
   const save = async () => {
-
     var result = [];
     studentData.forEach((student) => {
       student.journalEntry.forEach((mark) => {
@@ -72,6 +77,8 @@ export default function Compensation(props) {
 
   if (networkStatus === NetworkStatus.refetch) return spinner;
 
+  if (error) throw new Error(503);
+
   var studentData = [];
 
   data.fetchReplacements.forEach((student) => {
@@ -80,19 +87,17 @@ export default function Compensation(props) {
     }
   });
 
-  const updateDates = (value, id, entry, row) => {
-
+  const updateDates = ({ date, column, group, row }) => {
     const student = studentData.find((item, index) => item.student.id === row);
     const studentIndex = studentData.indexOf(student);
-    var mark = student.journalEntry.find((item) => item.id === entry);
+    var mark = student.journalEntry.find((item) => item.id === group);
     const markIndex = student.journalEntry.indexOf(mark);
 
-    let flag = value === "";
-    value = value?.toLocaleDateString("ru-RU").split(".");
+    date = date?.toLocaleDateString("ru-RU").split(".");
     const newRepl = {
-      id: !mark.replacement ? 0 : id,
-      date: `${value[2]}-${value[1]}-${value[0]}`.concat("T00:00:00.000Z"),
-      entryId: entry,
+      id: !mark?.replacement ? 0 : column,
+      date: `${date[2]}-${date[1]}-${date[0]}`.concat("T00:00:00.000Z"),
+      entryId: group,
     };
 
     studentData = [
@@ -118,9 +123,10 @@ export default function Compensation(props) {
         initialMonth={month}
         setMonth={setMonth}
         save={save}
-        courses={auth.user.courses}
+        courses={props.location.state?.courses || auth.user.courses}
         course={course}
         setCourse={setCourse}
+        refetch={() => refetch()}
       />
       <table className="compensation_table">
         <thead>
@@ -129,10 +135,10 @@ export default function Compensation(props) {
             {Array(10)
               .fill(1)
               .map((item, index) => (
-                <>
+                <Fragment key={index}>
                   <th>Пропуск</th>
                   <th>Выдано</th>
-                </>
+                </Fragment>
               ))}
           </tr>
         </thead>
@@ -144,19 +150,23 @@ export default function Compensation(props) {
                 {Array(10)
                   .fill(1)
                   .map((num, index) => {
-                    var lesson = null;
-                    var lesson_date = null;
-                    var repl = null;
+                    let lesson = null;
+                    let lesson_date = null;
+                    let repl = null;
                     if (item.journalEntry[index]) {
-                      lesson = item.journalEntry[index]
+                      lesson = item.journalEntry[index];
                       lesson_date = lesson.date.split("T")[0];
                       if (lesson.replacement) repl = lesson.replacement;
                     }
 
                     return (
-                      <>
+                      <Fragment key={index}>
                         <td className="name_cell">
-                          {lesson_date ? `${lesson_date.split("-")[2]}.${lesson_date.split("-")[1]}.${lesson_date.split("-")[0]}` : ""}
+                          {lesson_date
+                            ? `${lesson_date.split("-")[2]}.${
+                                lesson_date.split("-")[1]
+                              }.${lesson_date.split("-")[0]}`
+                            : ""}
                         </td>
                         <td>
                           {lesson ? (
@@ -166,7 +176,6 @@ export default function Compensation(props) {
                               }
                               column={repl ? repl.id : 0}
                               group={lesson.id}
-                              month={month + 1}
                               row={item.student.id}
                               updateDates={updateDates}
                             />
@@ -174,7 +183,7 @@ export default function Compensation(props) {
                             ""
                           )}
                         </td>
-                      </>
+                      </Fragment>
                     );
                   })}
               </tr>

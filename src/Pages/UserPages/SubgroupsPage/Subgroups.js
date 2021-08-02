@@ -1,12 +1,12 @@
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
-import { PROGRAMS } from "../scripts/constants";
-import { UPDATE_SUBGROUPS_MUTATION } from "../scripts/mutations";
-import { FETCH_SUBGROUPS_QUERY } from "../scripts/queries";
-import { useAuth } from "../scripts/use-auth";
-import "../styles/Subgroups.css";
+import { PROGRAMS } from "../../../scripts/constants";
+import { UPDATE_SUBGROUPS_MUTATION } from "../../../scripts/mutations";
+import { FETCH_SUBGROUPS_QUERY } from "../../../scripts/queries";
+import { useAuth } from "../../../scripts/use-auth";
+import "../../../styles/Subgroups.css";
 
-import Controls from "./Controls";
+import Controls from "../../../components/Controls";
 
 export const Subgroups = () => {
   const auth = useAuth();
@@ -64,12 +64,19 @@ export const Subgroups = () => {
       text: "Сохранить",
       onClick: save,
     },
+    {
+      type: "button",
+      text: "Отменить изменения",
+      onClick: () => refetch(),
+    },
   ];
 
   const spinner = <div>Загрузка</div>;
 
   if (loading) return spinner;
   if (networkStatus === NetworkStatus.refetch) return spinner;
+
+  if (error) throw new Error(503);
 
   data = data.fetchSubgroups;
 
@@ -119,9 +126,12 @@ export const Subgroups = () => {
         <ul className="group_list">
           {data.map((group, index) => (
             <>
-              <li className="group_header">{`Класс: ${group.class}${PROGRAMS[group.program]}`}</li>
+              <li className="group_header">{`Класс: ${group.class}${
+                PROGRAMS[group.program]
+              }`}</li>
               {group.relations.map((item) => (
                 <Item
+                  key={item.student.id}
                   name={item.student.name}
                   surname={item.student.surname}
                   subgroup={item.subgroup}
@@ -134,7 +144,6 @@ export const Subgroups = () => {
           ))}
         </ul>
       </div>
-
     </div>
   );
 };

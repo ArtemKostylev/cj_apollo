@@ -60,6 +60,25 @@ export const DELETE_CONSULTS_MUTATION = gql`
   }
 `;
 
+export const UPDATE_GROUP_CONSULTS_MUTATION = gql`
+  mutation updateGroupConsultsMutation(
+    $data: [GroupConsultInput]
+    $teacher: Int
+    $course: Int
+  ) {
+    updateGroupConsults(teacher: $teacher, course: $course, data: $data) {
+      id
+      date
+    }
+  }
+`;
+
+export const DELETE_GROUP_CONSULTS_MUTATION = gql`
+  mutation deleteGroupConsultsMutation($ids: [Int!]!) {
+    deleteGroupConsults(ids: $ids)
+  }
+`;
+
 export const UPDATE_SUBGROUPS_MUTATION = gql`
   mutation updateSubgroupsMutation($data: [SubgroupInput]) {
     updateSubgroups(data: $data) {
@@ -173,8 +192,20 @@ export const UPDATE_STUDENT_RELATIONS_MUTATION = gql`
   }
 `;
 
-export const UPLOAD_FROM_FILE = gql`
-  mutation uploadFromFileMutation($type: String, $file: Upload!) {
-    uploadFromFile(type: $type, file: $file)
+export const UPLOAD_TEACHERS_FROM_FILE = gql`
+  mutation uploadTeachersFromFileMutation($file: Upload!) {
+    uploadTeachersFromFile(file: $file)
+  }
+`;
+
+export const UPLOAD_COURSES_FROM_FILE = gql`
+  mutation uploadCoursesFromFileMutation($file: Upload!) {
+    uploadCoursesFromFile(file: $file)
+  }
+`;
+
+export const UPLOAD_STUDENTS_FROM_FILE = gql`
+  mutation uploadStudentsFromFileMutation($file: Upload!) {
+    uploadStudentsFromFile(file: $file)
   }
 `;

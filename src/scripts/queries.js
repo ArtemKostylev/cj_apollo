@@ -4,12 +4,14 @@ export const FETCH_JOURNAL_QUERY = gql`
   query fetchJournalQuery(
     $courseId: Int!
     $teacherId: Int!
-    $date_gte: Date!
-    $date_lte: Date!
+    $year: Int!
+    $date_gte: Date
+    $date_lte: Date
   ) {
     fetchJournal(
       courseId: $courseId
       teacherId: $teacherId
+      year: $year
       date_gte: $date_gte
       date_lte: $date_lte
     ) {
@@ -32,6 +34,8 @@ export const FETCH_JOURNAL_QUERY = gql`
         mark
         period
       }
+      archived
+      hours
     }
   }
 `;
@@ -47,6 +51,7 @@ export const FETCH_TEACHERS_QUERY = gql`
         course {
           id
           name
+          group
         }
       }
     }
@@ -89,18 +94,8 @@ export const FETCH_REPLACEMENTS_QUERY = gql`
 `;
 
 export const FETCH_NOTES_QUERY = gql`
-  query fetchNotesQuery(
-    $teacherId: Int!
-    $courseId: Int!
-    $period: String!
-    $year: Int!
-  ) {
-    fetchNotes(
-      teacherId: $teacherId
-      courseId: $courseId
-      period: $period
-      year: $year
-    ) {
+  query fetchNotesQuery($teacherId: Int!, $courseId: Int!, $year: Int!) {
+    fetchNotes(teacherId: $teacherId, courseId: $courseId, year: $year) {
       id
       text
     }
@@ -108,18 +103,8 @@ export const FETCH_NOTES_QUERY = gql`
 `;
 
 export const FETCH_CONSULTS_QUERY = gql`
-  query fetchConsultsQuery(
-    $teacherId: Int!
-    $courseId: Int!
-    $period: String!
-    $year: Int!
-  ) {
-    fetchConsults(
-      teacherId: $teacherId
-      courseId: $courseId
-      year: $year
-      period: $period
-    ) {
+  query fetchConsultsQuery($teacherId: Int!, $courseId: Int!, $year: Int!) {
+    fetchConsults(teacherId: $teacherId, courseId: $courseId, year: $year) {
       id
       student {
         id
@@ -130,7 +115,29 @@ export const FETCH_CONSULTS_QUERY = gql`
       }
       consult {
         id
+        hours
         date
+      }
+    }
+  }
+`;
+
+export const FETCH_GROUP_CONSULTS_QUERY = gql`
+  query fetchGroupConsultsQuery(
+    $teacherId: Int!
+    $courseId: Int!
+    $year: Int!
+  ) {
+    fetchGroupConsults(
+      teacherId: $teacherId
+      courseId: $courseId
+      year: $year
+    ) {
+      group
+      consults {
+        id
+        date
+        hours
       }
     }
   }

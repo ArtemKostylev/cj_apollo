@@ -33,6 +33,16 @@
   flex: 4;
 }
 
+.block_right .stats_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.block_right .stats_table th {
+  border: 1px solid gray;
+  padding: 0;
+}
+
 .controls {
   display: flex;
   flex-direction: row;
@@ -89,12 +99,13 @@
 }
 
 .block_left li:focus {
-  background-color: black;
+  background-color: #e6eaea;
 }
 
-.block_left li:focus p {
-  color: white;
+.block_left li:hover {
+  background-color: #e6eaea;
 }
+
 .block_left li p {
   font-size: 1.3rem;
   color: #191919;

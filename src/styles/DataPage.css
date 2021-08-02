@@ -8,6 +8,18 @@
   padding: 0;
 }
 
+h2 {
+  font-family: "IBM Plex Serif", serif;
+  font-weight: lighter;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-family: "IBM Plex Serif", serif;
+  font-weight: lighter;
+  text-transform: uppercase;
+}
+
 .change_item {
   display: flex;
   width: 100%;
@@ -40,9 +52,43 @@
 
 .change_item .edit_panel.visible {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.change_item .edit_panel .form_input_containter {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.change_item .edit_panel .form_input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.change_item .edit_panel .form_controls {
+  display: flex;
+  flex-direction: row;
+}
+
+.change_item .edit_panel .form_controls div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0rem 3rem;
+  padding: 0rem 1rem;
+  cursor: pointer;
+}
+
+.change_item .edit_panel .form_controls div:hover {
+  background-color: #f6f6f6;
+}
+
+.change_item .edit_panel .form_controls div p {
+  margin-right: 1rem;
 }
 
 .change_item .arrow_icon_container.visible {
@@ -51,7 +97,10 @@
 
 .change_item .edit_panel input {
   margin: 1rem 1rem;
+}
 
+.change_item .edit_panel input:invalid {
+  border: 3px solid red;
 }
 
 .change_item .arrow_icon_container {
@@ -71,11 +120,15 @@
 }
 
 .change_item .text_active {
-  color: red;
+  color: black;
 }
 
 .change_item .text {
-  color: black;
+  color: rgb(175, 175, 175);
+}
+
+.change_item.clicked {
+  background-color: #f6f6f6;
 }
 
 .changes_block {
@@ -118,4 +171,49 @@
 
 .changes_block.visible {
   display: inline-block;
+}
+
+.modal {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
+  background-color: white;
+}
+
+.modal:focus-visible {
+  outline: none;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalfile {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  right: 40%;
+  bottom: 40%;
+  background-color: white;
+}
+
+.modalfile:focus-visible {
+  outline: none;
+}
+
+.class_paragraph {
+  text-align: left;
+  padding-left: 5%;
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 5px;
+  margin-left: 5%;
+  margin-right: 5%;
+  color: #aaaaaa;
 }

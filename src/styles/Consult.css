@@ -14,7 +14,7 @@
   overflow: hidden;
   line-height: 50px;
   empty-cells: show;
-  width: 50%;
+  width: 100%;
 }
 
 .consult_table th {
@@ -26,12 +26,28 @@
   background-color: #eff0f0;
 }
 
+.consult_table select {
+  outline: none;
+  border: none;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.consult_table option {
+  cursor: pointer;
+}
+.consult_table select:hover {
+  background-color: #f6f6f6;
+}
 .consult_table .name_cell {
   cursor: default;
 }
 
 .consult_table .name_column {
   max-width: 30%;
+  min-width: 20%;
   border: none;
 }
 

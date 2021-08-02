@@ -1,8 +1,9 @@
-.group_wrapper{
+.group_wrapper {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-top: 1px solid #e6eaea;
 }
 
 .group_list {
@@ -27,7 +28,7 @@
   justify-content: space-between;
 }
 
-.item p{
+.item p {
   margin-right: 2rem;
   font-size: large;
   width: 15vw;

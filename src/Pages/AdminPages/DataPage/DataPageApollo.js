@@ -1,4 +1,4 @@
-import { FETCH_FULL_INFO } from "../scripts/queries";
+import { FETCH_FULL_INFO } from "../../../scripts/queries";
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 import DataPageView from "./DataPageView.js";
 import {
@@ -13,7 +13,7 @@ import {
   UPDATE_STUDENT_MUTATION,
   UPDATE_STUDENT_RELATIONS_MUTATION,
   UPDATE_TEACHER_MUTATION,
-} from "../scripts/mutations";
+} from "../../../scripts/mutations";
 
 export default function DataPageController(props) {
   var { loading, data, error, refetch, networkStatus } = useQuery(
@@ -45,6 +45,7 @@ export default function DataPageController(props) {
 
   if (loading) return spinner;
   if (networkStatus === NetworkStatus.refetch) return spinner;
+  if (error) throw new Error(503);
 
   let { teachers, courses, students, relations } = data.fetchFullInfo;
 
@@ -54,6 +55,55 @@ export default function DataPageController(props) {
     student: el.student?.id || undefined,
     archived: el.archived,
   }));
+
+  teachers = teachers.map((el) => ({
+    ...el,
+    empty: !!relations.find((item) => item.teacher === el.id),
+  }));
+
+  let pairs = [];
+  let classes = [];
+  let programs = [];
+  let groupedData = [];
+  students.forEach((item) => {
+    classes.push(item.class);
+    programs.push(item.program);
+  });
+
+  classes = [...new Set(classes)];
+  programs = [...new Set(programs)];
+
+  classes.forEach((num) => {
+    programs.forEach((program) => {
+      pairs.push({
+        class: num,
+        program: program,
+        students: [],
+      });
+    });
+  });
+
+  students.forEach((item) => {
+    let pairIndex = pairs.findIndex(
+      (pair) => item.class === pair.class && item.program === pair.program
+    );
+    pairs[pairIndex].students.push(item);
+  });
+
+  pairs.forEach((pair) => {
+    if (pair.students.length > 0) groupedData.push(pair);
+  });
+
+  students = groupedData.sort(function compare(a, b) {
+    if (a.class < b.class) {
+      return -1;
+    }
+    if (a.class > b.class) {
+      return 1;
+    }
+    // a must be equal to b
+    return 0;
+  });
 
   const update = async (type, values) => {
     switch (type) {
@@ -88,7 +138,8 @@ export default function DataPageController(props) {
               id: values.id,
               name: values.name,
               surname: values.surname,
-              class: parseInt(values.classNum),
+              class: parseInt(values.class),
+              program: values.program,
             },
           },
         });
@@ -149,6 +200,7 @@ export default function DataPageController(props) {
         students: students,
       },
     });
+    refetch();
   };
 
   return (

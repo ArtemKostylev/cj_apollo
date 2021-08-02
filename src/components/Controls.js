@@ -14,7 +14,7 @@ const Controls = (props) => {
   */
   const ControlsItemDropdown = (props) => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [value, setValue] = useState(props.text);
+    const [value, setValue] = useState(props.text || "Нет значений");
 
     const onClick = () => {
       if (!dropdownVisible) setDropdownVisible(true);
@@ -39,8 +39,8 @@ const Controls = (props) => {
           }`}
         >
           <ul>
-            {props.data.map((item, index) => (
-              <li data-index={index} key={item} onClick={onClick}>
+            {props?.data?.map((item, index) => (
+              <li data-index={index} key={item} onClick={(e) => onClick(e)}>
                 {item}
               </li>
             ))}
@@ -78,7 +78,11 @@ const Controls = (props) => {
     };
 
     return (
-      <button className="controls_item__button" onClick={onClick}>
+      <button
+        className="controls_item__button"
+        disabled={props.disabled}
+        onClick={onClick}
+      >
         {props.text}
       </button>
     );
@@ -104,7 +108,7 @@ const Controls = (props) => {
       <>
         <p className="controls_item__label">{props.label}</p>
         <input
-          maxlength="4"
+          maxLength="4"
           className="controls_item__input"
           onChange={onChange}
           value={value}
@@ -114,11 +118,12 @@ const Controls = (props) => {
   };
 
   return (
-    <div className="controls_container">
+    <div className="controls_container noselect">
       {props.items.map((item) => {
         if (item.type === "dropdown") {
           return (
             <ControlsItemDropdown
+              key={item.text}
               data={item.data}
               label={item.label}
               onClick={item.onClick}
@@ -127,11 +132,18 @@ const Controls = (props) => {
           );
         }
         if (item.type === "button") {
-          return <ControlsItemButton onClick={item.onClick} text={item.text} />;
+          return (
+            <ControlsItemButton
+              key={item.text}
+              onClick={item.onClick}
+              text={item.text}
+            />
+          );
         }
 
         return (
           <ControlsItemInput
+            key={item.text}
             label={item.label}
             onClick={item.onClick}
             text={item.text}

@@ -1,17 +1,11 @@
-//TODO implement menu component
 import React from "react";
 import "../styles/Menu.css";
 import { Link } from "react-router-dom";
 import { useAuth } from "../scripts/use-auth";
+import { adminItems, userItems, subRoute } from "../scripts/constants";
 
 export default function Menu(props) {
   const auth = useAuth();
-
-  const subRoute = {
-    name: "Subgroups",
-    path: "/subgroups",
-    title: "Группы",
-  };
 
   var itemNames = auth.user.roleId === 1 ? adminItems : userItems;
 
@@ -23,7 +17,7 @@ export default function Menu(props) {
   }
 
   return (
-    <div className={`main ${props.visible ? "opened" : ""}`}>
+    <div className={`main ${props.visible ? "opened" : ""} noselect`}>
       <div className="item_container top">
         <div className="item_text top">МЕНЮ</div>
         <div className="close_button" onClick={props.close}>
@@ -48,39 +42,3 @@ const MenuItem = (props) => {
     </div>
   );
 };
-
-const userItems = [
-  {
-    name: "Journal",
-    path: "/journal",
-    title: "Классный журнал",
-  },
-  {
-    name: "Consult",
-    path: "/consult",
-    title: "Консультации",
-  },
-  {
-    name: "Compensation",
-    path: "/compensation",
-    title: "Возмещение",
-  },
-  {
-    name: "Notes",
-    path: "/notes",
-    title: "Заметки",
-  },
-];
-
-const adminItems = [
-  {
-    name: "Journals",
-    path: "/journals",
-    title: "Журналы",
-  },
-  {
-    name: "DataPage",
-    path: "/data",
-    title: "Изменение данных",
-  },
-];

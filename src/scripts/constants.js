@@ -1,5 +1,5 @@
 export const AUTH_TOKEN = "auth-token";
-export const TEACHER = "teacger-id";
+export const TEACHER = "teacher-id";
 export const USER = "user";
 export const MONTHS = [
   "Январь",
@@ -14,6 +14,11 @@ export const MONTHS = [
   "Октябрь",
   "Ноябрь",
   "Декабрь",
+];
+
+export const ACADEMIC_YEARS = [
+  { displayName: "2021/2022", value: 2021 },
+  { displayName: "2020/2021", value: 2020 },
 ];
 
 export const QUATERS = [
@@ -106,4 +111,64 @@ export const GROUP_PERIODS = {
   },
 };
 
-export const AVAILABLE_MARKS = ["2", "3", "4", "5", "Б", ".", "Пусто", ""];
+export const AVAILABLE_MARKS = [
+  "2",
+  "3",
+  "4",
+  "4-",
+  "4+",
+  "5-",
+  "5+",
+  "5",
+  "Б",
+  ".",
+  "Пусто",
+  "",
+];
+
+export const userItems = [
+  {
+    name: "Journal",
+    path: "/journal",
+    title: "Классный журнал",
+  },
+  {
+    name: "Consult",
+    path: "/consult",
+    title: "Консультации",
+  },
+  {
+    name: "Compensation",
+    path: "/compensation",
+    title: "Возмещение",
+  },
+  {
+    name: "Notes",
+    path: "/notes",
+    title: "Заметки",
+  },
+];
+
+export const adminItems = [
+  {
+    name: "Journals",
+    path: "/journals",
+    title: "Журналы",
+  },
+  {
+    name: "DataPage",
+    path: "/data",
+    title: "Изменение данных",
+  },
+  {
+    name: "Reports",
+    path: "/reports",
+    title: "Отчеты",
+  },
+];
+
+export const subRoute = {
+  name: "Subgroups",
+  path: "/subgroups",
+  title: "Группы",
+};

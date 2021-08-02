@@ -1,19 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles/index.css";
-import App from "./components/App";
+import App from "./Pages/App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ProvideAuth } from "./scripts/use-auth.js";
 import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
 
-import {
-  ApolloProvider,
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-} from "@apollo/client";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { USER } from "./scripts/constants";
 
 const authLink = setContext((_, { headers }) => {
@@ -26,8 +21,8 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-const path = "http://178.21.8.167:4000";
-//const path = "http://localhost:4000";
+//const path = "http://178.21.8.167:4000";
+const path = "http://localhost:4000";
 
 const httpLink = createUploadLink({
   uri: path,

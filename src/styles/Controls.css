@@ -5,6 +5,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  font-size: 1.1rem;
 }
 
 .last {
@@ -12,7 +13,7 @@
 }
 
 .controls_item {
-  font-size: 1.3em;
+  font-size: 1em;
 
   cursor: pointer;
 }
@@ -58,14 +59,12 @@
 }
 
 .controls_item__label {
-  font-size: 1.3em;
   margin-left: 2rem;
 }
 
 .controls_item__button {
   border: 0;
   background-color: transparent;
-  font-size: 1.3em;
   padding: 1em;
   cursor: pointer;
 }
@@ -80,7 +79,6 @@
 
 .controls_item__input {
   border: 0;
-  font-size: 1.3em;
   border-bottom: 2px solid black;
   text-align: center;
   width: 4ch;
