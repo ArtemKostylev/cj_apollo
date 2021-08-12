@@ -55,6 +55,7 @@ export default function DataPageView({
   const labels = {
     name: "Имя",
     surname: "Фамилия",
+    parent: "Отчество",
     group: "Групповой",
     class: "Класс",
     program: "Программа",
@@ -159,7 +160,9 @@ export default function DataPageView({
             style={{ flex: 5, textAlign: "left" }}
           >
             <p className={` ${active ? "text_active" : "text"}`}>
-              {`${data.name} ${data.surname || ""} ${archived ? "(A)" : ""}`}
+              {`${data.surname || ""} ${data.name || ""} ${data.parent || ""}${
+                archived ? "(A)" : ""
+              }`}
             </p>
           </span>
 
@@ -243,7 +246,7 @@ export default function DataPageView({
     <div className="page">
       <div className={`changes_block left visible`}>
         <div className="block_header">
-          <h2 style={{ flex: "15" }}>Учителя</h2>
+          <h2 style={{ flex: "15" }}>Преподователи</h2>
           <IoMdListBox
             style={{ marginRight: "10px", flex: "1" }}
             onClick={() => {
@@ -364,7 +367,7 @@ export default function DataPageView({
       </div>
       <div className={`changes_block right visible`}>
         <div className="block_header">
-          <h2 style={{ flex: "15" }}>Ученики</h2>
+          <h2 style={{ flex: "15" }}>Учащиеся</h2>
           <IoMdListBox
             style={{ marginRight: "10px", flex: "1" }}
             onClick={() => {
@@ -443,9 +446,9 @@ export default function DataPageView({
               <React.Fragment key={`${group.class} ${group.program}`}>
                 {group.students.filter((item) => archivedStudents.has(item.id))
                   .length > 0 ? (
-                  <p className="class_paragraph">{`Класс: ${
+                  <p className="class_paragraph">{`${
                     group.class
-                  } Программа: ${PROGRAMS[group.program]}`}</p>
+                  } ${PROGRAMS[group.program]}`}</p>
                 ) : (
                   ""
                 )}

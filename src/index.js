@@ -21,8 +21,8 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-//const path = "http://178.21.8.167:4000";
-const path = "http://localhost:4000";
+const path = "http://5.63.152.167:4000";
+//const path = "http://localhost:4000";
 
 const httpLink = createUploadLink({
   uri: path,

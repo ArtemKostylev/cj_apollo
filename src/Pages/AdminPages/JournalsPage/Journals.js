@@ -169,7 +169,7 @@ export default function Teachers(props) {
     }
 
     return journal.fetchJournal.map((item) => {
-      const name = `${item.student.name} ${item.student.surname}`;
+      const name = `${item.student.surname} ${item.student.name}`;
       const hours = `${item.hours}`;
       const dates = item.journalEntry.map((entry) => entry.date);
       const marks = item.journalEntry.map((entry) => entry.mark);
@@ -340,7 +340,9 @@ export default function Teachers(props) {
         <ul>
           {teachers.fetchTeachers.map((teacher) => (
             <ListItem
-              name={`${teacher.name} ${teacher.surname}`}
+              name={`${teacher.surname} ${teacher.name} ${
+                teacher?.parent || ""
+              }`}
               index={teacher.id}
               key={teacher.id}
             />

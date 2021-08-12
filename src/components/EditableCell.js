@@ -19,7 +19,7 @@ const EditableCell = ({
   const Dropdown = (visible) => {
     const onClick = (e) => {
       let mark = "";
-      if (e.target.innerHTML !== "Пусто") mark = e.target.innerHTML;
+      if (e.target.innerHTML !== "пусто") mark = e.target.innerHTML;
       setValue(mark);
       setDropdownVisibility(false);
       if (!updateMyData(index, id, mark, group)) setValue("");

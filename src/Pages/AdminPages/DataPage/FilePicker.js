@@ -13,7 +13,7 @@ export const FilePicker = ({ type, close }) => {
 
   switch (type) {
     case "teacher":
-      title = "учителей";
+      title = "преподователей";
       mutation = UPLOAD_TEACHERS_FROM_FILE;
       break;
     case "course":
@@ -21,7 +21,7 @@ export const FilePicker = ({ type, close }) => {
       mutation = UPLOAD_COURSES_FROM_FILE;
       break;
     case "student":
-      title = "учеников";
+      title = "учащихся";
       mutation = UPLOAD_STUDENTS_FROM_FILE;
       break;
     default:

@@ -93,6 +93,7 @@ export const UPDATE_TEACHER_MUTATION = gql`
       id
       name
       surname
+      parent
     }
   }
 `;
@@ -125,6 +126,7 @@ export const CREATE_TEACHER_MUTATION = gql`
       id
       name
       surname
+      parent
     }
   }
 `;

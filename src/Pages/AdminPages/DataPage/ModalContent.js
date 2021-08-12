@@ -19,6 +19,7 @@ export const ModalContent = ({
           data: {
             name: values.name,
             surname: values.surname,
+            parent: values?.parent || "",
           },
         },
       });
@@ -56,6 +57,16 @@ export const ModalContent = ({
     innerContent = (
       <div className="form_input_container">
         <div className="form_input">
+          <label>Фамилия</label>
+          <input
+            type="text"
+            onChange={(e) =>
+              setValues((prev) => ({ ...prev, surname: e.target.value }))
+            }
+            value={values.surname}
+          />
+        </div>
+        <div className="form_input">
           <label>Имя</label>
           <input
             type="text"
@@ -66,13 +77,13 @@ export const ModalContent = ({
           />
         </div>
         <div className="form_input">
-          <label>Фамилия</label>
+          <label>Отчество</label>
           <input
             type="text"
             onChange={(e) =>
-              setValues((prev) => ({ ...prev, surname: e.target.value }))
+              setValues((prev) => ({ ...prev, parent: e.target.value }))
             }
-            value={values.surname}
+            value={values.parent}
           />
         </div>
       </div>
@@ -106,24 +117,24 @@ export const ModalContent = ({
     innerContent = (
       <div className="form_input_container">
         <div className="form_input">
-          <label>Имя</label>
-          <input
-            type="text"
-            onChange={(e) =>
-              setValues((prev) => ({ ...prev, name: e.target.value }))
-            }
-            value={values.name}
-          />
-        </div>
-        <div className="form_input">
           <label>Фамилия</label>
-
           <input
             type="text"
             onChange={(e) =>
               setValues((prev) => ({ ...prev, surname: e.target.value }))
             }
             value={values.surname}
+          />
+        </div>
+        <div className="form_input">
+          <label>Имя</label>
+
+          <input
+            type="text"
+            onChange={(e) =>
+              setValues((prev) => ({ ...prev, name: e.target.value }))
+            }
+            value={values.name}
           />
         </div>
         <div className="form_input">
@@ -166,10 +177,10 @@ export const ModalContent = ({
     <div className="modal_container">
       <h1>
         {type === "teacher"
-          ? "Создание учителя"
+          ? "Создание преподователя"
           : type === "course"
           ? "Создание предмета"
-          : "Создание ученика"}
+          : "Создание учащегося"}
       </h1>
       {innerContent}
       <div className="modal_controls">

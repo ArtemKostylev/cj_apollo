@@ -46,6 +46,7 @@ export const FETCH_TEACHERS_QUERY = gql`
       id
       name
       surname
+      parent
       userId
       relations {
         course {
@@ -190,6 +191,7 @@ export const FETCH_FULL_INFO = gql`
         id
         name
         surname
+        parent
       }
       courses {
         id
