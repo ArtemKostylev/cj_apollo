@@ -114,6 +114,7 @@ export default function DataPageController(props) {
               id: values.id,
               name: values.name,
               surname: values.surname,
+              parent: values.parent,
             },
           },
         });

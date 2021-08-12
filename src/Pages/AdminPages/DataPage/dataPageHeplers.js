@@ -2,8 +2,8 @@ export const createCoditionalState = (type, data = {}) => {
   switch (type) {
     case "teacher":
       return {
-        name: data.name || "",
         surname: data.surname || "",
+        name: data.name || "",
         parent: data.parent || "",
       };
     case "course":

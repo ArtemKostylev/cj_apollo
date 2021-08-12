@@ -446,9 +446,9 @@ export default function DataPageView({
               <React.Fragment key={`${group.class} ${group.program}`}>
                 {group.students.filter((item) => archivedStudents.has(item.id))
                   .length > 0 ? (
-                  <p className="class_paragraph">{`${
-                    group.class
-                  } ${PROGRAMS[group.program]}`}</p>
+                  <p className="class_paragraph">{`${group.class} ${
+                    PROGRAMS[group.program]
+                  }`}</p>
                 ) : (
                   ""
                 )}
@@ -472,9 +472,9 @@ export default function DataPageView({
                     !activeStudents.has(item.id) &&
                     !archivedStudents.has(item.id)
                 ).length > 0 ? (
-                  <p className="class_paragraph">{`Класс: ${
-                    group.class
-                  } Программа: ${PROGRAMS[group.program]}`}</p>
+                  <p className="class_paragraph">{` ${group.class} ${
+                    PROGRAMS[group.program]
+                  }`}</p>
                 ) : (
                   ""
                 )}
