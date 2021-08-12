@@ -4,6 +4,7 @@ export const createCoditionalState = (type, data = {}) => {
       return {
         name: data.name || "",
         surname: data.surname || "",
+        parent: data.parent || "",
       };
     case "course":
       return {
