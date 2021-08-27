@@ -96,9 +96,13 @@
   padding: 1rem;
   border-bottom: 1px solid #e6eaea;
   cursor: pointer;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.block_left li:focus {
+.block_left .active {
   background-color: #e6eaea;
 }
 

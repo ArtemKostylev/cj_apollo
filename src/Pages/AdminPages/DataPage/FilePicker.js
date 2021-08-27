@@ -13,7 +13,7 @@ export const FilePicker = ({ type, close }) => {
 
   switch (type) {
     case "teacher":
-      title = "преподователей";
+      title = "преподавателей";
       mutation = UPLOAD_TEACHERS_FROM_FILE;
       break;
     case "course":

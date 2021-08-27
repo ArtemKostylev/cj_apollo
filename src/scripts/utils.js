@@ -59,3 +59,12 @@ export function getYear(targetMonth, year = null) {
   }
   return currentYear + 1;
 }
+export const compareStundents = (a, b) => {
+  if (a.surname < b.surname) {
+    return -1
+  }
+  if (a.surname > b.surname) {
+    return 1
+  }
+  return 0
+}

@@ -16,6 +16,7 @@ import { computeUpdateList, createCoditionalState } from "./dataPageHeplers";
 import { ModalContent } from "./ModalContent";
 import { FilePicker } from "./FilePicker";
 import { PROGRAMS } from "../../../scripts/constants";
+import { compareStundents } from "../../../scripts/utils";
 
 export default function DataPageView({
   teachers,
@@ -246,7 +247,7 @@ export default function DataPageView({
     <div className="page">
       <div className={`changes_block left visible`}>
         <div className="block_header">
-          <h2 style={{ flex: "15" }}>Преподователи</h2>
+          <h2 style={{ flex: "15" }}>Преподаватели</h2>
           <IoMdListBox
             style={{ marginRight: "10px", flex: "1" }}
             onClick={() => {
@@ -277,7 +278,7 @@ export default function DataPageView({
       </div>
       <div className={`changes_block center visible`}>
         <div className="block_header">
-          <h2 style={{ flex: "15" }}>Предметы</h2>
+          <h2 style={{ flex: "15" }}>Учебные предметы</h2>
           <IoMdListBox
             style={{ marginRight: "10px", flex: "1" }}
             onClick={() => {
@@ -483,7 +484,7 @@ export default function DataPageView({
                     (item) =>
                       !activeStudents.has(item.id) &&
                       !archivedStudents.has(item.id)
-                  )
+                  ).sort(compareStundents)
                   .map((item) => (
                     <ChangesItem
                       key={item.id}

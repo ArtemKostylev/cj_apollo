@@ -177,7 +177,7 @@ export const ModalContent = ({
     <div className="modal_container">
       <h1>
         {type === "teacher"
-          ? "Создание преподователя"
+          ? "Создание преподавателя"
           : type === "course"
           ? "Создание предмета"
           : "Создание учащегося"}
