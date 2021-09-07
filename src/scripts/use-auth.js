@@ -27,7 +27,6 @@ function useProvideAuth() {
       teacher: payload.user.teacher ? payload.user.teacher.id : null,
       token: payload.token,
     };
-    console.log(newUser);
     setUser(newUser);
     localStorage.setItem(USER, JSON.stringify(newUser));
     nav();

@@ -52,7 +52,7 @@ const Login = () => {
             name="email"
             autoComplete="email"
             size="30"
-            placeholder="Электронная почта"
+            placeholder="Логин"
           />
         </div>
         <div className="login_form_row">

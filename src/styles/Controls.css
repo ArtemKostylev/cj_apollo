@@ -5,7 +5,6 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-size: 1.1rem;
 }
 
 .last {
@@ -13,8 +12,6 @@
 }
 
 .controls_item {
-  font-size: 1em;
-
   cursor: pointer;
 }
 

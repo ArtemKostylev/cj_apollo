@@ -24,8 +24,6 @@ export const createCoditionalState = (type, data = {}) => {
 }
 
 export const computeUpdateList = (oldList, newList) => {
-  console.log('oldList', oldList)
-  console.log('newList', newList)
   let added = newList.map((course) => {
     if (!oldList.find((el) => el === course)) {
       return { id: course, archived: false }
@@ -39,9 +37,6 @@ export const computeUpdateList = (oldList, newList) => {
     }
     return undefined
   })
-
-  console.log('added', added)
-  console.log('removed', removed)
 
   let result = [...added, ...removed]
 

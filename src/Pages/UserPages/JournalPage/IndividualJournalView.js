@@ -80,34 +80,40 @@ const IndividualJournalView = ({
           </tr>
         </thead>
         <tbody>
-          {studentData.map((item) => (
-            <tr key={item.student.id}>
-              <td
-                className="name_cell"
-                style={{ color: item.archived ? "gray" : "black" }}
-              >{`${item.student.surname} ${item.student.name} ${
-                item.archived ? "(A)" : ""
-              }`}</td>
-              <td
-                className="name_cell"
-                style={{ color: item.archived ? "gray" : "black" }}
-              >{`${item.student.class}${
-                PROGRAMS[`${item.student.program}`]
-              }`}</td>
-              {parsedDates.map((date, index) => (
-                <EditableCell
-                  key={date}
-                  value={findMark(date, item.journalEntry)}
-                  row={item.student.id}
-                  column={index}
-                  updateMyData={updateMyData}
-                  weekend={date.isoWeekday() === 6 ? "weekend" : ""}
-                  disabled={item.archived}
-                />
-              ))}
-              {getQuaterMark(item)}
-            </tr>
-          ))}
+          {studentData
+            .sort((a, b) => {
+              if (a.student.class < b.student.class) return -1;
+              if (a.student.class > b.student.class) return 1;
+              return 0;
+            })
+            .map((item) => (
+              <tr key={item.student.id}>
+                <td
+                  className="name_cell"
+                  style={{ color: item.archived ? "gray" : "black" }}
+                >{`${item.student.surname} ${item.student.name} ${
+                  item.archived ? "(A)" : ""
+                }`}</td>
+                <td
+                  className="name_cell"
+                  style={{ color: item.archived ? "gray" : "black" }}
+                >{`${item.student.class}${
+                  PROGRAMS[`${item.student.program}`]
+                }`}</td>
+                {parsedDates.map((date, index) => (
+                  <EditableCell
+                    key={date}
+                    value={findMark(date, item.journalEntry)}
+                    row={item.student.id}
+                    column={index}
+                    updateMyData={updateMyData}
+                    weekend={date.isoWeekday() === 6 ? "weekend" : ""}
+                    disabled={item.archived}
+                  />
+                ))}
+                {getQuaterMark(item)}
+              </tr>
+            ))}
         </tbody>
       </table>
     </>

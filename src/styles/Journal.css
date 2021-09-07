@@ -4,7 +4,7 @@
   min-height: 100px;
   width: 100%;
   overflow: hidden;
-  line-height: 50px;
+  line-height: 0.9vw;
   empty-cells: show;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .journal_table th {
-  line-height: 50px;
+  line-height: 6vh;
   empty-cells: show;
   border-top: none;
   border: 1px solid #d6d8d8;
@@ -43,7 +43,7 @@ td {
   border-collapse: collapse;
   padding: 0px;
   cursor: pointer;
-  line-height: 50px;
+  line-height: 6vh;
 }
 
 td p:hover {

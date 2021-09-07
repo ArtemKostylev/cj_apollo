@@ -12,7 +12,6 @@ import {
   FETCH_GROUP_CONSULTS_QUERY,
 } from '../../../scripts/queries'
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client'
-import IndividualConsultsView from './IndividualConsultsView'
 import GroupConsultsView from './GroupConsultsView'
 import moment from 'moment'
 
@@ -69,68 +68,6 @@ export const ConsultController = (props) => {
       ? UPDATE_GROUP_CONSULTS_MUTATION
       : UPDATE_CONSULTS_MUTATION,
   )
-  const [clear] = useMutation(
-    userCourses[course].group
-      ? DELETE_GROUP_CONSULTS_MUTATION
-      : DELETE_CONSULTS_MUTATION,
-  )
-
-  const updateIndividualData = ({ date, hours, column, row }) => {
-    const student = data.find((item, index) => item.student.id === row)
-    const studentIndex = data.indexOf(student)
-    let consult = student.consult.find((item) => item.id === column)
-    const dateIndex = student.consult.indexOf(consult)
-    changed = true
-    date =
-      date instanceof Date ? date.toLocaleDateString('ru-RU').split('.') : date
-
-    if (!consult) {
-      const newConsult = {
-        id: !consult ? 0 : consult.id,
-        date: `${date[2]}-${date[1]}-${date[0]}`.concat('T00:00:00.000Z'),
-        year: parseInt(year),
-        update_flag: true,
-        delete_flag: false,
-        hours: hours || 0,
-      }
-      data = [
-        ...data.slice(0, studentIndex),
-        {
-          ...data[studentIndex],
-          consult: [...(data[studentIndex].consult || []), newConsult],
-        },
-        ...data.slice(studentIndex + 1),
-      ]
-      return
-    }
-    if (!date && hours) {
-      date = consult.date
-    }
-
-    let flag = date === ''
-    data = [
-      ...data.slice(0, studentIndex),
-      {
-        ...data[studentIndex],
-        consult: [
-          ...data[studentIndex].consult.slice(0, dateIndex),
-          {
-            ...data[studentIndex].consult[dateIndex],
-            date: Array.isArray(date)
-              ? `${date[2]}-${date[1]}-${date[0]}`.concat('T00:00:00.000Z')
-              : date,
-            hours: hours || 0,
-            delete_flag: flag,
-            update_flag: !flag,
-          },
-          ...data[studentIndex].consult.slice(dateIndex + 1),
-        ],
-      },
-      ...data.slice(studentIndex + 1),
-    ]
-    console.log(data)
-    return true
-  }
 
   const updateGroupData = ({ date, hours, column, row }) => {
     const group = data.find((item, index) => item.group === row)
@@ -185,23 +122,6 @@ export const ConsultController = (props) => {
       },
       ...data.slice(groupIndex + 1),
     ]
-  }
-
-  const createIndividualUpdateData = () => {
-    let result = []
-    data.forEach((student) => {
-      student.consult.forEach((date) => {
-        if (date.update_flag)
-          result.push({
-            id: date.id,
-            date: date.date,
-            year: year,
-            hours: date.hours,
-            relationId: student.id,
-          })
-      })
-    })
-    return result
   }
 
   const createGroupUpdateData = () => {

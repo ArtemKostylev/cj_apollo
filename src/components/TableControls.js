@@ -19,7 +19,6 @@ const TableControls = ({
   const [coursePickerValue, setCoursePickerValue] = React.useState(course);
 
   const onMonthClick = (e, setOpened) => {
-    console.log(e.target.innerHTML);
     period
       ? setMonthPickerValue(GROUP_PERIODS[e.target.getAttribute("data-id")])
       : setMonthPickerValue(e.target.innerHTML);

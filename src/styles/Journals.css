@@ -69,7 +69,7 @@
 }
 
 .item_data th {
-  line-height: 50px;
+  line-height: 6vh;
   empty-cells: show;
   border-top: none;
   border: 1px solid #d6d8d8;
@@ -111,7 +111,6 @@
 }
 
 .block_left li p {
-  font-size: 1.3rem;
   color: #191919;
   line-height: 2;
   margin: 0rem;

@@ -2,6 +2,7 @@ import React from 'react'
 import '../../../styles/Journal.css'
 import EditableDateCell from '../../../components/EditableDateCell'
 import { PROGRAMS } from '../../../scripts/constants'
+import { EditableCellHours } from './EditableCellHours'
 
 const GroupCompanyView = ({
   data,
@@ -23,7 +24,6 @@ const GroupCompanyView = ({
               return 0
             })
             .map((group, g_index) => {
-              //console.log(g_index)
               return (
                 <React.Fragment key={g_index}>
                   <tr>

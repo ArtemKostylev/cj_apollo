@@ -37,7 +37,6 @@ export const FilePicker = ({ type, close }) => {
       files: [file],
     },
   }) => {
-    console.log(file);
     send({ variables: { file } });
   };
 

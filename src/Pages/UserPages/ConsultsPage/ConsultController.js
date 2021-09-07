@@ -128,7 +128,6 @@ export const ConsultController = (props) => {
       },
       ...data.slice(studentIndex + 1),
     ];
-    console.log(data);
     return true;
   };
 
