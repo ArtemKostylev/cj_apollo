@@ -10,7 +10,6 @@
 
 # production
 /build
-/http
 
 # misc
 .DS_Store
