@@ -65,7 +65,9 @@ export default function Journal(props) {
     }
     const student = studentData.find((item) => item.student.id === row);
     const marks = student.journalEntry;
-    const cell = marks.find((el) => el.date.split("T")[0] === date);
+    const cell = marks.find(
+      (el) => el.date.split("T")[0] === date || el.date === date
+    );
 
     const studentId = studentData.indexOf(student);
 
