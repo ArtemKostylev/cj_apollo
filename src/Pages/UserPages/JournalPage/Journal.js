@@ -12,6 +12,8 @@ import { UPDATE_JOURNAL_MUTATION } from "../../../scripts/mutations";
 import { GROUP_PERIODS } from "../../../scripts/constants";
 import { getYear } from "../../../scripts/utils";
 import GroupCompanyView from "../GroupCompanyPage/GroupCompanyView";
+import { getMonthFromUTCString } from "./JournalPageHelpers";
+
 export default function Journal(props) {
   moment.locale("ru");
 
@@ -24,7 +26,7 @@ export default function Journal(props) {
   let changed = false;
 
   const [period, setPeriod] = useState(
-    month > 8 ? GROUP_PERIODS["first_half"] : GROUP_PERIODS["second_half"]
+    month > 7 ? GROUP_PERIODS["first_half"] : GROUP_PERIODS["second_half"]
   );
 
   const userCourses = props.location.state?.courses || auth.user?.courses;
@@ -268,7 +270,7 @@ export default function Journal(props) {
   }
   let groupedData = [];
 
-  //TODO replace with map
+  //TODO possible bottleneck
   if (userCourses[course].group) {
     let pairs = [];
     let classes = [];
@@ -322,72 +324,35 @@ export default function Journal(props) {
   //iterate over all dates, grouped by class, program and subgroup
   // dates are stored in UTC strings (DD-MM-YYYYTHH:MM:SS.sssZ)
 
-  let dates_by_group = groupedData.map((group) => {
-    let month_id = period.data[0].id; //month index. currently is index of first month in PERIOD constatnt, supplied from state.
-    let dates = group.students.map(
-      (student) => student.journalEntry.map((entry) => entry.date) // extrude all available dates from student data
-    );
-    let result = [];
-    const len = period.id === 0 ? 21 : 25; // depending on current half of the year, 20 or 24 cells should be supplied
-    if (dates[0].length === 0) {
-      // if there are no dates supplied for current group, we fill them with empty values
-      let counter = 1; //counter counts for passed cells, separating months from each other
-      for (let i = 1; i < len; i++) {
-        let border = month_id === 1 ? 4 : 5; // border differs, because in january we have only 4 cells
-        if (counter >= border) {
-          // if we are in the next month, reset the counter
-          counter = 1;
-          result.push({ date: "", month: month_id });
-          month_id++;
-          continue;
-        }
-        result.push({ date: "", month: month_id });
-        counter++;
-      }
-      return result;
-    }
+  const dates_by_group = groupedData.map((group) => {
+    const dates = [
+      ...new Set(
+        group.students
+          .map((student) => student.journalEntry.map((item) => item.date))
+          .flat()
+      ),
+    ];
 
-    dates = [...new Set(dates.flat())].values(); // date are 2d array in the beggining. All students in one group attend the same lessons, so we need only unique values.
-    let counter = 1;
+    const mappedDates = new Map(period.data.map((it) => [`${it.id}`, []]));
 
-    let date = dates.next().value; // pick first date from set
-    let month = parseInt(date.split("T")[0].split("-")[1]); // extrude month from the date
-    for (let i = 1; i < len; i++) {
-      let border = month_id === 1 ? 4 : 5;
-      if (counter < border && month === month_id) {
-        result.push({ date: date, month: month_id });
-        date = dates.next().value;
-        if (!date) {
-          month = 0;
-          continue;
-        }
-        month = parseInt(date.split("T")[0].split("-")[1]);
-        counter++;
-        continue;
+    const result = [];
+
+    dates.forEach((date) => {
+      if (date) {
+        const month = getMonthFromUTCString(date);
+        mappedDates.set(month, [...mappedDates.get(month), { date, month }]);
       }
-      if (counter < border && month !== month_id) {
-        counter++;
-        result.push({ date: "", month: month_id });
-        continue;
-      }
-      if (counter >= border && month !== month_id) {
-        counter = 1;
-        result.push({ date: "", month: month_id });
-        month_id++;
-        continue;
-      }
-      if (counter >= border) {
-        counter = 1;
-        result.push({ date: date, month: month_id });
-        date = dates.next().value;
-        if (!date) {
-          month = 0;
-          continue;
-        }
-        month = parseInt(date.split("T")[0].split("-")[1]);
-        month_id++;
-      }
-    }
+    });
+
+    mappedDates.forEach((value, key) => {
+      const maxDates = key === 0 ? 4 : 5;
+      const emptyCount = maxDates - value.length;
+      result.push(
+        ...value,
+        ...Array(emptyCount).fill({ date: "", month: key })
+      );
+    });
+
     return result;
   });
 

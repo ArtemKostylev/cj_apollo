@@ -5,3 +5,7 @@ export const findMark = (date, student) => {
   const mark = student.find((el) => el.date.split("T")[0] === date);
   return mark !== undefined ? mark.mark : "";
 };
+
+export const getMonthFromUTCString = (date) => {
+  return `${parseInt(date.split("T")[0].split("-")[1])}`;
+};
