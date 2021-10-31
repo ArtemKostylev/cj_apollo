@@ -127,10 +127,8 @@ export default function Journal(props) {
         mark: value,
         period: column,
         studentId: student.id,
-        teacherId: props.location.state.teacher || auth.user.teacher,
-        courseId:
-          props.location.state.courses[course].id ||
-          auth.user.courses[course].id,
+        teacherId: props.location.state?.teacher || auth.user.teacher,
+        courseId: userCourses[course].id,
         update_flag: true,
       };
       studentData[studentIndex].quaterMark = [
