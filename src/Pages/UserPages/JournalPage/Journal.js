@@ -13,6 +13,7 @@ import { GROUP_PERIODS } from "../../../scripts/constants";
 import { getYear } from "../../../scripts/utils";
 import GroupCompanyView from "../GroupCompanyPage/GroupCompanyView";
 import { getMonthFromUTCString } from "./JournalPageHelpers";
+import times from "lodash/times";
 
 export default function Journal(props) {
   moment.locale("ru");
@@ -326,7 +327,7 @@ export default function Journal(props) {
   //iterate over all dates, grouped by class, program and subgroup
   // dates are stored in UTC strings (DD-MM-YYYYTHH:MM:SS.sssZ)
 
-  const dates_by_group = groupedData.map((group) => {
+  let dates_by_group = groupedData.map((group) => {
     const dates = [
       ...new Set(
         group.students
@@ -351,7 +352,7 @@ export default function Journal(props) {
       const emptyCount = maxDates - value.length;
       result.push(
         ...value,
-        ...Array(emptyCount).fill({ date: "", month: key })
+        ...times(emptyCount, () => ({ date: "", month: key }))
       );
     });
 

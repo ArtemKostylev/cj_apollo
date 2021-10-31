@@ -11,6 +11,7 @@
 # production
 /build
 /http
+/html
 
 # misc
 .DS_Store
