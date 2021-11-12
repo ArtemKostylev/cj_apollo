@@ -1,20 +1,22 @@
 import React from "react";
-import { Button } from "../../../components/shared/ui/Button";
-import { Wrapper } from "../../../components/shared/ui/Wrapper";
-import { FormWrapper } from "../../../components/shared/ui/FormWrapper";
-import { Subtitle } from "../../../components/shared/ui/Subtitle";
-import "./spec.css";
-
-const SpecInput = (value) => {};
+import { SpecPageView } from "./SpecPageView";
+import { Spinner } from "../../../components/shared/ui/Spinner";
+import { FETCH_SPECIALIZATION } from "../../../scripts/queries";
+import { NetworkStatus, useQuery } from "@apollo/client";
 
 export const Specialization = () => {
-  return (
-    <Wrapper>
-      <FormWrapper></FormWrapper>
-    </Wrapper>
+  let { loading, data, error, refetch, networkStatus } = useQuery(
+    FETCH_SPECIALIZATION,
+    {
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "network-only",
+    }
   );
-  // input
-  // delete button
-  // update button
-  // save button
+
+  if (loading || networkStatus === NetworkStatus.refetch) return <Spinner />;
+  if (error) throw new Error(503);
+
+  return (
+    <SpecPageView initialData={data.fetchSpecialization} refetch={refetch} />
+  );
 };

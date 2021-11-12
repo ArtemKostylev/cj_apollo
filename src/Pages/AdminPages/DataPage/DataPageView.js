@@ -24,8 +24,10 @@ const PROGRAM_MAPPER = [
   { value: "OP", text: "ОП" },
 ];
 
-const convertSpecToOptions = (spec) =>
-  spec.map((it) => ({ value: it.id.toString, text: it.name }));
+const convertSpecToOptions = (spec) => [
+  ...spec.map((it) => ({ value: it.id.toString(), text: it.name })),
+  { value: "", text: "Не указано" },
+];
 
 const createOptions = (items) =>
   items.map((it) => <option value={it.value}>{it.text}</option>);
@@ -210,13 +212,13 @@ export default function DataPageView({
                 {key === "program" || key === "spec" ? (
                   <select
                     style={{ flex: "4", width: "100%", margin: "1rem 1rem" }}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setFormState((prev) => ({
                         ...prev,
-                        program: e.target.value,
-                      }))
-                    }
-                    value={formState["program"]}
+                        [key]: e.target.value,
+                      }));
+                    }}
+                    value={formState[key]}
                   >
                     {createOptions(
                       key === "program"
@@ -229,16 +231,20 @@ export default function DataPageView({
                     style={{ flex: "4" }}
                     value={formState[key]}
                     type={
-                      key === "group" || key === "spec" ? "checkbox" : "text"
+                      key === "group" || key === "exclude" ? "checkbox" : "text"
                     }
                     checked={
-                      key === "group" || key === "spec" ? formState[key] : false
+                      key === "group" || key === "exclude"
+                        ? formState[key]
+                        : false
                     }
                     onChange={(e) =>
                       setFormState((prev) => ({
                         ...prev,
                         [key]:
-                          key === "group" ? e.target.checked : e.target.value,
+                          key === "group" || key === "exclude"
+                            ? e.target.checked
+                            : e.target.value,
                       }))
                     }
                     maxLength={key === "class" ? 1 : undefined}

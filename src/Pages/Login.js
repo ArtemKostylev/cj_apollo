@@ -67,7 +67,7 @@ const Login = () => {
             setFormState({ ...formState, password: e.target.value })
           }
         />
-        <Button onClick={() => login()} text="Войти" />
+        <Button onClick={() => login()}>Войти</Button>
       </FormWrapper>
     </div>
   );

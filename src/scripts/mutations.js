@@ -117,17 +117,16 @@ export const UPDATE_STUDENT_MUTATION = gql`
       surname
       class
       program
-      specialization
+      specialization {
+        id
+      }
     }
   }
 `;
 
 export const UPDATE_SPECIALIZATION_MUTATION = gql`
   mutation updateSpecializationMutation($data: SpecializationInput) {
-    updateSpecialization(data: $data) {
-      id
-      name
-    }
+    updateSpecialization(data: $data)
   }
 `;
 

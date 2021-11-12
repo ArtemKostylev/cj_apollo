@@ -242,11 +242,17 @@ export const FETCH_GROUP_COMPANY = gql`
   }
 `;
 
-export const FETCH_SPECIALIZATIONS = gql`
-  query fetchSpecializations {
-    fetchSpecializations {
+export const FETCH_SPECIALIZATION = gql`
+  query fetchSpecialization {
+    fetchSpecialization {
       id
       name
     }
+  }
+`;
+
+export const FETCH_ANNUAL_REPORT = gql`
+  query fetchAnnualReport($year: Int) {
+    fetchAnnualReport(year: $year)
   }
 `;

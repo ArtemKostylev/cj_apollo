@@ -143,7 +143,7 @@ export default function DataPageController(props) {
               surname: values.surname,
               class: parseInt(values.class),
               program: values.program,
-              specialization: parseInt(values.spec),
+              specializationId: parseInt(values.spec),
             },
           },
         });
