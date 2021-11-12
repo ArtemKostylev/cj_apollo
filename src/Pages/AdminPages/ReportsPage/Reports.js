@@ -19,7 +19,7 @@ export const Reports = () => {
   return (
     <Wrapper>
       <Text>{`Ссылка для скачивания ведомости: ${data.fetchAnnualReport}`}</Text>
-      <Button onClick={() => refetch()}>Переформировать ведомость</Button>
+      <Button onClick={() => refetch()}>{`Переформировать ведомость`}</Button>
     </Wrapper>
   );
 };
