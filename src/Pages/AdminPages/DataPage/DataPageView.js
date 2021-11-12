@@ -18,11 +18,24 @@ import { FilePicker } from "./FilePicker";
 import { PROGRAMS } from "../../../scripts/constants";
 import { compareStundents } from "../../../scripts/utils";
 
+const PROGRAM_MAPPER = [
+  { value: "PP_5", text: "(5)ПП" },
+  { value: "PP_8", text: "(8)ПП" },
+  { value: "OP", text: "ОП" },
+];
+
+const convertSpecToOptions = (spec) =>
+  spec.map((it) => ({ value: it.id.toString, text: it.name }));
+
+const createOptions = (items) =>
+  items.map((it) => <option value={it.value}>{it.text}</option>);
+
 export default function DataPageView({
   teachers,
   courses,
   students,
   relations,
+  specializations,
   update,
   createTeacher,
   createCourse,
@@ -53,13 +66,15 @@ export default function DataPageView({
   const [filePickerShown, setFilePickerShown] = useState(false);
   const [fileType, setFileType] = useState();
 
-  const labels = {
+  const LABELS = {
     name: "Имя",
     surname: "Фамилия",
     parent: "Отчество",
     group: "Групповой",
     class: "Класс",
     program: "Программа",
+    spec: "Специальность",
+    exclude: "Убрать из ведомости",
   };
 
   //creates a list of higlited items based on current values and relations, passed from apollo.
@@ -190,9 +205,9 @@ export default function DataPageView({
                 <label
                   style={{ flex: "1", textAlign: "left", paddingLeft: "5%" }}
                 >
-                  {labels[key]}
+                  {LABELS[key]}
                 </label>
-                {key === "program" ? (
+                {key === "program" || key === "spec" ? (
                   <select
                     style={{ flex: "4", width: "100%", margin: "1rem 1rem" }}
                     onChange={(e) =>
@@ -203,16 +218,22 @@ export default function DataPageView({
                     }
                     value={formState["program"]}
                   >
-                    <option value="PP_5">(5)ПП</option>
-                    <option value="PP_8">(8)ПП</option>
-                    <option value="OP">ОП</option>
+                    {createOptions(
+                      key === "program"
+                        ? PROGRAM_MAPPER
+                        : convertSpecToOptions(specializations)
+                    )}
                   </select>
                 ) : (
                   <input
                     style={{ flex: "4" }}
                     value={formState[key]}
-                    type={key === "group" ? "checkbox" : "text"}
-                    checked={key === "group" ? formState[key] : false}
+                    type={
+                      key === "group" || key === "spec" ? "checkbox" : "text"
+                    }
+                    checked={
+                      key === "group" || key === "spec" ? formState[key] : false
+                    }
                     onChange={(e) =>
                       setFormState((prev) => ({
                         ...prev,
@@ -484,7 +505,8 @@ export default function DataPageView({
                     (item) =>
                       !activeStudents.has(item.id) &&
                       !archivedStudents.has(item.id)
-                  ).sort(compareStundents)
+                  )
+                  .sort(compareStundents)
                   .map((item) => (
                     <ChangesItem
                       key={item.id}

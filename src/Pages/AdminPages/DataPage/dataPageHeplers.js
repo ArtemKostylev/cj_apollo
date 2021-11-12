@@ -1,46 +1,46 @@
 export const createCoditionalState = (type, data = {}) => {
   switch (type) {
-    case 'teacher':
+    case "teacher":
       return {
-        surname: data.surname || '',
-        name: data.name || '',
-        parent: data.parent || '',
-      }
-    case 'course':
+        surname: data.surname || "",
+        name: data.name || "",
+        parent: data.parent || "",
+      };
+    case "course":
       return {
-        name: data.name || '',
+        name: data.name || "",
         group: data.group || false,
-      }
-    case 'student':
+        exclude: data.excludeFromReport || false,
+      };
+    case "student":
       return {
-        name: data.name || '',
-        surname: data.surname || '',
-        class: data.class || '',
-        program: data.program || 'PP_5',
-      }
+        name: data.name || "",
+        surname: data.surname || "",
+        class: data.class || "",
+        program: data.program || "PP_5",
+        spec: data.specialization || "",
+      };
     default:
-      return {}
+      return {};
   }
-}
+};
 
 export const computeUpdateList = (oldList, newList) => {
   let added = newList.map((course) => {
     if (!oldList.find((el) => el === course)) {
-      return { id: course, archived: false }
+      return { id: course, archived: false };
     }
-    return undefined
-  })
+    return undefined;
+  });
 
   let removed = oldList.map((course) => {
     if (!newList.find((el) => el === course)) {
-      return { id: course, archived: true }
+      return { id: course, archived: true };
     }
-    return undefined
-  })
+    return undefined;
+  });
 
-  let result = [...added, ...removed]
+  let result = [...added, ...removed];
 
-  return result.filter((el) => el !== undefined)
-}
-
-
+  return result.filter((el) => el !== undefined);
+};

@@ -21,8 +21,8 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-const path = "https://akostylev.com/api";
-//const path = "http://localhost:4000";
+//const path = "https://akostylev.com/api";
+const path = "http://localhost:4000";
 
 const httpLink = createUploadLink({
   uri: path,

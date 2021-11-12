@@ -165,6 +165,11 @@ export const adminItems = [
     path: "/reports",
     title: "Отчеты",
   },
+  {
+    name: "Specs",
+    path: "/specs",
+    title: "Специальности",
+  },
 ];
 
 export const subRoute = {

@@ -4,6 +4,10 @@ import { useAuth } from "../scripts/use-auth.js";
 import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "../scripts/mutations";
 import "../styles/Login.css";
+import { Button } from "../components/shared/ui/Button";
+import { FormInput } from "../components/shared/ui/FormInput";
+import { FormWrapper } from "../components/shared/ui/FormWrapper";
+import { Subtitle } from "../components/shared/ui/Subtitle";
 
 const Login = () => {
   let history = useHistory();
@@ -40,35 +44,31 @@ const Login = () => {
   return (
     <div className="login">
       <h1>Добро пожаловать!</h1>
-      <h3>Пожалуйста введите логин и пароль</h3>
-      <div className="login_form">
-        <div className="login_form_row">
-          <input
-            value={formState.login}
-            onChange={(e) =>
-              setFormState({ ...formState, login: e.target.value })
-            }
-            type="text"
-            name="email"
-            autoComplete="email"
-            size="30"
-            placeholder="Логин"
-          />
-        </div>
-        <div className="login_form_row">
-          <input
-            placeholder="Пароль"
-            type="password"
-            value={formState.password}
-            autoComplete="new-password"
-            size="30"
-            onChange={(e) =>
-              setFormState({ ...formState, password: e.target.value })
-            }
-          />
-        </div>
-        <button onClick={() => login()}>Войти</button>
-      </div>
+      <Subtitle>Пожалуйста введите логин и пароль</Subtitle>
+      <FormWrapper>
+        <FormInput
+          value={formState.login}
+          onChange={(e) =>
+            setFormState({ ...formState, login: e.target.value })
+          }
+          type="text"
+          name="email"
+          autoComplete="email"
+          size="30"
+          placeholder="Логин"
+        />
+        <FormInput
+          placeholder="Пароль"
+          type="password"
+          value={formState.password}
+          autoComplete="new-password"
+          size="30"
+          onChange={(e) =>
+            setFormState({ ...formState, password: e.target.value })
+          }
+        />
+        <Button onClick={() => login()} text="Войти" />
+      </FormWrapper>
     </div>
   );
 };

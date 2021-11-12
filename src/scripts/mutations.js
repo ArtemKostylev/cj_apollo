@@ -104,6 +104,7 @@ export const UPDATE_COURSE_MUTATION = gql`
       id
       name
       group
+      excludeFromReport
     }
   }
 `;
@@ -116,6 +117,16 @@ export const UPDATE_STUDENT_MUTATION = gql`
       surname
       class
       program
+      specialization
+    }
+  }
+`;
+
+export const UPDATE_SPECIALIZATION_MUTATION = gql`
+  mutation updateSpecializationMutation($data: SpecializationInput) {
+    updateSpecialization(data: $data) {
+      id
+      name
     }
   }
 `;
@@ -137,6 +148,7 @@ export const CREATE_COURSE_MUTATION = gql`
       id
       name
       group
+      excludeFromReport
     }
   }
 `;
@@ -156,6 +168,12 @@ export const CREATE_STUDENT_MUTATION = gql`
 export const DELETE_TEACHER_MUTATION = gql`
   mutation deleteTeacherMutation($id: Int) {
     deleteTeacher(id: $id)
+  }
+`;
+
+export const DELETE_SPECIALIZATION_MUTATION = gql`
+  mutation deleteSpecializationMutation($id: Int) {
+    deleteSpecialization(id: $id)
   }
 `;
 

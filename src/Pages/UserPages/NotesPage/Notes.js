@@ -1,6 +1,7 @@
 import { useAuth } from "../../../scripts/use-auth";
 import "../../../styles/Notes.css";
 import Controls from "../../../components/Controls";
+import { Wrapper } from "../../../components/shared/ui/Wrapper";
 import { useEffect, useState } from "react";
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 import { FETCH_NOTES_QUERY } from "../../../scripts/queries";
@@ -120,13 +121,13 @@ export const Notes = (props) => {
   };
 
   return (
-    <div className="notes_container">
+    <Wrapper>
       <Controls items={items} />
       <textarea
         placeholder="Это - место для заметок..."
         value={value}
         onChange={change}
       ></textarea>
-    </div>
+    </Wrapper>
   );
 };

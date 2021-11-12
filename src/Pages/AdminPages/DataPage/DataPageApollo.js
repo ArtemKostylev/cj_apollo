@@ -47,7 +47,8 @@ export default function DataPageController(props) {
   if (networkStatus === NetworkStatus.refetch) return spinner;
   if (error) throw new Error(503);
 
-  let { teachers, courses, students, relations } = data.fetchFullInfo;
+  let { teachers, courses, students, relations, specializations } =
+    data.fetchFullInfo;
 
   relations = relations.map((el) => ({
     teacher: el.teacher.id,
@@ -126,6 +127,7 @@ export default function DataPageController(props) {
               id: values.id,
               name: values.name,
               group: values.group,
+              excludeFromReport: values.exclude,
             },
           },
         });
@@ -141,6 +143,7 @@ export default function DataPageController(props) {
               surname: values.surname,
               class: parseInt(values.class),
               program: values.program,
+              specialization: parseInt(values.spec),
             },
           },
         });
@@ -210,6 +213,7 @@ export default function DataPageController(props) {
       courses={courses}
       students={students}
       relations={relations}
+      specializations={specializations}
       update={update}
       clear={clear}
       refetch={refetch}

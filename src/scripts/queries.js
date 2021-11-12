@@ -197,6 +197,7 @@ export const FETCH_FULL_INFO = gql`
         id
         name
         group
+        excludeFromReport
       }
       students {
         id
@@ -204,6 +205,9 @@ export const FETCH_FULL_INFO = gql`
         surname
         class
         program
+        specialization {
+          id
+        }
       }
       relations {
         teacher {
@@ -216,6 +220,10 @@ export const FETCH_FULL_INFO = gql`
           id
         }
         archived
+      }
+      specializations {
+        id
+        name
       }
     }
   }
@@ -232,4 +240,13 @@ export const FETCH_GROUP_COMPANY = gql`
       }
     }
   }
-`
+`;
+
+export const FETCH_SPECIALIZATIONS = gql`
+  query fetchSpecializations {
+    fetchSpecializations {
+      id
+      name
+    }
+  }
+`;

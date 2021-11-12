@@ -15,6 +15,7 @@ import { Subgroups } from "./UserPages/SubgroupsPage/Subgroups";
 import { ErrorScreen } from "./ErrorScreen";
 import { ErrorBoundary } from "react-error-boundary";
 import { Reports } from "./AdminPages/ReportsPage/Reports";
+import { Specialization } from "./AdminPages/SpecPage";
 
 export default function App() {
   const auth = useAuth();
@@ -65,6 +66,7 @@ const Content = () => {
         render={(props) => <ConsultController {...props} menuRef={menuRef} />}
       />
       <Route path="/reports" component={Reports} />
+      <Route path="/specs" component={Specialization} />
       <Redirect from="/" to="/journals" />
     </Switch>
   );
