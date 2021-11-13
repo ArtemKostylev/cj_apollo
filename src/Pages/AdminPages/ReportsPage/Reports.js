@@ -8,6 +8,9 @@ import { Spinner } from "../../../components/shared/ui/Spinner";
 
 export const Reports = () => {
   const { data, loading, error, refetch } = useQuery(FETCH_ANNUAL_REPORT, {
+    variables: {
+      year: 2021,
+    },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "network-only",
   });
@@ -18,7 +21,7 @@ export const Reports = () => {
 
   return (
     <Wrapper>
-      <Text>{`Ссылка для скачивания ведомости: ${data.fetchAnnualReport}`}</Text>
+      <a href={data.fetchAnnualReport}>Ссылка для скачивания ведомости</a>
       <Button onClick={() => refetch()}>{`Переформировать ведомость`}</Button>
     </Wrapper>
   );
