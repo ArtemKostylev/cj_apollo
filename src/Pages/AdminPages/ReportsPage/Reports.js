@@ -1,10 +1,9 @@
-import React from "react";
-import { Wrapper } from "../../../components/shared/ui/Wrapper";
-import { Button } from "../../../components/shared/ui/Button";
-import { useQuery } from "@apollo/client";
-import { FETCH_ANNUAL_REPORT } from "../../../scripts/queries";
-import { Text } from "../../../components/shared/ui/Text";
-import { Spinner } from "../../../components/shared/ui/Spinner";
+import React from 'react';
+import { Wrapper } from '../../../components/shared/ui/Wrapper';
+import { Button } from '../../../components/shared/ui/Button';
+import { useQuery } from '@apollo/client';
+import { FETCH_ANNUAL_REPORT } from '../../../scripts/queries';
+import { Spinner } from '../../../components/shared/ui/Spinner';
 
 export const Reports = () => {
   const { data, loading, error, refetch } = useQuery(FETCH_ANNUAL_REPORT, {
@@ -12,7 +11,7 @@ export const Reports = () => {
       year: 2021,
     },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   if (loading) return <Spinner />;

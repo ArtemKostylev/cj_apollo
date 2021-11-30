@@ -1,7 +1,7 @@
-import React from "react";
-import { Wrapper } from "../../../components/shared/ui/Wrapper";
-import { FormWrapper } from "../../../components/shared/ui/FormWrapper";
-import { SpecInput } from "./SpecInput";
+import React from 'react';
+import { Wrapper } from '../../../components/shared/ui/Wrapper';
+import { FormWrapper } from '../../../components/shared/ui/FormWrapper';
+import { SpecInput } from './SpecInput';
 
 export const SpecPageView = ({ initialData, refetch }) => {
   return (
