@@ -1,6 +1,6 @@
-import { useOnClickOutside } from "../scripts/utils";
-import "../styles/Controls.css";
-import React, { useRef, useState } from "react";
+import { useOnClickOutside } from '../../scripts/utils';
+import '../styles/Controls.css';
+import React, { useRef, useState } from 'react';
 
 const Controls = (props) => {
   /* 
@@ -14,7 +14,7 @@ const Controls = (props) => {
   */
   const ControlsItemDropdown = (props) => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [value, setValue] = useState(props.text || "Нет значений");
+    const [value, setValue] = useState(props.text || 'Нет значений');
 
     const onClick = () => {
       if (!dropdownVisible) setDropdownVisible(true);
@@ -35,7 +35,7 @@ const Controls = (props) => {
       return (
         <div
           className={`controls_item__dropdown ${
-            dropdownVisible ? "visible" : ""
+            dropdownVisible ? 'visible' : ''
           }`}
         >
           <ul>
@@ -51,14 +51,14 @@ const Controls = (props) => {
 
     return (
       <>
-        <span className="controls_item__label">{props.label}</span>
+        <span className='controls_item__label'>{props.label}</span>
         <span
-          className={`controls_item ${dropdownVisible ? "visible" : ""}`}
+          className={`controls_item ${dropdownVisible ? 'visible' : ''}`}
           onClick={onClick}
           ref={ref}
         >
-          <p className="controls_item__text">{value}</p>
-          <span className="arrow" />
+          <p className='controls_item__text'>{value}</p>
+          <span className='arrow' />
           <Dropdown />
         </span>
       </>
@@ -79,7 +79,7 @@ const Controls = (props) => {
 
     return (
       <button
-        className="controls_item__button"
+        className='controls_item__button'
         disabled={props.disabled}
         onClick={onClick}
       >
@@ -106,10 +106,10 @@ const Controls = (props) => {
 
     return (
       <>
-        <p className="controls_item__label">{props.label}</p>
+        <p className='controls_item__label'>{props.label}</p>
         <input
-          maxLength="4"
-          className="controls_item__input"
+          maxLength='4'
+          className='controls_item__input'
           onChange={onChange}
           value={value}
         ></input>
@@ -118,9 +118,9 @@ const Controls = (props) => {
   };
 
   return (
-    <div className="controls_container noselect">
+    <div className='controls_container noselect'>
       {props.items.map((item) => {
-        if (item.type === "dropdown") {
+        if (item.type === 'dropdown') {
           return (
             <ControlsItemDropdown
               key={item.text}
@@ -131,7 +131,7 @@ const Controls = (props) => {
             />
           );
         }
-        if (item.type === "button") {
+        if (item.type === 'button') {
           return (
             <ControlsItemButton
               key={item.text}
