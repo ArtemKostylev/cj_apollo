@@ -40,6 +40,7 @@ const Dropdown = ({ inverted, visible, onClick, width, ref }) => {
   );
 };
 
+// TODO: replace with editable cell
 export const EditableCellHours = (initialValue, updateData, row, column) => {
   const [value, setValue] = useState(initialValue);
   const [dropdownVisible, setDropdownVisible] = useState(false);

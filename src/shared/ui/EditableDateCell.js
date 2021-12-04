@@ -1,10 +1,37 @@
-import React, { forwardRef, useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../styles/Journal.css";
-import ru from "date-fns/locale/ru";
-import { getYear } from "../../scripts/utils";
-import moment from "moment";
+import React, { forwardRef, useState } from 'react';
+import styled from 'styled-components';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../styles/Journal.css';
+import ru from 'date-fns/locale/ru';
+import { getYear } from '../../scripts/utils';
+import moment from 'moment';
+
+const DATE_PLACEHOLDER = '.....';
+
+const convertDate = ({ value, full }) => {
+  if (!value) return DATE_PLACEHOLDER;
+
+  const [month, day, year] = value.split('/');
+
+  const date = `${day}.${month}`;
+
+  if (full) date.concat(`.${year}`);
+
+  return date;
+};
+
+const InputWrapper = styled.p`
+  padding: 0;
+  cursor: pointer;
+  margin: 0;
+`;
+
+const Input = forwardRef(({ value, onClick, full }, ref) => (
+  <InputWrapper onClick={onClick} ref={ref}>
+    {convertDate({ value, full })}
+  </InputWrapper>
+));
 
 const EditableDateCell = ({
   initialValue,
@@ -18,47 +45,25 @@ const EditableDateCell = ({
 }) => {
   const [value, setValue] = useState(initialValue);
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
   if (disabled) {
-    return (
-      <p>
-        {value
-          ? `${value.split("/")[1]}.${value.split("/")[0]}${
-              full ? "." + value.split("/")[2] : ""
-            }`
-          : "....."}
-      </p>
-    );
+    return convertDate({ value, full });
   }
-  const Input = forwardRef(({ value, onClick }, ref) => (
-    <p
-      onClick={onClick}
-      ref={ref}
-      style={{ padding: "0", cursor: "pointer", margin: "0" }}
-    >
-      {value
-        ? `${value.split("/")[1]}.${value.split("/")[0]}${
-            full ? "." + value.split("/")[2] : ""
-          }`
-        : "....."}
-    </p>
-  ));
 
+  // TODO: replace input month with month - 1
   const start_date = moment()
     .clone()
-    .year(getYear(month - 1))
-    .month(month - 1)
-    .startOf("month")
+    .year(getYear(month))
+    .month(month)
+    .startOf('month')
     .toDate();
+
   const end_date = moment()
     .clone()
-    .year(getYear(month - 1))
-    .month(month - 1)
-    .endOf("month")
+    .year(getYear(month))
+    .month(month)
+    .endOf('month')
     .toDate();
+
   return (
     <DatePicker
       selected={value}
@@ -74,6 +79,7 @@ const EditableDateCell = ({
       customInput={<Input />}
       minDate={start_date}
       maxDate={end_date}
+      full={full}
       locale={ru}
     />
   );

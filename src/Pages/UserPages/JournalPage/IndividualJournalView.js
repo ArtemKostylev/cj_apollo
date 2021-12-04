@@ -3,7 +3,7 @@ import { QUATER_END, QUATERS_RU, PROGRAMS } from "../../../scripts/constants";
 import { findMark } from "./JournalPageHelpers";
 import moment from "moment";
 import "../../../styles/Journal.css";
-import EditableCell from "../../../components/EditableCell";
+import { EditableCell } from '../../../shared/ui/EditableCell';
 
 const IndividualJournalView = ({
   parsedDates,

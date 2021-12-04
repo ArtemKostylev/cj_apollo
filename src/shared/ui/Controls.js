@@ -2,6 +2,8 @@ import { useOnClickOutside } from '../../scripts/utils';
 import '../styles/Controls.css';
 import React, { useRef, useState } from 'react';
 
+const DEFAULT_SELECT_VALUE = 'Нет значений';
+
 const Controls = (props) => {
   /* 
     Controls component with dropdown
@@ -12,22 +14,22 @@ const Controls = (props) => {
     - onClick: function to execute on click. Receives event as parameter.
     - label: label of controls item
   */
-  const ControlsItemDropdown = (props) => {
-    const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [value, setValue] = useState(props.text || 'Нет значений');
+  const ControlsItemSelect = ({ text }) => {
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(text || DEFAULT_SELECT_VALUE);
 
     const onClick = () => {
-      if (!dropdownVisible) setDropdownVisible(true);
+      if (!open) setOpen(true);
     };
 
     const ref = useRef();
 
-    useOnClickOutside(ref, () => setDropdownVisible(false));
+    useOnClickOutside(ref, () => setOpen(false));
 
     const Dropdown = () => {
       const onClick = (e) => {
         e.preventDefault();
-        setDropdownVisible(false);
+        setOpen(false);
         setValue(e.target.innerHTML);
         props.onClick(e);
       };
@@ -122,7 +124,7 @@ const Controls = (props) => {
       {props.items.map((item) => {
         if (item.type === 'dropdown') {
           return (
-            <ControlsItemDropdown
+            <ControlsItemSelect
               key={item.text}
               data={item.data}
               label={item.label}
