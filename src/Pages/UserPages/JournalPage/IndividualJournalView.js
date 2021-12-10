@@ -4,12 +4,12 @@ import { PROGRAMS } from '../../../constants/programs';
 import { findMark } from './JournalPageHelpers';
 import moment from 'moment';
 import '../../../styles/Journal.css';
-import EditableCell from '../../../components/EditableCell';
+import { EditableCell } from '../../../shared/ui/EditableCell';
 
 const IndividualJournalView = ({
   parsedDates,
   month,
-  updateQuaterData,
+  updateQuarterData,
   updateMyData,
   studentData,
 }) => {
@@ -27,16 +27,25 @@ const IndividualJournalView = ({
         <>
           <EditableCell
             value={mark ? mark.mark : ''}
-            row={item.student.id}
-            column={mark ? mark.period : QUARTER_END[month]}
-            updateMyData={updateQuaterData}
+            onClick={(value) =>
+              updateQuarterData({
+                row: item.student.id,
+                column: mark ? mark.period : QUARTER_END[month],
+                value,
+              })
+            }
           />
           {year !== null ? (
             <EditableCell
               value={year ? year.mark : ''}
-              row={item.student.id}
-              column={year ? year.period : 'year'}
-              updateMyData={updateQuaterData}
+              updateMyData={updateQuarterData}
+              onClick={(value) =>
+                updateQuarterData({
+                  row: item.student.id,
+                  column: year ? year.period : 'year',
+                  value,
+                })
+              }
             />
           ) : (
             ''
@@ -105,10 +114,14 @@ const IndividualJournalView = ({
                   <EditableCell
                     key={date}
                     value={findMark(date, item.journalEntry)}
-                    row={item.student.id}
-                    column={index}
-                    updateMyData={updateMyData}
-                    weekend={date.isoWeekday() === 6 ? 'weekend' : ''}
+                    onClick={(value) =>
+                      updateMyData({
+                        row: item.student.id,
+                        column: index,
+                        value,
+                      })
+                    }
+                    isWeekend={date.isoWeekday() === 6}
                     disabled={item.archived}
                   />
                 ))}

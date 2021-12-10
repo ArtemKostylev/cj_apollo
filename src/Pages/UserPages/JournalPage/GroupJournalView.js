@@ -2,7 +2,7 @@ import React from 'react';
 import { findMark } from './JournalPageHelpers';
 import '../../../styles/Journal.css';
 import EditableDateCell from '../../../components/EditableDateCell';
-import EditableCell from '../../../components/EditableCell';
+import { EditableCell } from '../../../components/EditableCell';
 import { PROGRAMS } from '../../../constants/programs';
 import { compareStundents } from '../../../utils/utils';
 
@@ -12,7 +12,7 @@ const GroupJournalView = ({
   period,
   updateDates,
   updateMyData,
-  updateQuaterData,
+  updateQuarterData,
 }) => {
   const prepareQuaters = () => {
     if (period.id === 0) {
@@ -98,11 +98,14 @@ const GroupJournalView = ({
                         <EditableCell
                           disabled={item.archived}
                           value={findMark(date.date, item.journalEntry)}
-                          row={item.student.id}
-                          column={index}
-                          updateMyData={updateMyData}
-                          weekend={''}
-                          group={g_index}
+                          onClick={(value) =>
+                            updateMyData({
+                              row: item.student.id,
+                              column: index,
+                              group: g_index,
+                              value,
+                            })
+                          }
                           key={index}
                         />
                       ))}
@@ -119,11 +122,14 @@ const GroupJournalView = ({
                         return (
                           <EditableCell
                             value={mark ? mark.mark : ''}
-                            row={item.student.id ? item.student.id : ''}
-                            column={quat}
-                            updateMyData={updateQuaterData}
-                            weekend={''}
-                            group={g_index}
+                            onClick={(value) =>
+                              updateQuarterData({
+                                row: item.student.id ? item.student.id : '',
+                                column: quat,
+                                group: g_index,
+                                value,
+                              })
+                            }
                             key={quat}
                           />
                         );

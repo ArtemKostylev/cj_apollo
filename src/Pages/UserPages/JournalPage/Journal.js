@@ -117,7 +117,7 @@ export default function Journal(props) {
     return true;
   };
 
-  const updateQuaterData = (row, column, value, group) => {
+  const updateQuarterData = (row, column, value, group) => {
     const student = studentData.find((item, index) => item.student.id === row);
     const studentIndex = studentData.indexOf(student);
     var mark = student.quaterMark.find((item) => item.period === column);
@@ -423,13 +423,13 @@ export default function Journal(props) {
           period={period}
           updateDates={updateDates}
           updateMyData={updateMyData}
-          updateQuaterData={updateQuaterData}
+          updateQuarterData={updateQuarterData}
         />
       ) : (
         <IndividualJournalView
           parsedDates={parsedDates}
           month={month}
-          updateQuaterData={updateQuaterData}
+          updateQuarterData={updateQuarterData}
           updateMyData={updateMyData}
           studentData={studentData}
           onlyHours={userCourses[course].onlyHours}
