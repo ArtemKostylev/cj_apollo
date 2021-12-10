@@ -26,16 +26,15 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const path = pathMap[process.env.NODE_ENV];
-
 const httpLink = createUploadLink({
-  uri: path,
+  uri: pathMap[process.env.NODE_ENV],
 });
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+
 ReactDOM.render(
   <ApolloProvider client={client}>
     <ProvideAuth>
