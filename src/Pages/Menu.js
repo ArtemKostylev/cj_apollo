@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Menu.css';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../scripts/use-auth';
+import { useAuth } from '../utils/use-auth';
 import {
   ADMIN_RESOURCES,
   USER_RESOURCES,

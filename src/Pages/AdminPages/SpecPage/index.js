@@ -1,7 +1,7 @@
 import React from "react";
 import { SpecPageView } from "./SpecPageView";
 import { Spinner } from "../../../components/shared/ui/Spinner";
-import { FETCH_SPECIALIZATION } from "../../../scripts/queries";
+import { FETCH_SPECIALIZATION } from "../../../utils/queries";
 import { NetworkStatus, useQuery } from "@apollo/client";
 
 export const Specialization = () => {

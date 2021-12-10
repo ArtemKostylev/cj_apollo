@@ -1,9 +1,9 @@
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { PROGRAMS } from '../../../constants/programs';
-import { UPDATE_SUBGROUPS_MUTATION } from '../../../scripts/mutations';
-import { FETCH_SUBGROUPS_QUERY } from '../../../scripts/queries';
-import { useAuth } from '../../../scripts/use-auth';
+import { UPDATE_SUBGROUPS_MUTATION } from '../../../utils/mutations';
+import { FETCH_SUBGROUPS_QUERY } from '../../../utils/queries';
+import { useAuth } from '../../../utils/use-auth';
 import '../../../styles/Subgroups.css';
 
 import Controls from '../../../components/Controls';

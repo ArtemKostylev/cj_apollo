@@ -1,8 +1,8 @@
 import React from "react";
 import "../styles/Header.css";
-import { useAuth } from "../scripts/use-auth.js";
+import { useAuth } from "../utils/use-auth.js";
 import { useHistory, useLocation } from "react-router-dom";
-import { getHeaderFromRoute } from "../scripts/utils";
+import { getHeaderFromRoute } from "../utils/utils";
 
 export default function Header(props) {
   let history = useHistory();

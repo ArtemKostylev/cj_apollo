@@ -4,7 +4,7 @@ import '../../../styles/Journal.css';
 import EditableDateCell from '../../../components/EditableDateCell';
 import EditableCell from '../../../components/EditableCell';
 import { PROGRAMS } from '../../../constants/programs';
-import { compareStundents } from '../../../scripts/utils';
+import { compareStundents } from '../../../utils/utils';
 
 const GroupJournalView = ({
   dates_by_group,

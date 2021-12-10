@@ -3,13 +3,13 @@ import { useQuery } from '@apollo/client';
 import {
   FETCH_JOURNAL_QUERY,
   FETCH_TEACHERS_QUERY,
-} from '../../../scripts/queries';
+} from '../../../utils/queries';
 import '../../../styles/Journals.css';
 import moment from 'moment';
 import { QUARTERS, QUARTERS_RU } from '../../../constants/quarters';
 import { ACADEMIC_YEARS } from '../../../constants/academicYears';
 import { PERIODS } from '../../../constants/periods';
-import { getQuater } from '../../../scripts/utils';
+import { getQuater } from '../../../utils/utils';
 import Controls from '../../../components/Controls';
 import { useHistory } from 'react-router-dom';
 

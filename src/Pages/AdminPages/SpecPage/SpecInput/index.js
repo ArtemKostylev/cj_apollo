@@ -3,7 +3,7 @@ import { SpecInputView } from "./SpecInputView";
 import {
   UPDATE_SPECIALIZATION_MUTATION,
   DELETE_SPECIALIZATION_MUTATION,
-} from "../../../../scripts/mutations";
+} from "../../../../utils/mutations";
 import { useMutation } from "@apollo/client";
 
 export const SpecInput = ({ initialData = {}, refetch, isEnabled }) => {

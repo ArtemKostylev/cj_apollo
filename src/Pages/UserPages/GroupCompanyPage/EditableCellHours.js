@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useOnClickOutside } from "../../../scripts/utils";
+import { useOnClickOutside } from "../../../utils/utils";
 import "../../../styles/Journal.css";
 
 const Dropdown = ({ inverted, visible, onClick, width, ref }) => {

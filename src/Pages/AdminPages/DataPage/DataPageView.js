@@ -16,7 +16,7 @@ import { computeUpdateList, createCoditionalState } from './dataPageHeplers';
 import { ModalContent } from './ModalContent';
 import { FilePicker } from './FilePicker';
 import { PROGRAMS } from '../../../constants/programs';
-import { compareStundents } from '../../../scripts/utils';
+import { compareStundents } from '../../../utils/utils';
 
 const PROGRAM_MAPPER = [
   { value: 'PP_5', text: '(5)ПП' },
