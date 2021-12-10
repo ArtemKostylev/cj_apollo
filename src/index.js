@@ -7,21 +7,26 @@ import { BrowserRouter } from 'react-router-dom';
 import { ProvideAuth } from './scripts/use-auth.js';
 import { setContext } from '@apollo/client/link/context';
 import { createUploadLink } from 'apollo-upload-client';
-
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { USER_ALIAS } from './constants/localAliases';
+
+const pathMap = {
+  development: 'http://localhost:4000',
+  production: 'https://akostylev.com/api',
+};
 
 const authLink = setContext((_, { headers }) => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem(USER_ALIAS));
   const token = user ? user.token : false;
   return {
     headers: {
       ...headers,
-      Authorization: token ? `Bearer ${token}` : '',
+      Authorization: token && `Bearer ${token}`,
     },
   };
 });
-const path = 'https://akostylev.com/api';
-//const path = "http://localhost:4000";
+
+const path = pathMap[process.env.NODE_ENV];
 
 const httpLink = createUploadLink({
   uri: path,
