@@ -1,25 +1,21 @@
-export const USER_RESOURCES = [
-  {
-    name: 'Journal',
+export const USER_RESOURCES = {
+  journal: {
     path: '/journal',
     title: 'Классный журнал',
   },
-  {
-    name: 'Consult',
+  consult: {
     path: '/consult',
     title: 'Консультации',
   },
-  {
-    name: 'Compensation',
+  compensation: {
     path: '/compensation',
     title: 'Возмещение',
   },
-  {
-    name: 'Notes',
+  notes: {
     path: '/notes',
     title: 'Заметки',
   },
-];
+};
 
 export const ADMIN_RESOURCES = [
   {
@@ -45,7 +41,6 @@ export const ADMIN_RESOURCES = [
 ];
 
 export const SUBGROUPS_RESOURCE = {
-  name: 'Subgroups',
   path: '/subgroups',
   title: 'Группы',
 };
