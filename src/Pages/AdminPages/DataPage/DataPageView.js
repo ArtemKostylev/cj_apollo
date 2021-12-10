@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import "../../../styles/DataPage.css";
+import React, { useState, useEffect } from 'react';
+import '../../../styles/DataPage.css';
 import {
   BsChevronDown,
   BsChevronUp,
@@ -7,26 +7,26 @@ import {
   BsPencilSquare,
   BsTrash,
   BsCheck,
-} from "react-icons/bs";
+} from 'react-icons/bs';
 
-import { IoMdListBox } from "react-icons/io";
+import { IoMdListBox } from 'react-icons/io';
 
-import ReactModal from "react-modal";
-import { computeUpdateList, createCoditionalState } from "./dataPageHeplers";
-import { ModalContent } from "./ModalContent";
-import { FilePicker } from "./FilePicker";
-import { PROGRAMS } from "../../../scripts/constants";
-import { compareStundents } from "../../../scripts/utils";
+import ReactModal from 'react-modal';
+import { computeUpdateList, createCoditionalState } from './dataPageHeplers';
+import { ModalContent } from './ModalContent';
+import { FilePicker } from './FilePicker';
+import { PROGRAMS } from '../../../constants/programs';
+import { compareStundents } from '../../../scripts/utils';
 
 const PROGRAM_MAPPER = [
-  { value: "PP_5", text: "(5)ПП" },
-  { value: "PP_8", text: "(8)ПП" },
-  { value: "OP", text: "ОП" },
+  { value: 'PP_5', text: '(5)ПП' },
+  { value: 'PP_8', text: '(8)ПП' },
+  { value: 'OP', text: 'ОП' },
 ];
 
 const convertSpecToOptions = (spec) => [
   ...spec.map((it) => ({ value: it.id.toString(), text: it.name })),
-  { value: "", text: "Не указано" },
+  { value: '', text: 'Не указано' },
 ];
 
 const createOptions = (items) =>
@@ -58,7 +58,7 @@ export default function DataPageView({
   const [archivedCourses, setArchivedCourses] = useState(new Set());
   const [archivedStudents, setArchivedStudents] = useState(new Set());
 
-  const [modalType, setModalType] = useState("teacher");
+  const [modalType, setModalType] = useState('teacher');
   const [courseMode, setCourseMode] = useState(false);
   const [studentMode, setStudentMode] = useState(false);
 
@@ -69,14 +69,14 @@ export default function DataPageView({
   const [fileType, setFileType] = useState();
 
   const LABELS = {
-    name: "Имя",
-    surname: "Фамилия",
-    parent: "Отчество",
-    group: "Групповой",
-    class: "Класс",
-    program: "Программа",
-    spec: "Специальность",
-    exclude: "Убрать из ведомости",
+    name: 'Имя',
+    surname: 'Фамилия',
+    parent: 'Отчество',
+    group: 'Групповой',
+    class: 'Класс',
+    program: 'Программа',
+    spec: 'Специальность',
+    exclude: 'Убрать из ведомости',
   };
 
   //creates a list of higlited items based on current values and relations, passed from apollo.
@@ -137,13 +137,13 @@ export default function DataPageView({
     };
 
     const onChecked = () => {
-      if (type === "course") {
+      if (type === 'course') {
         setCheckedCourses((prev) => {
           let id = prev.findIndex((el) => el === data.id);
           id > -1 ? prev.splice(id, 1) : prev.push(data.id);
           return prev;
         });
-      } else if (type === "student") {
+      } else if (type === 'student') {
         setCheckedStudents((prev) => {
           let id = prev.findIndex((el) => el === data.id);
           id > -1 ? prev.splice(id, 1) : prev.push(data.id);
@@ -154,64 +154,64 @@ export default function DataPageView({
     };
 
     const getClicked = () => {
-      if (type === "teacher") {
+      if (type === 'teacher') {
         return data.id === currentTeacher;
       }
-      if (type === "course") {
+      if (type === 'course') {
         return data.id === currentCourse;
       }
     };
 
     return (
-      <li className={`change_item ${getClicked() ? "clicked" : ""}`}>
-        <div className={`text_panel ${editVisible ? "visible" : ""}`}>
+      <li className={`change_item ${getClicked() ? 'clicked' : ''}`}>
+        <div className={`text_panel ${editVisible ? 'visible' : ''}`}>
           <span
             onClick={() => {
-              if (type === "teacher") {
+              if (type === 'teacher') {
                 setCurrentTeacher(data.id);
                 setCurrentCourse(0);
                 setActiveStudents(new Set());
-              } else if (type === "course") {
+              } else if (type === 'course') {
                 setCurrentCourse(data.id);
               }
             }}
-            style={{ flex: 5, textAlign: "left" }}
+            style={{ flex: 5, textAlign: 'left' }}
           >
-            <p className={` ${active ? "text_active" : "text"}`}>
-              {`${data.surname || ""} ${data.name || ""} ${data.parent || ""}${
-                archived ? "(A)" : ""
+            <p className={` ${active ? 'text_active' : 'text'}`}>
+              {`${data.surname || ''} ${data.name || ''} ${data.parent || ''}${
+                archived ? '(A)' : ''
               }`}
             </p>
           </span>
 
           {mode ? (
             <input
-              type="checkbox"
+              type='checkbox'
               checked={checked}
-              style={{ marginRight: "4%" }}
+              style={{ marginRight: '4%' }}
               onChange={() => onChecked()}
             />
           ) : (
             <span
-              className={`arrow_icon_container ${editVisible ? "visible" : ""}`}
+              className={`arrow_icon_container ${editVisible ? 'visible' : ''}`}
               onClick={expand}
             >
               {editVisible ? <BsChevronUp /> : <BsChevronDown />}
             </span>
           )}
         </div>
-        <div className={`edit_panel ${editVisible ? "visible" : ""}`}>
-          <div className="form_input_containter">
+        <div className={`edit_panel ${editVisible ? 'visible' : ''}`}>
+          <div className='form_input_containter'>
             {Object.keys(formState).map((key) => (
-              <div key={key} className="form_input">
+              <div key={key} className='form_input'>
                 <label
-                  style={{ flex: "1", textAlign: "left", paddingLeft: "5%" }}
+                  style={{ flex: '1', textAlign: 'left', paddingLeft: '5%' }}
                 >
                   {LABELS[key]}
                 </label>
-                {key === "program" || key === "spec" ? (
+                {key === 'program' || key === 'spec' ? (
                   <select
-                    style={{ flex: "4", width: "100%", margin: "1rem 1rem" }}
+                    style={{ flex: '4', width: '100%', margin: '1rem 1rem' }}
                     onChange={(e) => {
                       setFormState((prev) => ({
                         ...prev,
@@ -221,20 +221,20 @@ export default function DataPageView({
                     value={formState[key]}
                   >
                     {createOptions(
-                      key === "program"
+                      key === 'program'
                         ? PROGRAM_MAPPER
                         : convertSpecToOptions(specializations)
                     )}
                   </select>
                 ) : (
                   <input
-                    style={{ flex: "4" }}
+                    style={{ flex: '4' }}
                     value={formState[key]}
                     type={
-                      key === "group" || key === "exclude" ? "checkbox" : "text"
+                      key === 'group' || key === 'exclude' ? 'checkbox' : 'text'
                     }
                     checked={
-                      key === "group" || key === "exclude"
+                      key === 'group' || key === 'exclude'
                         ? formState[key]
                         : false
                     }
@@ -242,18 +242,18 @@ export default function DataPageView({
                       setFormState((prev) => ({
                         ...prev,
                         [key]:
-                          key === "group" || key === "exclude"
+                          key === 'group' || key === 'exclude'
                             ? e.target.checked
                             : e.target.value,
                       }))
                     }
-                    maxLength={key === "class" ? 1 : undefined}
+                    maxLength={key === 'class' ? 1 : undefined}
                   />
                 )}
               </div>
             ))}
           </div>
-          <div className="form_controls">
+          <div className='form_controls'>
             <div onClick={() => update(type, { id: data.id, ...formState })}>
               <p>Сохранить</p>
               <BsPencilSquare />
@@ -271,31 +271,31 @@ export default function DataPageView({
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="page">
+    <div className='page'>
       <div className={`changes_block left visible`}>
-        <div className="block_header">
-          <h2 style={{ flex: "15" }}>Преподаватели</h2>
+        <div className='block_header'>
+          <h2 style={{ flex: '15' }}>Преподаватели</h2>
           <IoMdListBox
-            style={{ marginRight: "10px", flex: "1" }}
+            style={{ marginRight: '10px', flex: '1' }}
             onClick={() => {
               setFilePickerShown(true);
-              setFileType("teacher");
+              setFileType('teacher');
             }}
           />
           <BsPlusSquare
-            style={{ marginRight: "10px", flex: "1" }}
+            style={{ marginRight: '10px', flex: '1' }}
             onClick={() => {
               setShowModal(true);
-              setModalType("teacher");
+              setModalType('teacher');
             }}
           />
         </div>
-        <div className="list_wrapper">
+        <div className='list_wrapper'>
           <ul>
             {teachers.map((item) => (
               <ChangesItem
                 key={item.id}
-                type="teacher"
+                type='teacher'
                 data={item}
                 active={item.empty}
               />
@@ -304,26 +304,26 @@ export default function DataPageView({
         </div>
       </div>
       <div className={`changes_block center visible`}>
-        <div className="block_header">
-          <h2 style={{ flex: "15" }}>Учебные предметы</h2>
+        <div className='block_header'>
+          <h2 style={{ flex: '15' }}>Учебные предметы</h2>
           <IoMdListBox
-            style={{ marginRight: "10px", flex: "1" }}
+            style={{ marginRight: '10px', flex: '1' }}
             onClick={() => {
               setFilePickerShown(true);
-              setFileType("course");
+              setFileType('course');
             }}
           />
           <BsPlusSquare
-            style={{ marginRight: "10px", flex: "1" }}
+            style={{ marginRight: '10px', flex: '1' }}
             onClick={() => {
               setShowModal(true);
-              setModalType("course");
+              setModalType('course');
             }}
           />
           {currentTeacher ? (
             courseMode ? (
               <BsCheck
-                style={{ marginRight: "10px", flex: "1" }}
+                style={{ marginRight: '10px', flex: '1' }}
                 onClick={() => {
                   setCourseMode(false);
                   if (
@@ -342,7 +342,7 @@ export default function DataPageView({
               />
             ) : (
               <BsPencilSquare
-                style={{ marginRight: "10px", flex: "1" }}
+                style={{ marginRight: '10px', flex: '1' }}
                 onClick={() => {
                   setCheckedCourses(Array.from(activeCourses));
                   setCourseMode(true);
@@ -350,17 +350,17 @@ export default function DataPageView({
               />
             )
           ) : (
-            ""
+            ''
           )}
         </div>
-        <div className="list_wrapper">
+        <div className='list_wrapper'>
           <ul>
             {courses
               .filter((item) => activeCourses.has(item.id))
               .map((item) => (
                 <ChangesItem
                   key={item.id}
-                  type="course"
+                  type='course'
                   data={item}
                   active={true}
                   mode={courseMode}
@@ -371,7 +371,7 @@ export default function DataPageView({
               .map((item) => (
                 <ChangesItem
                   key={item.id}
-                  type="course"
+                  type='course'
                   data={item}
                   archived={true}
                   mode={courseMode}
@@ -385,7 +385,7 @@ export default function DataPageView({
               .map((item) => (
                 <ChangesItem
                   key={item.id}
-                  type="course"
+                  type='course'
                   data={item}
                   mode={courseMode}
                 />
@@ -394,26 +394,26 @@ export default function DataPageView({
         </div>
       </div>
       <div className={`changes_block right visible`}>
-        <div className="block_header">
-          <h2 style={{ flex: "15" }}>Учащиеся</h2>
+        <div className='block_header'>
+          <h2 style={{ flex: '15' }}>Учащиеся</h2>
           <IoMdListBox
-            style={{ marginRight: "10px", flex: "1" }}
+            style={{ marginRight: '10px', flex: '1' }}
             onClick={() => {
               setFilePickerShown(true);
-              setFileType("student");
+              setFileType('student');
             }}
           />
           <BsPlusSquare
-            style={{ marginRight: "10px", flex: "1" }}
+            style={{ marginRight: '10px', flex: '1' }}
             onClick={() => {
               setShowModal(true);
-              setModalType("student");
+              setModalType('student');
             }}
           />
           {currentCourse ? (
             studentMode ? (
               <BsCheck
-                style={{ marginRight: "10px", flex: "1" }}
+                style={{ marginRight: '10px', flex: '1' }}
                 onClick={() => {
                   setStudentMode(false);
                   if (
@@ -433,7 +433,7 @@ export default function DataPageView({
               />
             ) : (
               <BsPencilSquare
-                style={{ marginRight: "10px", flex: "1" }}
+                style={{ marginRight: '10px', flex: '1' }}
                 onClick={() => {
                   setCheckedStudents(Array.from(activeStudents) || []);
                   setStudentMode(true);
@@ -441,27 +441,27 @@ export default function DataPageView({
               />
             )
           ) : (
-            ""
+            ''
           )}
         </div>
-        <div className="list_wrapper">
+        <div className='list_wrapper'>
           <ul>
             {students.map((group) => (
               <React.Fragment key={`${group.class} ${group.program}`}>
                 {group.students.filter((item) => activeStudents.has(item.id))
                   .length > 0 ? (
-                  <p className="class_paragraph">{`Класс: ${
+                  <p className='class_paragraph'>{`Класс: ${
                     group.class
                   } Программа: ${PROGRAMS[group.program]}`}</p>
                 ) : (
-                  ""
+                  ''
                 )}
                 {group.students
                   .filter((item) => activeStudents.has(item.id))
                   .map((item) => (
                     <ChangesItem
                       key={item.id}
-                      type="student"
+                      type='student'
                       data={item}
                       active={true}
                       mode={studentMode}
@@ -474,18 +474,18 @@ export default function DataPageView({
               <React.Fragment key={`${group.class} ${group.program}`}>
                 {group.students.filter((item) => archivedStudents.has(item.id))
                   .length > 0 ? (
-                  <p className="class_paragraph">{`${group.class} ${
+                  <p className='class_paragraph'>{`${group.class} ${
                     PROGRAMS[group.program]
                   }`}</p>
                 ) : (
-                  ""
+                  ''
                 )}
                 {group.students
                   .filter((item) => archivedStudents.has(item.id))
                   .map((item) => (
                     <ChangesItem
                       key={item.id}
-                      type="student"
+                      type='student'
                       data={item}
                       archived={true}
                       mode={studentMode}
@@ -500,11 +500,11 @@ export default function DataPageView({
                     !activeStudents.has(item.id) &&
                     !archivedStudents.has(item.id)
                 ).length > 0 ? (
-                  <p className="class_paragraph">{` ${group.class} ${
+                  <p className='class_paragraph'>{` ${group.class} ${
                     PROGRAMS[group.program]
                   }`}</p>
                 ) : (
-                  ""
+                  ''
                 )}
                 {group.students
                   .filter(
@@ -516,7 +516,7 @@ export default function DataPageView({
                   .map((item) => (
                     <ChangesItem
                       key={item.id}
-                      type="student"
+                      type='student'
                       data={item}
                       mode={studentMode}
                     />
@@ -528,8 +528,8 @@ export default function DataPageView({
       </div>
       <ReactModal
         isOpen={showModal}
-        className="modal"
-        overlayClassName="overlay"
+        className='modal'
+        overlayClassName='overlay'
       >
         <ModalContent
           type={modalType}
@@ -542,8 +542,8 @@ export default function DataPageView({
       </ReactModal>
       <ReactModal
         isOpen={filePickerShown}
-        className="modalfile"
-        overlayClassName="overlay"
+        className='modalfile'
+        overlayClassName='overlay'
       >
         <FilePicker type={fileType} close={setFilePickerShown} />
       </ReactModal>

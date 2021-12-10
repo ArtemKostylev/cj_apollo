@@ -1,27 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./styles/index.css";
-import App from "./Pages/App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { ProvideAuth } from "./scripts/use-auth.js";
-import { setContext } from "@apollo/client/link/context";
-import { createUploadLink } from "apollo-upload-client";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles/index.css';
+import App from './Pages/App';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { ProvideAuth } from './scripts/use-auth.js';
+import { setContext } from '@apollo/client/link/context';
+import { createUploadLink } from 'apollo-upload-client';
 
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
-import { USER } from "./scripts/constants";
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const authLink = setContext((_, { headers }) => {
-  const user = JSON.parse(localStorage.getItem(USER));
+  const user = JSON.parse(localStorage.getItem('user'));
   const token = user ? user.token : false;
   return {
     headers: {
       ...headers,
-      Authorization: token ? `Bearer ${token}` : "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
-const path = "https://akostylev.com/api";
+const path = 'https://akostylev.com/api';
 //const path = "http://localhost:4000";
 
 const httpLink = createUploadLink({
@@ -40,7 +39,7 @@ ReactDOM.render(
       </BrowserRouter>
     </ProvideAuth>
   </ApolloProvider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

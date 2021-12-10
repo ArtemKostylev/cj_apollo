@@ -1,12 +1,12 @@
-import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
-import React, { useState } from "react";
-import { PROGRAMS } from "../../../scripts/constants";
-import { UPDATE_SUBGROUPS_MUTATION } from "../../../scripts/mutations";
-import { FETCH_SUBGROUPS_QUERY } from "../../../scripts/queries";
-import { useAuth } from "../../../scripts/use-auth";
-import "../../../styles/Subgroups.css";
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { PROGRAMS } from '../../../constants/programs';
+import { UPDATE_SUBGROUPS_MUTATION } from '../../../scripts/mutations';
+import { FETCH_SUBGROUPS_QUERY } from '../../../scripts/queries';
+import { useAuth } from '../../../scripts/use-auth';
+import '../../../styles/Subgroups.css';
 
-import Controls from "../../../components/Controls";
+import Controls from '../../../components/Controls';
 
 export const Subgroups = () => {
   const auth = useAuth();
@@ -16,7 +16,7 @@ export const Subgroups = () => {
   const [course, setCourse] = useState(0);
 
   const getCourse = (e) => {
-    setCourse(e.target.getAttribute("data-index"));
+    setCourse(e.target.getAttribute('data-index'));
   };
 
   var { loading, data, error, refetch, networkStatus } = useQuery(
@@ -27,7 +27,7 @@ export const Subgroups = () => {
         teacherId: auth.user.teacher,
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
     }
   );
 
@@ -53,20 +53,20 @@ export const Subgroups = () => {
 
   const items = [
     {
-      type: "dropdown",
+      type: 'dropdown',
       data: availableCourses.map((course) => course.name),
-      label: "Предмет :",
+      label: 'Предмет :',
       text: availableCourses[course].name,
       onClick: getCourse,
     },
     {
-      type: "button",
-      text: "Сохранить",
+      type: 'button',
+      text: 'Сохранить',
       onClick: save,
     },
     {
-      type: "button",
-      text: "Отменить изменения",
+      type: 'button',
+      text: 'Отменить изменения',
       onClick: () => refetch(),
     },
   ];
@@ -111,10 +111,10 @@ export const Subgroups = () => {
     };
 
     return (
-      <li className="item">
+      <li className='item'>
         <p>{`${props.surname} ${props.name}`}</p>
         <label> Группа:</label>
-        <input value={value} onChange={onChange} maxlength="1" />
+        <input value={value} onChange={onChange} maxlength='1' />
       </li>
     );
   };
@@ -122,11 +122,11 @@ export const Subgroups = () => {
   return (
     <div>
       <Controls items={items} />
-      <div className="group_wrapper">
-        <ul className="group_list">
+      <div className='group_wrapper'>
+        <ul className='group_list'>
           {data.map((group, index) => (
             <>
-              <li className="group_header">{`Класс: ${group.class}${
+              <li className='group_header'>{`Класс: ${group.class}${
                 PROGRAMS[group.program]
               }`}</li>
               {group.relations.map((item) => (

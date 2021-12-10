@@ -9,11 +9,6 @@ export default function Header(props) {
   const auth = useAuth();
   const location = useLocation();
 
-  /*TODO add header text change on route changes.
-  (useLocation).maybe, it is reasonable to move
-  all items from menu to constants, and than export them here.
-  */
-
   const logout = () => {
     auth.signout(() => {
       history.push("/");

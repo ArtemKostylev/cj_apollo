@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
-import { GROUP_PERIODS, MONTHS } from "../scripts/constants";
-import { useOnClickOutside } from "../scripts/utils";
+import React, { useState, useRef } from 'react';
+import { GROUP_PERIODS } from '../constants/periods';
+import { MONTHS } from '../constants/months';
+import { useOnClickOutside } from '../scripts/utils';
 
 const TableControls = ({
   initialMonth,
@@ -20,13 +21,13 @@ const TableControls = ({
 
   const onMonthClick = (e, setOpened) => {
     period
-      ? setMonthPickerValue(GROUP_PERIODS[e.target.getAttribute("data-id")])
+      ? setMonthPickerValue(GROUP_PERIODS[e.target.getAttribute('data-id')])
       : setMonthPickerValue(e.target.innerHTML);
     setOpened(false);
   };
 
   const onCourseClick = (e, setOpened) => {
-    setCoursePickerValue(e.target.getAttribute("data-index"));
+    setCoursePickerValue(e.target.getAttribute('data-index'));
     setOpened(false);
   };
 
@@ -55,28 +56,28 @@ const TableControls = ({
 
     return (
       <div
-        className={`month_picker ${opened ? "visible" : ""}`}
+        className={`month_picker ${opened ? 'visible' : ''}`}
         onClick={open}
         ref={ref}
       >
         {name}
-        <div className={`month_dropdown ${opened ? "visible" : ""}`}>
-          {type === "period" ? (
+        <div className={`month_dropdown ${opened ? 'visible' : ''}`}>
+          {type === 'period' ? (
             <ul>
               <li
                 onClick={(e) => onItemClick(e, setOpened)}
-                data-id={"first_half"}
+                data-id={'first_half'}
               >
                 Первое полугодие
               </li>
               <li
                 onClick={(e) => onItemClick(e, setOpened)}
-                data-id={"second_half"}
+                data-id={'second_half'}
               >
                 Второе полугодие
               </li>
             </ul>
-          ) : type === "month" ? (
+          ) : type === 'month' ? (
             <ul>
               {[8, 9, 10, 11, 0, 1, 2, 3, 4].map((month, index) => (
                 <li key={month} onClick={(e) => onItemClick(e, setOpened)}>
@@ -84,7 +85,7 @@ const TableControls = ({
                 </li>
               ))}
             </ul>
-          ) : type === "course" ? (
+          ) : type === 'course' ? (
             <ul>
               {courses.map((course, index) => (
                 <li
@@ -97,7 +98,7 @@ const TableControls = ({
               ))}
             </ul>
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>
@@ -105,21 +106,21 @@ const TableControls = ({
   };
 
   return (
-    <div className="controls_wrapper noselect">
+    <div className='controls_wrapper noselect'>
       <ValuePicker
         name={period ? monthPickerValue.name : monthPickerValue}
-        type={period ? "period" : "month"}
+        type={period ? 'period' : 'month'}
         onItemClick={onMonthClick}
       />
       <ValuePicker
         name={courses[coursePickerValue].name}
-        type="course"
+        type='course'
         onItemClick={onCourseClick}
       />
-      <div className="save_button" onClick={save}>
+      <div className='save_button' onClick={save}>
         Сохранить
       </div>
-      <div className="save_button" onClick={refetch}>
+      <div className='save_button' onClick={refetch}>
         Отменить изменения
       </div>
     </div>

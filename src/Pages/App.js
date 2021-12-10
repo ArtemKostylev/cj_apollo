@@ -110,7 +110,8 @@ const Content = () => {
         />
         <div className={`Content ${menuVisible ? "menuVisible" : ""}`}>
           <Header menuClick={menuClick} menuRef={menuRef}></Header>
-          {auth.user.roleId === 1 ? adminBoard : userBoard}
+          {/* TODO: replace roleId with role */}
+          {auth.user.role === ADMIN ? adminBoard : userBoard}
         </div>
       </ErrorBoundary>
     </div>
