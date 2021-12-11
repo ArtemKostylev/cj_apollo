@@ -2,7 +2,7 @@ import React from 'react';
 import { Wrapper } from '../../../components/shared/ui/Wrapper';
 import { Button } from '../../../components/shared/ui/Button';
 import { useQuery } from '@apollo/client';
-import { FETCH_ANNUAL_REPORT } from '../../../scripts/queries';
+import { FETCH_ANNUAL_REPORT } from '../../../utils/queries';
 import { Spinner } from '../../../components/shared/ui/Spinner';
 
 export const Reports = () => {

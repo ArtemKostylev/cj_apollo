@@ -1,5 +1,5 @@
-import React, { useState, useContext, createContext } from "react";
-import { USER } from "../scripts/constants.js";
+import React, { useState, useContext, createContext } from 'react';
+import { USER_ALIAS } from '../constants/localAliases';
 
 const AuthContext = createContext();
 
@@ -12,7 +12,7 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const cashed_user = localStorage.getItem(USER);
+  const cashed_user = localStorage.getItem(USER_ALIAS);
 
   const [user, setUser] = useState(
     cashed_user ? JSON.parse(cashed_user) : null
@@ -28,13 +28,13 @@ function useProvideAuth() {
       token: payload.token,
     };
     setUser(newUser);
-    localStorage.setItem(USER, JSON.stringify(newUser));
+    localStorage.setItem(USER_ALIAS, JSON.stringify(newUser));
     nav();
   };
 
   const signout = (nav) => {
     setUser(false);
-    localStorage.removeItem(USER);
+    localStorage.removeItem(USER_ALIAS);
     nav();
   };
 

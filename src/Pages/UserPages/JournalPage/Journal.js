@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import moment from "moment";
-import "moment/locale/ru";
-import TableControls from "../../../components/TableControls";
-import IndividualJournalView from "./IndividualJournalView";
-import GroupJournalView from "./GroupJournalView";
-import { useMutation, useQuery, NetworkStatus } from "@apollo/client";
-import { FETCH_JOURNAL_QUERY } from "../../../scripts/queries";
-import { useAuth } from "../../../scripts/use-auth";
-import { UPDATE_JOURNAL_MUTATION } from "../../../scripts/mutations";
-import { GROUP_PERIODS } from "../../../scripts/constants";
-import { getYear } from "../../../scripts/utils";
-import GroupCompanyView from "../GroupCompanyPage/GroupCompanyView";
-import { getMonthFromUTCString } from "./JournalPageHelpers";
-import times from "lodash/times";
+import React, { useEffect, useState } from 'react';
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import moment from 'moment';
+import 'moment/locale/ru';
+import TableControls from '../../../components/TableControls';
+import IndividualJournalView from './IndividualJournalView';
+import GroupJournalView from './GroupJournalView';
+import { useMutation, useQuery, NetworkStatus } from '@apollo/client';
+import { FETCH_JOURNAL_QUERY } from '../../../utils/queries';
+import { useAuth } from '../../../utils/use-auth';
+import { UPDATE_JOURNAL_MUTATION } from '../../../utils/mutations';
+import { GROUP_PERIODS } from '../../../constants/periods';
+import { getYear } from '../../../utils/utils';
+import GroupCompanyView from '../GroupCompanyPage/GroupCompanyView';
+import { getMonthFromUTCString } from './JournalPageHelpers';
+import times from 'lodash/times';
 
 export default function Journal(props) {
-  moment.locale("ru");
+  moment.locale('ru');
 
   let auth = useAuth();
 
@@ -27,7 +27,7 @@ export default function Journal(props) {
   let changed = false;
 
   const [period, setPeriod] = useState(
-    month > 7 ? GROUP_PERIODS["first_half"] : GROUP_PERIODS["second_half"]
+    month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']
   );
 
   const userCourses = props.location.state?.courses || auth.user?.courses;
@@ -35,17 +35,17 @@ export default function Journal(props) {
     if (changed) {
       event.preventDefault();
       let confirm = window.confirm(
-        "Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны."
+        'Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.'
       );
       if (!confirm) event.stopImmediatePropagation();
     }
   };
 
   useEffect(() => {
-    props.menuRef?.current.addEventListener("click", listener);
+    props.menuRef?.current.addEventListener('click', listener);
 
     return () => {
-      props.menuRef?.current?.removeEventListener("click", listener);
+      props.menuRef?.current?.removeEventListener('click', listener);
     };
   });
 
@@ -54,20 +54,20 @@ export default function Journal(props) {
   const parsedDates = createDates(startDate);
 
   const updateMyData = (row, column, value, group) => {
-    let date = "";
+    let date = '';
     if (group > -1) {
       date = dates_by_group[group][column].date;
-      if (date === "") {
-        alert("Пожалуйста, заполните дату");
+      if (date === '') {
+        alert('Пожалуйста, заполните дату');
         return false;
       }
     } else {
-      date = parsedDates[column].format("YYYY-MM-DD");
+      date = parsedDates[column].format('YYYY-MM-DD');
     }
     const student = studentData.find((item) => item.student.id === row);
     const marks = student.journalEntry;
     const cell = marks.find(
-      (el) => el.date.split("T")[0] === date || el.date === date
+      (el) => el.date.split('T')[0] === date || el.date === date
     );
 
     const studentId = studentData.indexOf(student);
@@ -82,9 +82,9 @@ export default function Journal(props) {
             {
               id: 0,
               mark: value,
-              date: date.includes("T00:00:00.000Z")
+              date: date.includes('T00:00:00.000Z')
                 ? date
-                : date.concat("T00:00:00.000Z"),
+                : date.concat('T00:00:00.000Z'),
               delete_flag: false,
               update_flag: true,
             },
@@ -94,7 +94,7 @@ export default function Journal(props) {
       ];
     } else {
       let index = marks.indexOf(cell);
-      let flag = value === "";
+      let flag = value === '';
       studentData = [
         ...studentData.slice(0, studentId),
         {
@@ -117,7 +117,7 @@ export default function Journal(props) {
     return true;
   };
 
-  const updateQuaterData = (row, column, value, group) => {
+  const updateQuarterData = (row, column, value, group) => {
     const student = studentData.find((item, index) => item.student.id === row);
     const studentIndex = studentData.indexOf(student);
     var mark = student.quaterMark.find((item) => item.period === column);
@@ -138,7 +138,7 @@ export default function Journal(props) {
       return true;
     }
     const markIndex = student.quaterMark.indexOf(mark);
-    let flag = value === "";
+    let flag = value === '';
     studentData = [
       ...studentData.slice(0, studentIndex),
       {
@@ -230,7 +230,7 @@ export default function Journal(props) {
       year: moment().month() > 7 ? moment().year() : moment().year() - 1,
     },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   const [update] = useMutation(UPDATE_JOURNAL_MUTATION);
@@ -350,7 +350,7 @@ export default function Journal(props) {
       const emptyCount = maxDates - value.length;
       result.push(
         ...value,
-        ...times(emptyCount, () => ({ date: "", month: key }))
+        ...times(emptyCount, () => ({ date: '', month: key }))
       );
     });
 
@@ -358,9 +358,9 @@ export default function Journal(props) {
   });
 
   const updateDates = ({ date, column, group }) => {
-    date = date.toLocaleDateString("ru-RU");
-    date = date.split(".");
-    date = `${date[2]}-${date[1]}-${date[0]}`.concat("T00:00:00.000Z");
+    date = date.toLocaleDateString('ru-RU');
+    date = date.split('.');
+    date = `${date[2]}-${date[1]}-${date[0]}`.concat('T00:00:00.000Z');
 
     const oldDate = dates_by_group[group][column].date;
 
@@ -423,13 +423,13 @@ export default function Journal(props) {
           period={period}
           updateDates={updateDates}
           updateMyData={updateMyData}
-          updateQuaterData={updateQuaterData}
+          updateQuarterData={updateQuarterData}
         />
       ) : (
         <IndividualJournalView
           parsedDates={parsedDates}
           month={month}
-          updateQuaterData={updateQuaterData}
+          updateQuarterData={updateQuarterData}
           updateMyData={updateMyData}
           studentData={studentData}
           onlyHours={userCourses[course].onlyHours}
@@ -441,10 +441,10 @@ export default function Journal(props) {
 
 const createDates = (initialDate) => {
   let result = [];
-  let start = initialDate.clone().startOf("month");
-  let end = initialDate.clone().endOf("month");
+  let start = initialDate.clone().startOf('month');
+  let end = initialDate.clone().endOf('month');
 
-  for (let date = start; date <= end; date.add(1, "day")) {
+  for (let date = start; date <= end; date.add(1, 'day')) {
     if (date.isoWeekday() !== 7) result.push(date.clone());
   }
   return result;

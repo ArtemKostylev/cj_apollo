@@ -1,11 +1,13 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const LOGIN_MUTATION = gql`
   mutation LoginMutation($login: String!, $password: String!) {
     signin(login: $login, password: $password) {
       token
       user {
-        roleId
+        role {
+          name
+        }
         teacher {
           id
           relations {

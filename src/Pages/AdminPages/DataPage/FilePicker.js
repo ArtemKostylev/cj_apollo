@@ -4,7 +4,7 @@ import {
   UPLOAD_COURSES_FROM_FILE,
   UPLOAD_STUDENTS_FROM_FILE,
   UPLOAD_TEACHERS_FROM_FILE,
-} from "../../../scripts/mutations";
+} from "../../../utils/mutations";
 import "../../../styles/FilePicker.css";
 
 export const FilePicker = ({ type, close }) => {

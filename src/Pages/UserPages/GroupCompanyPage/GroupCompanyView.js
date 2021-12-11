@@ -1,8 +1,8 @@
-import React from 'react'
-import '../../../styles/Journal.css'
-import EditableDateCell from '../../../components/EditableDateCell'
-import { PROGRAMS } from '../../../scripts/constants'
-import { EditableCellHours } from './EditableCellHours'
+import React from 'react';
+import '../../../styles/Journal.css';
+import EditableDateCell from '../../../components/EditableDateCell';
+import { PROGRAMS } from '../../../constants/programs';
+import { EditableCellHours } from './EditableCellHours';
 
 const GroupCompanyView = ({
   data,
@@ -12,22 +12,21 @@ const GroupCompanyView = ({
   updateMyData,
   updateQuaterData,
 }) => {
-
   return (
     <>
-      <table className="journal_table">
+      <table className='journal_table'>
         <tbody>
           {data
             .sort((a, b) => {
-              if (a.class < b.class) return -1
-              if (a.class > b.class) return 1
-              return 0
+              if (a.class < b.class) return -1;
+              if (a.class > b.class) return 1;
+              return 0;
             })
             .map((group, g_index) => {
               return (
                 <React.Fragment key={g_index}>
                   <tr>
-                    <th className="name_column" rowSpan="2">
+                    <th className='name_column' rowSpan='2'>
                       Группа
                     </th>
                     {period.data.map((month) => (
@@ -40,7 +39,7 @@ const GroupCompanyView = ({
                   <tr>
                     {group.hours.map((date, id) => {
                       return (
-                        <th className="date">
+                        <th className='date'>
                           <EditableDateCell
                             initialValue={
                               date.date === ''
@@ -55,11 +54,11 @@ const GroupCompanyView = ({
                             key={id}
                           />
                         </th>
-                      )
+                      );
                     })}
                   </tr>
                   <tr>
-                    <td className="name_cell">{`${group.group.split(' ')[0]} ${
+                    <td className='name_cell'>{`${group.group.split(' ')[0]} ${
                       PROGRAMS[group.group.split(' ')[1]]
                     } ${group.group.split(' ')[2]}`}</td>
                     {group.hours.map((date, index) => (
@@ -74,12 +73,12 @@ const GroupCompanyView = ({
                     ))}
                   </tr>
                 </React.Fragment>
-              )
+              );
             })}
         </tbody>
       </table>
     </>
-  )
-}
+  );
+};
 
-export default GroupCompanyView
+export default GroupCompanyView;

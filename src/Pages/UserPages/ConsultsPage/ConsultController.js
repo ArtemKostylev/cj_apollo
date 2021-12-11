@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../../scripts/use-auth";
+import { useAuth } from "../../../utils/use-auth";
 import {
   DELETE_CONSULTS_MUTATION,
   DELETE_GROUP_CONSULTS_MUTATION,
   UPDATE_GROUP_CONSULTS_MUTATION,
   UPDATE_CONSULTS_MUTATION,
-} from "../../../scripts/mutations";
+} from "../../../utils/mutations";
 
 import {
   FETCH_CONSULTS_QUERY,
   FETCH_GROUP_CONSULTS_QUERY,
-} from "../../../scripts/queries";
+} from "../../../utils/queries";
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";

@@ -83,8 +83,6 @@ const Dropdown = ({ open, options, onClick, width }) => {
   );
 };
 
-// TODO: fix all import to named from default
-
 const CellText = styled.p`
   border: none;
   outline: none;
@@ -139,7 +137,7 @@ export const EditableCell = ({
           open={open}
           options={options}
           onClick={(e) => {
-            onClick(e);
+            onClick(e.target.value);
             setValue(e.target.value);
           }}
           width={width}

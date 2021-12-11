@@ -1,11 +1,11 @@
-import { useAuth } from "../../../scripts/use-auth";
+import { useAuth } from "../../../utils/use-auth";
 import "../../../styles/Notes.css";
 import Controls from "../../../components/Controls";
 import { Wrapper } from "../../../components/shared/ui/Wrapper";
 import { useEffect, useState } from "react";
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
-import { FETCH_NOTES_QUERY } from "../../../scripts/queries";
-import { UPDATE_NOTE_MUTATION } from "../../../scripts/mutations";
+import { FETCH_NOTES_QUERY } from "../../../utils/queries";
+import { UPDATE_NOTE_MUTATION } from "../../../utils/mutations";
 import moment from "moment";
 
 export const Notes = (props) => {

@@ -1,78 +1,68 @@
-import React, { useState } from 'react'
-import { useQuery } from '@apollo/client'
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
 import {
   FETCH_JOURNAL_QUERY,
   FETCH_TEACHERS_QUERY,
-} from '../../../scripts/queries'
-import '../../../styles/Journals.css'
-import moment from 'moment'
-import {
-  QUATERS,
-  QUATERS_RU,
-  ACADEMIC_YEARS,
-  PERIODS,
-} from '../../../scripts/constants'
-import { getQuater } from '../../../scripts/utils'
-import Controls from '../../../components/Controls'
-import { useHistory } from 'react-router-dom'
-
-const HEADERS = [
-  'ФИО',
-  'Класс',
-  'Программа',
-  'Кол-во часов',
-  'Пропуски',
-  'По болезни',
-]
+} from '../../../utils/queries';
+import '../../../styles/Journals.css';
+import moment from 'moment';
+import { QUARTERS, QUARTERS_RU } from '../../../constants/quarters';
+import { ACADEMIC_YEARS } from '../../../constants/academicYears';
+import { PERIODS } from '../../../constants/periods';
+import { getQuater } from '../../../utils/utils';
+import Controls from '../../../components/Controls';
+import { useHistory } from 'react-router-dom';
 
 export default function Teachers(props) {
-  let history = useHistory()
+  let history = useHistory();
 
-  const [teacherIndex, setTeacherIndex] = useState()
-  const [period, setPeriod] = useState(getQuater(moment().month()))
+  const [teacherIndex, setTeacherIndex] = useState();
+  const [period, setPeriod] = useState(getQuater(moment().month()));
   const [year, setYear] = useState(
-    moment().month() > 7 ? moment().year() : moment().year() - 1,
-  )
-  const [course, setCourse] = useState(0)
+    moment().month() > 7 ? moment().year() : moment().year() - 1
+  );
+  const [course, setCourse] = useState(0);
 
-  const spinner = <div>Загрузка</div>
+  const spinner = <div>Загрузка</div>;
 
-  const { loading: tcLoading, data: teachers, error } = useQuery(
-    FETCH_TEACHERS_QUERY,
-  )
+  const {
+    loading: tcLoading,
+    data: teachers,
+    error,
+  } = useQuery(FETCH_TEACHERS_QUERY);
 
-  if (tcLoading) return spinner
-  if (error) throw new Error(503)
+  if (tcLoading) return spinner;
+  if (error) throw new Error(503);
 
   const ListItem = (props) => {
     return (
       <li
-        tabIndex="0"
+        tabIndex='0'
         onClick={() => setTeacherIndex(props.index)}
         className={teacherIndex === props.index ? 'active' : ''}
       >
         <p>{props.name}</p>
       </li>
-    )
-  }
+    );
+  };
 
   const extrudeDate = (date) => {
-    const [month, day] = date.split('T')[0].split('-').slice(1)
-    return `${day}.${month}`
-  }
+    const [month, day] = date.split('T')[0].split('-').slice(1);
+    return `${day}.${month}`;
+  };
 
   const StudentItem = (props) => {
     const cells = Array(props.cells)
       .fill()
-      .map((x, i) => i)
+      .map((x, i) => i);
     return (
-      <div className="teacher_item">
-        <div className="item_header">
+      <div className='teacher_item'>
+        <div className='item_header'>
           <p>{props.name}</p>
           <p>{props.archived ? '(A)' : ''}</p>
           <p>{`Выдано уроков: ${props.hours}`}</p>
         </div>
-        <div className="item_data">
+        <div className='item_data'>
           <table>
             <thead>
               <tr>
@@ -84,7 +74,7 @@ export default function Teachers(props) {
                 <th
                   style={{ width: '10%', whiteSpace: 'nowrap', margin: '10px' }}
                 >
-                  {QUATERS_RU[props.period]}
+                  {QUARTERS_RU[props.period]}
                 </th>
                 {PERIODS[props.period] !== 'fourth' || (
                   <th
@@ -111,7 +101,7 @@ export default function Teachers(props) {
                 ))}
                 <td>
                   {props.quater.find(
-                    (item) => item.period === PERIODS[props.period],
+                    (item) => item.period === PERIODS[props.period]
                   )?.mark || ''}
                 </td>
                 {PERIODS[props.period] !== 'fourth' || (
@@ -125,55 +115,57 @@ export default function Teachers(props) {
           </table>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const TeacherJournal = (props) => {
-    const { loading, data: journal, error, networkStatus } = useQuery(
-      FETCH_JOURNAL_QUERY,
-      {
-        variables: {
-          courseId: props.courseId,
-          teacherId: props.teacherIndex,
-          date_gte: moment()
-            .month(QUATERS[props.period][0])
-            .year(props.period > 1 ? props.year + 1 : props.year)
-            .startOf('month')
-            .utc()
-            .format('YYYY-MM-DDTHH:mm:ss.SSS')
-            .concat('Z'),
-          date_lte: moment()
-            .month(QUATERS[props.period].slice(-1)[0])
-            .year(props.period > 1 ? props.year + 1 : props.year)
-            .endOf('month')
-            .utc()
-            .format('YYYY-MM-DDTHH:mm:ss.SSS')
-            .concat('Z'),
-          year: props.year,
-        },
-        fetchPolicy: 'network-only',
+    const {
+      loading,
+      data: journal,
+      error,
+      networkStatus,
+    } = useQuery(FETCH_JOURNAL_QUERY, {
+      variables: {
+        courseId: props.courseId,
+        teacherId: props.teacherIndex,
+        date_gte: moment()
+          .month(QUARTERS[props.period][0])
+          .year(props.period > 1 ? props.year + 1 : props.year)
+          .startOf('month')
+          .utc()
+          .format('YYYY-MM-DDTHH:mm:ss.SSS')
+          .concat('Z'),
+        date_lte: moment()
+          .month(QUARTERS[props.period].slice(-1)[0])
+          .year(props.period > 1 ? props.year + 1 : props.year)
+          .endOf('month')
+          .utc()
+          .format('YYYY-MM-DDTHH:mm:ss.SSS')
+          .concat('Z'),
+        year: props.year,
       },
-    )
+      fetchPolicy: 'network-only',
+    });
 
     if (props.courseId === 0) {
-      return <p>На данный момент для этого учителя нет данных</p>
+      return <p>На данный момент для этого учителя нет данных</p>;
     }
 
-    if (loading) return spinner
-    if (networkStatus === networkStatus.refetch) return spinner
+    if (loading) return spinner;
+    if (networkStatus === networkStatus.refetch) return spinner;
 
-    if (error) throw new Error(503)
+    if (error) throw new Error(503);
 
     if (journal.fetchJournal[0].student === null) {
-      return <p>Для данного предмета еще не назначены ученики</p>
+      return <p>Для данного предмета еще не назначены ученики</p>;
     }
 
     return journal.fetchJournal.map((item) => {
-      const name = `${item.student.surname} ${item.student.name}`
-      const hours = `${item.hours}`
-      const dates = item.journalEntry.map((entry) => entry.date)
-      const marks = item.journalEntry.map((entry) => entry.mark)
-      const quater = item.quaterMark
+      const name = `${item.student.surname} ${item.student.name}`;
+      const hours = `${item.hours}`;
+      const dates = item.journalEntry.map((entry) => entry.date);
+      const marks = item.journalEntry.map((entry) => entry.mark);
+      const quater = item.quaterMark;
       return (
         <StudentItem
           name={name}
@@ -186,21 +178,21 @@ export default function Teachers(props) {
           period={props.period}
           archived={item.archived}
         />
-      )
-    })
-  }
+      );
+    });
+  };
 
   const getYearValue = (e) => {
-    setYear(ACADEMIC_YEARS[e.target.getAttribute('data-index')].value)
-  }
+    setYear(ACADEMIC_YEARS[e.target.getAttribute('data-index')].value);
+  };
 
   const getPeriod = (e) => {
-    setPeriod(e.target.getAttribute('data-index'))
-  }
+    setPeriod(e.target.getAttribute('data-index'));
+  };
 
   const getCourse = (e) => {
-    setCourse(e.target.getAttribute('data-index'))
-  }
+    setCourse(e.target.getAttribute('data-index'));
+  };
 
   const items = [
     {
@@ -212,9 +204,9 @@ export default function Teachers(props) {
     },
     {
       type: 'dropdown',
-      data: QUATERS_RU,
+      data: QUARTERS_RU,
       label: 'Период :',
-      text: QUATERS_RU[period],
+      text: QUARTERS_RU[period],
       onClick: getPeriod,
     },
     {
@@ -224,7 +216,7 @@ export default function Teachers(props) {
         ?.relations.map((item) => item.course.name),
       label: 'Предмет :',
       text: teachers?.fetchTeachers?.find(
-        (teacher) => teacher.id === teacherIndex,
+        (teacher) => teacher.id === teacherIndex
       )?.relations[course]?.course?.name,
       onClick: getCourse,
     },
@@ -235,7 +227,7 @@ export default function Teachers(props) {
         if (
           teachers.fetchTeachers.find(
             (teacher) =>
-              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id),
+              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id)
           ).relations[course]?.course?.id !== undefined
         )
           history.push({
@@ -246,11 +238,11 @@ export default function Teachers(props) {
                 .find(
                   (teacher) =>
                     teacher.id ===
-                    (teacherIndex || teachers.fetchTeachers[0].id),
+                    (teacherIndex || teachers.fetchTeachers[0].id)
                 )
                 .relations.map((item) => item.course),
             },
-          })
+          });
       },
       disabled: course.id === 0,
     },
@@ -261,7 +253,7 @@ export default function Teachers(props) {
         if (
           teachers.fetchTeachers.find(
             (teacher) =>
-              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id),
+              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id)
           ).relations[course]?.course?.id !== undefined
         )
           history.push({
@@ -272,11 +264,11 @@ export default function Teachers(props) {
                 .find(
                   (teacher) =>
                     teacher.id ===
-                    (teacherIndex || teachers.fetchTeachers[0].id),
+                    (teacherIndex || teachers.fetchTeachers[0].id)
                 )
                 .relations.map((item) => item.course),
             },
-          })
+          });
       },
       disabled: course.id === 0,
     },
@@ -287,7 +279,7 @@ export default function Teachers(props) {
         if (
           teachers.fetchTeachers.find(
             (teacher) =>
-              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id),
+              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id)
           ).relations[course]?.course?.id !== undefined
         )
           history.push({
@@ -298,11 +290,11 @@ export default function Teachers(props) {
                 .find(
                   (teacher) =>
                     teacher.id ===
-                    (teacherIndex || teachers.fetchTeachers[0].id),
+                    (teacherIndex || teachers.fetchTeachers[0].id)
                 )
                 .relations.map((item) => item.course),
             },
-          })
+          });
       },
       disabled: course.id === 0,
     },
@@ -313,7 +305,7 @@ export default function Teachers(props) {
         if (
           teachers.fetchTeachers.find(
             (teacher) =>
-              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id),
+              teacher.id === (teacherIndex || teachers.fetchTeachers[0].id)
           ).relations[course]?.course?.id !== undefined
         )
           history.push({
@@ -324,19 +316,19 @@ export default function Teachers(props) {
                 .find(
                   (teacher) =>
                     teacher.id ===
-                    (teacherIndex || teachers.fetchTeachers[0].id),
+                    (teacherIndex || teachers.fetchTeachers[0].id)
                 )
                 .relations.map((item) => item.course),
             },
-          })
+          });
       },
       disabled: course.id === 0,
     },
-  ]
+  ];
 
   return (
-    <div className="page">
-      <div className="block_left">
+    <div className='page'>
+      <div className='block_left'>
         <ul>
           {teachers.fetchTeachers.map((teacher) => (
             <ListItem
@@ -349,7 +341,7 @@ export default function Teachers(props) {
           ))}
         </ul>
       </div>
-      <div className="block_right">
+      <div className='block_right'>
         <Controls items={items} />
         <TeacherJournal
           teacherIndex={teacherIndex || teachers.fetchTeachers[0].id}
@@ -359,11 +351,11 @@ export default function Teachers(props) {
           courseId={
             teachers?.fetchTeachers?.find(
               (teacher) =>
-                teacher.id === (teacherIndex || teachers.fetchTeachers[0].id),
+                teacher.id === (teacherIndex || teachers.fetchTeachers[0].id)
             )?.relations[course]?.course?.id || 0
           }
         />
       </div>
     </div>
-  )
+  );
 }

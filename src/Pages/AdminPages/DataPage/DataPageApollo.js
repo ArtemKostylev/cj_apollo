@@ -1,4 +1,4 @@
-import { FETCH_FULL_INFO } from "../../../scripts/queries";
+import { FETCH_FULL_INFO } from "../../../utils/queries";
 import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 import DataPageView from "./DataPageView.js";
 import {
@@ -13,7 +13,7 @@ import {
   UPDATE_STUDENT_MUTATION,
   UPDATE_STUDENT_RELATIONS_MUTATION,
   UPDATE_TEACHER_MUTATION,
-} from "../../../scripts/mutations";
+} from "../../../utils/mutations";
 
 export default function DataPageController(props) {
   var { loading, data, error, refetch, networkStatus } = useQuery(
