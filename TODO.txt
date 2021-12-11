@@ -1,0 +1,2 @@
+TODO: add url params to journal, to save course on reload
+TODO: refactor all components to use styled-components
