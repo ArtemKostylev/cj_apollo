@@ -12,14 +12,14 @@ import { ADMIN, TEACHER } from '../constants/roles';
 
 const MenuItemWrapper = styled.div`
   text-align: left;
-  display: block;
+  display: flex;
   width: 100%;
   background-color: #f4f7f6;
   border-bottom: 1px solid #e6eaea;
   cursor: pointer;
   height: 78px;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
 
   &:hover {
     background-color: white;
@@ -32,16 +32,18 @@ const MenuItemText = styled.p`
   font-size: 1rem;
 `;
 
+const MenuItemLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+`;
+
 const MenuItem = ({ path, onClose, title }) => {
   return (
     <MenuItemWrapper key={path}>
-      <Link
-        to={path}
-        style={{ textDecoration: 'none', color: 'inherit' }}
-        onClick={onClose}
-      >
+      <MenuItemLink to={path} onClick={onClose}>
         <MenuItemText>{title}</MenuItemText>
-      </Link>
+      </MenuItemLink>
     </MenuItemWrapper>
   );
 };
@@ -79,7 +81,11 @@ const resourceMap = {
 export default function Menu({ onClose, isOpen }) {
   const auth = useAuth();
 
+  console.log(auth.user.role.name);
+
   const resources = resourceMap[auth.user.role.name];
+
+  console.log(resources);
 
   if (auth.user.courses.some((course) => course.group)) {
     resources.subgroups = SUBGROUPS_RESOURCE;
@@ -92,7 +98,7 @@ export default function Menu({ onClose, isOpen }) {
         <MenuCloseButton onClick={onClose}>Закрыть</MenuCloseButton>
       </MenuItemWrapper>
       {Object.keys(resources).map((key) => (
-        <MenuItem {...resources[key]} onClose={onClose} />
+        <MenuItem {...resources[key]} key={key} onClose={onClose} />
       ))}
     </MenuWrapper>
   );

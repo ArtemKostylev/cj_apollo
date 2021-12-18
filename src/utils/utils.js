@@ -42,8 +42,8 @@ export function getHeaderFromRoute(pathname) {
     return item.path === pathname;
   };
   const route =
-    USER_RESOURCES.find((item) => compare(item)) ||
-    ADMIN_RESOURCES.find((item) => compare(item)) ||
+    Object.values(USER_RESOURCES).find((item) => compare(item)) ||
+    Object.values(ADMIN_RESOURCES).find((item) => compare(item)) ||
     SUBGROUPS_RESOURCE.path === pathname;
   return route.title?.toUpperCase() || 'КЛАССНЫЙ ЖУРНАЛ';
 }

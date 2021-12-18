@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EditableDateCell from '../../../shared/ui/EditableDateCell';
 
-const HourDateCell = ({ column, hours, date, row, updateDates }) => {
+const HourDateCell = ({ column, hours, date, row, updateDates, unlimited }) => {
   const [hoursValue, setHoursValue] = useState(hours);
 
   useEffect(() => {
@@ -16,6 +16,7 @@ const HourDateCell = ({ column, hours, date, row, updateDates }) => {
           column={column || 0}
           row={row || 0}
           updateDates={updateDates}
+          unlimited
         />
       </td>
       <td>

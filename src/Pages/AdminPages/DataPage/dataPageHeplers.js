@@ -13,7 +13,6 @@ export const createCoditionalState = (type, data = {}) => {
         exclude: data.excludeFromReport || false,
       };
     case "student":
-      console.log(data.specialization);
       return {
         name: data.name || "",
         surname: data.surname || "",

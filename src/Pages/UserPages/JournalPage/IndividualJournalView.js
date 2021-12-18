@@ -5,6 +5,7 @@ import { findMark } from './JournalPageHelpers';
 import moment from 'moment';
 import '../../../styles/Journal.css';
 import { EditableCell } from '../../../shared/ui/EditableCell';
+import { MARKS_OPTIONS } from '../../../constants/marksOptions';
 
 const IndividualJournalView = ({
   parsedDates,
@@ -34,6 +35,7 @@ const IndividualJournalView = ({
                 value,
               })
             }
+            options={MARKS_OPTIONS}
           />
           {year !== null ? (
             <EditableCell
@@ -46,6 +48,7 @@ const IndividualJournalView = ({
                   value,
                 })
               }
+              options={MARKS_OPTIONS}
             />
           ) : (
             ''
@@ -123,6 +126,7 @@ const IndividualJournalView = ({
                     }
                     isWeekend={date.isoWeekday() === 6}
                     disabled={item.archived}
+                    options={MARKS_OPTIONS}
                   />
                 ))}
                 {getQuaterMark(item)}

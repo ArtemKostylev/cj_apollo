@@ -53,7 +53,8 @@ export default function Journal(props) {
 
   const parsedDates = createDates(startDate);
 
-  const updateMyData = (row, column, value, group) => {
+  const updateMyData = ({ row, column, value, group }) => {
+    console.log(row, column, value, group);
     let date = '';
     if (group > -1) {
       date = dates_by_group[group][column].date;
@@ -117,7 +118,7 @@ export default function Journal(props) {
     return true;
   };
 
-  const updateQuarterData = (row, column, value, group) => {
+  const updateQuarterData = ({ row, column, value, group }) => {
     const student = studentData.find((item, index) => item.student.id === row);
     const studentIndex = studentData.indexOf(student);
     var mark = student.quaterMark.find((item) => item.period === column);

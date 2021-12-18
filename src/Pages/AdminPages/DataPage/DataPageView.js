@@ -30,7 +30,11 @@ const convertSpecToOptions = (spec) => [
 ];
 
 const createOptions = (items) =>
-  items.map((it) => <option value={it.value}>{it.text}</option>);
+  items.map((it) => (
+    <option value={it.value} key={it.value}>
+      {it.text}
+    </option>
+  ));
 
 export default function DataPageView({
   teachers,

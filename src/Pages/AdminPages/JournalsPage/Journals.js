@@ -13,7 +13,7 @@ import { getQuater } from '../../../utils/utils';
 import Controls from '../../../shared/ui/Controls';
 import { useHistory } from 'react-router-dom';
 
-export default function Teachers(props) {
+export const Journals = (props) => {
   let history = useHistory();
 
   const [teacherIndex, setTeacherIndex] = useState();
@@ -358,4 +358,4 @@ export default function Teachers(props) {
       </div>
     </div>
   );
-}
+};

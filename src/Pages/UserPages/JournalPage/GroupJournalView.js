@@ -5,6 +5,7 @@ import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import { EditableCell } from '../../../shared/ui/EditableCell';
 import { PROGRAMS } from '../../../constants/programs';
 import { compareStundents } from '../../../utils/utils';
+import { MARKS_OPTIONS } from '../../../constants/marksOptions';
 
 const GroupJournalView = ({
   dates_by_group,
@@ -74,7 +75,7 @@ const GroupJournalView = ({
                               : new Date(date.date.split('T')[0])
                           }
                           column={id}
-                          month={date.month}
+                          month={date.month - 1}
                           group={g_index}
                           updateDates={updateDates}
                           full={false}
@@ -107,6 +108,7 @@ const GroupJournalView = ({
                             })
                           }
                           key={index}
+                          options={MARKS_OPTIONS}
                         />
                       ))}
                       {prepareQuaters().map((quat) => {
@@ -131,6 +133,7 @@ const GroupJournalView = ({
                               })
                             }
                             key={quat}
+                            options={MARKS_OPTIONS}
                           />
                         );
                       })}

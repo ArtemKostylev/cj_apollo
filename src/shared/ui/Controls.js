@@ -14,9 +14,9 @@ const Controls = (props) => {
     - onClick: function to execute on click. Receives event as parameter.
     - label: label of controls item
   */
-  const ControlsItemSelect = ({ text }) => {
+  const ControlsItemSelect = (props) => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(text || DEFAULT_SELECT_VALUE);
+    const [value, setValue] = useState(props.text || DEFAULT_SELECT_VALUE);
 
     const onClick = () => {
       if (!open) setOpen(true);

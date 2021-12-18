@@ -40,6 +40,7 @@ const EditableDateCell = ({
   group,
   month,
   row,
+  unlimited = false,
   full = true,
   disabled = false,
 }) => {
@@ -50,19 +51,23 @@ const EditableDateCell = ({
   }
 
   // TODO: replace input month with month - 1
-  const start_date = moment()
-    .clone()
-    .year(getYear(month))
-    .month(month)
-    .startOf('month')
-    .toDate();
+  const start_date = unlimited
+    ? ''
+    : moment()
+        .clone()
+        .year(getYear(month))
+        .month(month)
+        .startOf('month')
+        .toDate();
 
-  const end_date = moment()
-    .clone()
-    .year(getYear(month))
-    .month(month)
-    .endOf('month')
-    .toDate();
+  const end_date = unlimited
+    ? ''
+    : moment()
+        .clone()
+        .year(getYear(month))
+        .month(month)
+        .endOf('month')
+        .toDate();
 
   return (
     <DatePicker

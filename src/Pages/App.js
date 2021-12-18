@@ -7,7 +7,7 @@ import Compensation from './UserPages/CompensationPage/Compensation';
 import Login from './Login';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth } from '../utils/use-auth.js';
-import Journals from './AdminPages/JournalsPage/Journals';
+import { Journals } from './AdminPages/JournalsPage/Journals';
 import DataPageApollo from './AdminPages/DataPage/DataPageApollo';
 import { Notes } from './UserPages/NotesPage/Notes';
 import { ConsultController } from './UserPages/ConsultsPage/ConsultController';
@@ -83,8 +83,8 @@ const Content = () => {
     <div className='App'>
       <ErrorBoundary FallbackComponent={ErrorScreen}>
         <Menu
-          visible={menuVisible}
-          close={() => setMenuVisible((prev) => !prev)}
+          isOpen={menuVisible}
+          onClose={() => setMenuVisible((prev) => !prev)}
         ></Menu>
         <div
           className={`Cover ${menuVisible && 'menuVisible'}`}
@@ -92,7 +92,7 @@ const Content = () => {
         />
         <div className={`Content ${menuVisible && 'menuVisible'}`}>
           <Header menuClick={menuClick} menuRef={menuRef} />
-          {auth.user.role.name === ADMIN ? AdminRoutes : TeacherRoutes}
+          {auth.user.role.name === ADMIN ? <AdminRoutes /> : <TeacherRoutes />}
         </div>
       </ErrorBoundary>
     </div>

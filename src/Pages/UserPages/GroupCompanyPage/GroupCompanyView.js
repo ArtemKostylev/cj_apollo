@@ -47,7 +47,7 @@ const GroupCompanyView = ({
                                 : new Date(date.date.split('T')[0])
                             }
                             column={id}
-                            month={date.month}
+                            month={date.month - 1}
                             group={g_index}
                             updateDates={updateDates}
                             full={false}

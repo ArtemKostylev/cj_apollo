@@ -36,6 +36,7 @@ const IndividualConsultsView = ({ controlItems, data, updateDates }) => {
                     }
                     hours={item.consult[index]?.hours}
                     key={index}
+                    unlimited
                   />
                 ))}
             </tr>

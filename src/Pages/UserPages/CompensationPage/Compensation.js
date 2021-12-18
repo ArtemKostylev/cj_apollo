@@ -178,6 +178,8 @@ export default function Compensation(props) {
                               group={lesson.id}
                               row={item.student.id}
                               updateDates={updateDates}
+                              month={month - 1}
+                              unlimited
                             />
                           ) : (
                             ''
