@@ -6,7 +6,7 @@ import { FETCH_SUBGROUPS_QUERY } from '../../../utils/queries';
 import { useAuth } from '../../../utils/use-auth';
 import '../../../styles/Subgroups.css';
 
-import Controls from '../../../components/Controls';
+import Controls from '../../../shared/ui/Controls';
 
 export const Subgroups = () => {
   const auth = useAuth();

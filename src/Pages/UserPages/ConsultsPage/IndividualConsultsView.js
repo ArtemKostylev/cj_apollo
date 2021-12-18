@@ -1,17 +1,17 @@
-import React from "react";
-import HourDateCell from "./HourDateCell";
-import Controls from "../../../components/Controls";
-import "../../../styles/Consult.css";
+import React from 'react';
+import HourDateCell from './HourDateCell';
+import Controls from '../../../shared/ui/Controls';
+import '../../../styles/Consult.css';
 
 const IndividualConsultsView = ({ controlItems, data, updateDates }) => {
   return (
-    <div className="consult_container">
+    <div className='consult_container'>
       <Controls items={controlItems} />
-      <table className="consult_table">
+      <table className='consult_table'>
         <thead>
           <tr>
-            <th className="name_column">Имя ученика</th>
-            <th className="date_columns" colSpan="32">
+            <th className='name_column'>Имя ученика</th>
+            <th className='date_columns' colSpan='32'>
               Даты/Часы
             </th>
           </tr>
@@ -19,7 +19,7 @@ const IndividualConsultsView = ({ controlItems, data, updateDates }) => {
         <tbody>
           {data.map((item, sindex) => (
             <tr key={item.student.surname}>
-              <td className="name_cell">
+              <td className='name_cell'>
                 {`${item.student.surname} ${item.student.name}`}
               </td>
               {Array(16)
@@ -31,8 +31,8 @@ const IndividualConsultsView = ({ controlItems, data, updateDates }) => {
                     row={item.student.id}
                     date={
                       item.consult[index]
-                        ? new Date(item.consult[index].date.split("T")[0])
-                        : ""
+                        ? new Date(item.consult[index].date.split('T')[0])
+                        : ''
                     }
                     hours={item.consult[index]?.hours}
                     key={index}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { QUARTER_END, QUARTERS_RU } from '../../../constants/programs';
+import { QUARTER_END, QUARTERS_RU } from '../../../constants/quarters';
 import { PROGRAMS } from '../../../constants/programs';
 import { findMark } from './JournalPageHelpers';
 import moment from 'moment';

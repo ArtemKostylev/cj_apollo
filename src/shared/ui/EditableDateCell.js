@@ -2,9 +2,9 @@ import React, { forwardRef, useState } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../styles/Journal.css';
+import '../../styles/Journal.css';
 import ru from 'date-fns/locale/ru';
-import { getYear } from '../../scripts/utils';
+import { getYear } from '../../utils/utils';
 import moment from 'moment';
 
 const DATE_PLACEHOLDER = '.....';

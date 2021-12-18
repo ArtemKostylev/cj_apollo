@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import moment from 'moment';
 import 'moment/locale/ru';
-import TableControls from '../../../components/TableControls';
+import TableControls from '../../../shared/ui/TableControls';
 import IndividualJournalView from './IndividualJournalView';
 import GroupJournalView from './GroupJournalView';
 import { useMutation, useQuery, NetworkStatus } from '@apollo/client';

@@ -4,10 +4,10 @@ import { useAuth } from '../utils/use-auth.js';
 import { useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from '../utils/mutations';
 import '../styles/Login.css';
-import { Button } from '../components/shared/ui/Button';
-import { FormInput } from '../components/shared/ui/FormInput';
-import { FormWrapper } from '../components/shared/ui/FormWrapper';
-import { Subtitle } from '../components/shared/ui/Subtitle';
+import { Button } from '../shared/ui/Button';
+import { FormInput } from '../shared/ui/FormInput';
+import { FormWrapper } from '../shared/ui/FormWrapper';
+import { Subtitle } from '../shared/ui/Subtitle';
 
 const Login = () => {
   let history = useHistory();

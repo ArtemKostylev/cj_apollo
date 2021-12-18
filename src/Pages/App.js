@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import '../styles/App.css';
-import Menu from './Menu';
-import Header from './Header';
+import Menu from '../shared/Menu';
+import Header from '../shared/Header';
 import Journal from './UserPages/JournalPage/Journal';
 import Compensation from './UserPages/CompensationPage/Compensation';
 import Login from './Login';

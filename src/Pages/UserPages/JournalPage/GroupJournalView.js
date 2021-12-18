@@ -1,8 +1,8 @@
 import React from 'react';
 import { findMark } from './JournalPageHelpers';
 import '../../../styles/Journal.css';
-import EditableDateCell from '../../../components/EditableDateCell';
-import { EditableCell } from '../../../components/EditableCell';
+import EditableDateCell from '../../../shared/ui/EditableDateCell';
+import { EditableCell } from '../../../shared/ui/EditableCell';
 import { PROGRAMS } from '../../../constants/programs';
 import { compareStundents } from '../../../utils/utils';
 

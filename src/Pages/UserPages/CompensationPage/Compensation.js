@@ -1,13 +1,13 @@
-import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
-import moment from "moment";
-import React, { useState, Fragment } from "react";
-import { UPDATE_REPLACEMENTS_MUTATION } from "../../../utils/mutations";
-import { FETCH_REPLACEMENTS_QUERY } from "../../../utils/queries";
-import { useAuth } from "../../../utils/use-auth";
-import EditableDateCell from "../../../components/EditableDateCell";
-import TableControls from "../../../components/TableControls";
-import { getYear } from "../../../utils/utils";
-import "../../../styles/Compensation.css";
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import moment from 'moment';
+import React, { useState, Fragment } from 'react';
+import { UPDATE_REPLACEMENTS_MUTATION } from '../../../utils/mutations';
+import { FETCH_REPLACEMENTS_QUERY } from '../../../utils/queries';
+import { useAuth } from '../../../utils/use-auth';
+import EditableDateCell from '../../../shared/ui/EditableDateCell';
+import TableControls from '../../../shared/ui/TableControls';
+import { getYear } from '../../../utils/utils';
+import '../../../styles/Compensation.css';
 
 export default function Compensation(props) {
   let auth = useAuth();
@@ -29,21 +29,21 @@ export default function Compensation(props) {
           .month(month)
           .year(year)
           .clone()
-          .startOf("month")
+          .startOf('month')
           .utc()
-          .format("YYYY-MM-DDTHH:mm:ss.SSS")
-          .concat("Z"),
+          .format('YYYY-MM-DDTHH:mm:ss.SSS')
+          .concat('Z'),
         date_lte: moment()
           .month(month)
           .year(year)
           .clone()
-          .endOf("month")
+          .endOf('month')
           .utc()
-          .format("YYYY-MM-DDTHH:mm:ss.SSS")
-          .concat("Z"),
+          .format('YYYY-MM-DDTHH:mm:ss.SSS')
+          .concat('Z'),
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
     }
   );
 
@@ -93,10 +93,10 @@ export default function Compensation(props) {
     var mark = student.journalEntry.find((item) => item.id === group);
     const markIndex = student.journalEntry.indexOf(mark);
 
-    date = date?.toLocaleDateString("ru-RU").split(".");
+    date = date?.toLocaleDateString('ru-RU').split('.');
     const newRepl = {
       id: !mark?.replacement ? 0 : column,
-      date: `${date[2]}-${date[1]}-${date[0]}`.concat("T00:00:00.000Z"),
+      date: `${date[2]}-${date[1]}-${date[0]}`.concat('T00:00:00.000Z'),
       entryId: group,
     };
 
@@ -128,10 +128,10 @@ export default function Compensation(props) {
         setCourse={setCourse}
         refetch={() => refetch()}
       />
-      <table className="compensation_table">
+      <table className='compensation_table'>
         <thead>
           <tr>
-            <th className="name_column">Имя ученика</th>
+            <th className='name_column'>Имя ученика</th>
             {Array(10)
               .fill(1)
               .map((item, index) => (
@@ -146,7 +146,7 @@ export default function Compensation(props) {
           {studentData.map((item) => {
             return (
               <tr>
-                <td className="name_cell">{`${item.student.surname} ${item.student.name}`}</td>
+                <td className='name_cell'>{`${item.student.surname} ${item.student.name}`}</td>
                 {Array(10)
                   .fill(1)
                   .map((num, index) => {
@@ -155,24 +155,24 @@ export default function Compensation(props) {
                     let repl = null;
                     if (item.journalEntry[index]) {
                       lesson = item.journalEntry[index];
-                      lesson_date = lesson.date.split("T")[0];
+                      lesson_date = lesson.date.split('T')[0];
                       if (lesson.replacement) repl = lesson.replacement;
                     }
 
                     return (
                       <Fragment key={index}>
-                        <td className="name_cell">
+                        <td className='name_cell'>
                           {lesson_date
-                            ? `${lesson_date.split("-")[2]}.${
-                                lesson_date.split("-")[1]
-                              }.${lesson_date.split("-")[0]}`
-                            : ""}
+                            ? `${lesson_date.split('-')[2]}.${
+                                lesson_date.split('-')[1]
+                              }.${lesson_date.split('-')[0]}`
+                            : ''}
                         </td>
                         <td>
                           {lesson ? (
                             <EditableDateCell
                               initialValue={
-                                repl ? new Date(repl.date.split("T")[0]) : ""
+                                repl ? new Date(repl.date.split('T')[0]) : ''
                               }
                               column={repl ? repl.id : 0}
                               group={lesson.id}
@@ -180,7 +180,7 @@ export default function Compensation(props) {
                               updateDates={updateDates}
                             />
                           ) : (
-                            ""
+                            ''
                           )}
                         </td>
                       </Fragment>

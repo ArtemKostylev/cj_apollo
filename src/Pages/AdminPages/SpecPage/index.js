@@ -1,15 +1,15 @@
-import React from "react";
-import { SpecPageView } from "./SpecPageView";
-import { Spinner } from "../../../components/shared/ui/Spinner";
-import { FETCH_SPECIALIZATION } from "../../../utils/queries";
-import { NetworkStatus, useQuery } from "@apollo/client";
+import React from 'react';
+import { SpecPageView } from './SpecPageView';
+import { Spinner } from '../../../shared/ui/Spinner';
+import { FETCH_SPECIALIZATION } from '../../../utils/queries';
+import { NetworkStatus, useQuery } from '@apollo/client';
 
 export const Specialization = () => {
   let { loading, data, error, refetch, networkStatus } = useQuery(
     FETCH_SPECIALIZATION,
     {
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
     }
   );
 

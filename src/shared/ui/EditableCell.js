@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../scripts/utils';
+import { useOnClickOutside } from '../../utils/utils';
 
 const DropdownOption = styled.li`
   display: flex;

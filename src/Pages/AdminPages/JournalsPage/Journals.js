@@ -10,7 +10,7 @@ import { QUARTERS, QUARTERS_RU } from '../../../constants/quarters';
 import { ACADEMIC_YEARS } from '../../../constants/academicYears';
 import { PERIODS } from '../../../constants/periods';
 import { getQuater } from '../../../utils/utils';
-import Controls from '../../../components/Controls';
+import Controls from '../../../shared/ui/Controls';
 import { useHistory } from 'react-router-dom';
 
 export default function Teachers(props) {

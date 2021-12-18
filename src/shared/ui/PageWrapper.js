@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-// TODO: later turn this wrapper into flex mb
+// TODO: later turn this PageWrapper into flex mb
 
 export const PageWrapper = styled.div`
   width: 100%;

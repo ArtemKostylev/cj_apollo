@@ -1,7 +1,11 @@
-import { useEffect } from "react";
-import { adminItems, userItems, subRoute } from "./constants";
-import { QUATERS } from "./constants";
-import moment from "moment";
+import { useEffect } from 'react';
+import {
+  ADMIN_RESOURCES,
+  USER_RESOURCES,
+  SUBGROUPS_RESOURCE,
+} from '../constants/resources';
+import { QUARTERS } from '../constants/quarters';
+import moment from 'moment';
 
 export function useOnClickOutside(ref, handler) {
   useEffect(() => {
@@ -14,19 +18,19 @@ export function useOnClickOutside(ref, handler) {
       handler(event);
     };
 
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
 
     return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
     };
   }, [ref, handler]);
 }
 
 export function getQuater(month) {
   let quater = null;
-  QUATERS.forEach((item, index) => {
+  QUARTERS.forEach((item, index) => {
     if (item.includes(month)) quater = index;
   });
 
@@ -38,10 +42,10 @@ export function getHeaderFromRoute(pathname) {
     return item.path === pathname;
   };
   const route =
-    userItems.find((item) => compare(item)) ||
-    adminItems.find((item) => compare(item)) ||
-    subRoute.path === pathname;
-  return route.title?.toUpperCase() || "КЛАССНЫЙ ЖУРНАЛ";
+    USER_RESOURCES.find((item) => compare(item)) ||
+    ADMIN_RESOURCES.find((item) => compare(item)) ||
+    SUBGROUPS_RESOURCE.path === pathname;
+  return route.title?.toUpperCase() || 'КЛАССНЫЙ ЖУРНАЛ';
 }
 
 export function getYear(targetMonth, year = null) {
@@ -61,10 +65,10 @@ export function getYear(targetMonth, year = null) {
 }
 export const compareStundents = (a, b) => {
   if (a.surname < b.surname) {
-    return -1
+    return -1;
   }
   if (a.surname > b.surname) {
-    return 1
+    return 1;
   }
-  return 0
-}
+  return 0;
+};

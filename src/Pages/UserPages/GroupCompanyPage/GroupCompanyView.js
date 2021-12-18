@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../../styles/Journal.css';
-import EditableDateCell from '../../../components/EditableDateCell';
+import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import { PROGRAMS } from '../../../constants/programs';
 import { EditableCellHours } from './EditableCellHours';
 

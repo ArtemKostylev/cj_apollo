@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { FaCheckCircle, FaPen, FaTrashAlt } from "react-icons/fa";
-import styled from "styled-components";
-import { FormInput } from "../../../../components/shared/ui/FormInput";
+import React, { useState } from 'react';
+import { FaCheckCircle, FaPen, FaTrashAlt } from 'react-icons/fa';
+import styled from 'styled-components';
+import { FormInput } from '../../../../shared/ui/FormInput';
 
 const InputWrapper = styled.div`
   display: flex;
@@ -53,26 +53,26 @@ export const SpecInputView = ({
       <FormInput
         value={inputData.name}
         disabled={!enabled}
-        placeholder={"Введите название специальности"}
+        placeholder={'Введите название специальности'}
         size={35}
       />
       {enabled ? (
         <FaCheckCircle
           size={28}
-          style={{ cursor: "pointer", marginTop: "20px" }}
+          style={{ cursor: 'pointer', marginTop: '20px' }}
           onClick={() => handleSave()}
         />
       ) : (
         <FaPen
           size={28}
-          style={{ cursor: "pointer", marginTop: "20px" }}
+          style={{ cursor: 'pointer', marginTop: '20px' }}
           onClick={() => setEnabled(true)}
         />
       )}
       {initialData.name && (
         <FaTrashAlt
           size={28}
-          style={{ cursor: "pointer", marginTop: "20px" }}
+          style={{ cursor: 'pointer', marginTop: '20px' }}
           onClick={() => handleDelete()}
         />
       )}

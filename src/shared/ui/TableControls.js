@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { GROUP_PERIODS } from '../constants/periods';
-import { MONTHS } from '../constants/months';
-import { useOnClickOutside } from '../scripts/utils';
+import { GROUP_PERIODS } from '../../constants/periods';
+import { MONTHS } from '../../constants/months';
+import { useOnClickOutside } from '../../utils/utils';
 
 const TableControls = ({
   initialMonth,

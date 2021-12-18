@@ -1,5 +1,5 @@
-import { useOnClickOutside } from '../../scripts/utils';
-import '../styles/Controls.css';
+import { useOnClickOutside } from '../../utils/utils';
+import '../../styles/Controls.css';
 import React, { useRef, useState } from 'react';
 
 const DEFAULT_SELECT_VALUE = 'Нет значений';
@@ -35,11 +35,7 @@ const Controls = (props) => {
       };
 
       return (
-        <div
-          className={`controls_item__dropdown ${
-            dropdownVisible ? 'visible' : ''
-          }`}
-        >
+        <div className={`controls_item__dropdown ${open ? 'visible' : ''}`}>
           <ul>
             {props?.data?.map((item, index) => (
               <li data-index={index} key={item} onClick={(e) => onClick(e)}>
@@ -55,7 +51,7 @@ const Controls = (props) => {
       <>
         <span className='controls_item__label'>{props.label}</span>
         <span
-          className={`controls_item ${dropdownVisible ? 'visible' : ''}`}
+          className={`controls_item ${open ? 'visible' : ''}`}
           onClick={onClick}
           ref={ref}
         >

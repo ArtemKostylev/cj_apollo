@@ -1,7 +1,7 @@
 import React from 'react';
 import { PROGRAMS } from '../../../constants/programs';
 import HourDateCell from './HourDateCell';
-import Controls from '../../../components/Controls';
+import Controls from '../../../shared/ui/Controls';
 import '../../../styles/Consult.css';
 
 const GroupConsultsView = ({

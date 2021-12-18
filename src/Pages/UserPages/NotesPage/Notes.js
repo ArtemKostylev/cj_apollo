@@ -1,12 +1,12 @@
-import { useAuth } from "../../../utils/use-auth";
-import "../../../styles/Notes.css";
-import Controls from "../../../components/Controls";
-import { Wrapper } from "../../../components/shared/ui/Wrapper";
-import { useEffect, useState } from "react";
-import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
-import { FETCH_NOTES_QUERY } from "../../../utils/queries";
-import { UPDATE_NOTE_MUTATION } from "../../../utils/mutations";
-import moment from "moment";
+import { useAuth } from '../../../utils/use-auth';
+import '../../../styles/Notes.css';
+import Controls from '../../../shared/ui/Controls';
+import { PageWrapper } from '../../../shared/ui/PageWrapper';
+import { useEffect, useState } from 'react';
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import { FETCH_NOTES_QUERY } from '../../../utils/queries';
+import { UPDATE_NOTE_MUTATION } from '../../../utils/mutations';
+import moment from 'moment';
 
 export const Notes = (props) => {
   const auth = useAuth();
@@ -15,17 +15,17 @@ export const Notes = (props) => {
     if (changed) {
       event.preventDefault();
       let confirm = window.confirm(
-        "Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны."
+        'Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.'
       );
       !confirm ? event.stopImmediatePropagation() : setChanged(false);
     }
   };
 
   useEffect(() => {
-    props.menuRef?.current.addEventListener("click", listener);
+    props.menuRef?.current.addEventListener('click', listener);
 
     return () => {
-      props.menuRef?.current?.removeEventListener("click", listener);
+      props.menuRef?.current?.removeEventListener('click', listener);
     };
   });
 
@@ -34,8 +34,8 @@ export const Notes = (props) => {
   const [changed, setChanged] = useState(false);
 
   const getCourse = (e) => {
-    setCourse(e.target.getAttribute("data-index"));
-    setValue("");
+    setCourse(e.target.getAttribute('data-index'));
+    setValue('');
     refetch();
   };
 
@@ -70,32 +70,32 @@ export const Notes = (props) => {
         year: parseInt(year),
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
     }
   );
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
   const items = [
     {
-      type: "dropdown",
+      type: 'dropdown',
       data:
         props.location.state?.courses.map((course) => course.name) ||
         auth.user.courses.map((course) => course.name),
-      label: "Предмет :",
+      label: 'Предмет :',
       text:
         props.location.state?.courses[course].name ||
         auth.user.courses[course].name,
       onClick: getCourse,
     },
     {
-      type: "button",
-      text: "Сохранить",
+      type: 'button',
+      text: 'Сохранить',
       onClick: save,
     },
     {
-      type: "button",
-      text: "Отменить изменения",
+      type: 'button',
+      text: 'Отменить изменения',
       onClick: () => refetch(),
     },
   ];
@@ -108,9 +108,9 @@ export const Notes = (props) => {
   if (error) throw new Error(503);
 
   if (
-    value === "" &&
+    value === '' &&
     data.fetchNotes &&
-    data.fetchNotes.text !== "" &&
+    data.fetchNotes.text !== '' &&
     !changed
   )
     setValue(data.fetchNotes.text);
@@ -121,13 +121,13 @@ export const Notes = (props) => {
   };
 
   return (
-    <Wrapper>
+    <PageWrapper>
       <Controls items={items} />
       <textarea
-        placeholder="Это - место для заметок..."
+        placeholder='Это - место для заметок...'
         value={value}
         onChange={change}
       ></textarea>
-    </Wrapper>
+    </PageWrapper>
   );
 };
