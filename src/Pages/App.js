@@ -103,7 +103,7 @@ export default function App() {
   const auth = useAuth();
 
   const history = useHistory();
-  if (!auth.user.role) {
+  if (!auth?.user?.role) {
     localStorage.clear();
     history.push('/login');
   }
