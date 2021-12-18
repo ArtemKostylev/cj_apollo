@@ -5,7 +5,7 @@ import Header from '../shared/Header';
 import Journal from './UserPages/JournalPage/Journal';
 import Compensation from './UserPages/CompensationPage/Compensation';
 import Login from './Login';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useAuth } from '../utils/use-auth.js';
 import { Journals } from './AdminPages/JournalsPage/Journals';
 import DataPageApollo from './AdminPages/DataPage/DataPageApollo';
@@ -101,6 +101,12 @@ const Content = () => {
 
 export default function App() {
   const auth = useAuth();
+
+  const history = useHistory();
+  if (!auth.user.role) {
+    localStorage.clear();
+    history.push('/login');
+  }
 
   return (
     <Switch>
