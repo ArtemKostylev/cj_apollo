@@ -342,12 +342,18 @@ export default function Journal(props) {
     dates.forEach((date) => {
       if (date) {
         const month = getMonthFromUTCString(date);
-        mappedDates.set(month, [...mappedDates.get(month), { date, month }]);
+
+        const datesArray = mappedDates.get(month);
+
+        if (datesArray) {
+          mappedDates.set(month, [...datesArray, { date, month }]);
+        }
       }
     });
 
     mappedDates.forEach((value, key) => {
-      const maxDates = key === 0 ? 4 : 5;
+      console.log(key);
+      const maxDates = key === '1' ? 4 : 5;
       const emptyCount = maxDates - value.length;
       result.push(
         ...value,
