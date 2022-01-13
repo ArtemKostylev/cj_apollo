@@ -9,6 +9,8 @@ import { setContext } from '@apollo/client/link/context';
 import { createUploadLink } from 'apollo-upload-client';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { USER_ALIAS } from './constants/localAliases';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './styles/theme';
 
 const pathMap = {
   development: 'http://localhost:4000',
@@ -38,9 +40,11 @@ const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <ProvideAuth>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </ProvideAuth>
   </ApolloProvider>,
   document.getElementById('root')

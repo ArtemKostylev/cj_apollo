@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { GROUP_PERIODS } from '../../constants/periods';
 import { MONTHS } from '../../constants/months';
 import { useOnClickOutside } from '../../utils/utils';
+import { ActionButton } from './ActionButton';
 
 const TableControls = ({
   initialMonth,
@@ -117,12 +118,8 @@ const TableControls = ({
         type='course'
         onItemClick={onCourseClick}
       />
-      <div className='save_button' onClick={save}>
-        Сохранить
-      </div>
-      <div className='save_button' onClick={refetch}>
-        Отменить изменения
-      </div>
+      <ActionButton onClick={save}>Сохранить</ActionButton>
+      <ActionButton onClick={refetch}>Отменить изменения</ActionButton>
     </div>
   );
 };

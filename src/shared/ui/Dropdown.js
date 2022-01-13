@@ -28,9 +28,8 @@ const DropdownOptionText = styled.p`
 
 const DropdownLayout = styled.div`
   display: ${({ open }) => (open ? 'block' : 'none')};
-  width: ${({ width }) => width};
+  width: ${({ width }) => width}px;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  border-radius: 10px;
   position: absolute;
   margin: 0;
   z-index: 10;
