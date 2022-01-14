@@ -4,8 +4,8 @@ import '../../../styles/Journal.css';
 import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import { EditableCell } from '../../../shared/ui/EditableCell';
 import { PROGRAMS } from '../../../constants/programs';
-import { compareStundents } from '../../../utils/utils';
-import { MARKS_OPTIONS } from '../../../constants/marksOptions';
+import { compareStudents } from '../../../utils/utils';
+import { MARKS_OPTIONS, HOURS_OPTIONS } from '../../../constants/marksOptions';
 
 const GroupJournalView = ({
   dates_by_group,
@@ -14,12 +14,10 @@ const GroupJournalView = ({
   updateDates,
   updateMyData,
   updateQuarterData,
+  onlyHours,
 }) => {
-  const prepareQuaters = () => {
-    if (period.id === 0) {
-      return ['first', 'second'];
-    } else return ['third', 'fourth', 'year'];
-  };
+  const prepareQuarters = () =>
+    period.id === 0 ? ['first', 'second'] : ['third', 'fourth', 'year'];
 
   return (
     <>
@@ -49,18 +47,20 @@ const GroupJournalView = ({
                       {month.name}
                     </th>
                   ))}
-                  <th rowSpan='2' className='quater_column'>
-                    {period.id === 0 ? 'I четверть' : 'III четверть'}
-                  </th>
-                  <th rowSpan='2' className='quater_column'>
-                    {period.id === 0 ? 'II четверть' : 'IV четверть'}
-                  </th>
-                  {period.id === 1 ? (
-                    <th rowSpan='2' className='quater_column'>
-                      Годовая оценка
-                    </th>
-                  ) : (
-                    ''
+                  {!onlyHours && (
+                    <>
+                      <th rowSpan='2' className='quarter_column'>
+                        {period.id === 0 ? 'I четверть' : 'III четверть'}
+                      </th>
+                      <th rowSpan='2' className='quarter_column'>
+                        {period.id === 0 ? 'II четверть' : 'IV четверть'}
+                      </th>
+                      {period.id === 1 && (
+                        <th rowSpan='2' className='quarter_column'>
+                          Годовая оценка
+                        </th>
+                      )}
+                    </>
                   )}
                 </tr>
 
@@ -86,7 +86,7 @@ const GroupJournalView = ({
                   })}
                 </tr>
                 {groupedData[g_index].students
-                  .sort(compareStundents)
+                  .sort(compareStudents)
                   .map((item) => (
                     <tr>
                       <td
@@ -108,35 +108,36 @@ const GroupJournalView = ({
                             })
                           }
                           key={index}
-                          options={MARKS_OPTIONS}
+                          options={onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS}
                         />
                       ))}
-                      {prepareQuaters().map((quat) => {
-                        var mark = '';
-                        try {
-                          mark = item.quaterMark.find(
-                            (mark) => mark.period === quat
-                          );
-                        } catch {
-                          mark = '';
-                        }
+                      {!onlyHours &&
+                        prepareQuarters().map((quat) => {
+                          var mark = '';
+                          try {
+                            mark = item.quaterMark.find(
+                              (mark) => mark.period === quat
+                            );
+                          } catch {
+                            mark = '';
+                          }
 
-                        return (
-                          <EditableCell
-                            value={mark ? mark.mark : ''}
-                            onClick={(value) =>
-                              updateQuarterData({
-                                row: item.student.id ? item.student.id : '',
-                                column: quat,
-                                group: g_index,
-                                value,
-                              })
-                            }
-                            key={quat}
-                            options={MARKS_OPTIONS}
-                          />
-                        );
-                      })}
+                          return (
+                            <EditableCell
+                              value={mark ? mark.mark : ''}
+                              onClick={(value) =>
+                                updateQuarterData({
+                                  row: item.student.id ? item.student.id : '',
+                                  column: quat,
+                                  group: g_index,
+                                  value,
+                                })
+                              }
+                              key={quat}
+                              options={MARKS_OPTIONS}
+                            />
+                          );
+                        })}
                     </tr>
                   ))}
               </React.Fragment>

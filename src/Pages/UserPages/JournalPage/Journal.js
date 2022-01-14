@@ -54,7 +54,6 @@ export default function Journal(props) {
   const parsedDates = createDates(startDate);
 
   const updateMyData = ({ row, column, value, group }) => {
-    console.log(row, column, value, group);
     let date = '';
     if (group > -1) {
       date = dates_by_group[group][column].date;
@@ -431,6 +430,7 @@ export default function Journal(props) {
           updateDates={updateDates}
           updateMyData={updateMyData}
           updateQuarterData={updateQuarterData}
+          onlyHours={userCourses[course].onlyHours}
         />
       ) : (
         <IndividualJournalView

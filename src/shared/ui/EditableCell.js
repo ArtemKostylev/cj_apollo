@@ -29,7 +29,7 @@ const EditableCellLayout = styled.td`
 `;
 
 export const EditableCell = ({
-  value: initialValue,
+  value: initialValue = '',
   options,
   isWeekend = false,
   onClick,

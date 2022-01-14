@@ -12,11 +12,11 @@ import {
 import { IoMdListBox } from 'react-icons/io';
 
 import ReactModal from 'react-modal';
-import { computeUpdateList, createCoditionalState } from './dataPageHeplers';
+import { computeUpdateList, createConditionalState } from './dataPageHeplers';
 import { ModalContent } from './ModalContent';
 import { FilePicker } from './FilePicker';
 import { PROGRAMS } from '../../../constants/programs';
-import { compareStundents } from '../../../utils/utils';
+import { compareStudents } from '../../../utils/utils';
 
 const PROGRAM_MAPPER = [
   { value: 'PP_5', text: '(5)ПП' },
@@ -131,7 +131,7 @@ export default function DataPageView({
 
   const ChangesItem = ({ type, mode, data, active, archived }) => {
     const [formState, setFormState] = useState(
-      createCoditionalState(type, data)
+      createConditionalState(type, data)
     );
     const [editVisible, setEditVisible] = useState(false);
     const [checked, setChecked] = useState(active);
@@ -205,7 +205,7 @@ export default function DataPageView({
           )}
         </div>
         <div className={`edit_panel ${editVisible ? 'visible' : ''}`}>
-          <div className='form_input_containter'>
+          <div className='form_input_container'>
             {Object.keys(formState).map((key) => (
               <div key={key} className='form_input'>
                 <label
@@ -235,10 +235,12 @@ export default function DataPageView({
                     style={{ flex: '4' }}
                     value={formState[key]}
                     type={
-                      key === 'group' || key === 'exclude' ? 'checkbox' : 'text'
+                      key === 'group' || key === 'exclude' || key === 'hours'
+                        ? 'checkbox'
+                        : 'text'
                     }
                     checked={
-                      key === 'group' || key === 'exclude'
+                      key === 'group' || key === 'exclude' || key === 'hours'
                         ? formState[key]
                         : false
                     }
@@ -516,7 +518,7 @@ export default function DataPageView({
                       !activeStudents.has(item.id) &&
                       !archivedStudents.has(item.id)
                   )
-                  .sort(compareStundents)
+                  .sort(compareStudents)
                   .map((item) => (
                     <ChangesItem
                       key={item.id}

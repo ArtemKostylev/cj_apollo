@@ -63,7 +63,7 @@ export function getYear(targetMonth, year = null) {
   }
   return currentYear + 1;
 }
-export const compareStundents = (a, b) => {
+export const compareStudents = (a, b) => {
   if (a.surname < b.surname) {
     return -1;
   }

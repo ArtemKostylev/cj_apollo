@@ -1,29 +1,44 @@
-export const createCoditionalState = (type, data = {}) => {
+import { DATA_PAGE_FIELD_TYPES } from '../../../constants/dataPageFieldTypes';
+
+export const createConditionalState = (type, data = {}) => {
   switch (type) {
-    case "teacher":
+    case 'teacher':
       return {
-        surname: data.surname || "",
-        name: data.name || "",
-        parent: data.parent || "",
+        surname: data.surname || '',
+        name: data.name || '',
+        parent: data.parent || '',
       };
-    case "course":
+    case 'course':
       return {
-        name: data.name || "",
+        name: data.name || '',
         group: data.group || false,
+        hours: data.onlyHours || false,
         exclude: data.excludeFromReport || false,
       };
-    case "student":
+    case 'student':
       return {
-        name: data.name || "",
-        surname: data.surname || "",
-        class: data.class || "",
-        program: data.program || "PP_5",
-        spec: data.specialization ? data.specialization.id.toString() : "",
+        name: data.name || '',
+        surname: data.surname || '',
+        class: data.class || '',
+        program: data.program || 'PP_5',
+        spec: data.specialization ? data.specialization.id.toString() : '',
       };
     default:
       return {};
   }
 };
+
+export const setFieldType = (field) => {
+  const boolFields = ['group', 'exclude', 'hours'];
+
+  return boolFields.includes(field)
+    ? DATA_PAGE_FIELD_TYPES.CHECKBOX
+    : DATA_PAGE_FIELD_TYPES.TEXT;
+};
+
+export const setFieldValue = (field) => {
+  
+}
 
 export const computeUpdateList = (oldList, newList) => {
   let added = newList.map((course) => {

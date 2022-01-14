@@ -1,2 +1,4 @@
 TODO: add url params to journal, to save course on reload
 TODO: refactor all components to use styled-components
+
+TODO: Add new set of marks (0.5h -> 3h) to journal, dependent on type of course.

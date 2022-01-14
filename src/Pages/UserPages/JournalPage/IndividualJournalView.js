@@ -5,7 +5,9 @@ import { findMark } from './JournalPageHelpers';
 import moment from 'moment';
 import '../../../styles/Journal.css';
 import { EditableCell } from '../../../shared/ui/EditableCell';
-import { MARKS_OPTIONS } from '../../../constants/marksOptions';
+import { MARKS_OPTIONS, HOURS_OPTIONS } from '../../../constants/marksOptions';
+
+const QUARTER_END_MONTHS = [9, 11, 2, 4];
 
 const IndividualJournalView = ({
   parsedDates,
@@ -13,8 +15,9 @@ const IndividualJournalView = ({
   updateQuarterData,
   updateMyData,
   studentData,
+  onlyHours,
 }) => {
-  const getQuaterMark = (item) => {
+  const getQuarterMark = (item) => {
     if (QUARTER_END[month]) {
       const mark = item.quaterMark.find(
         (mark) => mark.period === QUARTER_END[month]
@@ -27,7 +30,7 @@ const IndividualJournalView = ({
       return (
         <>
           <EditableCell
-            value={mark ? mark.mark : ''}
+            value={mark && mark.mark}
             onClick={(value) =>
               updateQuarterData({
                 row: item.student.id,
@@ -37,9 +40,9 @@ const IndividualJournalView = ({
             }
             options={MARKS_OPTIONS}
           />
-          {year !== null ? (
+          {year !== null && (
             <EditableCell
-              value={year ? year.mark : ''}
+              value={year && year.mark}
               updateMyData={updateQuarterData}
               onClick={(value) =>
                 updateQuarterData({
@@ -50,8 +53,6 @@ const IndividualJournalView = ({
               }
               options={MARKS_OPTIONS}
             />
-          ) : (
-            ''
           )}
         </>
       );
@@ -71,19 +72,15 @@ const IndividualJournalView = ({
             {parsedDates.map((date) => (
               <th key={date}>{date.format('DD.MM')}</th>
             ))}
-            {[2, 4, 9, 11].includes(month) ? (
-              <th rowSpan='2' className='quater_column'>
-                {`${QUARTERS_RU[[9, 11, 2, 4].indexOf(month)]}`}
+            {!onlyHours && QUARTER_END_MONTHS.includes(month) && (
+              <th rowSpan='2' className='quarter_column'>
+                {`${QUARTERS_RU[QUARTER_END_MONTHS.indexOf(month)]}`}
               </th>
-            ) : (
-              ''
             )}
-            {month === 4 ? (
-              <th rowSpan='2' className='quater_column'>
+            {!onlyHours && month === 4 && (
+              <th rowSpan='2' className='quarter_column'>
                 {`Год`}
               </th>
-            ) : (
-              ''
             )}
           </tr>
           <tr>
@@ -104,15 +101,19 @@ const IndividualJournalView = ({
                 <td
                   className='name_cell'
                   style={{ color: item.archived ? 'gray' : 'black' }}
-                >{`${item.student.surname} ${item.student.name} ${
-                  item.archived ? '(A)' : ''
-                }`}</td>
+                >
+                  {`${item.student.surname} ${item.student.name} ${
+                    item.archived ? '(A)' : ''
+                  }`}
+                </td>
                 <td
                   className='name_cell'
                   style={{ color: item.archived ? 'gray' : 'black' }}
-                >{`${item.student.class}${
-                  PROGRAMS[`${item.student.program}`]
-                }`}</td>
+                >
+                  {`${item.student.class}${
+                    PROGRAMS[`${item.student.program}`]
+                  }`}
+                </td>
                 {parsedDates.map((date, index) => (
                   <EditableCell
                     key={date}
@@ -126,10 +127,10 @@ const IndividualJournalView = ({
                     }
                     isWeekend={date.isoWeekday() === 6}
                     disabled={item.archived}
-                    options={MARKS_OPTIONS}
+                    options={onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS}
                   />
                 ))}
-                {getQuaterMark(item)}
+                {!onlyHours && getQuarterMark(item)}
               </tr>
             ))}
         </tbody>
