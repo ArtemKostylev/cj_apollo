@@ -10,7 +10,7 @@ export const getMonthFromUTCString = (date) => {
   return `${parseInt(date.split('T')[0].split('-')[1])}`;
 };
 
-const createDates = (initialDate) => {
+export const createDates = (initialDate) => {
   let result = [];
   let start = initialDate.clone().startOf('month');
   let end = initialDate.clone().endOf('month');

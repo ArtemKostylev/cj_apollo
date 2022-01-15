@@ -19,6 +19,7 @@ import {
 import times from 'lodash/times';
 import { JournalSkeleton } from './JournalSkeleton';
 import { handleError } from '../../../utils/errorMapper';
+import { t } from '../../../static/text';
 
 export default function Journal(props) {
   moment.locale('ru');
@@ -43,9 +44,7 @@ export default function Journal(props) {
     // TODO: move this listener and useEffect to a custom hook and reuse in other components
     if (changed) {
       event.preventDefault();
-      let confirm = window.confirm(
-        'Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.' // TODO: move this text to vocabulary
-      );
+      let confirm = window.confirm(t('unsaved_warning'));
       if (!confirm) event.stopImmediatePropagation();
     }
   };
@@ -204,7 +203,7 @@ export default function Journal(props) {
   }));
 
   if (studentData[0].student === null) {
-    return <p>Здесь пока нет данных</p>; // TODO: move this text to vocabulary
+    return <p>{t('no_data')}</p>;
   }
 
   let groupedData = [];
