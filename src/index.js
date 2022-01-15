@@ -8,7 +8,7 @@ import { ProvideAuth } from './utils/use-auth.js';
 import { setContext } from '@apollo/client/link/context';
 import { createUploadLink } from 'apollo-upload-client';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { USER_ALIAS } from './constants/localAliases';
+import { USER_ALIAS } from './constants/localStorageAliases';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 

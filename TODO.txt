@@ -1,4 +1,39 @@
-TODO: add url params to journal, to save course on reload
-TODO: refactor all components to use styled-components
+===============================================================================
+DONE:
+===============================================================================
 
-TODO: Add new set of marks (0.5h -> 3h) to journal, dependent on type of course.
+===============================================================================
+IN PROGRESS
+===============================================================================
+----------------------------------------------------------
+TODO: remove journal ui re-render on save      
+----------------------------------------------------------
+-> Loading animation should be moved to button text instead of table screen.
+-> Table interactions should be blocked during save process
+-> Table opacity should be lowered during save process
+
+-> Should not refetch after save is done:
+  - Some kind of transaction system should be implemented (we make a copy of state object after latest successful save, that
+  is immutable until another save success, then, if save failed, we revert object to this state). This also requires all 
+  backend operations to be performed in single transaction (If it is not already done in that way).
+  - On save error an alert should be shown, containing some text, that is meaningful to a user. (During this task
+  some kind of an error mapper should be implemented; this mapper can also be used in fallback screen).
+
+-> after successful save we replace last state, return opacity to the table, turn interactivity on, and show animation of loading
+  circle transitioning into check mark for 1 sec, then into normal "save" text.
+
+-> Erasing all user activity on error seems kinda unacceptable. Mb instead we can show some tooltip near save button or change appearance
+to indicate, that current progress is unsaved.
+
+===============================================================================
+TBD:
+===============================================================================
+
+TODO: prettify ui of pages: REPORTS, CONSULTS, REPLACEMENTS
+TODO: create a design system and implement it as a theme and basic components
+TODO: marksOptions constants short form if text === value
+TODO: replace academicYears constant with a year text generator function
+TODO: refactor dataPage forms into something less scary and more supportable
+TODO: carefully remove days from GROUP_PERIODS constant
+TODO: move all static text to a vocabulary with key/value pairs and use only keys on pages
+TODO: create onLeaveUnsaved hook

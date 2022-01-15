@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext } from 'react';
-import { USER_ALIAS } from '../constants/localAliases';
+import { USER_ALIAS } from '../constants/localStorageAliases';
 
 const AuthContext = createContext();
 
