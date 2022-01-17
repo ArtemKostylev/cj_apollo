@@ -81,6 +81,7 @@ export default function DataPageView({
     program: 'Программа',
     spec: 'Специальность',
     exclude: 'Убрать из ведомости',
+    hours: 'Только часы',
   };
 
   //creates a list of higlited items based on current values and relations, passed from apollo.
@@ -248,7 +249,7 @@ export default function DataPageView({
                       setFormState((prev) => ({
                         ...prev,
                         [key]:
-                          key === 'group' || key === 'exclude'
+                          key === 'group' || key === 'exclude' || key === 'hours'
                             ? e.target.checked
                             : e.target.value,
                       }))

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const FETCH_JOURNAL_QUERY = gql`
   query fetchJournalQuery(
@@ -53,6 +53,7 @@ export const FETCH_TEACHERS_QUERY = gql`
           id
           name
           group
+          onlyHours
         }
       }
     }
@@ -180,6 +181,7 @@ export const FETCH_COURSES_QUERY = gql`
       id
       name
       group
+      onlyHours
     }
   }
 `;
@@ -198,6 +200,7 @@ export const FETCH_FULL_INFO = gql`
         name
         group
         excludeFromReport
+        onlyHours
       }
       students {
         id
