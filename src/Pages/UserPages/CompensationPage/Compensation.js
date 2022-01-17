@@ -168,23 +168,21 @@ export default function Compensation(props) {
                               }.${lesson_date.split('-')[0]}`
                             : ''}
                         </td>
-                        <td>
-                          {lesson ? (
-                            <EditableDateCell
-                              initialValue={
-                                repl ? new Date(repl.date.split('T')[0]) : ''
-                              }
-                              column={repl ? repl.id : 0}
-                              group={lesson.id}
-                              row={item.student.id}
-                              updateDates={updateDates}
-                              month={month - 1}
-                              unlimited
-                            />
-                          ) : (
-                            ''
-                          )}
-                        </td>
+
+                        {lesson && (
+                          <EditableDateCell
+                            initialValue={
+                              repl ? new Date(repl.date.split('T')[0]) : ''
+                            }
+                            column={repl ? repl.id : 0}
+                            group={lesson.id}
+                            row={item.student.id}
+                            updateDates={updateDates}
+                            month={month - 1}
+                            unlimited
+                            inHeader={false}
+                          />
+                        )}
                       </Fragment>
                     );
                   })}

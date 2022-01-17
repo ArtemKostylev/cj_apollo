@@ -67,21 +67,19 @@ const GroupJournalView = ({
                 <tr>
                   {group.map((date, id) => {
                     return (
-                      <th className='date'>
-                        <EditableDateCell
-                          initialValue={
-                            date.date === ''
-                              ? ''
-                              : new Date(date.date.split('T')[0])
-                          }
-                          column={id}
-                          month={date.month - 1}
-                          group={g_index}
-                          updateDates={updateDates}
-                          full={false}
-                          key={id}
-                        />
-                      </th>
+                      <EditableDateCell
+                        initialValue={
+                          date.date === ''
+                            ? ''
+                            : new Date(date.date.split('T')[0])
+                        }
+                        column={id}
+                        month={date.month - 1}
+                        group={g_index}
+                        updateDates={updateDates}
+                        full={false}
+                        key={id}
+                      />
                     );
                   })}
                 </tr>

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../utils/utils';
 import { Dropdown } from './Dropdown';
+import { TableCell } from './tableUi/TableCell';
 
 const CellText = styled.p`
   border: none;
@@ -11,11 +12,7 @@ const CellText = styled.p`
   margin: 0px;
 `;
 
-const EditableCellLayout = styled.td`
-  border-top: none;
-  border: 1px solid #e6eaea;
-  border-collapse: collapse;
-  padding: 0px;
+const EditableCellLayout = styled(TableCell)`
   cursor: pointer;
   line-height: 6vh;
 

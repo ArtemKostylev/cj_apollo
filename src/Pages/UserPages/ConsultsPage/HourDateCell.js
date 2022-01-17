@@ -10,15 +10,14 @@ const HourDateCell = ({ column, hours, date, row, updateDates, unlimited }) => {
 
   return (
     <React.Fragment>
-      <td>
-        <EditableDateCell
-          initialValue={date || ''}
-          column={column || 0}
-          row={row || 0}
-          updateDates={updateDates}
-          unlimited
-        />
-      </td>
+      <EditableDateCell
+        initialValue={date || ''}
+        column={column || 0}
+        row={row || 0}
+        updateDates={updateDates}
+        inHeader={false}
+        unlimited
+      />
       <td>
         <select
           value={hoursValue}
