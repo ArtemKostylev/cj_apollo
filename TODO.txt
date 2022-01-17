@@ -25,6 +25,15 @@ TODO: remove journal ui re-render on save
 -> Erasing all user activity on error seems kinda unacceptable. Mb instead we can show some tooltip near save button or change appearance
 to indicate, that current progress is unsaved.
 
+----------------------------------------------------------
+TODO: add journals for choir piano
+----------------------------------------------------------
+-> Best way is to create an endpoint, which will pick all the groups from existing students
+-> A new model should be created for saving
+-> Such a course should be aware of the base choir course
+-> Try to reuse existing table ui
+-> Add new field to edit form in dataPage
+
 ===============================================================================
 TBD:
 ===============================================================================
