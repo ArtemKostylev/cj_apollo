@@ -15,6 +15,7 @@ export const LOGIN_MUTATION = gql`
               id
               name
               group
+              onlyHours
             }
           }
         }
@@ -216,7 +217,7 @@ export const UPDATE_STUDENT_RELATIONS_MUTATION = gql`
 
 export const UPDATE_GROUP_COMPANY = gql`
   mutation updateGroupCompany()
-`
+`;
 
 export const UPLOAD_TEACHERS_FROM_FILE = gql`
   mutation uploadTeachersFromFileMutation($file: Upload!) {
