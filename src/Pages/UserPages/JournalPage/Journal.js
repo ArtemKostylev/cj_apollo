@@ -283,7 +283,6 @@ export default function Journal(props) {
     });
 
     mappedDates.forEach((value, key) => {
-      console.log(key);
       const maxDates = key === '1' ? 4 : 5;
       const emptyCount = maxDates - value.length;
       result.push(

@@ -15,6 +15,7 @@ export const LOGIN_MUTATION = gql`
               id
               name
               group
+              onlyHours
             }
           }
         }
@@ -107,6 +108,7 @@ export const UPDATE_COURSE_MUTATION = gql`
       name
       group
       excludeFromReport
+      onlyHours
     }
   }
 `;

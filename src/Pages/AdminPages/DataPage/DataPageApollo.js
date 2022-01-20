@@ -1,6 +1,6 @@
-import { FETCH_FULL_INFO } from "../../../utils/queries";
-import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
-import DataPageView from "./DataPageView.js";
+import { FETCH_FULL_INFO } from '../../../utils/queries';
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import DataPageView from './DataPageView.js';
 import {
   CREATE_COURSE_MUTATION,
   CREATE_STUDENT_MUTATION,
@@ -13,14 +13,14 @@ import {
   UPDATE_STUDENT_MUTATION,
   UPDATE_STUDENT_RELATIONS_MUTATION,
   UPDATE_TEACHER_MUTATION,
-} from "../../../utils/mutations";
+} from '../../../utils/mutations';
 
 export default function DataPageController(props) {
   var { loading, data, error, refetch, networkStatus } = useQuery(
     FETCH_FULL_INFO,
     {
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
     }
   );
 
@@ -108,7 +108,7 @@ export default function DataPageController(props) {
 
   const update = async (type, values) => {
     switch (type) {
-      case "teacher":
+      case 'teacher':
         await updateTeacher({
           variables: {
             data: {
@@ -120,7 +120,7 @@ export default function DataPageController(props) {
           },
         });
         break;
-      case "course":
+      case 'course':
         await updateCourse({
           variables: {
             data: {
@@ -128,13 +128,14 @@ export default function DataPageController(props) {
               name: values.name,
               group: values.group,
               excludeFromReport: values.exclude,
+              onlyHours: values.hours,
             },
           },
         });
 
         break;
 
-      case "student":
+      case 'student':
         await updateStudent({
           variables: {
             data: {
@@ -157,7 +158,7 @@ export default function DataPageController(props) {
 
   const clear = async (type, id) => {
     switch (type) {
-      case "teacher":
+      case 'teacher':
         await deleteTeacher({
           variables: {
             id: id,
@@ -165,7 +166,7 @@ export default function DataPageController(props) {
         });
         break;
 
-      case "course":
+      case 'course':
         await deleteCourse({
           variables: {
             id: id,
@@ -173,7 +174,7 @@ export default function DataPageController(props) {
         });
         break;
 
-      case "student":
+      case 'student':
         await deleteStudent({
           variables: {
             id: id,
