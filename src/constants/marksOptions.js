@@ -28,4 +28,5 @@ export const HOURS_OPTIONS = [
   [{ value: '1.0', text: '1.0' }],
   [{ value: '1.5', text: '1.5' }],
   [{ value: '2.0', text: '2.0' }],
+  [{ value: 'Б', text: 'Б' }],
 ];
