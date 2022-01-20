@@ -81,11 +81,7 @@ const resourceMap = {
 export default function Menu({ onClose, isOpen }) {
   const auth = useAuth();
 
-  console.log(auth.user.role.name);
-
   const resources = resourceMap[auth.user.role.name];
-
-  console.log(resources);
 
   if (auth.user.courses.some((course) => course.group)) {
     resources.subgroups = SUBGROUPS_RESOURCE;

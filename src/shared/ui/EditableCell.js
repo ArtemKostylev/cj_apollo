@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../utils/utils';
 import { Dropdown } from './Dropdown';
@@ -35,10 +35,14 @@ export const EditableCell = ({
   onClick,
   disabled,
 }) => {
-  const [value, setValue] = React.useState(initialValue);
-  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = useState(initialValue);
+  const [open, setOpen] = useState(false);
 
-  const ref = React.useRef();
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  const ref = useRef();
 
   const width = ref.current?.clientWidth || 0;
 
