@@ -11,7 +11,7 @@ import { useAuth } from '../../../utils/use-auth';
 import { UPDATE_JOURNAL_MUTATION } from '../../../utils/mutations';
 import { GROUP_PERIODS } from '../../../constants/periods';
 import { getYear } from '../../../utils/utils';
-import GroupCompanyView from '../GroupCompanyPage/GroupCompanyView';
+import { t } from '../../../static/text';
 import { getMonthFromUTCString } from './JournalPageHelpers';
 import times from 'lodash/times';
 
@@ -34,9 +34,7 @@ export default function Journal(props) {
   const listener = (event) => {
     if (changed) {
       event.preventDefault();
-      let confirm = window.confirm(
-        'Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.'
-      );
+      let confirm = window.confirm(t('unsaved_warning'));
       if (!confirm) event.stopImmediatePropagation();
     }
   };
@@ -58,7 +56,7 @@ export default function Journal(props) {
     if (group > -1) {
       date = dates_by_group[group][column].date;
       if (date === '') {
-        alert('Пожалуйста, заполните дату');
+        alert(t('empty_date'));
         return false;
       }
     } else {
@@ -267,7 +265,7 @@ export default function Journal(props) {
   }));
 
   if (studentData[0].student === null) {
-    return <p>Здесь пока нет данных</p>;
+    return <p>{t('no_data')}</p>;
   }
   let groupedData = [];
 

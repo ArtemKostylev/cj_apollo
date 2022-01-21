@@ -9,6 +9,7 @@ import {
   SUBGROUPS_RESOURCE,
 } from '../constants/resources';
 import { ADMIN, TEACHER } from '../constants/roles';
+import { t } from '../static/text';
 
 const MenuItemWrapper = styled.div`
   text-align: left;
@@ -91,7 +92,7 @@ export default function Menu({ onClose, isOpen }) {
     <MenuWrapper isOpen={isOpen}>
       <MenuItemWrapper>
         <MenuItemText>МЕНЮ</MenuItemText>
-        <MenuCloseButton onClick={onClose}>Закрыть</MenuCloseButton>
+        <MenuCloseButton onClick={onClose}>{t('close')}</MenuCloseButton>
       </MenuItemWrapper>
       {Object.keys(resources).map((key) => (
         <MenuItem {...resources[key]} key={key} onClose={onClose} />
