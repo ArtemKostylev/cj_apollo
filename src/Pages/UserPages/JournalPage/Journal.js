@@ -5,15 +5,21 @@ import 'moment/locale/ru';
 import TableControls from '../../../shared/ui/TableControls';
 import IndividualJournalView from './IndividualJournalView';
 import GroupJournalView from './GroupJournalView';
-import { useMutation, useQuery, NetworkStatus } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { FETCH_JOURNAL_QUERY } from '../../../utils/queries';
 import { useAuth } from '../../../utils/use-auth';
 import { UPDATE_JOURNAL_MUTATION } from '../../../utils/mutations';
 import { GROUP_PERIODS } from '../../../constants/periods';
 import { getYear } from '../../../utils/utils';
-import { t } from '../../../static/text';
-import { getMonthFromUTCString } from './JournalPageHelpers';
+import {
+  getMonthFromUTCString,
+  prepareSaveData,
+  createDates,
+} from './JournalPageHelpers';
 import times from 'lodash/times';
+import { JournalSkeleton } from './JournalSkeleton';
+import { handleError } from '../../../utils/errorMapper';
+import { t } from '../../../static/text';
 
 export default function Journal(props) {
   moment.locale('ru');
@@ -31,7 +37,11 @@ export default function Journal(props) {
   );
 
   const userCourses = props.location.state?.courses || auth.user?.courses;
+  const teacherId = props.location.state?.teacher || auth.user?.teacher;
+  const courseId = userCourses[course].id; // TODO: this should be contained in query string
+
   const listener = (event) => {
+    // TODO: move this listener and useEffect to a custom hook and reuse in other components
     if (changed) {
       event.preventDefault();
       let confirm = window.confirm(t('unsaved_warning'));
@@ -49,8 +59,9 @@ export default function Journal(props) {
 
   const startDate = moment().month(month).year(getYear(month));
 
-  const parsedDates = createDates(startDate);
+  const parsedDates = createDates(startDate); // TODO: wrap this in useMemo
 
+  // ? maybe this two update functions can be combined into 1. Also, naming sucks
   const updateMyData = ({ row, column, value, group }) => {
     let date = '';
     if (group > -1) {
@@ -157,102 +168,29 @@ export default function Journal(props) {
     return true;
   };
 
-  const createUpdateData = () => {
-    let result = [];
-
-    for (let i = 0; i < studentData.length; i++) {
-      let student = studentData[i].journalEntry;
-      for (let j = 0; j < student.length; j++) {
-        let entry = student[j];
-        if (entry.update_flag)
-          result.push({
-            id: entry.id,
-            mark: entry.mark,
-            date: entry.date,
-            relationId: studentData[i].id,
-          });
-      }
-    }
-
-    return result;
-  };
-
-  const createClearData = () => {
-    let result = [];
-    for (let i = 0; i < studentData.length; i++) {
-      let student = studentData[i].journalEntry;
-      for (let j = 0; j < student.length; j++) {
-        let entry = student[j];
-        if (entry.delete_flag && entry.id !== 0) result.push(entry.id);
-      }
-    }
-    return result;
-  };
-
-  const createQuaterData = () => {
-    let result = [];
-    studentData.forEach((student) => {
-      student.quaterMark.forEach((mark) => {
-        if (mark.update_flag)
-          result.push({
-            id: mark.id,
-            mark: mark.mark,
-            period: mark.period,
-            relationId: student.id,
-          });
-      });
-    });
-    return result;
-  };
-
-  const createQuaterClearData = () => {
-    let result = [];
-    studentData.forEach((student) => {
-      student.quaterMark.forEach((mark) => {
-        if (mark.delete_flag && mark.id !== 0) result.push(mark.id);
-      });
-    });
-    return result;
-  };
-
   let {
     loading,
-    data: studentData,
+    data: studentData, // ? do this variable really need a rename?
     error,
-    refetch,
-    networkStatus,
   } = useQuery(FETCH_JOURNAL_QUERY, {
     variables: {
-      teacherId: props.location.state?.teacher || auth.user?.teacher,
-      courseId: userCourses[course].id,
+      teacherId,
+      courseId,
       year: moment().month() > 7 ? moment().year() : moment().year() - 1,
     },
-    notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
   });
 
-  const [update] = useMutation(UPDATE_JOURNAL_MUTATION);
+  const [save, { loading: isSaving }] = useMutation(UPDATE_JOURNAL_MUTATION, {
+    variables: {
+      data: prepareSaveData(studentData),
+    },
+  });
 
-  const save = async () => {
-    await update({
-      variables: {
-        data: {
-          updateCasual: createUpdateData(),
-          updatePeriod: createQuaterData(),
-          deleteCasual: createClearData(),
-          deletePeriod: createQuaterClearData(),
-        },
-      },
-    });
+  if (error) handleError(error);
+  if (loading) return JournalSkeleton;
 
-    refetch();
-  };
-
-  const spinner = <div>Загрузка</div>;
-
-  if (error) throw new Error(503);
-  if (loading) return spinner;
-  if (networkStatus === NetworkStatus.refetch) return spinner;
+  // TODO: move this logic to backend
   studentData = studentData.fetchJournal.map((student) => ({
     ...student,
     journalEntry: [
@@ -267,6 +205,7 @@ export default function Journal(props) {
   if (studentData[0].student === null) {
     return <p>{t('no_data')}</p>;
   }
+
   let groupedData = [];
 
   //TODO possible bottleneck
@@ -317,11 +256,6 @@ export default function Journal(props) {
       return 0;
     });
   }
-
-  //inside groupedData we divide them by subgroups
-
-  //iterate over all dates, grouped by class, program and subgroup
-  // dates are stored in UTC strings (DD-MM-YYYYTHH:MM:SS.sssZ)
 
   let dates_by_group = groupedData.map((group) => {
     const dates = [
@@ -417,7 +351,6 @@ export default function Journal(props) {
         setCourse={setCourse}
         setPeriod={userCourses[course].group ? setPeriod : undefined}
         period={userCourses[course].group ? period : undefined}
-        refetch={() => refetch()}
       />
       {userCourses[course].group ? (
         <GroupJournalView
@@ -442,14 +375,3 @@ export default function Journal(props) {
     </>
   );
 }
-
-const createDates = (initialDate) => {
-  let result = [];
-  let start = initialDate.clone().startOf('month');
-  let end = initialDate.clone().endOf('month');
-
-  for (let date = start; date <= end; date.add(1, 'day')) {
-    if (date.isoWeekday() !== 7) result.push(date.clone());
-  }
-  return result;
-};
