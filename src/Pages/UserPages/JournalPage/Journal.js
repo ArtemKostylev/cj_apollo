@@ -67,7 +67,7 @@ export default function Journal(props) {
     if (group > -1) {
       date = dates_by_group[group][column].date;
       if (date === '') {
-        alert('Пожалуйста, заполните дату');
+        alert(t('empty_date'));
         return false;
       }
     } else {

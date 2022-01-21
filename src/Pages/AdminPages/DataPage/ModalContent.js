@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createConditionalState } from './dataPageHeplers';
 import '../../../styles/ModalContent.css';
+import { t } from '../../../static/text';
 
 export const ModalContent = ({
   type,
@@ -34,7 +35,7 @@ export const ModalContent = ({
       });
     } else if (type === 'student') {
       if (!Number.isInteger(parseInt(values.class))) {
-        alert('Класс должен быть числом!');
+        alert(t('class_is_number'));
         return;
       }
       await createStudent({
@@ -57,7 +58,7 @@ export const ModalContent = ({
     innerContent = (
       <div className='form_input_container'>
         <div className='form_input'>
-          <label>Фамилия</label>
+          <label>{t('surname')}</label>
           <input
             type='text'
             onChange={(e) =>
@@ -67,7 +68,7 @@ export const ModalContent = ({
           />
         </div>
         <div className='form_input'>
-          <label>Имя</label>
+          <label>{t('name')}</label>
           <input
             type='text'
             onChange={(e) =>
@@ -77,7 +78,7 @@ export const ModalContent = ({
           />
         </div>
         <div className='form_input'>
-          <label>Отчество</label>
+          <label>{t('famname')}</label>
           <input
             type='text'
             onChange={(e) =>
@@ -92,7 +93,7 @@ export const ModalContent = ({
     innerContent = (
       <div className='form_input_container'>
         <div className='form_input'>
-          <label>Название</label>
+          <label>{t('title')}</label>
           <input
             type='text'
             onChange={(e) =>
@@ -102,7 +103,7 @@ export const ModalContent = ({
           />
         </div>
         <div className='form_input'>
-          <label>Групповой</label>
+          <label>{t('group')}</label>
           <input
             type='checkbox'
             onChange={(e) =>
@@ -117,7 +118,7 @@ export const ModalContent = ({
     innerContent = (
       <div className='form_input_container'>
         <div className='form_input'>
-          <label>Фамилия</label>
+          <label>{t('surname')}</label>
           <input
             type='text'
             onChange={(e) =>
@@ -127,7 +128,7 @@ export const ModalContent = ({
           />
         </div>
         <div className='form_input'>
-          <label>Имя</label>
+          <label>{t('name')}</label>
 
           <input
             type='text'
@@ -138,7 +139,7 @@ export const ModalContent = ({
           />
         </div>
         <div className='form_input'>
-          <label>Класс</label>
+          <label>{t('class')}</label>
           <input
             onChange={(e) =>
               setValues((prev) => ({
@@ -153,7 +154,7 @@ export const ModalContent = ({
           />
         </div>
         <div className='form_input'>
-          <label>Программа</label>
+          <label>{t('program')}</label>
           <select
             defaultValue={'PP_5'}
             onChange={(e) =>
@@ -164,9 +165,9 @@ export const ModalContent = ({
             }
             value={values.program}
           >
-            <option value='PP_5'>(5)ПП</option>
-            <option value='PP_8'>(8)ПП</option>
-            <option value='OP'>ОП</option>
+            <option value='PP_5'>{t('PP_5')}</option>
+            <option value='PP_8'>{t('PP_8')}</option>
+            <option value='OP'>{t('OP')}</option>
           </select>
         </div>
       </div>
@@ -184,8 +185,8 @@ export const ModalContent = ({
       </h1>
       {innerContent}
       <div className='modal_controls'>
-        <button onClick={submit}>Сохранить</button>
-        <button onClick={() => close(false)}>Отмена</button>
+        <button onClick={submit}>{t('save')}</button>
+        <button onClick={() => close(false)}>{t('cancel')}</button>
       </div>
     </div>
   );
