@@ -17,11 +17,12 @@ import { ModalContent } from './ModalContent';
 import { FilePicker } from './FilePicker';
 import { PROGRAMS } from '../../../constants/programs';
 import { compareStudents } from '../../../utils/utils';
+import { t } from '../../../static/text';
 
 const PROGRAM_MAPPER = [
-  { value: 'PP_5', text: '(5)ПП' },
-  { value: 'PP_8', text: '(8)ПП' },
-  { value: 'OP', text: 'ОП' },
+  { value: 'PP_5', text: t('PP_5') },
+  { value: 'PP_8', text: t('PP_8') },
+  { value: 'OP', text: t('OP') },
 ];
 
 const convertSpecToOptions = (spec) => [
@@ -249,7 +250,9 @@ export default function DataPageView({
                       setFormState((prev) => ({
                         ...prev,
                         [key]:
-                          key === 'group' || key === 'exclude' || key === 'hours'
+                          key === 'group' ||
+                          key === 'exclude' ||
+                          key === 'hours'
                             ? e.target.checked
                             : e.target.value,
                       }))
