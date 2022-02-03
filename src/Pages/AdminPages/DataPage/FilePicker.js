@@ -1,31 +1,32 @@
-import { useMutation } from "@apollo/client";
-import React from "react";
+import { useMutation } from '@apollo/client';
+import React from 'react';
 import {
   UPLOAD_COURSES_FROM_FILE,
   UPLOAD_STUDENTS_FROM_FILE,
   UPLOAD_TEACHERS_FROM_FILE,
-} from "../../../utils/mutations";
-import "../../../styles/FilePicker.css";
+} from '../../../utils/mutations';
+import '../../../styles/FilePicker.css';
+import { t } from '../../../static/text';
 
 export const FilePicker = ({ type, close }) => {
   let title;
   let mutation;
 
   switch (type) {
-    case "teacher":
-      title = "преподавателей";
+    case 'teacher':
+      title = 'преподавателей';
       mutation = UPLOAD_TEACHERS_FROM_FILE;
       break;
-    case "course":
-      title = "предметов";
+    case 'course':
+      title = 'предметов';
       mutation = UPLOAD_COURSES_FROM_FILE;
       break;
-    case "student":
-      title = "учащихся";
+    case 'student':
+      title = 'учащихся';
       mutation = UPLOAD_STUDENTS_FROM_FILE;
       break;
     default:
-      title = "";
+      title = '';
       mutation = UPLOAD_TEACHERS_FROM_FILE;
   }
 
@@ -41,10 +42,10 @@ export const FilePicker = ({ type, close }) => {
   };
 
   return (
-    <div className="filepicker_container">
-      <h1>{`Загрузка списка ${title} из файла`}</h1>
-      <input type="file" required onChange={onChange} />
-      <button onClick={() => close()}>Закрыть</button>
+    <div className='filepicker_container'>
+      <h1>{t('list_loading', [title])}</h1>
+      <input type='file' required onChange={onChange} />
+      <button onClick={() => close()}>{t('close')}</button>
     </div>
   );
 };
