@@ -14,38 +14,25 @@ import { getYear } from '../../../utils/utils';
 import { t } from '../../../static/text';
 import { getMonthFromUTCString } from './JournalPageHelpers';
 import times from 'lodash/times';
+import { usePageLeave } from '../../../utils/usePageLeave';
 
 export default function Journal(props) {
   moment.locale('ru');
 
   let auth = useAuth();
+  const [setChanged, setRef] = usePageLeave(props.menuRef);
+
+  useEffect(() => setRef(props.menuRef), [props.menuRef, setRef]);
 
   const [month, setMonth] = React.useState(
     !![5, 6, 7].find((item) => item === moment().month()) ? 4 : moment().month()
   );
   const [course, setCourse] = useState(0);
-  let changed = false;
-
   const [period, setPeriod] = useState(
     month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']
   );
 
   const userCourses = props.location.state?.courses || auth.user?.courses;
-  const listener = (event) => {
-    if (changed) {
-      event.preventDefault();
-      let confirm = window.confirm(t('unsaved_warning'));
-      if (!confirm) event.stopImmediatePropagation();
-    }
-  };
-
-  useEffect(() => {
-    props.menuRef?.current.addEventListener('click', listener);
-
-    return () => {
-      props.menuRef?.current?.removeEventListener('click', listener);
-    };
-  });
 
   const startDate = moment().month(month).year(getYear(month));
 
@@ -111,7 +98,7 @@ export default function Journal(props) {
         ...studentData.slice(studentId + 1),
       ];
     }
-    changed = true;
+    setChanged(true);
     return true;
   };
 

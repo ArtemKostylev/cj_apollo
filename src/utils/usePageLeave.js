@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { t } from '../static/text';
 
-export const usePageLeave = ({ menuRef }) => {
+export const usePageLeave = () => {
   const [changed, setChanged] = useState();
+  const [ref, setRef] = useState();
 
   useEffect(() => {
+
     const listener = (event) => {
       if (changed) {
         event.preventDefault();
@@ -13,19 +15,12 @@ export const usePageLeave = ({ menuRef }) => {
       }
     };
 
-    console.log(changed, menuRef);
-
-    menuRef?.current?.addEventListener('click', listener);
+    ref?.current?.addEventListener('click', listener);
 
     return () => {
-      menuRef?.current?.removeEventListener('click', listener);
+      ref?.current?.removeEventListener('click', listener);
     };
-  }, [menuRef, changed]);
+  }, [ref, changed]);
 
-  return {
-    setChanged: (value) => {
-      console.log(value);
-      setChanged(value);
-    },
-  };
+  return [setChanged, setRef];
 };
