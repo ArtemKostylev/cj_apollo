@@ -11,6 +11,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "apollo-upload-client": "^16.0.0",
+    "cross-env": "^7.0.3",
     "date-fns": "^2.19.0",
     "graphql": "^15.5.0",
     "lodash": "^4.17.21",
@@ -31,8 +32,9 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "BUILD_PATH='../html' react-scripts build",
+    "start": "cross-env REACT_APP_ENV='development' react-scripts start",
+    "start-prod": "cross-env REACT_APP_ENV='production' react-scripts start",
+    "build": "cross-env REACT_APP_ENV='production' BUILD_PATH='../html' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
