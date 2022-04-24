@@ -29,7 +29,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = createUploadLink({
-  uri: pathMap[process.env.NODE_ENV],
+  uri: pathMap[process.env.REACT_APP_ENV],
 });
 
 const client = new ApolloClient({

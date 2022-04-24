@@ -92,7 +92,7 @@ const Content = () => {
         />
         <div className={`Content ${menuVisible && 'menuVisible'}`}>
           <Header menuClick={menuClick} menuRef={menuRef} />
-          {auth.user.role.name === ADMIN ? <AdminRoutes /> : <TeacherRoutes />}
+          {auth.user.role.name === ADMIN ? <AdminRoutes menuRef={menuRef}/> : <TeacherRoutes menuRef={menuRef}/>}
         </div>
       </ErrorBoundary>
     </div>
