@@ -44,6 +44,7 @@ export default function Journal(props) {
       date = dates_by_group[group][column].date;
       if (date === '') {
         alert(t('empty_date'));
+        setChanged(true);
         return false;
       }
     } else {
