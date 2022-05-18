@@ -6,7 +6,7 @@ export const QUARTERS = [
 ];
 
 export const QUARTER_END = {
-  4: 'fouth',
+  4: 'fourth',
   2: 'third',
   9: 'first',
   11: 'second',
