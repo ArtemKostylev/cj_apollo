@@ -12,8 +12,8 @@ const CellText = styled.p`
 `;
 
 const EditableCellLayout = styled.td`
-  border-top: none;
   border: 1px solid #e6eaea;
+  border-top: none;
   border-collapse: collapse;
   padding: 0px;
   cursor: pointer;

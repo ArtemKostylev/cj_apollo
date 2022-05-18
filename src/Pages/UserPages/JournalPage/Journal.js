@@ -12,11 +12,12 @@ import { UPDATE_JOURNAL_MUTATION } from '../../../utils/mutations';
 import { GROUP_PERIODS } from '../../../constants/periods';
 import { getYear } from '../../../utils/utils';
 import { t } from '../../../static/text';
-import { getMonthFromUTCString } from './JournalPageHelpers';
+import {getFromAuthOrLocation, getMonthFromUTCString} from './JournalPageHelpers';
 import times from 'lodash/times';
 import { usePageLeave } from '../../../utils/usePageLeave';
+import {Spinner} from "../../../shared/ui/Spinner";
 
-export default function Journal(props) {
+export default function Journal({location, ...props}) {
   moment.locale('ru');
 
   let auth = useAuth();
@@ -32,11 +33,12 @@ export default function Journal(props) {
     month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']
   );
 
-  const userCourses = props.location.state?.courses || auth.user?.courses;
+  const [teacherId, userCourses] = getFromAuthOrLocation(auth, location, ['teacher', 'courses']);
 
   const startDate = moment().month(month).year(getYear(month));
 
   const parsedDates = createDates(startDate);
+
 
   const updateMyData = ({ row, column, value, group }) => {
     let date = '';
@@ -52,7 +54,7 @@ export default function Journal(props) {
     const student = studentData.find((item) => item.student.id === row);
     const marks = student.journalEntry;
     const cell = marks.find(
-      (el) => el.date.split('T')[0] === date || el.date === date
+        (el) => el.date.split('T')[0] === date || el.date === date
     );
 
     const studentId = studentData.indexOf(student);
@@ -68,8 +70,8 @@ export default function Journal(props) {
               id: 0,
               mark: value,
               date: date.includes('T00:00:00.000Z')
-                ? date
-                : date.concat('T00:00:00.000Z'),
+                  ? date
+                  : date.concat('T00:00:00.000Z'),
               delete_flag: false,
               update_flag: true,
             },
@@ -144,6 +146,7 @@ export default function Journal(props) {
     return true;
   };
 
+
   const createUpdateData = () => {
     let result = [];
 
@@ -210,7 +213,7 @@ export default function Journal(props) {
     networkStatus,
   } = useQuery(FETCH_JOURNAL_QUERY, {
     variables: {
-      teacherId: props.location.state?.teacher || auth.user?.teacher,
+      teacherId,
       courseId: userCourses[course].id,
       year: moment().month() > 7 ? moment().year() : moment().year() - 1,
     },
@@ -232,14 +235,13 @@ export default function Journal(props) {
       },
     });
 
-    refetch();
+    await refetch();
   };
 
-  const spinner = <div>Загрузка</div>;
-
   if (error) throw new Error(503);
-  if (loading) return spinner;
-  if (networkStatus === NetworkStatus.refetch) return spinner;
+  if (loading) return <Spinner/>;
+  if (networkStatus === NetworkStatus.refetch) return <Spinner/>;
+
   studentData = studentData.fetchJournal.map((student) => ({
     ...student,
     journalEntry: [

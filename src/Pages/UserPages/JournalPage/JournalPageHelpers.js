@@ -1,3 +1,5 @@
+import get from 'lodash/get';
+
 export const findMark = (date, student) => {
   if (date === "" || !date) return "";
   if (typeof date === "string") date = date.split("T")[0];
@@ -9,3 +11,8 @@ export const findMark = (date, student) => {
 export const getMonthFromUTCString = (date) => {
   return `${parseInt(date.split("T")[0].split("-")[1])}`;
 };
+
+export const getFromAuthOrLocation = (auth, location, keys) => {
+  return keys.map(key => get(location?.state, key) || get(auth?.user, key))
+}
+
