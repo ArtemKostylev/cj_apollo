@@ -1,24 +1,24 @@
-import React, { forwardRef, useState, useEffect } from 'react';
+import React, {forwardRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/Journal.css';
 import ru from 'date-fns/locale/ru';
-import { getYear } from '../../utils/utils';
+import {getYear} from '../../utils/utils';
 import moment from 'moment';
 
 const DATE_PLACEHOLDER = '.....';
 
-const convertDate = ({ value, full }) => {
-  if (!value) return DATE_PLACEHOLDER;
+const convertDate = ({value, full}) => {
+    if (!value) return DATE_PLACEHOLDER;
 
-  const [month, day, year] = value.split('/');
+    const [month, day, year] = value.split('/');
 
-  const date = `${day}.${month}`;
+    const date = `${day}.${month}`;
 
-  if (full) date.concat(`.${year}`);
+    if (full) date.concat(`.${year}`);
 
-  return date;
+    return date;
 };
 
 const InputWrapper = styled.p`
@@ -27,71 +27,72 @@ const InputWrapper = styled.p`
   margin: 0;
 `;
 
-const Input = forwardRef(({ value, onClick, full }, ref) => (
-  <InputWrapper onClick={onClick} ref={ref}>
-    {convertDate({ value, full })}
-  </InputWrapper>
+const Input = forwardRef(({value, onClick, full}, ref) => (
+    <InputWrapper onClick={onClick} ref={ref}>
+        {convertDate({value, full})}
+    </InputWrapper>
 ));
 
 const EditableDateCell = ({
-  initialValue,
-  updateDates,
-  column,
-  group,
-  month,
-  row,
-  unlimited = false,
-  full = true,
-  disabled = false,
-}) => {
-  const [value, setValue] = useState(initialValue);
+                              initialValue,
+                              updateDates,
+                              column,
+                              group,
+                              month,
+                              row,
+                              unlimited = false,
+                              full = true,
+                              disabled = false,
+                          }) => {
+    const [value, setValue] = useState(initialValue);
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
+    useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
 
-  if (disabled) {
-    return convertDate({ value, full });
-  }
+    if (disabled) {
+        return convertDate({value, full});
+    }
 
-  // TODO: replace input month with month - 1
-  const start_date = unlimited
-    ? ''
-    : moment()
-        .clone()
-        .year(getYear(month))
-        .month(month)
-        .startOf('month')
-        .toDate();
+    // TODO: replace input month with month - 1
+    const start_date = unlimited
+        ? ''
+        : moment()
+            .clone()
+            .year(getYear(month))
+            .month(month)
+            .startOf('month')
+            .toDate();
 
-  const end_date = unlimited
-    ? ''
-    : moment()
-        .clone()
-        .year(getYear(month))
-        .month(month)
-        .endOf('month')
-        .toDate();
+    const end_date = unlimited
+        ? ''
+        : moment()
+            .clone()
+            .year(getYear(month))
+            .month(month)
+            .endOf('month')
+            .toDate();
 
-  return (
-    <DatePicker
-      selected={value}
-      onChange={(date) => {
-        updateDates({
-          date: date,
-          column: column,
-          group: group,
-          row: row || 0,
-        });
-        setValue(date);
-      }}
-      customInput={<Input />}
-      minDate={start_date}
-      maxDate={end_date}
-      full={full}
-      locale={ru}
-    />
-  );
+    return (
+        <DatePicker
+            selected={value}
+            onChange={(date) => {
+                updateDates({
+                    date: date,
+                    column: column,
+                    group: group,
+                    row: row || 0,
+                });
+                setValue(date);
+            }}
+            customInput={<Input/>}
+            minDate={start_date}
+            maxDate={end_date}
+            full={full}
+            locale={ru}
+            style={{lineHeight: '1em'}}
+        />
+    );
 };
 
 export default EditableDateCell;
