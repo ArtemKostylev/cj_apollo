@@ -27,7 +27,7 @@ const IndividualConsultsView = ({controlItems, data, updateDates}) => {
                             .map((num, index) => (
                                 <HourDateCell
                                     updateDates={updateDates}
-                                    column={item.consults[index]?.id || `ui_${index}`}
+                                    column={item.consult[index]?.id || `ui_${index}`}
                                     row={item.student.id}
                                     date={
                                         item.consult[index]

@@ -77,9 +77,10 @@ export const ConsultController = (props) => {
     );
 
     const updateIndividualData = ({date, hours, column, row}) => {
+        console.log(data);
         const student = data.find((item, index) => item.student.id === row);
         const studentIndex = data.indexOf(student);
-        const consult = student.consults.find((item) => {
+        const consult = student.consult.find((item) => {
             const itemIndex = item.id ? item.id : item.uiIndex;
             return itemIndex === column;
         });
