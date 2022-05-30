@@ -1,6 +1,6 @@
-import React, {forwardRef, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import DatePicker from 'react-datepicker';
+import React, {forwardRef, useState, useEffect, useRef} from 'react';
+import styled, {css} from 'styled-components';
+import DatePicker, {CalendarContainer} from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/Journal.css';
 import ru from 'date-fns/locale/ru';
@@ -8,6 +8,18 @@ import {getYear} from '../../utils/utils';
 import moment from 'moment';
 
 const DATE_PLACEHOLDER = '.....';
+
+const ContainerWrapper = styled.div`
+  line-height: 1em;
+`
+
+const Container = ({className, children}) => (
+    <ContainerWrapper>
+        <CalendarContainer className={className}>
+            {children}
+        </CalendarContainer>
+    </ContainerWrapper>
+);
 
 const convertDate = ({value, full}) => {
     if (!value) return DATE_PLACEHOLDER;
@@ -22,6 +34,8 @@ const convertDate = ({value, full}) => {
 };
 
 const InputWrapper = styled.p`
+  width: 100%;
+  text-align: center;
   padding: 0;
   cursor: pointer;
   margin: 0;
@@ -55,7 +69,7 @@ const EditableDateCell = ({
     }
 
     // TODO: replace input month with month - 1
-    const start_date = unlimited
+    const startDate = unlimited
         ? ''
         : moment()
             .clone()
@@ -64,7 +78,7 @@ const EditableDateCell = ({
             .startOf('month')
             .toDate();
 
-    const end_date = unlimited
+    const endDate = unlimited
         ? ''
         : moment()
             .clone()
@@ -86,11 +100,12 @@ const EditableDateCell = ({
                 setValue(date);
             }}
             customInput={<Input/>}
-            minDate={start_date}
-            maxDate={end_date}
+            popperPlacement='auto'
+            minDate={startDate}
+            maxDate={endDate}
             full={full}
             locale={ru}
-            style={{lineHeight: '1em'}}
+            calendarContainer={Container}
         />
     );
 };

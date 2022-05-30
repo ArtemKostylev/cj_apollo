@@ -1,56 +1,69 @@
 .consult_container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .consult_table {
-  border-top: none;
-  border: 1px solid #d6d8d8;
-  border-collapse: collapse;
-  min-height: 100px;
-  overflow: hidden;
-  line-height: 50px;
-  empty-cells: show;
-  width: 100%;
+    border: 1px solid #d6d8d8;
+    border-top: none;
+    border-collapse: collapse;
+    min-height: 100px;
+    overflow: hidden;
+    line-height: 50px;
+    empty-cells: show;
+    width: 100%;
 }
 
 .consult_table th {
-  line-height: 50px;
-  empty-cells: show;
-  border-top: none;
-  border: 1px solid #d6d8d8;
-  border-collapse: collapse;
-  background-color: #eff0f0;
+    line-height: 50px;
+    empty-cells: show;
+    border: 1px solid #d6d8d8;
+    border-top: none;
+    border-collapse: collapse;
+    background-color: #eff0f0;
+}
+
+.consult_table td:hover {
+    background-color: #e6eaea;
+}
+
+.consult_table td [class*='react-datepicker-wrapper'] {
+    width: 100%;
+}
+
+.consult_table td:hover select {
+    background-color: #e6eaea;
 }
 
 .consult_table select {
-  outline: none;
-  border: none;
-  background-color: white;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
 }
 
 .consult_table option {
-  cursor: pointer;
+    cursor: pointer;
 }
-.consult_table select:hover {
-  background-color: #f6f6f6;
-}
+
 .consult_table .name_cell {
-  cursor: default;
+    cursor: default;
 }
 
 .consult_table .name_column {
-  max-width: 30%;
-  min-width: 20%;
-  border: none;
+    max-width: 30%;
+    min-width: 20%;
+    border: none;
 }
 
 .consult_table .date_columns {
-  min-width: 70%;
+    min-width: 70%;
 }
