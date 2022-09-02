@@ -34,7 +34,7 @@
   "scripts": {
     "start": "cross-env REACT_APP_ENV='development' react-scripts start",
     "start-prod": "cross-env REACT_APP_ENV='production' react-scripts start",
-    "build": "cross-env REACT_APP_ENV='production' BUILD_PATH='../html' react-scripts build",
+    "build": "cross-env REACT_APP_ENV='production' BUILD_PATH='var/www/akostylev/html' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
