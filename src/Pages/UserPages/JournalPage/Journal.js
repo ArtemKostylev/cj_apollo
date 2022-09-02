@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import moment from 'moment';
 import 'moment/locale/ru';
@@ -14,30 +14,22 @@ import {getYear} from '../../../utils/utils';
 import {t} from '../../../static/text';
 import {getMonthFromUTCString} from './JournalPageHelpers';
 import times from 'lodash/times';
-import {usePageLeave} from '../../../utils/usePageLeave';
 
 export default function Journal(props) {
     moment.locale('ru');
 
     let auth = useAuth();
-    // ! Temporary disabled
-    // const [setChanged, setRef] = usePageLeave(props.menuRef);
 
-    // useEffect(() => setRef(props.menuRef), [props.menuRef, setRef]);
-
-    const [month, setMonth] = React.useState(
-        !![5, 6, 7].find((item) => item === moment().month()) ? 4 : moment().month()
-    );
+    const [month, setMonth] = React.useState([5, 6, 7].includes(moment().month()) ? 4 : moment().month());
     const [course, setCourse] = useState(0);
-    const [period, setPeriod] = useState(
-        month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']
-    );
+    const [period, setPeriod] = useState(month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']);
+    const [year, setYear] = useState(`${moment().year()}`);
 
-    const userCourses = props.location.state?.courses || auth.user?.courses;
+    const userCourses = useMemo(() => props.location.state?.courses || auth.user?.courses, [props.location.state, auth.user]);
 
-    const startDate = moment().month(month).year(getYear(month));
+    const startDate = useMemo(() => moment().month(month).year(getYear(month, year)), [month, year]);
 
-    const parsedDates = createDates(startDate);
+    const parsedDates = useMemo(() => createDates(startDate), [startDate]);
 
     const updateMyData = ({row, column, value, group}) => {
         let date = '';
@@ -213,7 +205,7 @@ export default function Journal(props) {
         variables: {
             teacherId: props.location.state?.teacher || auth.user?.teacher,
             courseId: userCourses[course].id,
-            year: moment().month() > 7 ? moment().year() : moment().year() - 1,
+            year: moment().month() > 7 ? parseInt(year) : parseInt(year) - 1,
         },
         notifyOnNetworkStatusChange: true,
         fetchPolicy: 'network-only',
@@ -403,8 +395,10 @@ export default function Journal(props) {
                 courses={userCourses}
                 course={course}
                 setCourse={setCourse}
-                setPeriod={userCourses[course].group ? setPeriod : undefined}
-                period={userCourses[course].group ? period : undefined}
+                year={year}
+                setYear={setYear}
+                setPeriod={userCourses[course].group && setPeriod}
+                period={userCourses[course].group && period}
                 refetch={() => refetch()}
             />
             {userCourses[course].group ? (

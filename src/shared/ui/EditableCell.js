@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../utils/utils';
-import { Dropdown } from './Dropdown';
+import {useOnClickOutside} from '../../utils/utils';
+import {Dropdown} from './Dropdown';
 
 const CellText = styled.p`
   border: none;
@@ -12,16 +12,16 @@ const CellText = styled.p`
 `;
 
 const EditableCellLayout = styled.td`
-  border-top: none;
   border: 1px solid #e6eaea;
+  border-top: none;
   border-collapse: collapse;
-  padding: 0px;
+  padding: 0;
   cursor: pointer;
   line-height: 6vh;
 
-  ${({ disabled }) => disabled && 'background-color: #e6eaea'};
+  ${({disabled}) => disabled && 'background-color: #e6eaea'};
 
-  ${({ isWeekend }) => isWeekend && 'background-color: #eff0f0'};
+  ${({isWeekend}) => isWeekend && 'background-color: #eff0f0'};
 
   &:hover {
     background-color: #e6eaea;
@@ -29,44 +29,44 @@ const EditableCellLayout = styled.td`
 `;
 
 export const EditableCell = ({
-  value: initialValue = '',
-  options,
-  isWeekend = false,
-  onClick,
-  disabled,
-}) => {
-  const [value, setValue] = useState(initialValue);
-  const [open, setOpen] = useState(false);
+                                 value: initialValue = '',
+                                 options,
+                                 isWeekend = false,
+                                 onClick,
+                                 disabled,
+                             }) => {
+    const [value, setValue] = useState(initialValue);
+    const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
+    useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
 
-  const ref = useRef();
+    const ref = useRef();
 
-  const width = ref.current?.clientWidth || 0;
+    const width = ref.current?.clientWidth || 0;
 
-  useOnClickOutside(ref, () => setOpen(false));
+    useOnClickOutside(ref, () => setOpen(false));
 
-  return (
-    <EditableCellLayout
-      onClick={() => setOpen((prev) => !prev)}
-      ref={ref}
-      isWeekend={isWeekend}
-      disabled={disabled}
-    >
-      <CellText>{value}</CellText>
-      {!disabled && (
-        <Dropdown
-          open={open}
-          options={options}
-          onClick={(e) => {
-            onClick(e.target.getAttribute('value'));
-            setValue(e.target.getAttribute('value'));
-          }}
-          width={width}
-        />
-      )}
-    </EditableCellLayout>
-  );
+    return (
+        <EditableCellLayout
+            onClick={() => setOpen((prev) => !prev)}
+            ref={ref}
+            isWeekend={isWeekend}
+            disabled={disabled}
+        >
+            <CellText>{value}</CellText>
+            {!disabled && (
+                <Dropdown
+                    open={open}
+                    options={options}
+                    onClick={(e) => {
+                        onClick(e.target.getAttribute('value'));
+                        setValue(e.target.getAttribute('value'));
+                    }}
+                    width={width}
+                />
+            )}
+        </EditableCellLayout>
+    );
 };

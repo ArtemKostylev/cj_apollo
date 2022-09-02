@@ -1,127 +1,142 @@
-import React, { useState, useRef } from 'react';
-import { GROUP_PERIODS } from '../../constants/periods';
-import { MONTHS } from '../../constants/months';
-import { useOnClickOutside } from '../../utils/utils';
-import { ActionButton } from './ActionButton';
+import React, {useState, useRef, useMemo, useCallback, memo} from 'react';
+import {GROUP_PERIODS} from '../../constants/periods';
+import {MONTHS} from '../../constants/months';
+import {useOnClickOutside} from '../../utils/utils';
+import {ActionButton} from './ActionButton';
 
-const TableControls = ({
-  initialMonth,
-  setMonth,
-  save,
-  courses,
-  course,
-  setCourse,
-  period,
-  setPeriod,
-  refetch,
-}) => {
-  const [monthPickerValue, setMonthPickerValue] = React.useState(
-    period || MONTHS[initialMonth]
-  );
-  const [coursePickerValue, setCoursePickerValue] = React.useState(course);
+const MONTH = 'month';
+const PERIOD = 'period';
+const COURSE = 'course';
+const YEAR = 'year';
 
-  const onMonthClick = (e, setOpened) => {
-    period
-      ? setMonthPickerValue(GROUP_PERIODS[e.target.getAttribute('data-id')])
-      : setMonthPickerValue(e.target.innerHTML);
-    setOpened(false);
-  };
+const YEARS = {
+    2021: '2021/2022',
+    2022: '2022/2023'
+}
 
-  const onCourseClick = (e, setOpened) => {
-    setCoursePickerValue(e.target.getAttribute('data-index'));
-    setOpened(false);
-  };
-
-  React.useEffect(() => {
-    period
-      ? setPeriod(monthPickerValue)
-      : setMonth(MONTHS.indexOf(monthPickerValue));
-  }, [monthPickerValue, setMonth, setPeriod, period]);
-
-  React.useEffect(() => {
-    setCourse(coursePickerValue);
-  }, [coursePickerValue, setCourse]);
-
-  const ValuePicker = ({ name, type, onItemClick }) => {
+const ValuePicker = memo(({name, type, onItemClick, courses}) => {
     const [opened, setOpened] = useState(false);
     const ref = useRef();
 
-    const open = () => {
-      if (!opened) setOpened(true);
-      else setOpened(false);
-    };
+    const open = useCallback(() => {
+        if (!opened) setOpened(true);
+        else setOpened(false);
+    }, []);
+
+    const onClick = useCallback((e) => {
+        onItemClick(e);
+        setOpened(false);
+    }, [onItemClick])
 
     useOnClickOutside(ref, () => {
-      setOpened(false);
+        setOpened(false);
     });
 
-    return (
-      <div
-        className={`month_picker ${opened ? 'visible' : ''}`}
-        onClick={open}
-        ref={ref}
-      >
-        {name}
-        <div className={`month_dropdown ${opened ? 'visible' : ''}`}>
-          {type === 'period' ? (
-            <ul>
-              <li
-                onClick={(e) => onItemClick(e, setOpened)}
-                data-id={'first_half'}
-              >
+    const PeriodList = () => (
+        <ul>
+            <li onClick={onClick} data-id={'first_half'}>
                 Первое полугодие
-              </li>
-              <li
-                onClick={(e) => onItemClick(e, setOpened)}
-                data-id={'second_half'}
-              >
+            </li>
+            <li onClick={onClick} data-id={'second_half'}>
                 Второе полугодие
-              </li>
-            </ul>
-          ) : type === 'month' ? (
-            <ul>
-              {[8, 9, 10, 11, 0, 1, 2, 3, 4].map((month, index) => (
-                <li key={month} onClick={(e) => onItemClick(e, setOpened)}>
-                  {MONTHS[month]}
-                </li>
-              ))}
-            </ul>
-          ) : type === 'course' ? (
-            <ul>
-              {courses.map((course, index) => (
-                <li
-                  key={course.name}
-                  onClick={(e) => onItemClick(e, setOpened)}
-                  data-index={index}
-                >
-                  {course.name}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            ''
-          )}
-        </div>
-      </div>
-    );
-  };
+            </li>
+        </ul>
+    )
 
-  return (
-    <div className='controls_wrapper noselect'>
-      <ValuePicker
-        name={period ? monthPickerValue.name : monthPickerValue}
-        type={period ? 'period' : 'month'}
-        onItemClick={onMonthClick}
-      />
-      <ValuePicker
-        name={courses[coursePickerValue].name}
-        type='course'
-        onItemClick={onCourseClick}
-      />
-      <ActionButton onClick={save}>Сохранить</ActionButton>
-      <ActionButton onClick={refetch}>Отменить изменения</ActionButton>
-    </div>
-  );
+    const MonthList = () => (
+        <ul>
+            {[8, 9, 10, 11, 0, 1, 2, 3, 4].map((month) => (
+                <li key={month} onClick={onClick}>
+                    {MONTHS[month]}
+                </li>
+            ))}
+        </ul>
+    )
+
+    const CourseList = () => (
+        <ul>
+            {courses && courses.map((course, index) => (
+                <li key={course.name} onClick={onClick} data-index={index}>
+                    {course.name}
+                </li>
+            ))}
+        </ul>
+    )
+
+    const YearList = () => (
+        <ul>
+            {Object.entries(YEARS).map(([key, value]) => (
+                <li key={key} onClick={onClick} data-index={key}>{value}</li>
+            ))}
+        </ul>
+    )
+
+    const listMap = {
+        [MONTH]: <MonthList/>,
+        [COURSE]: <CourseList/>,
+        [PERIOD]: <PeriodList/>,
+        [YEAR]: <YearList/>
+    }
+
+    return (
+        <div className={`month_picker ${opened ? 'visible' : ''}`} onClick={open} ref={ref}>
+            {name}
+            <div className={`month_dropdown ${opened ? 'visible' : ''}`}>
+                {listMap[type]}
+            </div>
+        </div>
+    );
+});
+
+const TableControls = ({
+                           initialMonth,
+                           setMonth,
+                           save,
+                           courses,
+                           course,
+                           setCourse,
+                           period,
+                           setPeriod,
+                           setYear,
+                           year,
+                           refetch,
+                       }) => {
+    const onMonthClick = useCallback((e) => {
+        period
+            ? setPeriod(GROUP_PERIODS[e.target.getAttribute('data-id')])
+            : setMonth(MONTHS.indexOf(e.target.innerHTML));
+    }, []);
+
+    const onCourseClick = useCallback((e) => {
+        setCourse(e.target.getAttribute('data-index'));
+    }, []);
+
+    const onYearClick = useCallback((e) => {
+        setYear(e.target.getAttribute('data-index'))
+    }, [])
+
+    return (
+        <div className='controls_wrapper noselect'>
+            <ValuePicker
+                name={period?.name || MONTHS[initialMonth]}
+                type={period ? PERIOD : MONTH}
+                onItemClick={onMonthClick}
+            />
+            <ValuePicker
+                name={courses[course].name}
+                type='course'
+                onItemClick={onCourseClick}
+                courses={courses}
+            />
+            <ValuePicker
+                name={YEARS[year]}
+                type={YEAR}
+                onItemClick={onYearClick}
+            />
+            <ActionButton onClick={save}>Сохранить</ActionButton>
+            <ActionButton onClick={refetch}>Отменить изменения</ActionButton>
+        </div>
+    );
 };
 
 export default TableControls;

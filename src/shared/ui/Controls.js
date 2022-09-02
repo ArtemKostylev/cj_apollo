@@ -106,11 +106,11 @@ const Controls = (props) => {
       <>
         <p className='controls_item__label'>{props.label}</p>
         <input
-          maxLength='4'
-          className='controls_item__input'
-          onChange={onChange}
-          value={value}
-        ></input>
+    maxLength='4'
+    className='controls_item__input'
+    onChange={onChange}
+    value={value}
+    />
       </>
     );
   };
