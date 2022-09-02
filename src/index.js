@@ -14,7 +14,7 @@ import {theme} from './styles/theme';
 
 const pathMap = {
     development: 'http://localhost:4000',
-    production: 'https://194.67.67.84/api',
+    production: 'https://akostylev.com/api',
 };
 
 const authLink = setContext((_, {headers}) => {
