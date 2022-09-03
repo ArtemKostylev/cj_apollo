@@ -104,6 +104,7 @@ export default function Journal(props) {
                 id: 0,
                 mark: value,
                 period: column,
+                year: year,
                 studentId: student.id,
                 teacherId: props.location.state?.teacher || auth.user.teacher,
                 courseId: userCourses[course].id,
@@ -178,6 +179,7 @@ export default function Journal(props) {
                         id: mark.id,
                         mark: mark.mark,
                         period: mark.period,
+                        year: mark.year,
                         relationId: student.id,
                     });
             });
