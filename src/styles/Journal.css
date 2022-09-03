@@ -153,6 +153,11 @@ td p:hover {
     background-color: #ddd;
 }
 
+.moth_picker div {
+    width: 100%;
+    height: 100%;
+}
+
 .month_dropdown {
     display: none;
     position: absolute;

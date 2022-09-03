@@ -28,6 +28,10 @@ const EditableCellLayout = styled.td`
   }
 `;
 
+function toDisplayValue(value) {
+    return value === '.' ? '✓' : value;
+}
+
 export const EditableCell = ({
                                  value: initialValue = '',
                                  options,
@@ -55,7 +59,7 @@ export const EditableCell = ({
             isWeekend={isWeekend}
             disabled={disabled}
         >
-            <CellText>{value}</CellText>
+            <CellText>{toDisplayValue(value)}</CellText>
             {!disabled && (
                 <Dropdown
                     open={open}

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
 import App from './Pages/App';
-import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
 import {ProvideAuth} from './utils/use-auth.js';
 import {setContext} from '@apollo/client/link/context';

@@ -19,14 +19,13 @@ const ValuePicker = memo(({name, type, onItemClick, courses}) => {
     const ref = useRef();
 
     const open = useCallback(() => {
-        if (!opened) setOpened(true);
-        else setOpened(false);
+        setOpened(prev => !prev)
     }, []);
 
-    const onClick = useCallback((e) => {
+    const onClick = (e) => {
         onItemClick(e);
         setOpened(false);
-    }, [onItemClick])
+    }
 
     useOnClickOutside(ref, () => {
         setOpened(false);
@@ -79,11 +78,11 @@ const ValuePicker = memo(({name, type, onItemClick, courses}) => {
     }
 
     return (
-        <div className={`month_picker ${opened ? 'visible' : ''}`} onClick={open} ref={ref}>
-            {name}
-            <div className={`month_dropdown ${opened ? 'visible' : ''}`}>
+        <div className={`month_picker ${opened ? 'visible' : ''}`} ref={ref}>
+            <div onClick={open}>{name}</div>
+            {opened && <div className={`month_dropdown ${opened ? 'visible' : ''}`}>
                 {listMap[type]}
-            </div>
+            </div>}
         </div>
     );
 });
