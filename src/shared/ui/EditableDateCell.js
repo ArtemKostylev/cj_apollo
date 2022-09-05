@@ -57,6 +57,7 @@ const EditableDateCell = ({
                               unlimited = false,
                               full = true,
                               disabled = false,
+                              year
                           }) => {
     const [value, setValue] = useState(initialValue);
 
@@ -73,7 +74,7 @@ const EditableDateCell = ({
         ? ''
         : moment()
             .clone()
-            .year(getYear(month))
+            .year(getYear(month, year))
             .month(month)
             .startOf('month')
             .toDate();
@@ -82,7 +83,7 @@ const EditableDateCell = ({
         ? ''
         : moment()
             .clone()
-            .year(getYear(month))
+            .year(getYear(month, year))
             .month(month)
             .endOf('month')
             .toDate();
@@ -104,6 +105,7 @@ const EditableDateCell = ({
             minDate={startDate}
             maxDate={endDate}
             full={full}
+            openToDate={unlimited ? moment().year(year).toDate() : undefined}
             locale={ru}
             calendarContainer={Container}
         />

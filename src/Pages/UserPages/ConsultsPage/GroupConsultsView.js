@@ -9,6 +9,7 @@ const GroupConsultsView = ({
                                controlItems,
                                updateDates,
                                long = false,
+                               year
                            }) => (
     <div className='consult_container'>
         <Controls items={controlItems}/>
@@ -42,6 +43,7 @@ const GroupConsultsView = ({
                                         : ''
                                 }
                                 hours={item.consults[index]?.hours}
+                                year={year}
                             />
                         ))}
                 </tr>

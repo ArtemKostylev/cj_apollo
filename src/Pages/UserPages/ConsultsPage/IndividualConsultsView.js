@@ -3,7 +3,7 @@ import HourDateCell from './HourDateCell';
 import Controls from '../../../shared/ui/Controls';
 import '../../../styles/Consult.css';
 
-const IndividualConsultsView = ({controlItems, data, updateDates}) => {
+const IndividualConsultsView = ({controlItems, data, updateDates, year}) => {
     return (
         <div className='consult_container'>
             <Controls items={controlItems}/>
@@ -36,6 +36,7 @@ const IndividualConsultsView = ({controlItems, data, updateDates}) => {
                                     }
                                     hours={item.consult[index]?.hours}
                                     key={index}
+                                    year={year}
                                     unlimited
                                 />
                             ))}

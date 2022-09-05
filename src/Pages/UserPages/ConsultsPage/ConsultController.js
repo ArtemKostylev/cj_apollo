@@ -15,12 +15,18 @@ import {NetworkStatus, useMutation, useQuery} from "@apollo/client";
 import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";
 import moment from "moment";
+import {YEARS} from '../../../shared/ui/TableControls';
+import {getYear} from '../../../utils/utils';
 
 export const ConsultController = (props) => {
     const auth = useAuth();
 
-    const year = moment().month() > 7 ? moment().year() : moment().year() - 1;
+    const [currentYear, setCurrentYear] = useState(`${moment().year()}`);
     const [course, setCourse] = useState(0);
+
+    const onYearChange = (e) => {
+        setCurrentYear(e.target.getAttribute("data-index"));
+    }
 
     const userCourses = props.location.state?.courses || auth.user?.courses;
 
@@ -57,7 +63,7 @@ export const ConsultController = (props) => {
             variables: {
                 teacherId: props.location.state?.teacher || auth.user.teacher,
                 courseId: userCourses[course].id,
-                year: parseInt(year),
+                year: getYear(moment().month(), currentYear),
             },
             notifyOnNetworkStatusChange: true,
             fetchPolicy: "network-only",
@@ -77,7 +83,6 @@ export const ConsultController = (props) => {
     );
 
     const updateIndividualData = ({date, hours, column, row}) => {
-        console.log(data);
         const student = data.find((item, index) => item.student.id === row);
         const studentIndex = data.indexOf(student);
         const consult = student.consult.find((item) => {
@@ -94,7 +99,7 @@ export const ConsultController = (props) => {
                 uiIndex: column,
                 id: 0,
                 date: `${date[2]}-${date[1]}-${date[0]}`.concat("T00:00:00.000Z"),
-                year: parseInt(year),
+                year: parseInt(currentYear),
                 update_flag: true,
                 delete_flag: false,
                 hours: hours || 0,
@@ -156,7 +161,7 @@ export const ConsultController = (props) => {
                 uiIndex: column,
                 id: 0,
                 date: `${date[2]}-${date[1]}-${date[0]}`.concat("T00:00:00.000Z"),
-                year: parseInt(year),
+                year: parseInt(currentYear),
                 update_flag: true,
                 delete_flag: false,
                 hours: hours || 0,
@@ -206,7 +211,7 @@ export const ConsultController = (props) => {
                     result.push({
                         id: date.id,
                         date: date.date,
-                        year: year,
+                        year: parseInt(currentYear),
                         hours: date.hours,
                         relationId: student.id,
                     });
@@ -224,7 +229,7 @@ export const ConsultController = (props) => {
                     groupData.push({
                         id: consult.id,
                         date: consult.date,
-                        year: year,
+                        year: parseInt(currentYear),
                         hours: consult.hours,
                     });
             });
@@ -290,6 +295,13 @@ export const ConsultController = (props) => {
             onClick: getCourse,
         },
         {
+            type: "dropdown",
+            data: YEARS,
+            label: "Год :",
+            text: currentYear,
+            onClick: onYearChange,
+        },
+        {
             type: "button",
             text: "Сохранить",
             onClick: save,
@@ -316,12 +328,14 @@ export const ConsultController = (props) => {
             data={data}
             controlItems={items}
             updateDates={updateGroupData}
+            year={currentYear}
         />
     ) : (
         <IndividualConsultsView
             data={data}
             controlItems={items}
             updateDates={updateIndividualData}
+            year={currentYear}
         />
     );
 };

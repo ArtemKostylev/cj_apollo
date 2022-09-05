@@ -50,7 +50,7 @@ export function getHeaderFromRoute(pathname) {
 
 export function getYear(targetMonth, year = null) {
     const currentMonth = moment().month();
-    const currentYear = year || moment().year();
+    const currentYear = parseInt(year) || moment().year();
 
     if (currentMonth <= 7) {
         if (targetMonth > 7) {
@@ -60,6 +60,7 @@ export function getYear(targetMonth, year = null) {
     }
     if (targetMonth > 7) {
         return currentYear;
+
     }
     return currentYear + 1;
 }

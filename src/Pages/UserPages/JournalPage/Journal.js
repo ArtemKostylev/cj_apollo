@@ -408,6 +408,7 @@ export default function Journal(props) {
                     dates_by_group={dates_by_group}
                     groupedData={groupedData}
                     period={period}
+                    year={year}
                     updateDates={updateDates}
                     updateMyData={updateMyData}
                     updateQuarterData={updateQuarterData}
