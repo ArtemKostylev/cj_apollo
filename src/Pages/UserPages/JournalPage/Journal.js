@@ -251,7 +251,6 @@ export default function Journal(props) {
     }
     let groupedData = [];
 
-    //TODO possible bottleneck
     if (userCourses[course].group) {
         let pairs = [];
         let classes = [];

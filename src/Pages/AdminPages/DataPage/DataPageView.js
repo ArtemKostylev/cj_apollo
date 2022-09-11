@@ -268,10 +268,10 @@ export default function DataPageView({
                             <p>Сохранить</p>
                             <BsPencilSquare/>
                         </div>
-                        <div onClick={() => clear(type, data.id)}>
+                        {/*                        <div onClick={() => clear(type, data.id)}>
                             <p>Удалить</p>
                             <BsTrash/>
-                        </div>
+                        </div>*/}
                     </div>
                 </div>
             </li>
