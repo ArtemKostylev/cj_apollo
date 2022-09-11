@@ -1,15 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import '../styles/Menu.css';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../utils/use-auth';
-import {
-  ADMIN_RESOURCES,
-  USER_RESOURCES,
-  SUBGROUPS_RESOURCE,
-} from '../constants/resources';
-import { ADMIN, TEACHER } from '../constants/roles';
-import { t } from '../static/text';
+import {Link} from 'react-router-dom';
+import {useAuth} from '../hooks/use-auth';
+import {ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE,} from '../constants/resources';
+import {ADMIN, TEACHER} from '../constants/roles';
+import {t} from '../static/text';
 
 const MenuItemWrapper = styled.div`
   text-align: left;
@@ -39,14 +34,14 @@ const MenuItemLink = styled(Link)`
   width: 100%;
 `;
 
-const MenuItem = ({ path, onClose, title }) => {
-  return (
-    <MenuItemWrapper key={path}>
-      <MenuItemLink to={path} onClick={onClose}>
-        <MenuItemText>{title}</MenuItemText>
-      </MenuItemLink>
-    </MenuItemWrapper>
-  );
+const MenuItem = ({path, onClose, title}) => {
+    return (
+        <MenuItemWrapper key={path}>
+            <MenuItemLink to={path} onClick={onClose}>
+                <MenuItemText>{title}</MenuItemText>
+            </MenuItemLink>
+        </MenuItemWrapper>
+    );
 };
 
 const MenuWrapper = styled.div`
@@ -56,7 +51,7 @@ const MenuWrapper = styled.div`
   box-shadow: 4px 5px 5px lightgray;
   line-height: 78px;
   transform: ${(props) =>
-    props.isOpen ? 'translateX(0vw)' : 'translateX(-20vw)'};
+          props.isOpen ? 'translateX(0vw)' : 'translateX(-20vw)'};
   transition: transform 0.5s;
   margin: 0px;
   font-family: 'IBM Plex Serif', serif;
@@ -75,28 +70,28 @@ const MenuCloseButton = styled.div`
 `;
 
 const resourceMap = {
-  [ADMIN]: ADMIN_RESOURCES,
-  [TEACHER]: USER_RESOURCES,
+    [ADMIN]: ADMIN_RESOURCES,
+    [TEACHER]: USER_RESOURCES,
 };
 
-export default function Menu({ onClose, isOpen }) {
-  const auth = useAuth();
+export default function Menu({onClose, isOpen}) {
+    const auth = useAuth();
 
-  const resources = resourceMap[auth.user.role.name];
+    const resources = resourceMap[auth.user.role.name];
 
-  if (auth.user.courses.some((course) => course.group)) {
-    resources.subgroups = SUBGROUPS_RESOURCE;
-  }
+    if (auth.user.courses.some((course) => course.group)) {
+        resources.subgroups = SUBGROUPS_RESOURCE;
+    }
 
-  return (
-    <MenuWrapper isOpen={isOpen}>
-      <MenuItemWrapper>
-        <MenuItemText>МЕНЮ</MenuItemText>
-        <MenuCloseButton onClick={onClose}>{t('close')}</MenuCloseButton>
-      </MenuItemWrapper>
-      {Object.keys(resources).map((key) => (
-        <MenuItem {...resources[key]} key={key} onClose={onClose} />
-      ))}
-    </MenuWrapper>
-  );
+    return (
+        <MenuWrapper isOpen={isOpen}>
+            <MenuItemWrapper>
+                <MenuItemText>МЕНЮ</MenuItemText>
+                <MenuCloseButton onClick={onClose}>{t('close')}</MenuCloseButton>
+            </MenuItemWrapper>
+            {Object.keys(resources).map((key) => (
+                <MenuItem {...resources[key]} key={key} onClose={onClose}/>
+            ))}
+        </MenuWrapper>
+    );
 }

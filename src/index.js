@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './styles/index.css';
 import App from './Pages/App';
 import {BrowserRouter} from 'react-router-dom';
-import {ProvideAuth} from './utils/use-auth.js';
+import {ProvideAuth} from './hooks/use-auth.js';
 import {setContext} from '@apollo/client/link/context';
 import {createUploadLink} from 'apollo-upload-client';
 import {ApolloProvider, ApolloClient, InMemoryCache} from '@apollo/client';

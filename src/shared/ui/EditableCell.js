@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
-import {useOnClickOutside} from '../../utils/utils';
+import {useOnClickOutside} from '../../hooks/useOnClickOutside';
 import {Dropdown} from './Dropdown';
 
 const CellText = styled.p`

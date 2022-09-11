@@ -4,7 +4,7 @@ import '../../../styles/Journal.css';
 import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import {EditableCell} from '../../../shared/ui/EditableCell';
 import {PROGRAMS} from '../../../constants/programs';
-import {compareStudents} from '../../../utils/utils';
+import {compareStudents} from '../../../utils/comparators';
 import {MARKS_OPTIONS, HOURS_OPTIONS} from '../../../constants/marksOptions';
 
 const GroupJournalView = ({

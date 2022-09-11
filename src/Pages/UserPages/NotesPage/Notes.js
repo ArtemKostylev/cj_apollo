@@ -1,11 +1,11 @@
-import {useAuth} from '../../../utils/use-auth';
+import {useAuth} from '../../../hooks/use-auth';
 import '../../../styles/Notes.css';
 import Controls from '../../../shared/ui/Controls';
 import {PageWrapper} from '../../../shared/ui/PageWrapper';
 import {useEffect, useState} from 'react';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
-import {FETCH_NOTES_QUERY} from '../../../utils/queries';
-import {UPDATE_NOTE_MUTATION} from '../../../utils/mutations';
+import {FETCH_NOTES_QUERY} from '../../../graphql/queries/fetchNotes';
+import {UPDATE_NOTE_MUTATION} from '../../../graphql/mutations/updateNotes';
 import moment from 'moment';
 import {YEARS} from '../../../shared/ui/TableControls';
 

@@ -1,22 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {useAuth} from "../../../utils/use-auth";
-import {
-    DELETE_CONSULTS_MUTATION,
-    DELETE_GROUP_CONSULTS_MUTATION,
-    UPDATE_GROUP_CONSULTS_MUTATION,
-    UPDATE_CONSULTS_MUTATION,
-} from "../../../utils/mutations";
-
-import {
-    FETCH_CONSULTS_QUERY,
-    FETCH_GROUP_CONSULTS_QUERY,
-} from "../../../utils/queries";
+import {useAuth} from "../../../hooks/use-auth";
+import {DELETE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteGroupConsults";
+import {DELETE_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteConsults";
+import {FETCH_CONSULTS_QUERY} from "../../../graphql/queries/fetchConsults";
+import {UPDATE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/updateGroupConsults";
+import {UPDATE_CONSULTS_MUTATION} from "../../../graphql/mutations/updateConsults";
+import {FETCH_GROUP_CONSULTS_QUERY} from "../../../graphql/queries/fetchGroupConsults";
 import {NetworkStatus, useMutation, useQuery} from "@apollo/client";
 import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";
 import moment from "moment";
 import {YEARS} from '../../../shared/ui/TableControls';
-import {getYear} from '../../../utils/utils';
+import {getYear} from '../../../utils/date';
 
 export const ConsultController = (props) => {
     const auth = useAuth();
@@ -29,26 +24,6 @@ export const ConsultController = (props) => {
     }
 
     const userCourses = props.location.state?.courses || auth.user?.courses;
-
-    let changed = false;
-
-    const listener = (event) => {
-        if (changed) {
-            event.preventDefault();
-            let confirm = window.confirm(
-                "Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны."
-            );
-            if (!confirm) event.stopImmediatePropagation();
-        }
-    };
-
-    useEffect(() => {
-        props.menuRef?.current.addEventListener("click", listener);
-
-        return () => {
-            props.menuRef?.current?.removeEventListener("click", listener);
-        };
-    });
 
     const getCourse = (e) => {
         setCourse(e.target.getAttribute("data-index"));
@@ -90,7 +65,6 @@ export const ConsultController = (props) => {
             return itemIndex === column;
         });
         const dateIndex = student.consult.indexOf(consult);
-        changed = true;
         date =
             date instanceof Date ? date.toLocaleDateString("ru-RU").split(".") : date;
 
@@ -152,7 +126,6 @@ export const ConsultController = (props) => {
             return itemIndex === column;
         });
         const dateIndex = group.consults.indexOf(consult);
-        changed = true;
         date =
             date instanceof Date ? date.toLocaleDateString("ru-RU").split(".") : date;
 

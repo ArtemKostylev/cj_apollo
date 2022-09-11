@@ -1,12 +1,12 @@
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
 import moment from 'moment';
 import React, {useState, Fragment} from 'react';
-import {UPDATE_REPLACEMENTS_MUTATION} from '../../../utils/mutations';
-import {FETCH_REPLACEMENTS_QUERY} from '../../../utils/queries';
-import {useAuth} from '../../../utils/use-auth';
+import {UPDATE_REPLACEMENTS_MUTATION} from '../../../graphql/mutations/updateReplacement';
+import {FETCH_REPLACEMENTS_QUERY} from '../../../graphql/queries/fetchReplacements';
+import {useAuth} from '../../../hooks/use-auth';
 import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import TableControls from '../../../shared/ui/TableControls';
-import {getYear} from '../../../utils/utils';
+import {getYear} from '../../../utils/date';
 import '../../../styles/Compensation.css';
 
 export default function Compensation(props) {

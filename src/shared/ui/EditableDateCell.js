@@ -4,7 +4,7 @@ import DatePicker, {CalendarContainer} from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/Journal.css';
 import ru from 'date-fns/locale/ru';
-import {getYear} from '../../utils/utils';
+import {getYear} from '../../utils/date';
 import moment from 'moment';
 
 const DATE_PLACEHOLDER = '.....';

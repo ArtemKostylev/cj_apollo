@@ -1,7 +1,7 @@
-import React, {useState, useRef, useMemo, useCallback, memo} from 'react';
+import React, {useState, useRef, useCallback, memo} from 'react';
 import {GROUP_PERIODS} from '../../constants/periods';
 import {MONTHS} from '../../constants/months';
-import {useOnClickOutside} from '../../utils/utils';
+import {useOnClickOutside} from '../../hooks/useOnClickOutside';
 import {ActionButton} from './ActionButton';
 
 const MONTH = 'month';

@@ -1,4 +1,4 @@
-import {useOnClickOutside} from '../../utils/utils';
+import {useOnClickOutside} from '../../hooks/useOnClickOutside';
 import '../../styles/Controls.css';
 import React, {useRef, useState} from 'react';
 
