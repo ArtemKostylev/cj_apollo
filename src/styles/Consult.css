@@ -54,10 +54,6 @@
     cursor: pointer;
 }
 
-.consult_table .name_cell {
-    cursor: default;
-}
-
 .consult_table .name_column {
     max-width: 30%;
     min-width: 20%;

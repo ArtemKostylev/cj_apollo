@@ -28,7 +28,7 @@ const convertDate = ({value, full}) => {
 
     const date = `${day}.${month}`;
 
-    if (full) date.concat(`.${year}`);
+    if (full) return date.concat(`.${year}`);
 
     return date;
 };
@@ -36,8 +36,9 @@ const convertDate = ({value, full}) => {
 const InputWrapper = styled.p`
   width: 100%;
   text-align: center;
-  padding: 0;
   cursor: pointer;
+  padding-left: 4px;
+  padding-right: 4px;
   margin: 0;
 `;
 
@@ -66,7 +67,7 @@ const EditableDateCell = ({
     }, [initialValue]);
 
     if (disabled) {
-        return convertDate({value, full});
+        return <span>{convertDate({value, full})}</span>;
     }
 
     // TODO: replace input month with month - 1
@@ -100,11 +101,10 @@ const EditableDateCell = ({
                 });
                 setValue(date);
             }}
-            customInput={<Input/>}
+            customInput={<Input full={full}/>}
             popperPlacement='auto'
             minDate={startDate}
             maxDate={endDate}
-            full={full}
             openToDate={unlimited ? moment().year(year).toDate() : undefined}
             locale={ru}
             calendarContainer={Container}

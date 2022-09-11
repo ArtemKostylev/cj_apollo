@@ -8,9 +8,27 @@ import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import TableControls from '../../../shared/ui/TableControls';
 import {getYear} from '../../../utils/date';
 import '../../../styles/Compensation.css';
+import {useLocation} from "react-router-dom";
+import times from 'lodash/times';
+import styled from "styled-components";
 
-export default function Compensation(props) {
+type updateDatesProps = {
+    date: Date,
+    column: number,
+    group: number,
+    row: number
+}
+
+const LessonCell = styled.td`
+  background-color: #eff0f0;
+  cursor: default;
+  padding-left: 4px;
+  padding-right: 4px;
+`
+
+export const Compensation = () => {
     let auth = useAuth();
+    const location = useLocation() as any;
 
     const [course, setCourse] = useState(0);
     const [month, setMonth] = useState(moment().month());
@@ -18,13 +36,13 @@ export default function Compensation(props) {
 
     const year = getYear(month, selectedYear);
 
-    var {loading, data, error, refetch, networkStatus} = useQuery(
+    const {loading, data, error, refetch, networkStatus} = useQuery(
         FETCH_REPLACEMENTS_QUERY,
         {
             variables: {
-                teacherId: props.location.state?.teacher || auth.user.teacher,
+                teacherId: location.state?.teacher || auth.user.teacher,
                 courseId:
-                    props.location.state?.courses[course].id ||
+                    location.state?.courses[course].id ||
                     auth.user.courses[course].id,
                 date_gte: moment()
                     .month(month)
@@ -51,7 +69,7 @@ export default function Compensation(props) {
     const [update] = useMutation(UPDATE_REPLACEMENTS_MUTATION);
 
     const save = async () => {
-        var result = [];
+        const result: { id: number, date: string, entryId: number }[] = [];
         studentData.forEach((student) => {
             student.journalEntry.forEach((mark) => {
                 if (mark.replacement)
@@ -78,26 +96,27 @@ export default function Compensation(props) {
 
     if (networkStatus === NetworkStatus.refetch) return spinner;
 
-    if (error) throw new Error(503);
+    if (error) throw new Error('503');
 
-    var studentData = [];
+    let studentData: TeacherCourseStudent[] = [];
 
-    data.fetchReplacements.forEach((student) => {
-        if (student.journalEntry.length > 0) {
-            studentData.push(student);
+    data.fetchReplacements.forEach((entry: TeacherCourseStudent) => {
+        if (entry.journalEntry.length > 0) {
+            studentData.push(entry);
         }
     });
 
-    const updateDates = ({date, column, group, row}) => {
+    const updateDates = ({date, column, group, row}: updateDatesProps) => {
         const student = studentData.find((item, index) => item.student.id === row);
+        if (!student) throw new Error(`Student with index ${row} was not found`)
         const studentIndex = studentData.indexOf(student);
-        var mark = student.journalEntry.find((item) => item.id === group);
-        const markIndex = student.journalEntry.indexOf(mark);
+        const mark = student.journalEntry.find((item) => item.id === group);
+        const markIndex = mark ? student.journalEntry.indexOf(mark) : -1;
 
-        date = date?.toLocaleDateString('ru-RU').split('.');
+        const dateStr = date?.toLocaleDateString('ru-RU').split('.');
         const newRepl = {
             id: !mark?.replacement ? 0 : column,
-            date: `${date[2]}-${date[1]}-${date[0]}`.concat('T00:00:00.000Z'),
+            date: `${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`.concat('T00:00:00.000Z'),
             entryId: group,
         };
 
@@ -124,7 +143,7 @@ export default function Compensation(props) {
                 initialMonth={month}
                 setMonth={setMonth}
                 save={save}
-                courses={props.location.state?.courses || auth.user.courses}
+                courses={location.state?.courses || auth.user.courses}
                 course={course}
                 setCourse={setCourse}
                 setYear={setSelectedYear}
@@ -135,14 +154,12 @@ export default function Compensation(props) {
                 <thead>
                 <tr>
                     <th className='name_column'>Имя ученика</th>
-                    {Array(10)
-                        .fill(1)
-                        .map((item, index) => (
-                            <Fragment key={index}>
-                                <th>Пропуск</th>
-                                <th>Выдано</th>
-                            </Fragment>
-                        ))}
+                    {times(10, (index) => (
+                        <Fragment key={index}>
+                            <th>Пропуск</th>
+                            <th>Выдано</th>
+                        </Fragment>
+                    ))}
                 </tr>
                 </thead>
                 <tbody>
@@ -150,48 +167,36 @@ export default function Compensation(props) {
                     return (
                         <tr>
                             <td className='name_cell'>{`${item.student.surname} ${item.student.name}`}</td>
-                            {Array(10)
-                                .fill(1)
-                                .map((num, index) => {
-                                    let lesson = null;
-                                    let lesson_date = null;
-                                    let repl = null;
-                                    if (item.journalEntry[index]) {
-                                        lesson = item.journalEntry[index];
-                                        lesson_date = lesson.date.split('T')[0];
-                                        if (lesson.replacement) repl = lesson.replacement;
-                                    }
+                            {times(10, (index: number) => {
+                                let lesson = null;
+                                let lesson_date = null;
+                                let repl = null;
+                                if (item.journalEntry[index]) {
+                                    lesson = item.journalEntry[index];
+                                    lesson_date = lesson.date.split('T')[0];
+                                    if (lesson.replacement) repl = lesson.replacement;
+                                }
 
-                                    return (
-                                        <Fragment key={index}>
-                                            <td className='name_cell'>
-                                                {lesson_date
-                                                    ? `${lesson_date.split('-')[2]}.${
-                                                        lesson_date.split('-')[1]
-                                                    }.${lesson_date.split('-')[0]}`
-                                                    : ''}
-                                            </td>
-                                            <td>
-                                                {lesson ? (
-                                                    <EditableDateCell
-                                                        initialValue={
-                                                            repl ? new Date(repl.date.split('T')[0]) : ''
-                                                        }
-                                                        column={repl ? repl.id : 0}
-                                                        group={lesson.id}
-                                                        row={item.student.id}
-                                                        updateDates={updateDates}
-                                                        month={month - 1}
-                                                        year={selectedYear}
-                                                        unlimited
-                                                    />
-                                                ) : (
-                                                    ''
-                                                )}
-                                            </td>
-                                        </Fragment>
-                                    );
-                                })}
+                                return (
+                                    <Fragment key={index}>
+                                        <LessonCell>
+                                            {lesson_date ? `${lesson_date.split('-')[2]}.${lesson_date.split('-')[1]}.${lesson_date.split('-')[0]}` : ''}
+                                        </LessonCell>
+                                        <td>
+                                            {lesson && <EditableDateCell
+                                                initialValue={repl ? new Date(repl.date.split('T')[0]) : ''}
+                                                column={repl ? repl.id : 0}
+                                                group={lesson.id}
+                                                row={item.student.id}
+                                                updateDates={updateDates}
+                                                month={month - 1}
+                                                year={selectedYear}
+                                                unlimited
+                                            />}
+                                        </td>
+                                    </Fragment>
+                                );
+                            })}
                         </tr>
                     );
                 })}
