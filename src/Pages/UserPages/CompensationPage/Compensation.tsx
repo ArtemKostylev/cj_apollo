@@ -148,7 +148,6 @@ export const Compensation = () => {
                 setCourse={setCourse}
                 setYear={setSelectedYear}
                 year={selectedYear}
-                refetch={() => refetch()}
             />
             <table className='compensation_table'>
                 <thead>

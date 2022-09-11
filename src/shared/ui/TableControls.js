@@ -98,7 +98,6 @@ const TableControls = ({
                            setPeriod = undefined,
                            setYear,
                            year,
-                           refetch,
                        }) => {
     const onMonthClick = useCallback((e) => {
         period
@@ -133,7 +132,6 @@ const TableControls = ({
                 onItemClick={onYearClick}
             />
             <ActionButton onClick={save}>Сохранить</ActionButton>
-            <ActionButton onClick={refetch}>Отменить изменения</ActionButton>
         </div>
     );
 };

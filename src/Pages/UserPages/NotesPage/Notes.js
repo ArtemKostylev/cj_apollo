@@ -105,11 +105,6 @@ export const Notes = (props) => {
             text: 'Сохранить',
             onClick: save,
         },
-        {
-            type: 'button',
-            text: 'Отменить изменения',
-            onClick: () => refetch(),
-        },
     ];
 
     const spinner = <div>Загрузка</div>;

@@ -400,7 +400,6 @@ export default function Journal(props) {
                 setYear={setYear}
                 setPeriod={userCourses[course].group && setPeriod}
                 period={userCourses[course].group && period}
-                refetch={() => refetch()}
             />
             {userCourses[course].group ? (
                 <GroupJournalView
