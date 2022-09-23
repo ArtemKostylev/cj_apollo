@@ -8,7 +8,7 @@ import {QUARTERS, QUARTERS_RU} from '../../../constants/quarters';
 import {ACADEMIC_YEARS} from '../../../constants/academicYears';
 import {PERIODS} from '../../../constants/periods';
 import {getQuarter} from '../../../utils/date';
-import Controls from '../../../shared/ui/Controls';
+import Index from '../../../shared/ui/Controls';
 import {useHistory} from 'react-router-dom';
 
 export const Journals = (props) => {
@@ -340,7 +340,7 @@ export const Journals = (props) => {
                 </ul>
             </div>
             <div className='block_right'>
-                <Controls items={items}/>
+                <Index items={items}/>
                 <TeacherJournal
                     teacherIndex={teacherIndex || teachers.fetchTeachers[0].id}
                     period={period}

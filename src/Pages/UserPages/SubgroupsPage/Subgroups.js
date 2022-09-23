@@ -6,7 +6,7 @@ import {FETCH_SUBGROUPS_QUERY} from '../../../graphql/queries/fetchSubgroups';
 import {useAuth} from '../../../hooks/use-auth';
 import '../../../styles/Subgroups.css';
 
-import Controls from '../../../shared/ui/Controls';
+import Index from '../../../shared/ui/Controls';
 
 export const Subgroups = () => {
     const auth = useAuth();
@@ -116,7 +116,7 @@ export const Subgroups = () => {
 
     return (
         <div>
-            <Controls items={items}/>
+            <Index items={items}/>
             <div className='group_wrapper'>
                 <ul className='group_list'>
                     {data.map((group, index) => (

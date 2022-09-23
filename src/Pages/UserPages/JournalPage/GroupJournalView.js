@@ -2,7 +2,7 @@ import React from 'react';
 import {findMark} from './JournalPageHelpers';
 import '../../../styles/Journal.css';
 import EditableDateCell from '../../../shared/ui/EditableDateCell';
-import {EditableCell} from '../../../shared/ui/EditableCell';
+import {Index} from '../../../shared/ui/EditableCell/EditableCell';
 import {PROGRAMS} from '../../../constants/programs';
 import {compareStudents} from '../../../utils/comparators';
 import {MARKS_OPTIONS, HOURS_OPTIONS} from '../../../constants/marksOptions';
@@ -98,7 +98,7 @@ const GroupJournalView = ({
                                             item.archived ? '(A)' : ''
                                         }`}</td>
                                         {group.map((date, index) => (
-                                            <EditableCell
+                                            <Index
                                                 disabled={item.archived}
                                                 value={findMark(date.date, item.journalEntry)}
                                                 onClick={(value) =>
@@ -125,7 +125,7 @@ const GroupJournalView = ({
                                                 }
 
                                                 return (
-                                                    <EditableCell
+                                                    <Index
                                                         value={mark ? mark.mark : ''}
                                                         onClick={(value) =>
                                                             updateQuarterData({
