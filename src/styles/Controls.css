@@ -1,95 +1,80 @@
 .controls_container {
-  width: 100%;
-  height: 80px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .last {
-  margin-right: 2.1rem;
+    margin-right: 2.1rem;
 }
 
 .controls_item {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .controls_item:hover {
-  background-color: #e6eaea;
+    background-color: #e6eaea;
 }
 
 .controls_item.visible {
-  background-color: #e6eaea;
+    background-color: #e6eaea;
 }
 
 .controls_item__text {
-  display: inline-block;
-  padding-left: 0.8rem;
+    display: inline-block;
+    padding-left: 0.8rem;
 }
 
 .controls_item__dropdown {
-  display: none;
-  position: absolute;
-  z-index: 1;
-  padding-left: -10px;
-  background-color: #e6eaea;
-  box-shadow: 0px 2px 5px gray;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    padding-left: -10px;
+    background-color: #e6eaea;
+    box-shadow: 0px 2px 5px gray;
 }
 
 .controls_item__dropdown ul {
-  list-style-type: none;
-  padding: 2px;
-  margin: 0px;
+    list-style-type: none;
+    padding: 2px;
+    margin: 0px;
 }
 
 .controls_item__dropdown li {
-  padding: 20px 2.5rem 20px 0.8rem;
+    padding: 20px 2.5rem 20px 0.8rem;
 }
 
 .controls_item__dropdown li:hover {
-  background-color: #ddd;
+    background-color: #ddd;
 }
 
 .controls_item__dropdown.visible {
-  display: block;
+    display: block;
 }
 
 .controls_item__label {
-  margin-left: 2rem;
-}
-
-.controls_item__button {
-  border: 0;
-  background-color: transparent;
-  padding: 1em;
-  cursor: pointer;
-}
-
-.controls_item__button:hover {
-  background-color: #e6eaea;
-}
-
-.controls_item__button:focus {
-  outline: 0;
+    margin-left: 2rem;
 }
 
 .controls_item__input {
-  border: 0;
-  border-bottom: 2px solid black;
-  text-align: center;
-  width: 4ch;
+    border: 0;
+    border-bottom: 2px solid black;
+    text-align: center;
+    width: 4ch;
 }
 
 .controls_item__input:focus {
-  outline: 0;
+    outline: 0;
 }
 
 .arrow {
-  display: inline-block;
-  border: 4px solid transparent;
-  border-top-color: black;
-  margin-top: 0.4em;
-  margin-left: 5px;
-  margin-right: 2.1rem;
+    display: inline-block;
+    border: 4px solid transparent;
+    border-top-color: black;
+    margin-top: 0.4em;
+    margin-left: 5px;
+    margin-right: 2.1rem;
 }

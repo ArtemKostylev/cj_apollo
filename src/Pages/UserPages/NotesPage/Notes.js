@@ -1,6 +1,6 @@
 import {useAuth} from '../../../hooks/use-auth';
 import '../../../styles/Notes.css';
-import Controls from '../../../shared/ui/Controls';
+import Index from '../../../shared/ui/Controls';
 import {PageWrapper} from '../../../shared/ui/PageWrapper';
 import {useEffect, useState} from 'react';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
@@ -129,7 +129,7 @@ export const Notes = (props) => {
 
     return (
         <PageWrapper>
-            <Controls items={items}/>
+            <Index items={items}/>
             <textarea
                 placeholder='Это - место для заметок...'
                 value={value}
