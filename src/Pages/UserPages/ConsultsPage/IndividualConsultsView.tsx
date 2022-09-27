@@ -4,7 +4,7 @@ import {TableControls, TableControlsConfig} from '../../../shared/ui/TableContro
 import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
 import times from 'lodash/times';
-import {NameCell} from '../../../shared/ui/Table/NameCell';
+import {NameCell} from '../../../shared/ui/table/NameCell';
 
 type Props = {
   controlsConfig: TableControlsConfig;

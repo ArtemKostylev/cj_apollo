@@ -7,7 +7,6 @@ export type SelectProps = {
   options?: Map<string, DropdownOptionType>;
   text?: string;
   onClick?: (value: string) => void;
-  label?: string;
 }
 
 const DEFAULT_SELECT_VALUE = 'Нет значений';
@@ -25,7 +24,7 @@ const SelectText = styled.span`
 
 `;
 
-export const Select = ({options, text, onClick, label}: SelectProps) => {
+export const Select = ({options, text, onClick}: SelectProps) => {
   const [opened, setOpened] = useState(false);
   const [value, setValue] = useState(text || DEFAULT_SELECT_VALUE);
 
@@ -47,7 +46,6 @@ export const Select = ({options, text, onClick, label}: SelectProps) => {
 
   return (
     <ControlContainer>
-      {label && <ControlLabel>{label}</ControlLabel>}
       <div ref={ref}>
         <SelectText>value</SelectText>
         <Dropdown opened={opened} options={options} onSelect={onSelect}/>

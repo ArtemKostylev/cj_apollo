@@ -1,26 +1,22 @@
 import React from 'react';
-import {useMetaData} from '../../../hooks/useMetaData';
-import {useQuery} from '@apollo/client';
-import {Spinner} from '../../../shared/ui/Spinner';
 import {Layout} from './Layout';
-
-interface MidtermExamsData {
-  midtermExams: MidtermExam[];
-}
-
-interface StudentsData {
-  students: Student[];
-}
+import {ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
+import ReactModal from 'react-modal';
+import {Spinner} from '../../../shared/ui/Spinner';
 
 export const MidtermExam = () => {
-  const {teacherId} = useMetaData();
+  const {modalOpened, onClose, loading, error} = useMidtermExamContext();
 
-  const {loading: studentsLoading, data: studentsData, error: studentsError} = useQuery<StudentsData>();
-  const {loading: midtermExamLoading, data: midtermExamData, error: midtermExamError} = useQuery<MidtermExamsData>();
+  if (loading) return <Spinner/>
+  if (error) throw new Error('503')
 
-  if (studentsLoading || midtermExamLoading) return <Spinner/>;
+  return (
+    <Layout>
+      <ReactModal isOpen={modalOpened}
+                  className='modal'
+                  overlayClassName='overlay'>
 
-  if (studentsError || midtermExamError) throw new Error('500');
-
-  return <Layout data={midtermExamData?.midtermExams} students={studentsData?.students}/>
+      </ReactModal>
+    </Layout>
+  )
 }

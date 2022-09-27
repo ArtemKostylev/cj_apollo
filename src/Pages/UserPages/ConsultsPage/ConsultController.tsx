@@ -11,7 +11,7 @@ import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";
 import moment, {Moment} from "moment";
 import {TableControlsConfig, TableControlType} from '../../../shared/ui/TableControls';
-import {YEARS} from '../../../constants/Years';
+import {YEARS} from '../../../constants/years';
 import {getYear} from '../../../utils/date';
 import {useLocation} from "react-router-dom";
 import {insertInPosition, updateInPosition} from '../../../utils/crud';
@@ -182,14 +182,12 @@ export const ConsultController = () => {
     {
       type: TableControlType.SELECT,
       data: userCourses.map((course: any) => course.name),
-      label: "Предмет :",
       text: userCourses[course].name,
       onClick: onCourseChange,
     },
     {
       type: TableControlType.SELECT,
       data: YEARS,
-      label: "Год :",
       value: currentYear,
       onClick: onYearChange,
     },

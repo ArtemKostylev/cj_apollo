@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export type ButtonProps = {
   disabled?: boolean;
   onClick?: () => void;
-  label?: string;
+  text?: string;
 }
 
 const BottonBase = styled.button`
@@ -22,10 +22,10 @@ const BottonBase = styled.button`
   }
 `
 
-export const Button = ({disabled, label, onClick}: ButtonProps) => {
+export const Button = ({disabled, text, onClick}: ButtonProps) => {
   return (
     <BottonBase disabled={disabled} onClick={onClick}>
-      {label}
+      {text}
     </BottonBase>
   );
 };
