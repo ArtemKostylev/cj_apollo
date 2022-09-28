@@ -11,14 +11,12 @@ import {getQuarter} from '../../../utils/date';
 import Controls from '../../../shared/ui/Controls';
 import {useHistory} from 'react-router-dom';
 
-export const Journals = (props) => {
+export const Journals = () => {
     let history = useHistory();
 
     const [teacherIndex, setTeacherIndex] = useState();
     const [period, setPeriod] = useState(getQuarter(moment().month()));
-    const [year, setYear] = useState(
-        moment().month() > 7 ? moment().year() : moment().year() - 1
-    );
+
     const [course, setCourse] = useState(0);
 
     const spinner = <div>Загрузка</div>;
@@ -195,13 +193,6 @@ export const Journals = (props) => {
     const items = [
         {
             type: 'dropdown',
-            data: ACADEMIC_YEARS.map((item) => item.displayName),
-            label: 'Год :',
-            text: ACADEMIC_YEARS.find((item) => item.value === year).displayName,
-            onClick: getYearValue,
-        },
-        {
-            type: 'dropdown',
             data: QUARTERS_RU,
             label: 'Период :',
             text: QUARTERS_RU[period],
@@ -340,7 +331,8 @@ export const Journals = (props) => {
                 </ul>
             </div>
             <div className='block_right'>
-                <Controls items={items}/>
+                {/*   TODO: temporary disabled
+             <Controls items={items}/>*/}
                 <TeacherJournal
                     teacherIndex={teacherIndex || teachers.fetchTeachers[0].id}
                     period={period}

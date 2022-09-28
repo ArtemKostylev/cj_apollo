@@ -7,7 +7,7 @@ import IndividualJournalView from './IndividualJournalView';
 import GroupJournalView from './GroupJournalView';
 import {useMutation, useQuery, NetworkStatus} from '@apollo/client';
 import {FETCH_JOURNAL_QUERY} from '../../../graphql/queries/fetchJournal';
-import {useAuth} from '../../../hooks/use-auth';
+import {useAuth} from '../../../hooks/useAuth';
 import {UPDATE_JOURNAL_MUTATION} from '../../../graphql/mutations/updateJournal';
 import {GROUP_PERIODS} from '../../../constants/periods';
 import {getYear} from '../../../utils/date';
@@ -25,7 +25,7 @@ export default function Journal(props) {
     const [period, setPeriod] = useState(month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']);
     const [year, setYear] = useState(`${moment().year()}`);
 
-    const userCourses = useMemo(() => props.location.state?.courses || auth.user?.courses, [props.location.state, auth.user]);
+    const userCourses = useMemo(() => props.location.state?.versions[year].courses || auth.user?.versions[year].courses, [props.location.state, auth.user]);
 
     const startDate = useMemo(() => moment().month(month).year(getYear(month, year)), [month, year]);
 
@@ -98,7 +98,7 @@ export default function Journal(props) {
     const updateQuarterData = ({row, column, value, group}) => {
         const student = studentData.find((item, index) => item.student.id === row);
         const studentIndex = studentData.indexOf(student);
-        var mark = student.quaterMark.find((item) => item.period === column);
+        let mark = student.quaterMark.find((item) => item.period === column);
         if (!mark) {
             const newMark = {
                 id: 0,
@@ -205,7 +205,7 @@ export default function Journal(props) {
         networkStatus,
     } = useQuery(FETCH_JOURNAL_QUERY, {
         variables: {
-            teacherId: props.location.state?.teacher || auth.user?.teacher,
+            teacherId: props.location.state?.versions[year].id || auth.user?.versions[year].id,
             courseId: userCourses[course].id,
             year: moment().month() > 7 ? parseInt(year) : parseInt(year) - 1,
         },

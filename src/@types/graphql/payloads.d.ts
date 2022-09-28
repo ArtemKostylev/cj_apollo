@@ -14,5 +14,5 @@ declare type UserPayload = {
   id: number;
   role: Role;
   email: string;
-  teacher?: Teacher;
+  teacher?: Teacher[];
 }
