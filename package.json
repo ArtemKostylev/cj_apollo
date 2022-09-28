@@ -16,6 +16,7 @@
     "apollo-upload-client": "^16.0.0",
     "cross-env": "^7.0.3",
     "date-fns": "^2.19.0",
+    "formik": "^2.2.9",
     "graphql": "^15.5.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",

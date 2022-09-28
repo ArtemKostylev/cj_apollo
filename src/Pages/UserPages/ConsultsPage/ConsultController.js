@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {useAuth} from "../../../hooks/use-auth";
+import React, {useState} from "react";
+import {useAuth} from "../../../hooks/useAuth";
 import {DELETE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteGroupConsults";
 import {DELETE_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteConsults";
 import {FETCH_CONSULTS_QUERY} from "../../../graphql/queries/fetchConsults";
@@ -23,7 +23,7 @@ export const ConsultController = (props) => {
         setCurrentYear(e.target.getAttribute("data-index"));
     }
 
-    const userCourses = props.location.state?.courses || auth.user?.courses;
+    const userCourses = props.location.state?.courses || auth.user?.versions[currentYear].courses;
 
     const getCourse = (e) => {
         setCourse(e.target.getAttribute("data-index"));
@@ -36,7 +36,7 @@ export const ConsultController = (props) => {
             : FETCH_CONSULTS_QUERY,
         {
             variables: {
-                teacherId: props.location.state?.teacher || auth.user.teacher,
+                teacherId: props.location.state?.versions[currentYear].id || auth.user.versions[currentYear].id,
                 courseId: userCourses[course].id,
                 year: getYear(moment().month(), currentYear),
             },
@@ -58,7 +58,7 @@ export const ConsultController = (props) => {
     );
 
     const updateIndividualData = ({date, hours, column, row}) => {
-        const student = data.find((item, index) => item.student.id === row);
+        const student = data.find((item) => item.student.id === row);
         const studentIndex = data.indexOf(student);
         const consult = student.consult.find((item) => {
             const itemIndex = item.id ? item.id : item.uiIndex;
@@ -229,7 +229,7 @@ export const ConsultController = (props) => {
         return result;
     };
 
-    const saveIndividual = async (e) => {
+    const saveIndividual = async () => {
         await update({
             variables: {
                 data: createIndividualUpdateData(),
@@ -244,7 +244,7 @@ export const ConsultController = (props) => {
         refetch();
     };
 
-    const saveGroup = async (e) => {
+    const saveGroup = async () => {
         await update({
             variables: {
                 teacher: props.location.state?.teacher || auth.user.teacher,
@@ -285,7 +285,7 @@ export const ConsultController = (props) => {
 
     if (loading) return spinner;
     if (networkStatus === NetworkStatus.refetch) return spinner;
-    if (error) throw new Error(503);
+    if (error) throw new Error('503');
 
     data = userCourses[course].group
         ? data.fetchGroupConsults

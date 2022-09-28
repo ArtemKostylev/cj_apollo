@@ -1,4 +1,4 @@
-import {useAuth} from '../../../hooks/use-auth';
+import {useAuth} from '../../../hooks/useAuth';
 import '../../../styles/Notes.css';
 import Controls from '../../../shared/ui/Controls';
 import {PageWrapper} from '../../../shared/ui/PageWrapper';
@@ -52,10 +52,10 @@ export const Notes = (props) => {
                 data: {
                     id: data.fetchNotes ? data.fetchNotes.id : 0,
                     text: value,
-                    teacherId: props.location.state?.teacher || auth.user.teacher,
+                    teacherId: props.location.state?.versions[currentYear].id || auth.user.versions[currentYear].id,
                     courseId:
-                        props.location.state?.courses[course].id ||
-                        auth.user.courses[course].id,
+                        props.location.state?.versions[currentYear].courses[course].id ||
+                        auth.user.versions[currentYear].courses[course].id,
                     year: parseInt(currentYear),
                 },
             },
@@ -68,10 +68,10 @@ export const Notes = (props) => {
         FETCH_NOTES_QUERY,
         {
             variables: {
-                teacherId: props.location.state?.teacher || auth.user?.teacher,
+                teacherId: props.location.state?.versions[currentYear].id || auth.user?.versions[currentYear].id,
                 courseId:
-                    props.location.state?.courses[course].id ||
-                    auth.user.courses[course].id,
+                    props.location.state?.versions[currentYear].courses[course].id ||
+                    auth.user.versions[currentYear].courses[course].id,
                 year: parseInt(currentYear),
             },
             notifyOnNetworkStatusChange: true,
@@ -85,12 +85,12 @@ export const Notes = (props) => {
         {
             type: 'dropdown',
             data:
-                props.location.state?.courses.map((course) => course.name) ||
-                auth.user.courses.map((course) => course.name),
+                props.location.state?.versions[currentYear].courses.map((course) => course.name) ||
+                auth.user.versions[currentYear].courses.map((course) => course.name),
             label: 'Предмет :',
             text:
-                props.location.state?.courses[course].name ||
-                auth.user.courses[course].name,
+                props.location.state?.versions[currentYear].courses[course].name ||
+                auth.user.versions[currentYear].courses[course].name,
             onClick: getCourse,
         },
         {
@@ -134,7 +134,7 @@ export const Notes = (props) => {
                 placeholder='Это - место для заметок...'
                 value={value}
                 onChange={change}
-            ></textarea>
+            />
         </PageWrapper>
     );
 };
