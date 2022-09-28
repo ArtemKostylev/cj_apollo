@@ -7,12 +7,14 @@ declare type Student = {
   load?: number;
   relations: TeacherCourseStudent[];
   specialization: Specialization;
+  freezeVersion?: FreezeVersion;
 }
 
 declare type Specialization = {
   id: number;
   name: string;
   students: Student[];
+  freezeVersion?: FreezeVersion;
 }
 
 declare type Teacher = {
@@ -22,12 +24,19 @@ declare type Teacher = {
   parent?: string;
   userId?: number;
   relations: TeacherCourseStudent[];
+  freezeVersion?: FreezeVersion;
 }
 
 declare type Course = {
   id: number;
   name: string;
   group: boolean;
+  freezeVersion?: FreezeVersion;
 
   [key: string]: any;
+}
+
+declare type FreezeVersion = {
+  id: number;
+  year: number;
 }

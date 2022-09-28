@@ -42,24 +42,26 @@ export const Compensation = () => {
     FETCH_REPLACEMENTS_QUERY,
     {
       variables: {
-        teacherId: location.state?.teacher || auth.user.teacher,
+        teacherId: location.state?.versions[selectedYear].id || auth.user.versions[selectedYear].id,
         courseId:
-          location.state?.courses[course].id ||
-          auth.user.courses[course].id,
+          location.state?.versions[selectedYear].courses[course].id ||
+          auth.user.versions[selectedYear].courses[course].id,
         date_gte: moment()
           .month(month)
           .year(year)
           .clone()
           .startOf('month')
           .utc()
-          .format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+          .format('YYYY-MM-DDTHH:mm:ss.SSS')
+          .concat('Z'),
         date_lte: moment()
           .month(month)
           .year(year)
           .clone()
           .endOf('month')
           .utc()
-          .format('YYYY-MM-DDTHH:mm:ss.SSSZ')
+          .format('YYYY-MM-DDTHH:mm:ss.SSS')
+          .concat('Z'),
       },
       notifyOnNetworkStatusChange: true,
       fetchPolicy: 'network-only',
@@ -101,7 +103,7 @@ export const Compensation = () => {
   });
 
   const updateDates = ({date, column, group, row}: updateDatesProps) => {
-    const student = studentData.find((item, index) => item.student.id === row);
+    const student = studentData.find((item) => item.student.id === row);
     if (!student) throw new Error(`Student with index ${row} was not found`)
     const studentIndex = studentData.indexOf(student);
     const mark = student.journalEntry.find((item) => item.id === group);

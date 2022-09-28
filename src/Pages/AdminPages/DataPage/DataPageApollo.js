@@ -13,8 +13,8 @@ import {DELETE_TEACHER_MUTATION} from "../../../graphql/mutations/deleteTeacher"
 import {UPDATE_COURSE_RELATIONS_MUTATION} from "../../../graphql/mutations/updateCourseRelation";
 import {UPDATE_STUDENT_RELATIONS_MUTATION} from "../../../graphql/mutations/updateStudentRelation";
 
-export default function DataPageController(props) {
-    var {loading, data, error, refetch, networkStatus} = useQuery(
+export default function DataPageController() {
+    let {loading, data, error, refetch, networkStatus} = useQuery(
         FETCH_FULL_INFO,
         {
             notifyOnNetworkStatusChange: true,
@@ -43,8 +43,7 @@ export default function DataPageController(props) {
     if (networkStatus === NetworkStatus.refetch) return spinner;
     if (error) throw new Error(503);
 
-    let {teachers, courses, students, relations, specializations} =
-        data.fetchFullInfo;
+    let {teachers, courses, students, relations, specializations} = data.fetchFullInfo;
 
     relations = relations.map((el) => ({
         teacher: el.teacher.id,

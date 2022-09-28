@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
-export const LOGIN_MUTATION = gql`
-    mutation LoginMutation($login: String!, $password: String!) {
-        signin(login: $login, password: $password) {
+export const SIGN_IN = gql`
+    mutation signInMutation($login: String!, $password: String!) {
+        signIn(login: $login, password: $password) {
             token
             user {
                 role {
@@ -17,6 +17,9 @@ export const LOGIN_MUTATION = gql`
                             group
                             onlyHours
                         }
+                    }
+                    freezeVersion {
+                        year
                     }
                 }
             }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {useAuth} from '../../../hooks/use-auth'
+import {useAuth} from '../../../hooks/useAuth'
 import {DELETE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteGroupConsults";
 import {DELETE_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteConsults";
 import {FETCH_CONSULTS_QUERY} from "../../../graphql/queries/fetchConsults";

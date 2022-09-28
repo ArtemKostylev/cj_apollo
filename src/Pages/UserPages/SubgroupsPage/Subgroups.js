@@ -1,17 +1,20 @@
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {PROGRAMS} from '../../../constants/programs';
 import {UPDATE_SUBGROUPS_MUTATION} from '../../../graphql/mutations/updateSubgroups';
 import {FETCH_SUBGROUPS_QUERY} from '../../../graphql/queries/fetchSubgroups';
-import {useAuth} from '../../../hooks/use-auth';
+import {useAuth} from '../../../hooks/useAuth';
 import '../../../styles/Subgroups.css';
 
-import Index from '../../../shared/ui/Controls';
+import Controls from '../../../shared/ui/Controls';
+import {getYear} from '../../../utils/date';
+import moment from 'moment';
 
 export const Subgroups = () => {
     const auth = useAuth();
+    const year = useMemo(() => getYear(moment().month()), [])
 
-    const availableCourses = auth.user.courses.filter((course) => course.group);
+    const availableCourses = auth.user.versions[year].courses.filter((course) => course.group);
 
     const [course, setCourse] = useState(0);
 
@@ -19,12 +22,12 @@ export const Subgroups = () => {
         setCourse(e.target.getAttribute('data-index'));
     };
 
-    var {loading, data, error, refetch, networkStatus} = useQuery(
+    let {loading, data, error, refetch, networkStatus} = useQuery(
         FETCH_SUBGROUPS_QUERY,
         {
             variables: {
                 courseId: availableCourses[course].id,
-                teacherId: auth.user.teacher,
+                teacherId: auth.user.versions[year].id,
             },
             notifyOnNetworkStatusChange: true,
             fetchPolicy: 'network-only',
@@ -116,7 +119,7 @@ export const Subgroups = () => {
 
     return (
         <div>
-            <Index items={items}/>
+            <Controls items={items}/>
             <div className='group_wrapper'>
                 <ul className='group_list'>
                     {data.map((group, index) => (

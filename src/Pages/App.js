@@ -4,9 +4,9 @@ import Menu from '../shared/Menu';
 import Header from '../shared/Header';
 import Journal from './UserPages/JournalPage/Journal';
 import {Compensation} from './UserPages/CompensationPage/Compensation';
-import Login from './Login';
+import {Login} from './Login';
 import {Switch, Route, Redirect, useHistory} from 'react-router-dom';
-import {useAuth} from '../hooks/use-auth.js';
+import {useAuth} from '../hooks/useAuth.js';
 import {Journals} from './AdminPages/JournalsPage/Journals';
 import DataPageApollo from './AdminPages/DataPage/DataPageApollo';
 import {Notes} from './UserPages/NotesPage/Notes';
@@ -85,14 +85,14 @@ const Content = () => {
                 <Menu
                     isOpen={menuVisible}
                     onClose={() => setMenuVisible((prev) => !prev)}
-                ></Menu>
+                />
                 <div
                     className={`Cover ${menuVisible && 'menuVisible'}`}
                     onClick={() => setMenuVisible((prev) => !prev)}
                 />
                 <div className={`Content ${menuVisible && 'menuVisible'}`}>
                     <Header menuClick={menuClick} menuRef={menuRef}/>
-                    {auth.user.role.name === ADMIN ? <AdminRoutes menuRef={menuRef}/> :
+                    {auth.user.role === ADMIN ? <AdminRoutes menuRef={menuRef}/> :
                         <TeacherRoutes menuRef={menuRef}/>}
                 </div>
             </ErrorBoundary>
