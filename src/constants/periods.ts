@@ -1,5 +1,15 @@
 export const PERIODS = ['first', 'second', 'third', 'fourth'];
 
+export const YEAR_PERIODS = {
+  FIRST_HALF: 'firstHalf',
+  SECOND_HALF: 'secondHalf'
+}
+
+export const PERIOD_NAMES = {
+  [YEAR_PERIODS.FIRST_HALF]: 'Первое полугодие',
+  [YEAR_PERIODS.SECOND_HALF]: 'Второе полугодие'
+}
+
 export const GROUP_PERIODS = {
   first_half: {
     name: 'Первое полугодие',

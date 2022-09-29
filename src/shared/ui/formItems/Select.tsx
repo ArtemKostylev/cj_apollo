@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export type SelectProps = {
   options?: Map<string, DropdownOptionType>;
   text?: string;
-  onClick?: (value: string | number) => void;
+  onClick?: (param: any) => void;
 }
 
 const DEFAULT_SELECT_VALUE = 'Нет значений';

@@ -8,9 +8,11 @@ import {TableControlsConfig, TableControlType} from '../../../shared/ui/TableCon
 import {QUARTERS_RU} from '../../../constants/quarters';
 import {YEARS} from '../../../constants/years';
 import {MidtermExamLabel} from '../../../constants/midtermExamType';
+import {PERIOD_NAMES, YEAR_PERIODS} from '../../../constants/periods';
+import {PeriodsRu} from '../../../@types/date';
 
 export const MidtermExam = () => {
-  const {loading, error, remove, selectedRecord, type, onTypeChange, year, onYearChange} = useMidtermExamContext();
+  const {loading, error, remove, period, onPeriodChange, selectedRecord, type, onTypeChange, year, onYearChange} = useMidtermExamContext();
   const [modalOpened, setModalOpened] = useState(false);
 
   const onCrudClick = useCallback(() => {
@@ -31,6 +33,12 @@ export const MidtermExam = () => {
   }, [])
 
   const controlsConfig = useMemo(() => [
+    {
+      type: TableControlType.SELECT,
+      data: PeriodsRu,
+      text: PeriodsRu[period],
+      onClick: onPeriodChange
+    },
     {
       type: TableControlType.SELECT,
       data: MidtermExamLabel,

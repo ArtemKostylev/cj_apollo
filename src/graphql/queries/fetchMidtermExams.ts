@@ -1,14 +1,20 @@
 import {gql} from '@apollo/client';
 
 export const FETCH_MIDTERM_EXAMS = gql`
-    query fetchStudentsForTeacher($teacherId: Int! $year: Int!) {
-        fetchStudentsForTeacher(teacherId: $teacherId, year: $year) {
+    query fetchMidtermExams($teacherId: Int! $type: string $dateGte: Date $dateLte: Date) {
+        fetchStudentsForTeacher(teacherId: $teacherId, type: $type, dateGte: $dateGte, dateLte: $dateLte) {
             midtermExam {
                 id
-                name
-                surname
-                class
-                program
+                date
+                mark
+                contents
+                student {
+                    id
+                    name
+                    surname
+                    class
+                    program
+                }
             }
         }
     }
