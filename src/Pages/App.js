@@ -17,58 +17,29 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {Reports} from './AdminPages/ReportsPage/Reports';
 import {Specialization} from './AdminPages/SpecPage';
 import {ADMIN} from '../constants/roles';
+import {MidtermExam} from './UserPages/MidtermExam';
 
-const AdminRoutes = ({menuRef}) => (
-    <Switch>
-        <Route path='/journals' component={Journals}/>
-        <Route path='/data' component={DataPageApollo}/>
-        <Route
-            path='/journal'
-            render={(props) => <Journal {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/compensation'
-            render={(props) => <Compensation {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/notes'
-            render={(props) => <Notes {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/consult'
-            render={(props) => <ConsultController {...props} menuRef={menuRef}/>}
-        />
-        <Route path='/reports' component={Reports}/>
-        <Route path='/specs' component={Specialization}/>
-        <Redirect from='/' to='/journals'/>
-    </Switch>
-);
+const AdminRoutes = <Switch>
+    <Route path='/journals' component={Journals}/>
+    <Route path='/data' component={DataPageApollo}/>
+    <Route path='/journal' component={Journal}/>
+    <Route path='/compensation' component={Compensation}/>
+    <Route path='/notes' component={Notes}/>
+    <Route path='/consult' render={ConsultController}/>
+    <Route path='/reports' component={Reports}/>
+    <Route path='/specs' component={Specialization}/>
+    <Redirect from='/' to='/journals'/>
+</Switch>
 
-const TeacherRoutes = ({menuRef}) => (
-    <Switch>
-        <Route
-            path='/journal'
-            render={(props) => <Journal {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/compensation'
-            render={(props) => <Compensation {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/notes'
-            render={(props) => <Notes {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/consult'
-            render={(props) => <ConsultController {...props} menuRef={menuRef}/>}
-        />
-        <Route
-            path='/subgroups'
-            render={(props) => <Subgroups {...props} menuRef={menuRef}/>}
-        />
-        <Redirect from='/' to='/journal'/>
-    </Switch>
-);
+const TeacherRoutes = <Switch>
+    <Route path='/journal' component={Journal}/>
+    <Route path='/compensation' component={Compensation}/>
+    <Route path='/notes' component={Notes}/>
+    <Route path='/consult' component={ConsultController}/>
+    <Route path='/subgroups' component={Subgroups}/>
+    <Route path='/midtermExam' component={MidtermExam}/>
+    <Redirect from='/' to='/journal'/>
+</Switch>
 
 const Content = () => {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -92,8 +63,7 @@ const Content = () => {
                 />
                 <div className={`Content ${menuVisible && 'menuVisible'}`}>
                     <Header menuClick={menuClick} menuRef={menuRef}/>
-                    {auth.user.role === ADMIN ? <AdminRoutes menuRef={menuRef}/> :
-                        <TeacherRoutes menuRef={menuRef}/>}
+                    {auth.user.role === ADMIN ? AdminRoutes : TeacherRoutes}
                 </div>
             </ErrorBoundary>
         </div>

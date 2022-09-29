@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export type ButtonProps = {
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (param: any) => void;
   text?: string;
 }
 

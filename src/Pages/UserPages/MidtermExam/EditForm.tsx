@@ -1,42 +1,47 @@
 import React from 'react';
+import {useFormik} from 'formik';
+import {useMidtermExamContext} from './useMidtermExamContext';
+import {Button} from '../../../shared/ui/Button';
 
-export const EditForm = () => {
+const INITIAL_VALUES = {
+  student: '',
+  date: '',
+  content: '',
+  type: ''
+}
+
+type Props = {
+  onClose: () => void;
+}
+
+export const EditForm = ({onClose}: Props) => {
+  const {} = useMidtermExamContext();
+
   const formik = useFormik({
-    initialValues: {
-      login: '',
-      password: '',
+    initialValues: INITIAL_VALUES,
+    onSubmit: (values) => {
+      onClose()
     },
-    onSubmit: (values) =>
-      login({
-        variables: {
-          login: values.login,
-          password: values.password,
-        },
-      }),
   });
 
   return (
     <form>
-      <FormItemWrapper>
-        <Input
-          id="login"
-          name="login"
-          type="text"
-          onChange={formik.handleChange}
-          value={formik.values.login}
-          placeholder="Логин"
-        />
-      </FormItemWrapper>
-      <FormItemWrapper>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          placeholder="Пароль"
-        />
-      </FormItemWrapper>
+      <select
+        id="student"
+        name="student"
+        onChange={formik.handleChange}
+        value={formik.values.student}
+        placeholder="Логин"
+      />
+      <input
+        id="password"
+        name="password"
+        type="password"
+        onChange={formik.handleChange}
+        value={formik.values.date}
+        placeholder="Пароль"
+      />
+      <Button type="submit">Войти</Button>
     </form>
   )
 }

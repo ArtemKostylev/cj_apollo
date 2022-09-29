@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from "react";
-import {useAuth} from "../../../hooks/use-auth";
+import {useAuth} from "../../../hooks/useAuth";
 import {DELETE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteGroupConsults";
 import {DELETE_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteConsults";
 import {FETCH_CONSULTS_QUERY} from "../../../graphql/queries/fetchConsults";
@@ -31,8 +31,8 @@ export const ConsultController = () => {
   const [currentYear, setCurrentYear] = useState(`${moment().year()}`);
   const [course, setCourse] = useState(0);
 
-  const userCourses = useMemo(() => location.state?.courses || auth.user?.courses, [location, auth]);
-  const teacher = useMemo(() => location.state?.teacher || auth.user.teacher, [location, auth]);
+  const userCourses = useMemo(() => location.state?.courses || auth.user?.versions[currentYear].courses, [location, auth]);
+  const teacher = useMemo(() => location.state?.teacher || auth.user.versions[currentYear].id, [location, auth]);
 
   const [update] = useMutation(userCourses[course].group ? UPDATE_GROUP_CONSULTS_MUTATION : UPDATE_CONSULTS_MUTATION);
   const [clear] = useMutation(userCourses[course].group ? DELETE_GROUP_CONSULTS_MUTATION : DELETE_CONSULTS_MUTATION);
@@ -166,7 +166,7 @@ export const ConsultController = () => {
   const saveGroup = async () => {
     await update({
       variables: {
-        teacher: location.state?.teacher || auth.user.teacher,
+        teacher: location.state?.teacher || auth.user.versions[currentYear].id,
         course: userCourses[course].id,
         data: createGroupUpdateData(),
       },

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export type SelectProps = {
   options?: Map<string, DropdownOptionType>;
   text?: string;
-  onClick?: (value: string) => void;
+  onClick?: (value: string | number) => void;
 }
 
 const DEFAULT_SELECT_VALUE = 'Нет значений';
@@ -26,9 +26,9 @@ const SelectText = styled.span`
 
 export const Select = ({options, text, onClick}: SelectProps) => {
   const [opened, setOpened] = useState(false);
-  const [value, setValue] = useState(text || DEFAULT_SELECT_VALUE);
+  const [value, setValue] = useState<string | number>(text || DEFAULT_SELECT_VALUE);
 
-  const onSelect = useCallback((value: string) => {
+  const onSelect = useCallback((value: string | number) => {
     setOpened(false);
     onClick && onClick(value);
     setValue(value);

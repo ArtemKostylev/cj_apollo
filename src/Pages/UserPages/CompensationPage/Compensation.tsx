@@ -3,7 +3,7 @@ import moment, {Moment} from 'moment';
 import React, {useState, Fragment} from 'react';
 import {UPDATE_REPLACEMENTS_MUTATION} from '../../../graphql/mutations/updateReplacement';
 import {FETCH_REPLACEMENTS_QUERY} from '../../../graphql/queries/fetchReplacements';
-import {useAuth} from '../../../hooks/use-auth';
+import {useAuth} from '../../../hooks/useAuth';
 import EditableDateCell from '../../../shared/ui/EditableDateCell';
 import {TableControls} from '../../../shared/ui/TableControls';
 import {getYear} from '../../../utils/date';
@@ -11,7 +11,6 @@ import '../../../styles/Compensation.css';
 import {useLocation} from "react-router-dom";
 import times from 'lodash/times';
 import styled from "styled-components";
-import {replace} from 'lodash';
 import {updateInPosition} from '../../../utils/crud';
 
 type updateDatesProps = {
