@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
-import {useAuth} from '../hooks/use-auth';
+import {useAuth} from '../hooks/useAuth';
 import {ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE,} from '../constants/resources';
 import {ADMIN, TEACHER} from '../constants/roles';
 import {t} from '../static/text';
