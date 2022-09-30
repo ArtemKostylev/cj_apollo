@@ -6,7 +6,7 @@ import Journal from './UserPages/JournalPage/Journal';
 import {Compensation} from './UserPages/CompensationPage/Compensation';
 import {Login} from './Login';
 import {Switch, Route, Redirect, useHistory} from 'react-router-dom';
-import {useAuth} from '../hooks/useAuth.js';
+import {useAuth} from '../hooks/useAuth';
 import {Journals} from './AdminPages/JournalsPage/Journals';
 import DataPageApollo from './AdminPages/DataPage/DataPageApollo';
 import {Notes} from './UserPages/NotesPage/Notes';
