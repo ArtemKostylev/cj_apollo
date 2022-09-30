@@ -60,11 +60,11 @@ export const Login = () => {
 
   const [login, {loading}] = useMutation(SIGN_IN, {
     onCompleted: (payload) => {
-      auth.signIn(payload.signin, () => {
+      auth.signIn(payload.signIn, () => {
         history.push('/');
       });
     },
-    onError: () => {
+    onError: (e: any) => {
       setErrorMessage('Неправильное имя пользователя или пароль');
     },
   });
