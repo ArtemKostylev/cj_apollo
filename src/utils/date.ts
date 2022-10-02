@@ -10,6 +10,11 @@ export function getQuarter(month: number) {
     return quarter === null ? 3 : quarter;
 }
 
+export const getCurrentAcademicYear = () => {
+    return moment().month() > 7 ? moment().year() : moment().year() - 1;
+  };
+  
+
 export function getYear(targetMonth: number, year: string | null = null) {
     const currentMonth = moment().month();
     const currentYear = year ? parseInt(year) : moment().year();
