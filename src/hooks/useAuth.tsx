@@ -29,10 +29,11 @@ export const useAuth = () => {
 
 function useProvideAuth(): AuthContextProps {
   const cashed_user = localStorage.getItem(USER_ALIAS);
-  
+
   const [user, setUser] = useState(() => {
     const userObj = cashed_user ? JSON.parse(cashed_user) : undefined;
-    if (userObj.role.name) {
+    if (userObj?.role?.name) {
+      localStorage.removeItem(USER_ALIAS);
       return undefined;   // Old version of user object detection
     }
     return userObj
