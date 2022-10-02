@@ -29,10 +29,14 @@ export const useAuth = () => {
 
 function useProvideAuth(): AuthContextProps {
   const cashed_user = localStorage.getItem(USER_ALIAS);
-
-  const [user, setUser] = useState(
-    cashed_user ? JSON.parse(cashed_user) : undefined
-  );
+  
+  const [user, setUser] = useState(() => {
+    const userObj = cashed_user ? JSON.parse(cashed_user) : undefined;
+    if (userObj.role.name) {
+      return undefined;   // Old version of user object detection
+    }
+    return userObj
+  }) 
 
   const signIn: signInCallback = (payload, nav) => {
     const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getYear(moment().month()),
