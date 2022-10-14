@@ -60,6 +60,7 @@ export const Compensation = () => {
           .utc()
           .format('YYYY-MM-DDTHH:mm:ss.SSS')
           .concat('Z'),
+        year
       },
       notifyOnNetworkStatusChange: true,
       fetchPolicy: 'network-only',

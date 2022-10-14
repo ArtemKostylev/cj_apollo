@@ -151,7 +151,7 @@ export const Journals = () => {
 
         if (error) throw new Error(503);
 
-        if (journal.fetchJournal[0].student === null) {
+        if (!journal.fetchJournal[0]?.student) {
             return <p>Для данного предмета еще не назначены ученики</p>;
         }
 
