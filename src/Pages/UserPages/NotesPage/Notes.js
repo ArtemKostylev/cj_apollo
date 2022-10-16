@@ -12,27 +12,8 @@ import {YEARS} from '../../../shared/ui/TableControls';
 export const Notes = (props) => {
     const auth = useAuth();
 
-    const listener = (event) => {
-        if (changed) {
-            event.preventDefault();
-            let confirm = window.confirm(
-                'Вы действительно хотите покинуть страницу? Все несохраненные изменения будут потеряны.'
-            );
-            !confirm ? event.stopImmediatePropagation() : setChanged(false);
-        }
-    };
-
-    useEffect(() => {
-        props.menuRef?.current.addEventListener('click', listener);
-
-        return () => {
-            props.menuRef?.current?.removeEventListener('click', listener);
-        };
-    });
-
     const [currentYear, setCurrentYear] = useState(`${moment().year()}`);
     const [course, setCourse] = useState(0);
-    const [changed, setChanged] = useState(false);
 
     const onYearChange = (e) => {
         setCurrentYear(e.target.getAttribute("data-index"));
@@ -61,7 +42,6 @@ export const Notes = (props) => {
             },
         });
         refetch();
-        setChanged(false);
     };
 
     const {loading, data, error, refetch, networkStatus} = useQuery(
@@ -76,6 +56,7 @@ export const Notes = (props) => {
             },
             notifyOnNetworkStatusChange: true,
             fetchPolicy: 'network-only',
+            onCompleted: data => setValue(data.fetchNotes.text)
         }
     );
 
@@ -114,16 +95,9 @@ export const Notes = (props) => {
 
     if (error) throw new Error(503);
 
-    if (
-        value === '' &&
-        data.fetchNotes &&
-        data.fetchNotes.text !== '' &&
-        !changed
-    )
-        setValue(data.fetchNotes.text);
+    if (value === '' && data.fetchNotes && data.fetchNotes.text !== '') setValue(data.fetchNotes.text);
 
     const change = (e) => {
-        setChanged(true);
         setValue(e.target.value);
     };
 
