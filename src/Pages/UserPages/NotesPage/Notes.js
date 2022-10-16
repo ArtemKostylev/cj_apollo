@@ -56,7 +56,7 @@ export const Notes = (props) => {
             },
             notifyOnNetworkStatusChange: true,
             fetchPolicy: 'network-only',
-            onCompleted: data => setValue(data.fetchNotes.text)
+            onCompleted: data => setValue(data?.fetchNotes?.text)
         }
     );
 
