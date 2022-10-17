@@ -50,8 +50,8 @@ export const Notes = (props) => {
             variables: {
                 teacherId: props.location.state?.versions[currentYear].id || auth.user?.versions[currentYear].id,
                 courseId:
-                    props.location.state?.versions[currentYear].courses[course].id ||
-                    auth.user.versions[currentYear].courses[course].id,
+                    props.location.state?.versions[currentYear]?.courses[course]?.id ||
+                    auth.user.versions[currentYear]?.courses[course]?.id,
                 year: parseInt(currentYear),
             },
             notifyOnNetworkStatusChange: true,
