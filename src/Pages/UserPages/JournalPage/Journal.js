@@ -284,10 +284,11 @@ export default function Journal(props) {
                 (pair) =>
                     item.student.class === pair.class &&
                     item.student.program === pair.program &&
-                    item.subgroup === (pair.subgroup || null)
+                    item.subgroup === (pair.subgroup)
             );
             pairs[pairIndex].students.push(item);
         });
+
 
         pairs.forEach((pair) => {
             if (pair.students.length > 0) groupedData.push(pair);
