@@ -50,8 +50,7 @@ export const Subgroups = () => {
             variables: {
                 data: result,
             },
-        });
-        refetch();
+        }).then(() => refetch());
     };
 
     const items = [

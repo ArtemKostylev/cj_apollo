@@ -1,6 +1,6 @@
 import React, {MouseEventHandler, RefObject} from "react";
 import "../styles/Header.css";
-import {useAuth} from "../hooks/useAuth.js";
+import {useAuth} from "../hooks/useAuth";
 import {useHistory, useLocation} from "react-router-dom";
 import {ADMIN_RESOURCES, SUBGROUPS_RESOURCE, USER_RESOURCES} from "../constants/resources";
 

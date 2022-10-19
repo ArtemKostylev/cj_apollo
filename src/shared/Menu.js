@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
-import {useAuth} from '../hooks/use-auth';
+import {useAuth} from '../hooks/useAuth';
 import {ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE,} from '../constants/resources';
 import {ADMIN, TEACHER} from '../constants/roles';
 import {t} from '../static/text';
+import { getCurrentAcademicYear } from '../utils/date';
 
 const MenuItemWrapper = styled.div`
   text-align: left;
@@ -77,10 +78,11 @@ const resourceMap = {
 export default function Menu({onClose, isOpen}) {
     const auth = useAuth();
 
-    const resources = resourceMap[auth.user.role.name];
+    const resources = resourceMap[auth.user.role];
 
-    if (auth.user.courses.some((course) => course.group)) {
+    if (auth.user?.versions[getCurrentAcademicYear()]?.courses.some((course) => course.group)) {
         resources.subgroups = SUBGROUPS_RESOURCE;
+
     }
 
     return (

@@ -25,7 +25,7 @@ export default function Journal(props) {
     const [period, setPeriod] = useState(month > 7 ? GROUP_PERIODS['first_half'] : GROUP_PERIODS['second_half']);
     const [year, setYear] = useState(`${moment().year()}`);
 
-    const userCourses = useMemo(() => props.location.state?.versions[year].courses || auth.user?.versions[year].courses, [props.location.state, auth.user]);
+    const userCourses = useMemo(() => props.location.state?.versions[year].courses || auth.user?.versions[year].courses, [props.location.state, auth.user, year]);
 
     const startDate = useMemo(() => moment().month(month).year(getYear(month, year)), [month, year]);
 
@@ -179,7 +179,7 @@ export default function Journal(props) {
                         id: mark.id,
                         mark: mark.mark,
                         period: mark.period,
-                        year: mark.year,
+                        year: parseInt(mark.year),
                         relationId: student.id,
                     });
             });
@@ -284,10 +284,11 @@ export default function Journal(props) {
                 (pair) =>
                     item.student.class === pair.class &&
                     item.student.program === pair.program &&
-                    item.subgroup === (pair.subgroup || null)
+                    item.subgroup === (pair.subgroup)
             );
             pairs[pairIndex].students.push(item);
         });
+
 
         pairs.forEach((pair) => {
             if (pair.students.length > 0) groupedData.push(pair);
