@@ -179,7 +179,7 @@ export default function Journal(props) {
                         id: mark.id,
                         mark: mark.mark,
                         period: mark.period,
-                        year: mark.year,
+                        year: parseInt(mark.year),
                         relationId: student.id,
                     });
             });
