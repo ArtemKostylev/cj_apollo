@@ -16,8 +16,10 @@ export const updateInPosition = (object: any[], keys: CrudKeys[], value: Record<
 }
 
 const modify = (object: any[], keys: Iterator<CrudKeys>, value: Record<string, any>, replace?: boolean): any => {
-
-  const {index, key} = keys.next().value;
+  const iterator = keys.next();
+  const iteratorValue = iterator.value;
+  const key = iteratorValue?.key;
+  const index = iteratorValue?.index;
 
   if (!key) {
     if (!replace) {

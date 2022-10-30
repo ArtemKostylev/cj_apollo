@@ -1,3 +1,5 @@
+import {DropdownOptionType} from '../shared/ui/Dropdown';
+
 export enum Months {
   JANUARY,
   FEBRUARY,
@@ -14,8 +16,8 @@ export enum Months {
 }
 
 export enum Periods {
-  FIRST = 1,
-  SECOND
+  FIRST = 'firstHalf',
+  SECOND = 'secondHalf'
 }
 
 export enum Quarters {
@@ -34,7 +36,28 @@ export const QuartersRu = {
   [Quarters.YEAR]: 'Год',
 };
 
-export const PeriodsRu: Record<Periods, string> = {
-  [Periods.FIRST]: 'Первое полугодие',
-  [Periods.SECOND]: 'Второе полугодие'
-}
+export const PERIODS_RU = new Map<string, DropdownOptionType>([
+  [Periods.FIRST, {value: Periods.FIRST, text: 'Первое полугодие'}],
+  [Periods.SECOND, {value: Periods.SECOND, text: 'Второе полугодие'}]
+])
+
+export const MONTHS_RU = new Map<number, DropdownOptionType>(
+  [
+    [Months.SEPTEMBER, {value: Months.SEPTEMBER, text: 'Сентябрь'}],
+    [Months.OCTOBER, {value: Months.OCTOBER, text: 'Октябрь'}],
+    [Months.NOVEMBER, {value: Months.NOVEMBER, text: 'Ноябрь'}],
+    [Months.DECEMBER, {value: Months.DECEMBER, text: 'Декабрь'}],
+    [Months.JANUARY, {value: Months.JANUARY, text: 'Январь'}],
+    [Months.FEBRUARY, {value: Months.FEBRUARY, text: 'Февраль'}],
+    [Months.MARCH, {value: Months.MARCH, text: 'Март'}],
+    [Months.APRIL, {value: Months.APRIL, text: 'Апрель'}],
+    [Months.MAY, {value: Months.MAY, text: 'Май'}],
+  ]
+)
+
+export const YEARS = new Map<number, DropdownOptionType>([
+  [2021, {value: 2021, text: '2021/2022'}],
+  [2022, {value: 2022, text: '2022/2023'}]
+])
+
+export const DATE_FORMAT = "YYYY-MM-DDT00:00:00.000[Z]";

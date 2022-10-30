@@ -4,9 +4,9 @@ import DatePicker, {CalendarContainer} from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/Journal.css';
 import ru from 'date-fns/locale/ru';
-import {getYear} from '../../utils/date';
 import moment, {Moment} from 'moment';
 import {UpdateDatesProps} from '../../Pages/UserPages/ConsultsPage/ConsultController';
+import {getYearByMonth} from '../../utils/academicDate';
 
 const DATE_PLACEHOLDER = '.....';
 
@@ -61,33 +61,42 @@ const Input = forwardRef(({value, onClick, full}: InputProps, ref: ForwardedRef<
 ));
 
 type EditableDateCellProps = {
-  initialValue: Moment;
+  initialValue: Moment | undefined;
   updateDates: (props: Omit<UpdateDatesProps, 'hours'> & { group: number }) => void;
   column: number;
   group?: number;
   month: number;
-  row: number;
+  row?: number;
   unlimited?: boolean;
   full?: boolean;
   disabled?: boolean;
-  year: string;
+  year: number;
 }
 
-const EditableDateCell = ({
-                            initialValue, updateDates, column, group, month, row, unlimited, full = true, disabled, year
-                          }: EditableDateCellProps) => {
-  const [value, setValue] = useState(initialValue.toDate());
+export const EditableDateCell = ({
+                                   initialValue,
+                                   updateDates,
+                                   column,
+                                   group,
+                                   month,
+                                   row = 0,
+                                   unlimited,
+                                   full = true,
+                                   disabled,
+                                   year
+                                 }: EditableDateCellProps) => {
+  const [value, setValue] = useState(initialValue?.toDate());
 
   useEffect(() => {
-    setValue(initialValue.toDate());
+    setValue(initialValue?.toDate());
   }, [initialValue]);
 
   if (disabled) {
-    return <span>{convertDate(value.toLocaleDateString(), full)}</span>;
+    return <span>{convertDate(value?.toLocaleDateString(), full)}</span>;
   }
 
-  const startDate = unlimited ? null : moment().clone().year(getYear(month, year)).month(month).startOf('month').toDate();
-  const endDate = unlimited ? null : moment().clone().year(getYear(month, year)).month(month).endOf('month').toDate();
+  const startDate = unlimited ? null : moment().clone().year(getYearByMonth(month, year)).month(month).startOf('month').toDate();
+  const endDate = unlimited ? null : moment().clone().year(getYearByMonth(month, year)).month(month).endOf('month').toDate();
 
   return (
     <DatePicker
@@ -100,11 +109,9 @@ const EditableDateCell = ({
       popperPlacement='auto'
       minDate={startDate}
       maxDate={endDate}
-      openToDate={unlimited ? moment().year(parseInt(year)).toDate() : undefined}
+      openToDate={unlimited ? moment().year(year).toDate() : undefined}
       locale={ru}
       calendarContainer={Container}
     />
   );
 };
-
-export default EditableDateCell;

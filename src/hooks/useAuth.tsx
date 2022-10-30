@@ -1,8 +1,8 @@
 import React, {useState, useContext, createContext} from 'react';
 import {USER_ALIAS} from '../constants/localStorageAliases';
 import {fromPairs} from 'lodash';
-import {getYear} from '../utils/date';
 import moment from 'moment';
+import {getYearByMonth} from '../utils/academicDate';
 
 type signInCallback = (payload: AuthPayload, nav: () => void) => void;
 type signOutCallback = (nav: () => void) => void;
@@ -37,10 +37,10 @@ function useProvideAuth(): AuthContextProps {
       return undefined;   // Old version of user object detection
     }
     return userObj
-  }) 
+  })
 
   const signIn: signInCallback = (payload, nav) => {
-    const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getYear(moment().month()),
+    const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getYearByMonth(moment().month()),
       {
         id: it.id,
         courses: it.relations.map(it => it.course)

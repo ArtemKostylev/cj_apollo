@@ -3,6 +3,7 @@ import {ButtonProps, Button} from './formItems/Button';
 import {SelectProps, Select} from './formItems/Select';
 import styled from 'styled-components';
 import omit from 'lodash/omit';
+import {theme} from '../../styles/theme';
 
 export enum TableControlType {
   BUTTON,
@@ -22,11 +23,13 @@ const ComponentMap = {
 
 const ControlsContainer = styled.div`
   width: 100%;
-  height: 80px;
+  line-height: 40px;
+  padding: 10px 0;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  border-bottom: 1px solid ${theme.border};
 `
 
 export const TableControls = ({config}: Props) => (

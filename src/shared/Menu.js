@@ -5,7 +5,7 @@ import {useAuth} from '../hooks/useAuth';
 import {ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE,} from '../constants/resources';
 import {ADMIN, TEACHER} from '../constants/roles';
 import {t} from '../static/text';
-import { getCurrentAcademicYear } from '../utils/date';
+import {getCurrentAcademicYear} from '../utils/academicDate';
 
 const MenuItemWrapper = styled.div`
   text-align: left;

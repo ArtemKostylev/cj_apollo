@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import {ControlContainer} from './ControlContainer.styled';
+import {theme} from '../../../styles/theme';
 
 export type ButtonProps = {
   disabled?: boolean;
@@ -7,11 +9,13 @@ export type ButtonProps = {
   text?: string;
 }
 
-const BottonBase = styled.button`
+export const ButtonBase = styled.button`
   border: 0;
   background-color: transparent;
   padding: 1em;
   cursor: pointer;
+  width: 100%;
+  border-right: 1px solid ${theme.border};
 
   &:hover {
     background-color: #e6eaea;
@@ -24,8 +28,10 @@ const BottonBase = styled.button`
 
 export const Button = ({disabled, text, onClick}: ButtonProps) => {
   return (
-    <BottonBase disabled={disabled} onClick={onClick}>
-      {text}
-    </BottonBase>
+    <ControlContainer>
+      <ButtonBase disabled={disabled} onClick={onClick}>
+        {text}
+      </ButtonBase>
+    </ControlContainer>
   );
 };

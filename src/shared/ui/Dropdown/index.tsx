@@ -3,11 +3,11 @@ import {DropdownOption} from './DropdownOption.styled';
 import {DropdownLayout} from './DropdownLayout.styled';
 
 type DropdownOptionsListProps = {
-  options: Map<string, DropdownOptionType>
-  onClick: (value: string) => void;
+  options: Map<string | number, DropdownOptionType>
+  onClick: (value: string | number) => void;
 }
 
-export type DropdownOptionType = { value: string, text: string, short?: boolean }
+export type DropdownOptionType = { value: string | number, text: string, short?: boolean }
 
 const DropdownOptionsList = ({options, onClick}: DropdownOptionsListProps) => {
   return <>
@@ -21,8 +21,8 @@ const DropdownOptionsList = ({options, onClick}: DropdownOptionsListProps) => {
 
 type DropdownProps = {
   opened: boolean;
-  options: Map<string, DropdownOptionType>;
-  onSelect: (value: string) => void;
+  options: Map<string | number, DropdownOptionType>;
+  onSelect: (value: string | number) => void;
   width?: string;
 }
 

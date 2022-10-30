@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import {useAuth} from "../../../hooks/useAuth";
 import {DELETE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteGroupConsults";
 import {DELETE_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteConsults";
@@ -11,10 +11,11 @@ import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";
 import moment, {Moment} from "moment";
 import {TableControlsConfig, TableControlType} from '../../../shared/ui/TableControls';
-import {YEARS} from '../../../constants/years';
-import {getYear} from '../../../utils/date';
+import {YEARS} from '../../../@types/date';
 import {useLocation} from "react-router-dom";
 import {insertInPosition, updateInPosition} from '../../../utils/crud';
+import {DATE_FORMAT} from '../../../@types/date';
+import {getCurrentAcademicYear, getYearByMonth} from '../../../utils/academicDate';
 
 export type UpdateDatesProps = {
   date: Moment;
@@ -28,22 +29,22 @@ export const ConsultController = () => {
   const auth = useAuth();
   const location = useLocation() as any;
 
-  const [currentYear, setCurrentYear] = useState(`${moment().year()}`);
+  const [currentYear, setCurrentYear] = useState(getCurrentAcademicYear());
   const [course, setCourse] = useState(0);
 
-  const userCourses = useMemo(() => location.state?.courses || auth.user?.versions[currentYear].courses, [location, auth]);
-  const teacher = useMemo(() => location.state?.teacher || auth.user.versions[currentYear].id, [location, auth]);
+  const userCourses: Course[] = useMemo(() => location.state?.courses || auth.user?.versions[currentYear].courses, [location, auth, currentYear]);
+  const teacher = useMemo(() => location.state?.teacher || auth.user.versions[currentYear].id, [location, auth, currentYear]);
 
   const [update] = useMutation(userCourses[course].group ? UPDATE_GROUP_CONSULTS_MUTATION : UPDATE_CONSULTS_MUTATION);
   const [clear] = useMutation(userCourses[course].group ? DELETE_GROUP_CONSULTS_MUTATION : DELETE_CONSULTS_MUTATION);
 
-  const onYearChange = (e: any) => {
-    setCurrentYear(e.target.getAttribute("data-index"));
-  }
+  const onYearChange = useCallback((year: number) => {
+    setCurrentYear(year);
+  }, []);
 
-  const onCourseChange = (e: any) => {
-    setCourse(e.target.getAttribute("data-index"));
-  };
+  const onCourseChange = useCallback((course: number) => {
+    setCourse(course);
+  }, []);
 
   let {loading, data, error, refetch, networkStatus} = useQuery(
     userCourses[course].group ? FETCH_GROUP_CONSULTS_QUERY : FETCH_CONSULTS_QUERY,
@@ -51,7 +52,7 @@ export const ConsultController = () => {
       variables: {
         teacherId: teacher,
         courseId: userCourses[course].id,
-        year: getYear(moment().month(), currentYear)
+        year: getYearByMonth(moment().month(), currentYear)
       },
       notifyOnNetworkStatusChange: true,
       fetchPolicy: "network-only"
@@ -72,7 +73,7 @@ export const ConsultController = () => {
         uiIndex: column,
         id: 0,
         date: date,
-        year: parseInt(currentYear),
+        year: currentYear,
         update_flag: true,
         delete_flag: false,
         hours: hours || 0,
@@ -94,14 +95,16 @@ export const ConsultController = () => {
   const createIndividualUpdateData = () => {
     const result: any[] = [];
 
+    debugger;
+
     data.forEach((student: any) => {
-      student.consult.forEach((date: any) => {
-        if (date.update_flag)
+      student.consult.forEach((consult: any) => {
+        if (consult.update_flag)
           result.push({
-            id: date.id,
-            date: date.date.format('YYYY.MM.DDT00:00:00.000Z'),
-            year: parseInt(currentYear),
-            hours: date.hours,
+            id: consult.id,
+            date: consult.date.format(DATE_FORMAT),
+            year: currentYear,
+            hours: consult.hours,
             relationId: student.id,
           });
       });
@@ -119,8 +122,8 @@ export const ConsultController = () => {
         if (consult.update_flag)
           groupData.push({
             id: consult.id,
-            date: consult.date.format('YYYY.MM.DDT00:00:00.000Z'),
-            year: parseInt(currentYear),
+            date: consult.date.format(DATE_FORMAT),
+            year: currentYear,
             hours: consult.hours,
           });
       });
@@ -181,14 +184,14 @@ export const ConsultController = () => {
   const controlsConfig: TableControlsConfig = useMemo(() => [
     {
       type: TableControlType.SELECT,
-      data: userCourses.map((course: any) => course.name),
+      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
       text: userCourses[course].name,
       onClick: onCourseChange,
     },
     {
       type: TableControlType.SELECT,
-      data: YEARS,
-      value: currentYear,
+      options: YEARS,
+      text: YEARS.get(currentYear)?.text,
       onClick: onYearChange,
     },
     {
@@ -196,7 +199,7 @@ export const ConsultController = () => {
       text: "Сохранить",
       onClick: save,
     },
-  ], [userCourses, currentYear]);
+  ], [userCourses, currentYear, course, data]);
 
   const spinner = <div>Загрузка</div>;
 
@@ -209,13 +212,13 @@ export const ConsultController = () => {
   if (userCourses[course].group) return <GroupConsultsView data={data} controlsConfig={controlsConfig}
                                                            updateDates={(props) => updateData({
                                                              ...props,
-                                                             predicate: (item: any) => item.student.id === props.row
+                                                             predicate: (item: any) => item.group === props.row
                                                            })}
                                                            year={currentYear}/>
 
   return <IndividualConsultsView data={data} controlsConfig={controlsConfig}
                                  updateDates={(props) => updateData({
                                    ...props,
-                                   predicate: (item: any) => item.group === props.row
+                                   predicate: (item: any) => item.student.id === props.row
                                  })} year={currentYear}/>
 };

@@ -11,7 +11,12 @@ export const MONTHS_IN_PERIODS = {
   [Periods.SECOND]: SECOND_PERIOD_MONTHS
 };
 
-export const getCurrentAcademicMonth = () => {
+export const QUARTERS_IN_PERIODS = {
+  [Periods.FIRST]: [Quarters.FIRST, Quarters.SECOND],
+  [Periods.SECOND]: [Quarters.THIRD, Quarters.FOURTH, Quarters.YEAR]
+};
+
+export const getCurrentAcademicMonth = (): Months => {
   const month = moment().month();
 
   if (INACTIVE_MONTHS.includes(month)) return Months.MAY;
@@ -19,7 +24,7 @@ export const getCurrentAcademicMonth = () => {
   return month;
 };
 
-export const getCurrentAcademicPeriod = () => {
+export const getCurrentAcademicPeriod = (): Periods => {
   const month = moment().month();
 
   if (FIRST_PERIOD_MONTHS.includes(month)) return Periods.FIRST;
@@ -137,3 +142,20 @@ export const getQuartersInMonth = (month: Months) => {
       return [];
   }
 };
+
+export function getYearByMonth(targetMonth: Months, year: number | null = null) {
+  const currentMonth = moment().month();
+  const currentYear = year || moment().year();
+
+  if (currentMonth <= 7) {
+    if (targetMonth > 7) {
+      return currentYear - 1;
+    }
+    return currentYear;
+  }
+  if (targetMonth > 7) {
+    return currentYear;
+
+  }
+  return currentYear + 1;
+}

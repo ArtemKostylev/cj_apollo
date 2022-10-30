@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, ChangeEvent} from 'react';
-import EditableDateCell from '../../../shared/ui/EditableDateCell';
+import {EditableDateCell} from '../../../shared/ui/EditableDateCell';
 import {HOURS} from '../../../constants/hours';
 import moment, {Moment} from 'moment';
 import {UpdateDatesProps} from './ConsultController';
@@ -10,7 +10,7 @@ type Props = {
   date: Moment;
   row: number;
   updateDates: (props: UpdateDatesProps) => void;
-  year: string;
+  year: number;
 }
 
 const HourDateCell = ({column, hours, date, row, updateDates, year}: Props) => {

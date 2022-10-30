@@ -5,11 +5,9 @@ import ReactModal from 'react-modal';
 import {Spinner} from '../../../shared/ui/Spinner';
 import {EditForm} from './EditForm';
 import {TableControlsConfig, TableControlType} from '../../../shared/ui/TableControls';
-import {QUARTERS_RU} from '../../../constants/quarters';
-import {YEARS} from '../../../constants/years';
 import {MidtermExamLabel} from '../../../constants/midtermExamType';
-import {PERIOD_NAMES, YEAR_PERIODS} from '../../../constants/periods';
-import {PeriodsRu} from '../../../@types/date';
+import {PERIODS_RU, YEARS} from '../../../@types/date';
+import {DropdownOptionType} from '../../../shared/ui/Dropdown';
 
 export const MidtermExam = () => {
   const {loading, error, remove, period, onPeriodChange, selectedRecord, type, onTypeChange, year, onYearChange} = useMidtermExamContext();
@@ -32,23 +30,17 @@ export const MidtermExam = () => {
     setModalOpened(false);
   }, [])
 
-  const controlsConfig = useMemo(() => [
+  const controlsConfig: TableControlsConfig = useMemo(() => [
     {
       type: TableControlType.SELECT,
-      data: PeriodsRu,
-      text: PeriodsRu[period],
-      onClick: onPeriodChange
-    },
-    {
-      type: TableControlType.SELECT,
-      data: MidtermExamLabel,
+      options: new Map() as Map<string, DropdownOptionType>,
       text: MidtermExamLabel[type],
       onClick: onTypeChange
     },
     {
       type: TableControlType.SELECT,
-      data: YEARS,
-      value: YEARS[year],
+      options: YEARS,
+      text: YEARS.get(year)?.text,
       onClick: onYearChange
     },
     {
@@ -68,7 +60,7 @@ export const MidtermExam = () => {
       onClick: onDeleteClick,
       disabled: !selectedRecord
     }
-  ], [])
+  ], [year, type])
 
   if (loading) return <Spinner/>
   if (error) throw new Error('503')

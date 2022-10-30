@@ -4,13 +4,14 @@ import HourDateCell from './HourDateCell';
 import {TableControls, TableControlsConfig} from '../../../shared/ui/TableControls';
 import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
+import moment from 'moment';
 
 type Props = {
   data: any;
   controlsConfig: TableControlsConfig;
   updateDates: (props: UpdateDatesProps) => void;
   long?: boolean;
-  year: string;
+  year: number;
 }
 
 
@@ -37,7 +38,7 @@ const GroupConsultsView = ({data, controlsConfig, updateDates, long = false, yea
               updateDates={updateDates}
               column={item.consults[index]?.id || `ui_${index}`}
               row={item.group}
-              date={item.consults[index] && new Date(item.consults[index].date.split('T')[0])}
+              date={item.consults[index] && moment(item.consults[index].date)}
               hours={item.consults[index]?.hours}
               year={year}
             />

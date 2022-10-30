@@ -17,6 +17,8 @@ declare type JournalEntry = {
   date: string;
   relationId?: number;
   replacement?: Replacement;
+  delete_flag?: boolean;
+  update_flag?: boolean;
 }
 
 declare type Replacement = {
@@ -26,6 +28,7 @@ declare type Replacement = {
 
 declare interface QuarterMark extends Omit<JournalEntry, 'date'> {
   period: string;
+  year: number;
 }
 
 declare type Consult = {

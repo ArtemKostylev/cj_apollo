@@ -5,12 +5,13 @@ import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
 import times from 'lodash/times';
 import {NameCell} from '../../../shared/ui/table/NameCell';
+import moment from 'moment';
 
 type Props = {
   controlsConfig: TableControlsConfig;
   data: any;
   updateDates: (props: UpdateDatesProps) => void;
-  year: string;
+  year: number;
 }
 
 const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props) => {
@@ -35,7 +36,7 @@ const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props
                 updateDates={updateDates}
                 column={item.consult[index]?.id || `ui_${index}`}
                 row={item.student.id}
-                date={item.consult[index] && new Date(item.consult[index].date.split('T')[0])}
+                date={item.consult[index] && moment(item.consult[index].date)}
                 hours={item.consult[index]?.hours}
                 key={index}
                 year={year}

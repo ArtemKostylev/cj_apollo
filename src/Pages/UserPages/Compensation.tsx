@@ -1,17 +1,18 @@
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
 import moment, {Moment} from 'moment';
-import React, {useState, Fragment} from 'react';
-import {UPDATE_REPLACEMENTS_MUTATION} from '../../../graphql/mutations/updateReplacement';
-import {FETCH_REPLACEMENTS_QUERY} from '../../../graphql/queries/fetchReplacements';
-import {useAuth} from '../../../hooks/useAuth';
-import EditableDateCell from '../../../shared/ui/EditableDateCell';
-import {TableControls} from '../../../shared/ui/TableControls';
-import {getYear} from '../../../utils/date';
-import '../../../styles/Compensation.css';
+import React, {Fragment, useCallback, useMemo, useState} from 'react';
+import {UPDATE_REPLACEMENTS_MUTATION} from '../../graphql/mutations/updateReplacement';
+import {FETCH_REPLACEMENTS_QUERY} from '../../graphql/queries/fetchReplacements';
+import {useAuth} from '../../hooks/useAuth';
+import {EditableDateCell} from '../../shared/ui/EditableDateCell';
+import {TableControls, TableControlsConfig, TableControlType} from '../../shared/ui/TableControls';
+import '../../styles/Compensation.css';
 import {useLocation} from "react-router-dom";
 import times from 'lodash/times';
 import styled from "styled-components";
-import {updateInPosition} from '../../../utils/crud';
+import {updateInPosition} from '../../utils/crud';
+import {MONTHS_RU, YEARS} from '../../@types/date';
+import {getCurrentAcademicYear, getYearByMonth} from '../../utils/academicDate';
 
 type updateDatesProps = {
   date: Moment,
@@ -33,18 +34,31 @@ export const Compensation = () => {
 
   const [course, setCourse] = useState(0);
   const [month, setMonth] = useState(moment().month());
-  const [selectedYear, setSelectedYear] = useState(`${moment().year()}`);
+  const [currentYear, setCurrentYear] = useState(getCurrentAcademicYear());
 
-  const year = getYear(month, selectedYear);
+  const teacher = useMemo(() => location.state?.versions[currentYear].id || auth.user.versions[currentYear].id, [currentYear])
+  const userCourses: Course[] = useMemo(() => location.state?.courses || auth.user?.versions[currentYear].courses, [location, auth])
+
+  const year = getYearByMonth(month, currentYear);
+
+  const onYearChange = useCallback((year: number) => {
+    setCurrentYear(year);
+  }, []);
+
+  const onCourseChange = useCallback((course: number) => {
+    setCourse(course);
+  }, []);
+
+  const onMonthChange = useCallback((month: number) => {
+    setMonth(month);
+  }, []);
 
   const {loading, data, error, refetch, networkStatus} = useQuery(
     FETCH_REPLACEMENTS_QUERY,
     {
       variables: {
-        teacherId: location.state?.versions[selectedYear].id || auth.user.versions[selectedYear].id,
-        courseId:
-          location.state?.versions[selectedYear].courses[course].id ||
-          auth.user.versions[selectedYear].courses[course].id,
+        teacherId: teacher,
+        courseId: userCourses[course].id,
         date_gte: moment()
           .month(month)
           .year(year)
@@ -92,6 +106,33 @@ export const Compensation = () => {
     refetch();
   };
 
+  const controlsConfig: TableControlsConfig = useMemo(() => [
+    {
+      type: TableControlType.SELECT,
+      options: MONTHS_RU,
+      text: MONTHS_RU.get(month)?.text,
+      onClick: onMonthChange,
+    },
+    {
+      type: TableControlType.SELECT,
+      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+      text: userCourses[course].name,
+      onClick: onCourseChange,
+    },
+    {
+      type: TableControlType.SELECT,
+      options: YEARS,
+      text: YEARS.get(currentYear)?.text,
+      onClick: onYearChange,
+    },
+    {
+      type: TableControlType.BUTTON,
+      text: "Сохранить",
+      onClick: save,
+    },
+  ], [userCourses, currentYear, course]);
+
+
   if (loading || networkStatus === NetworkStatus.refetch) return <div>Загрузка</div>;
   if (error) throw new Error('503');
   let studentData: TeacherCourseStudent[] = [];
@@ -120,7 +161,7 @@ export const Compensation = () => {
 
   return (
     <>
-      <TableControls config={}/>
+      <TableControls config={controlsConfig}/>
       <table className='compensation_table'>
         <thead>
         <tr>
@@ -155,13 +196,13 @@ export const Compensation = () => {
                     </LessonCell>
                     <td>
                       {lesson && <EditableDateCell
-                          initialValue={repl ? new Date(repl.date.split('T')[0]) : ''}
+                          initialValue={repl ? moment(repl.date) : undefined}
                           column={repl ? repl.id : 0}
                           group={lesson.id}
                           row={item.student.id}
                           updateDates={updateDates}
                           month={month - 1}
-                          year={selectedYear}
+                          year={currentYear}
                           unlimited
                       />}
                     </td>

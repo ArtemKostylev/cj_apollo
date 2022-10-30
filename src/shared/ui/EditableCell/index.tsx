@@ -5,15 +5,15 @@ import {EditableCellLayout} from './EditableCellLayout.styled';
 import {CellText} from './CellText.styled';
 
 type Props = {
-  value: string;
+  value: string | undefined;
   options: Map<string, DropdownOptionType>;
-  isWeekend: boolean;
-  onClick: (value: string) => void;
-  disabled: boolean;
+  isWeekend?: boolean;
+  onClick: (value: string | number) => void;
+  disabled?: boolean;
 }
 
-export const EditableCell = ({value = '', options, isWeekend = false, onClick, disabled}: Props) => {
-  const [dropdownValue, setDropdownValue] = useState(value);
+export const EditableCell = ({value = '', options, isWeekend = false, onClick, disabled = false}: Props) => {
+  const [dropdownValue, setDropdownValue] = useState<string | number>(value);
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {
