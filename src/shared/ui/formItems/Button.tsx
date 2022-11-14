@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import {ControlContainer} from './ControlContainer.styled';
-import {theme} from '../../../styles/theme';
 
 export type ButtonProps = {
   disabled?: boolean;
@@ -15,7 +14,6 @@ export const ButtonBase = styled.button`
   padding: 1em;
   cursor: pointer;
   width: 100%;
-  border-right: 1px solid ${theme.border};
 
   &:hover {
     background-color: #e6eaea;

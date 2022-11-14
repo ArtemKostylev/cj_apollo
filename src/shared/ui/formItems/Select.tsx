@@ -1,7 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {useOnClickOutside} from '../../../hooks/useOnClickOutside';
 import {Dropdown, DropdownOptionType} from '../Dropdown';
-import styled from 'styled-components';
 import {ButtonBase} from './Button';
 import {ControlContainer} from './ControlContainer.styled';
 

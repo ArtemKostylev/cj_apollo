@@ -19,7 +19,7 @@ import {getCurrentAcademicYear, getYearByMonth} from '../../../utils/academicDat
 
 export type UpdateDatesProps = {
   date: Moment;
-  hours?: string;
+  hours?: number;
   column: number;
   row: number;
   predicate?: (value: any) => boolean;
@@ -95,8 +95,6 @@ export const ConsultController = () => {
   const createIndividualUpdateData = () => {
     const result: any[] = [];
 
-    debugger;
-
     data.forEach((student: any) => {
       student.consult.forEach((consult: any) => {
         if (consult.update_flag)
@@ -118,7 +116,7 @@ export const ConsultController = () => {
 
     data.forEach((group: any) => {
       let groupData: any[] = [];
-      group.consults.forEach((consult: any) => {
+      group.consult.forEach((consult: any) => {
         if (consult.update_flag)
           groupData.push({
             id: consult.id,
@@ -135,7 +133,7 @@ export const ConsultController = () => {
             : parseInt(group.group.split(" ")[2]),
         program: group.group.split(" ")[1],
         class: parseInt(group.group.split(" ")[0]),
-        consults: groupData,
+        consult: groupData,
       });
     });
     return result;

@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import {useAuth} from '../../../hooks/useAuth'
-import {DELETE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteGroupConsults";
-import {DELETE_CONSULTS_MUTATION} from "../../../graphql/mutations/deleteConsults";
 import {FETCH_CONSULTS_QUERY} from "../../../graphql/queries/fetchConsults";
 import {UPDATE_GROUP_CONSULTS_MUTATION} from "../../../graphql/mutations/updateGroupConsults";
 import {UPDATE_CONSULTS_MUTATION} from "../../../graphql/mutations/updateConsults";
@@ -14,7 +12,7 @@ export const ConsultController = (props) => {
     const auth = useAuth()
 
     const year = moment().month() > 7 ? moment().year() : moment().year() - 1
-    const [course, setCourse] = useState(0)
+    const [course] = useState(0)
 
     const userCourses = props.location.state?.courses || auth.user?.courses
 
@@ -38,11 +36,6 @@ export const ConsultController = (props) => {
         }
     })
 
-    const getCourse = (e) => {
-        setCourse(e.target.getAttribute('data-index'))
-        refetch()
-    }
-
     let {loading, data, error, refetch, networkStatus} = useQuery(
         userCourses[course].group
             ? FETCH_GROUP_CONSULTS_QUERY
@@ -65,10 +58,10 @@ export const ConsultController = (props) => {
     )
 
     const updateGroupData = ({date, hours, column, row}) => {
-        const group = data.find((item, index) => item.group === row)
+        const group = data.find((item) => item.group === row)
         const groupIndex = data.indexOf(group)
-        let consult = group.consults.find((item) => item.id === column)
-        const dateIndex = group.consults.indexOf(consult)
+        let consult = group.consult.find((item) => item.id === column)
+        const dateIndex = group.consult.indexOf(consult)
         changed = true
         date =
             date instanceof Date ? date.toLocaleDateString('ru-RU').split('.') : date
@@ -145,7 +138,7 @@ export const ConsultController = (props) => {
         return result
     }
 
-    const save = async (e) => {
+    const save = async () => {
         await update({
             variables: {
                 teacherId: props.location.state?.teacher || auth.user.teacher,

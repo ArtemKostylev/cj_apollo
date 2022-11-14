@@ -36,10 +36,10 @@ const GroupConsultsView = ({data, controlsConfig, updateDates, long = false, yea
           {Array(long ? 16 : 8).fill(1).map((num, index) => (
             <HourDateCell
               updateDates={updateDates}
-              column={item.consults[index]?.id || `ui_${index}`}
+              column={item.consult[index]?.id || `ui_${index}`}
               row={item.group}
-              date={item.consults[index] && moment(item.consults[index].date)}
-              hours={item.consults[index]?.hours}
+              date={item.consult[index] && moment(item.consult[index].date)}
+              hours={item.consult[index]?.hours}
               year={year}
             />
           ))}

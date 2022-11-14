@@ -34,6 +34,6 @@ const ControlsContainer = styled.div`
 
 export const TableControls = ({config}: Props) => (
   <ControlsContainer>
-    {config.map(it => React.cloneElement(ComponentMap[it.type], omit(it, 'type')))}
+    {config.map(it => React.cloneElement(ComponentMap[it.type], {...omit(it, 'type'), key: it.text}))}
   </ControlsContainer>
 )

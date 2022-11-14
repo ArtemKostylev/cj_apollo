@@ -31,6 +31,7 @@ const LessonCell = styled.td`
 export const Compensation = () => {
   let auth = useAuth();
   const location = useLocation() as any;
+  let studentData: TeacherCourseStudent[] = [];
 
   const [course, setCourse] = useState(0);
   const [month, setMonth] = useState(moment().month());
@@ -130,12 +131,11 @@ export const Compensation = () => {
       text: "Сохранить",
       onClick: save,
     },
-  ], [userCourses, currentYear, course]);
+  ], [userCourses, currentYear, course, studentData]);
 
 
   if (loading || networkStatus === NetworkStatus.refetch) return <div>Загрузка</div>;
   if (error) throw new Error('503');
-  let studentData: TeacherCourseStudent[] = [];
 
   data.fetchReplacements.forEach((entry: TeacherCourseStudent) => {
     if (entry.journalEntry.length > 0) {

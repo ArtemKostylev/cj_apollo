@@ -24,6 +24,8 @@ export const Notes = () => {
   const [currentYear, setCurrentYear] = useState(moment().year());
   const [course, setCourse] = useState(0);
 
+  const [value, setValue] = useState('');
+
   const onYearChange = useCallback((year: number) => {
     setCurrentYear(year);
   }, []);
@@ -71,8 +73,6 @@ export const Notes = () => {
     }
   );
 
-  const [value, setValue] = useState('');
-
   const controlsConfig: TableControlsConfig = useMemo(() => [
     {
       type: TableControlType.SELECT,
@@ -91,7 +91,7 @@ export const Notes = () => {
       text: "Сохранить",
       onClick: save,
     }
-  ], [userCourses, currentYear, course]);
+  ], [userCourses, currentYear, course, value, data]);
 
   const spinner = <div>Загрузка</div>;
 

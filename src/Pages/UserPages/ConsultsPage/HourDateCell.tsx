@@ -6,7 +6,7 @@ import {UpdateDatesProps} from './ConsultController';
 
 type Props = {
   column: number;
-  hours: string;
+  hours: number;
   date: Moment;
   row: number;
   updateDates: (props: UpdateDatesProps) => void;
@@ -21,8 +21,9 @@ const HourDateCell = ({column, hours, date, row, updateDates, year}: Props) => {
   }, [hours, setHoursValue]);
 
   const onChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-    setHoursValue(event.target.value);
-    updateDates({date, hours: event.target.value, column, row});
+    const value = parseFloat(event.target.value)
+    setHoursValue(value);
+    updateDates({date, hours: value, column, row});
   }, [date, column, row]);
 
   return (

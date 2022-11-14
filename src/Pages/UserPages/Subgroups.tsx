@@ -40,19 +40,19 @@ export const Subgroups = () => {
   const auth = useAuth();
   const year = useMemo(() => getYearByMonth(moment().month()), [])
 
-  const availableCourses = auth.user.versions[year].courses.filter((course) => course.group);
+  const userCourses = auth.user.versions[year].courses.filter((course) => course.group);
 
   const [course, setCourse] = useState(0);
 
-  const getCourse = (e: any) => {
-    setCourse(e.target.getAttribute('data-index'));
+  const getCourse = (course: number) => {
+    setCourse(course);
   };
 
   let {loading, data, error, refetch, networkStatus} = useQuery(
     FETCH_SUBGROUPS_QUERY,
     {
       variables: {
-        courseId: availableCourses[course].id,
+        courseId: userCourses[course].id,
         teacherId: auth.user.versions[year].id,
       },
       notifyOnNetworkStatusChange: true,
@@ -82,8 +82,8 @@ export const Subgroups = () => {
   const controlsConfig: TableControlsConfig = useMemo(() => [
     {
       type: TableControlType.SELECT,
-      data: availableCourses.map((course) => course.name),
-      text: availableCourses[course].name,
+      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+      text: userCourses[course].name,
       onClick: getCourse,
     },
     {
@@ -91,7 +91,7 @@ export const Subgroups = () => {
       text: 'Сохранить',
       onClick: save,
     },
-  ], [availableCourses, course]);
+  ], [userCourses, course, data]);
 
   const spinner = <div>Загрузка</div>;
 
