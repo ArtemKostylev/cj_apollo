@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {Months, Periods, Quarters} from '../@types/date';
+import {Months, Periods, Quarters} from '../constants/date';
 
 const INACTIVE_MONTHS = [Months.JUNE, Months.JULY, Months.AUGUST];
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {PROGRAMS} from '../../../constants/programs';
 import HourDateCell from './HourDateCell';
-import {TableControls, TableControlsConfig} from '../../../shared/ui/TableControls';
+import {TableControls, TableControlsConfig} from '../../../ui/TableControls';
 import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
 import moment from 'moment';

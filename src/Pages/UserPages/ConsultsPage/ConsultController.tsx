@@ -10,11 +10,11 @@ import {NetworkStatus, useMutation, useQuery} from "@apollo/client";
 import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";
 import moment, {Moment} from "moment";
-import {TableControlsConfig, TableControlType} from '../../../shared/ui/TableControls';
-import {YEARS} from '../../../@types/date';
+import {TableControlsConfig, TableControlType} from '../../../ui/TableControls';
+import {YEARS} from '../../../constants/date';
 import {useLocation} from "react-router-dom";
 import {insertInPosition, updateInPosition} from '../../../utils/crud';
-import {DATE_FORMAT} from '../../../@types/date';
+import {DATE_FORMAT} from '../../../constants/date';
 import {getCurrentAcademicYear, getYearByMonth} from '../../../utils/academicDate';
 
 export type UpdateDatesProps = {

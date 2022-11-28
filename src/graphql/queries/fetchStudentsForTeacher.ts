@@ -1,15 +1,13 @@
 import {gql} from '@apollo/client';
 
-export const FETCH_STUDENTS_FOR_TEACHER = gql`
-    query fetchStudentsForTeacher($teacherId: Int! $year: Int!) {
-        fetchStudentsForTeacher(teacherId: $teacherId, year: $year) {
-            student {
-                id
-                name
-                surname
-                class
-                program
-            }
+export const FETCH_TEACHER_STUDENTS = gql`
+    query fetchTeacherStudents($teacherId: Int! $year: Int!) {
+        fetchTeacherStudents(teacherId: $teacherId, year: $year) {
+            id
+            name
+            surname
+            class
+            program
         }
     }
 `;

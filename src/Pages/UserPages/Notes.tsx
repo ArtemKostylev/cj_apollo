@@ -1,14 +1,14 @@
 import {useAuth} from '../../hooks/useAuth';
 import '../../styles/Notes.css';
-import {TableControls, TableControlsConfig, TableControlType} from '../../shared/ui/TableControls';
-import {PageWrapper} from '../../shared/ui/PageWrapper';
+import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
+import {PageWrapper} from '../../ui/PageWrapper';
 import {useCallback, useMemo, useState} from 'react';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
 import {FETCH_NOTES_QUERY} from '../../graphql/queries/fetchNotes';
 import {UPDATE_NOTE_MUTATION} from '../../graphql/mutations/updateNotes';
 import moment from 'moment';
 import {useLocation} from 'react-router-dom';
-import {YEARS} from '../../@types/date';
+import {YEARS} from '../../constants/date';
 import styled from 'styled-components';
 import {theme} from '../../styles/theme';
 

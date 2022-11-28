@@ -4,7 +4,7 @@ import {useFormik} from 'formik';
 import {useMutation} from '@apollo/client';
 import {SIGN_IN} from '../graphql/mutations/signIn';
 import {useHistory} from 'react-router-dom';
-import {Button} from '../shared/ui/Button';
+import {Button} from '../ui/Button';
 import {useAuth} from '../hooks/useAuth';
 
 const LoginFormLayout = styled.form`

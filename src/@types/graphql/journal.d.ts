@@ -50,10 +50,3 @@ declare type GroupConsult = {
   hours: number;
   program: string;
 }
-
-declare type MidtermExam = {
-  date: string;
-  mark: string;
-  contents: string;
-  student: Student;
-}

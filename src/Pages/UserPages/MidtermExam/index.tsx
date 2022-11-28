@@ -1,77 +1,50 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {Layout} from './Layout';
-import {ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
-import ReactModal from 'react-modal';
-import {Spinner} from '../../../shared/ui/Spinner';
-import {EditForm} from './EditForm';
-import {TableControlsConfig, TableControlType} from '../../../shared/ui/TableControls';
-import {MidtermExamLabel} from '../../../constants/midtermExamType';
-import {PERIODS_RU, YEARS} from '../../../@types/date';
-import {DropdownOptionType} from '../../../shared/ui/Dropdown';
+import {DEFAULT_MIDTERM_EXAM, ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
+import {Spinner} from '../../../ui/Spinner';
+import {TableControlsConfig, TableControlType} from '../../../ui/TableControls';
+import {YEARS} from '../../../constants/date';
 
-export const MidtermExam = () => {
-  const {loading, error, remove, period, onPeriodChange, selectedRecord, type, onTypeChange, year, onYearChange} = useMidtermExamContext();
-  const [modalOpened, setModalOpened] = useState(false);
+const MidtermExam = () => {
+  const {loading, error, selectedRecord, type, onTypeChange, year, onYearChange, data, addMidtermExam} = useMidtermExamContext();
 
-  const onCrudClick = useCallback(() => {
-    setModalOpened(true);
-  }, []);
-
-  const onDeleteClick = useCallback(async () => {
-    await remove({
-      variables: {
-        id: selectedRecord
+  const controlsConfig: TableControlsConfig = useMemo(() => {
+    return [
+      {
+        type: TableControlType.SELECT,
+        options: new Map(data.types?.map(it => [it.id, it.name])),
+        text: data?.types?.[type]?.name,
+        onClick: onTypeChange
+      },
+      {
+        type: TableControlType.SELECT,
+        options: YEARS,
+        text: YEARS.get(year)?.text,
+        onClick: onYearChange
+      },
+      {
+        type: TableControlType.BUTTON,
+        text: "Добавить",
+        onClick: () => addMidtermExam(DEFAULT_MIDTERM_EXAM),
+      },
+      {
+        type: TableControlType.BUTTON,
+        text: 'Удалить',
+        onClick: () => {
+        },
+        disabled: selectedRecord === undefined
       }
-    });
-  }, []);
-
-
-  const onClose = useCallback(() => {
-    setModalOpened(false);
-  }, [])
-
-  const controlsConfig: TableControlsConfig = useMemo(() => [
-    {
-      type: TableControlType.SELECT,
-      options: new Map() as Map<string, DropdownOptionType>,
-      text: MidtermExamLabel[type],
-      onClick: onTypeChange
-    },
-    {
-      type: TableControlType.SELECT,
-      options: YEARS,
-      text: YEARS.get(year)?.text,
-      onClick: onYearChange
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: "Добавить",
-      onClick: onCrudClick,
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: 'Изменить',
-      onClick: onCrudClick,
-      disabled: !selectedRecord
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: 'Удалить',
-      onClick: onDeleteClick,
-      disabled: !selectedRecord
-    }
-  ], [year, type])
+    ]
+  }, [year, type, selectedRecord])
 
   if (loading) return <Spinner/>
   if (error) throw new Error('503')
 
-  return (
-    <Layout controlsConfig={controlsConfig}>
-      <ReactModal isOpen={modalOpened}
-                  className='modal'
-                  overlayClassName='overlay'>
-        <EditForm onClose={onClose}/>
-      </ReactModal>
-    </Layout>
-  )
+  return (<Layout controlsConfig={controlsConfig}/>)
 }
+
+export const MidtermExamWithContext = () => (
+  <ProvideMidtermExam>
+    <MidtermExam/>
+  </ProvideMidtermExam>
+)

@@ -1,6 +1,6 @@
 import React from 'react';
 import {SpecPageView} from './SpecPageView';
-import {Spinner} from '../../../shared/ui/Spinner';
+import {Spinner} from '../../../ui/Spinner';
 import {FETCH_SPECIALIZATION} from '../../../graphql/queries/fetchSpecialization';
 import {NetworkStatus, useQuery} from '@apollo/client';
 

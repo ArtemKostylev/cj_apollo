@@ -1,15 +1,13 @@
 import React, {useState, useContext, createContext, ReactNode, useCallback} from 'react';
-import {useMutation, useQuery} from '@apollo/client';
-import {MidtermExam} from './index';
-import {normalizeByKey} from '../../../utils/nornalizer';
-import {MidtermExamType} from '../../../constants/midtermExamType';
-import {FETCH_STUDENTS_FOR_TEACHER} from '../../../graphql/queries/fetchStudentsForTeacher';
+import {useQuery} from '@apollo/client';
+import {FETCH_TEACHER_STUDENTS} from '../../../graphql/queries/fetchStudentsForTeacher';
 import {useAuth} from '../../../hooks/useAuth';
 import {FETCH_MIDTERM_EXAMS} from '../../../graphql/queries/fetchMidtermExams';
 import {getBorderDatesForPeriod, getCurrentAcademicPeriod, getCurrentAcademicYear} from '../../../utils/academicDate';
-import {Periods} from '../../../@types/date';
-import {UPDATE_MIDTERM_EXAM} from '../../../graphql/mutations/updateMidtermExam';
-import {DELETE_MIDTERM_EXAM} from '../../../graphql/mutations/deleteMidtermExam';
+import {Periods} from '../../../constants/date';
+import {FETCH_MIDTERM_EXAM_TYPES} from '../../../graphql/queries/fetchMidterExamTypes';
+import {addToQuery, Data, modifyEntity, useApollo} from '../../../hooks/useApolloCache';
+import {normalizeByKey, toDropdownOption} from '../../../utils/normalizer';
 
 const MidtermExamContext = createContext({} as MidtermExamContext);
 
@@ -17,31 +15,32 @@ type Props = {
   children: ReactNode;
 }
 
-interface MidtermExamsData {
-  midtermExams: MidtermExam[];
+interface MidtermExamsTypeData {
+  fetchMidtermExamTypes: MidtermExamType[];
 }
 
 interface StudentsData {
-  students: Student[];
+  fetchTeacherStudents: Student[];
 }
 
 type MidtermExamContext = {
   loading: boolean;
   data: {
-    select: Student[] | undefined;
     table: Record<string, MidtermExam> | undefined;
+    select: Map<string | number, DropdownOptionType>;
+    types: MidtermExamType[] | undefined;
   };
   error: any;
-  selectedRecord: string | undefined;
-  onRowClick: (value: string) => void;
-  onTypeChange: (value: string) => void;
+  selectedRecord: number | undefined;
+  onRowClick: (value: number) => void;
+  onTypeChange: (value: number) => void;
   onYearChange: (value: number) => void;
   onPeriodChange: (value: Periods) => void;
-  update: any;
-  remove: any;
-  type: string;
+  type: number;
   year: number;
   period: Periods;
+  modifyMidtermExam: modifyEntity<MidtermExam>,
+  addMidtermExam: addToQuery<MidtermExam>
 }
 
 export function ProvideMidtermExam({children}: Props) {
@@ -53,45 +52,67 @@ export const useMidtermExamContext = () => {
   return useContext(MidtermExamContext);
 };
 
+export const DEFAULT_MIDTERM_EXAM = {
+  __typename: 'MidtermExam',
+  id: 0,
+  number: 1,
+  contents: '',
+  student: null,
+  date: null,
+  result: '',
+  type: null,
+};
+
 function useProvideMidtermExam() {
-  const [type, setType] = useState<string>(MidtermExamType.CREDIT);
+  const [type, setType] = useState<number>(0);
   const [year, setYear] = useState<number>(getCurrentAcademicYear());
   const [period, setPeriod] = useState<Periods>(getCurrentAcademicPeriod());
+  const [selectedRecord, setSelectedRecord] = useState<number | undefined>(undefined);
   const {user: {versions}} = useAuth();
 
-  const {loading: studentsLoading, data: studentsData, error: studentsError} = useQuery<StudentsData>(FETCH_STUDENTS_FOR_TEACHER, {
-    variables: {teacherId: versions[year].id, year}
-  });
-  const {loading: midtermExamLoading, data: midtermExamData, error: midtermExamError} = useQuery<MidtermExamsData>(FETCH_MIDTERM_EXAMS, {
-    variables: {teacherId: versions[year].id, type, ...getBorderDatesForPeriod(period, year)}
-  });
-  const [update] = useMutation(UPDATE_MIDTERM_EXAM);
-  const [remove] = useMutation(DELETE_MIDTERM_EXAM);
-
-  const onTypeChange = useCallback((value: string) => setType(value), []);
+  const onTypeChange = useCallback((value: number) => setType(value), []);
   const onYearChange = useCallback((value: number) => setYear(value), []);
   const onPeriodChange = useCallback((value: Periods) => setPeriod(value), []);
+  const onRowClick = useCallback((id: number) => setSelectedRecord(id), [])
 
-  const [selectedRecord, setSelectedRecord] = useState<string | undefined>(undefined);
+  const {
+    loading: studentsLoading,
+    data: studentsData,
+    error: studentsError
+  } = useQuery<StudentsData>(FETCH_TEACHER_STUDENTS, {
+    variables: {teacherId: versions[year].id, year}
+  }); //? is this needed here????
 
-  const onRowClick = useCallback((id: string) => setSelectedRecord(id), [])
+  const {
+    loading: midtermExamTypesLoading,
+    data: midtermExamTypes,
+    error: midtermExamTypesError
+  } = useQuery<MidtermExamsTypeData>(FETCH_MIDTERM_EXAM_TYPES);  //? is this needed here????
+
+  const [{loading, error, data}, modifyMidtermExam, addMidtermExam] = useApollo<MidtermExam>(
+    FETCH_MIDTERM_EXAMS, {
+      teacherId: versions[year].id, year, typeId: type, ...getBorderDatesForPeriod(period, year)
+    },
+    'fetchMidtermExams'
+  );
 
   return {
-    loading: midtermExamLoading || studentsLoading,
     data: {
-      select: studentsData?.students,
-      table: midtermExamData?.midtermExams.reduce(normalizeByKey<MidtermExam>('id'), {})
+      table: data?.reduce(normalizeByKey<MidtermExam>('id'), {}),
+      select: toDropdownOption<Student>(studentsData?.fetchTeacherStudents, it => `${it.surname || ''} ${it.name || ''}`),
+      types: midtermExamTypes?.fetchMidtermExamTypes
     },
-    error: studentsError || midtermExamError,
+    loading: loading || studentsLoading || midtermExamTypesLoading,
+    error: studentsError || error || midtermExamTypesError,
     selectedRecord,
     onRowClick,
     onTypeChange,
     onYearChange,
     onPeriodChange,
-    remove,
-    update,
     type,
     year,
-    period
+    period,
+    modifyMidtermExam,
+    addMidtermExam
   }
 }

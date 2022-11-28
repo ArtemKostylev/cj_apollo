@@ -1,5 +1,3 @@
-import {DropdownOptionType} from '../shared/ui/Dropdown';
-
 export const PERIODS = ['first', 'second', 'third', 'fourth'];
 
 export const GROUP_PERIODS = {

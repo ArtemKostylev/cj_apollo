@@ -1,10 +1,10 @@
 import React from 'react';
 import HourDateCell from './HourDateCell';
-import {TableControls, TableControlsConfig} from '../../../shared/ui/TableControls';
+import {TableControls, TableControlsConfig} from '../../../ui/TableControls';
 import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
 import times from 'lodash/times';
-import {NameCell} from '../../../shared/ui/table/NameCell';
+import {NameView} from '../../../ui/cells/NameView';
 import moment from 'moment';
 
 type Props = {
@@ -30,7 +30,7 @@ const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props
         <tbody>
         {data.map((item: any) => (
           <tr key={item.student.surname}>
-            <NameCell name={item.student.name} surname={item.student.surname}/>
+            <NameView name={item.student.name} surname={item.student.surname}/>
             {times(16, (index) => (
               <HourDateCell
                 updateDates={updateDates}

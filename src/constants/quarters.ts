@@ -1,4 +1,4 @@
-import {Months} from '../@types/date';
+import {Months} from './date';
 
 export const QUARTERS = [
   [8, 9],

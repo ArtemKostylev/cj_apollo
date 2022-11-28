@@ -4,8 +4,6 @@ export const UPDATE_MIDTERM_EXAM = gql`
     mutation updateMidtermExam($data: MidtermExamInput) {
         updateMidtermExam(data: $data) {
             id
-            mark
-            date
             student {
                 id
                 name
@@ -13,6 +11,14 @@ export const UPDATE_MIDTERM_EXAM = gql`
                 class
                 program
             }
+            date
+            contents
+            result
+            type {
+                id
+                name
+            }
+            number
         }
     }
 `;

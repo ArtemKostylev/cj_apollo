@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, ChangeEvent} from 'react';
-import {EditableDateCell} from '../../../shared/ui/EditableDateCell';
+import {DateCell} from '../../../ui/cells/DateCell';
 import {HOURS} from '../../../constants/hours';
 import moment, {Moment} from 'moment';
 import {UpdateDatesProps} from './ConsultController';
@@ -29,8 +29,8 @@ const HourDateCell = ({column, hours, date, row, updateDates, year}: Props) => {
   return (
     <React.Fragment>
       <td>
-        <EditableDateCell month={moment().month()} initialValue={date} column={column || 0} row={row || 0} updateDates={updateDates} unlimited
-                          year={year}/>
+        <DateCell month={moment().month()} initialValue={date} column={column || 0} row={row || 0} updateDates={updateDates} unlimited
+                  year={year}/>
       </td>
       <td>
         <select value={hoursValue} onChange={onChange}>

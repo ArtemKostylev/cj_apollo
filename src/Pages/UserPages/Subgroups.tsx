@@ -5,7 +5,7 @@ import {UPDATE_SUBGROUPS_MUTATION} from '../../graphql/mutations/updateSubgroups
 import {FETCH_SUBGROUPS_QUERY} from '../../graphql/queries/fetchSubgroups';
 import {useAuth} from '../../hooks/useAuth';
 import '../../styles/Subgroups.css';
-import {TableControls, TableControlsConfig, TableControlType} from '../../shared/ui/TableControls';
+import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
 import moment from 'moment';
 import {getYearByMonth} from '../../utils/academicDate';
 

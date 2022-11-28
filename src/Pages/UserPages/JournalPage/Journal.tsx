@@ -2,16 +2,16 @@ import React, {useCallback, useMemo, useState} from 'react';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import moment, {Moment} from 'moment';
 import 'moment/locale/ru';
-import {TableControls, TableControlType} from '../../../shared/ui/TableControls';
-import IndividualJournalView from './IndividualJournalView';
-import GroupJournalView from './GroupJournalView';
+import {TableControls, TableControlType} from '../../../ui/TableControls';
+import {IndividualJournalView} from './IndividualJournalView';
+import {GroupJournalView} from './GroupJournalView';
 import {useMutation, useQuery, NetworkStatus} from '@apollo/client';
 import {FETCH_JOURNAL_QUERY} from '../../../graphql/queries/fetchJournal';
 import {useAuth} from '../../../hooks/useAuth';
 import {UPDATE_JOURNAL_MUTATION} from '../../../graphql/mutations/updateJournal';
 import {t} from '../../../static/text';
 import times from 'lodash/times';
-import {DATE_FORMAT, Months, MONTHS_RU, Periods, PERIODS_RU, YEARS} from '../../../@types/date';
+import {DATE_FORMAT, Months, MONTHS_RU, Periods, PERIODS_RU, YEARS} from '../../../constants/date';
 import {
   getCurrentAcademicMonth,
   getCurrentAcademicPeriod,
@@ -293,7 +293,7 @@ export default function Journal() {
 
   const spinner = <div>Загрузка</div>;
 
-  if (error) throw new Error('503');
+  if (error) throw new Error(error.message);
   if (loading) return spinner;
   if (networkStatus === NetworkStatus.refetch) return spinner;
   if (!data) throw new Error('500');
@@ -438,7 +438,7 @@ export default function Journal() {
       <TableControls config={controlsConfig}/>
       {userCourses[course].group ? (
         <GroupJournalView
-          dates_by_group={dates_by_group}
+          datesByGroup={dates_by_group}
           groupedData={groupedData}
           period={period}
           year={currentYear}

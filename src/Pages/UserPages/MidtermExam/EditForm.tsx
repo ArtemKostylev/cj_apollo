@@ -1,7 +1,7 @@
 import React from 'react';
 import {useFormik} from 'formik';
 import {useMidtermExamContext} from './useMidtermExamContext';
-import {Button} from '../../../shared/ui/Button';
+import {Button} from '../../../ui/Button';
 
 const INITIAL_VALUES = {
   student: '',

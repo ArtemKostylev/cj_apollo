@@ -4,14 +4,14 @@ import React, {Fragment, useCallback, useMemo, useState} from 'react';
 import {UPDATE_REPLACEMENTS_MUTATION} from '../../graphql/mutations/updateReplacement';
 import {FETCH_REPLACEMENTS_QUERY} from '../../graphql/queries/fetchReplacements';
 import {useAuth} from '../../hooks/useAuth';
-import {EditableDateCell} from '../../shared/ui/EditableDateCell';
-import {TableControls, TableControlsConfig, TableControlType} from '../../shared/ui/TableControls';
+import {DateCell} from '../../ui/cells/DateCell';
+import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
 import '../../styles/Compensation.css';
 import {useLocation} from "react-router-dom";
 import times from 'lodash/times';
 import styled from "styled-components";
 import {updateInPosition} from '../../utils/crud';
-import {MONTHS_RU, YEARS} from '../../@types/date';
+import {MONTHS_RU, YEARS} from '../../constants/date';
 import {getCurrentAcademicYear, getYearByMonth} from '../../utils/academicDate';
 
 type updateDatesProps = {
@@ -195,7 +195,7 @@ export const Compensation = () => {
                       {lesson_date ? `${lesson_date.split('-')[2]}.${lesson_date.split('-')[1]}.${lesson_date.split('-')[0]}` : ''}
                     </LessonCell>
                     <td>
-                      {lesson && <EditableDateCell
+                      {lesson && <DateCell
                           initialValue={repl ? moment(repl.date) : undefined}
                           column={repl ? repl.id : 0}
                           group={lesson.id}

@@ -1,17 +1,21 @@
-import React from 'react';
+import React, {memo, useMemo} from 'react';
 import {findMark} from './JournalPageHelpers';
-import '../../../styles/Journal.css';
-import {EditableDateCell} from '../../../shared/ui/EditableDateCell';
-import {EditableCell} from '../../../shared/ui/EditableCell';
-import {PROGRAMS} from '../../../constants/programs';
+import {DateCell} from '../../../ui/cells/DateCell';
+import {SelectCell} from '../../../ui/cells/SelectCell';
 import {compareStudents} from '../../../utils/comparators';
-import {HOURS_OPTIONS, MARKS_OPTIONS} from '../../../constants/editableCellOptions';
 import {MONTHS_IN_PERIODS, QUARTERS_IN_PERIODS} from '../../../utils/academicDate';
-import {Months, MONTHS_RU, Periods} from '../../../@types/date';
+import {Months, MONTHS_RU, Periods} from '../../../constants/date';
 import {DateByGroup, Pair, UpdateData, UpdateDates, UpdateQuarterData} from './Journal';
+import {HOURS_OPTIONS, MARKS_OPTIONS} from '../../../constants/selectCellOptions';
+import {GroupHeader} from '../../../ui/Table/GroupHeader';
+import {NameHeader} from '../../../ui/Table/NameHeader';
+import {Header} from '../../../ui/Table/style/Header.styled';
+import {PeriodQuarters} from './PeriodQuarters';
+import {NameView} from '../../../ui/cells/NameView';
+import {Table} from '../../../ui/Table';
 
 type Props = {
-  dates_by_group: DateByGroup[][];
+  datesByGroup: DateByGroup[][];
   groupedData: Pair[];
   period: Periods;
   updateDates: UpdateDates;
@@ -21,129 +25,53 @@ type Props = {
   year: number;
 }
 
-const GroupJournalView = ({dates_by_group, groupedData, period, updateDates, updateMyData, updateQuarterData, onlyHours, year}: Props) => {
-  return (
-    <>
-      <table className='journal_table'>
-        <tbody>
-        {dates_by_group.map((group, g_index) => {
-          return (
-            <React.Fragment key={g_index}>
-              <tr className='group_row'>
-                <th colSpan={period === Periods.FIRST ? 23 : 27}>
-                  <div>
-                    <p>{`Класс:  ${groupedData[g_index].class}${
-                      PROGRAMS[`${groupedData[g_index].program}`]
-                    }`}</p>
-                    <p>{`Группа: ${
-                      groupedData[g_index].subgroup || 'не указана'
-                    }`}</p>
-                  </div>
-                </th>
-              </tr>
-              <tr>
-                <th className='name_column' rowSpan={2}>Имя ученика</th>
-                {MONTHS_IN_PERIODS[period].map((month) => (
-                  <th key={month} colSpan={month === Months.JANUARY ? 4 : 5}>
-                    {MONTHS_RU.get(month)?.text}
-                  </th>
-                ))}
-                {!onlyHours && (
-                  <>
-                    <th rowSpan={2} className='quarter_column'>
-                      {period === Periods.FIRST ? 'I четверть' : 'III четверть'}
-                    </th>
-                    <th rowSpan={2} className='quarter_column'>
-                      {period === Periods.SECOND ? 'II четверть' : 'IV четверть'}
-                    </th>
-                    {period === Periods.SECOND && (
-                      <th rowSpan={2} className='quarter_column'>
-                        Годовая оценка
-                      </th>
-                    )}
-                  </>
-                )}
-              </tr>
+export const GroupJournalView = memo(({datesByGroup, groupedData, period, updateDates, updateMyData, updateQuarterData, onlyHours, year}: Props) => {
+  const selectCellOptions = useMemo(() => onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS, [onlyHours]);
+  return (<div>
+    {datesByGroup.map((group, gIndex) => {
+      const groupItem = groupedData[gIndex];
 
-              <tr>
-                {group.map((date, id) => {
-                  return (
-                    <th className='date'>
-                      <EditableDateCell
-                        initialValue={date.date}
-                        column={id}
-                        month={date.month}
-                        group={g_index}
-                        updateDates={updateDates}
-                        full={false}
-                        key={id}
-                        year={year}
-                      />
-                    </th>
-                  );
+      return (
+        <Table key={gIndex}>
+          <thead>
+          <GroupHeader period={period} classNumber={groupItem.class} program={groupItem.program} subgroup={groupItem.subgroup}/>
+          <tr>
+            <NameHeader rowSpan={2}/>
+            {MONTHS_IN_PERIODS[period].map((month) => (
+              <Header key={month} colSpan={month === Months.JANUARY ? 4 : 5}>{MONTHS_RU.get(month)?.text}c</Header>))}
+            <PeriodQuarters period={period} onlyHours={onlyHours}/>
+          </tr>
+          <tr>
+            {group.map((date, id) => <Header hoverable>
+              <DateCell initialValue={date.date} column={id} month={date.month} group={gIndex} updateDates={updateDates}
+                        full={false} key={id} year={year}/>
+            </Header>)}
+          </tr>
+          </thead>
+          <tbody>
+          {groupItem.students.sort(compareStudents).map(({student, journalEntry, archived, quaterMark}) => (
+            <tr>
+              <NameView name={student.name} surname={student.surname} archived={archived}/>
+              {group.map((date, index) => (
+                <SelectCell disabled={archived} value={findMark(date.date, journalEntry)} key={index} options={selectCellOptions}
+                            onSelect={(value) => updateMyData({row: student.id, column: index, group: gIndex, value: (value as string)})}/>
+              ))}
+              {!onlyHours &&
+                QUARTERS_IN_PERIODS[period].map((quarter) => {
+                  const mark = quaterMark.find((mark) => mark.period === quarter);
+
+                  return <SelectCell value={mark?.mark} key={quarter} options={MARKS_OPTIONS}
+                                     onSelect={(value) => updateQuarterData({
+                                       row: student.id ? student.id : 0,
+                                       column: quarter,
+                                       value: (value as string)
+                                     })}/>
                 })}
-              </tr>
-              {groupedData[g_index].students
-                .sort(compareStudents)
-                .map((item) => (
-                  <tr>
-                    <td
-                      className='name_cell'
-                      style={{color: item.archived ? 'gray' : 'black'}}
-                    >{`${item.student.surname} ${item.student.name} ${
-                      item.archived ? '(A)' : ''
-                    }`}</td>
-                    {group.map((date, index) => (
-                      <EditableCell
-                        disabled={item.archived}
-                        value={findMark(date.date, item.journalEntry)}
-                        onClick={(value) =>
-                          updateMyData({
-                            row: item.student.id,
-                            column: index,
-                            group: g_index,
-                            value: (value as string),
-                          })
-                        }
-                        key={index}
-                        options={onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS}
-                      />
-                    ))}
-                    {!onlyHours &&
-                      QUARTERS_IN_PERIODS[period].map((quarter) => {
-                        let mark;
-                        try {
-                          mark = item.quaterMark.find(
-                            (mark) => mark.period === quarter
-                          );
-                        } catch {
-                          mark = undefined;
-                        }
-
-                        return (
-                          <EditableCell
-                            value={mark?.mark}
-                            onClick={(value) =>
-                              updateQuarterData({
-                                row: item.student.id ? item.student.id : 0,
-                                column: quarter,
-                                value: (value as string),
-                              })
-                            }
-                            key={quarter}
-                            options={MARKS_OPTIONS}
-                          />
-                        );
-                      })}
-                  </tr>
-                ))}
-            </React.Fragment>
-          );
-        })}
-        </tbody>
-      </table>
-    </>
-  );
-};
-
-export default GroupJournalView;
+            </tr>
+          ))}
+          </tbody>
+        </Table>
+      );
+    })}
+  </div>)
+});
