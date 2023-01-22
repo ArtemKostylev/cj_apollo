@@ -1,9 +1,9 @@
 import React from 'react';
-import {PageWrapper} from '../../../shared/ui/PageWrapper';
-import {Button} from '../../../shared/ui/Button';
+import {PageWrapper} from '../../../ui/PageWrapper';
+import {Button} from '../../../ui/Button';
 import {useQuery} from '@apollo/client';
 import {FETCH_ANNUAL_REPORT} from '../../../graphql/queries/fetchAnnualReport';
-import {Spinner} from '../../../shared/ui/Spinner';
+import {Spinner} from '../../../ui/Spinner';
 
 export const Reports = () => {
     const {data, loading, error, refetch} = useQuery(FETCH_ANNUAL_REPORT, {

@@ -12,7 +12,7 @@ export const FETCH_GROUP_CONSULTS_QUERY = gql`
             year: $year
         ) {
             group
-            consults {
+            consult {
                 id
                 date
                 hours

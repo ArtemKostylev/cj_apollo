@@ -1,8 +1,9 @@
-import React, {useState, useContext, createContext} from 'react';
+import React, {useState, useContext, createContext, useMemo} from 'react';
 import {USER_ALIAS} from '../constants/localStorageAliases';
 import {fromPairs} from 'lodash';
-import {getYear} from '../utils/date';
-import moment from 'moment';
+import {getCurrentAcademicYear} from '../utils/academicDate';
+import {useHistory} from 'react-router-dom';
+import {ROUTES} from '../constants/routes';
 
 type signInCallback = (payload: AuthPayload, nav: () => void) => void;
 type signOutCallback = (nav: () => void) => void;
@@ -18,7 +19,7 @@ type AuthContextProps = {
 
 const AuthContext = createContext({} as AuthContextProps);
 
-export function ProvideAuth({children}: PrimitiveComponentProps) {
+export function AuthProvider({children}: PrimitiveComponentProps) {
   const auth = useProvideAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
@@ -28,19 +29,28 @@ export const useAuth = () => {
 };
 
 function useProvideAuth(): AuthContextProps {
-  const cashed_user = localStorage.getItem(USER_ALIAS);
+  const cashed_user = useMemo(() => localStorage.getItem(USER_ALIAS), []);
+  const history = useHistory();
 
   const [user, setUser] = useState(() => {
     const userObj = cashed_user ? JSON.parse(cashed_user) : undefined;
+
     if (userObj?.role?.name) {
       localStorage.removeItem(USER_ALIAS);
       return undefined;   // Old version of user object detection
     }
     return userObj
-  }) 
+  })
+
+  if (!user) history.replace(ROUTES.LOGIN);
 
   const signIn: signInCallback = (payload, nav) => {
-    const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getYear(moment().month()),
+    if (!payload?.user?.role) {
+      localStorage.clear();
+      return;
+    }
+
+    const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getCurrentAcademicYear(),
       {
         id: it.id,
         courses: it.relations.map(it => it.course)
@@ -59,9 +69,9 @@ function useProvideAuth(): AuthContextProps {
   };
 
   const signOut: signOutCallback = (nav) => {
+    nav();
     setUser(undefined);
     localStorage.removeItem(USER_ALIAS);
-    nav();
   };
 
   return {

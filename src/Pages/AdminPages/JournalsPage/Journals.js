@@ -1,21 +1,22 @@
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import {useQuery} from '@apollo/client';
 import {FETCH_JOURNAL_QUERY} from "../../../graphql/queries/fetchJournal";
 import {FETCH_TEACHERS_QUERY} from "../../../graphql/queries/fetchTeachers";
 import '../../../styles/Journals.css';
 import moment from 'moment';
 import {QUARTERS, QUARTERS_RU} from '../../../constants/quarters';
-import {ACADEMIC_YEARS} from '../../../constants/academicYears';
 import {PERIODS} from '../../../constants/periods';
 import {getQuarter} from '../../../utils/date';
 import {useHistory} from 'react-router-dom';
 
-export const Journals = () => {
+export const Journals = memo(() => {
     let history = useHistory();
 
     const [teacherIndex, setTeacherIndex] = useState();
     const [period, setPeriod] = useState(getQuarter(moment().month()));
-
+    const [year, setYear] = useState(
+        moment().month() > 7 ? moment().year() : moment().year() - 1
+    );
     const [course, setCourse] = useState(0);
 
     const spinner = <div>Загрузка</div>;
@@ -151,7 +152,7 @@ export const Journals = () => {
 
         if (error) throw new Error(503);
 
-        if (!journal.fetchJournal[0]?.student) {
+        if (journal.fetchJournal[0].student === null) {
             return <p>Для данного предмета еще не назначены ученики</p>;
         }
 
@@ -343,4 +344,4 @@ export const Journals = () => {
             </div>
         </div>
     );
-};
+});

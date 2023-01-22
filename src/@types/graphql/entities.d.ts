@@ -1,5 +1,4 @@
-declare type Student = {
-  id: number;
+declare interface Student extends PrimitiveCacheEntity {
   name: string;
   surname: string;
   class: number;
@@ -39,4 +38,19 @@ declare type Course = {
 declare type FreezeVersion = {
   id: number;
   year: number;
+}
+
+declare interface MidtermExam extends PrimitiveCacheEntity {
+  student: Student | null;
+  date: string | null;
+  contents: string;
+  result: string;
+  type: MidtermExamType | null;
+  number: number;
+
+  [key: string]: any;
+}
+
+declare interface MidtermExamType extends PrimitiveCacheEntity {
+  name: string;
 }
