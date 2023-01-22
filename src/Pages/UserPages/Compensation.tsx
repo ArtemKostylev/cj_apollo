@@ -12,7 +12,9 @@ import times from 'lodash/times';
 import styled from "styled-components";
 import {updateInPosition} from '../../utils/crud';
 import {MONTHS_RU, YEARS} from '../../constants/date';
-import {getCurrentAcademicYear, getYearByMonth} from '../../utils/academicDate';
+import {getCurrentAcademicYear, SECOND_PERIOD_MONTHS} from '../../utils/academicDate';
+import {TableCell} from '../../ui/cells/styles/TableCell.styled';
+import {NameView} from '../../ui/cells/NameView';
 
 type updateDatesProps = {
   date: Moment,
@@ -21,7 +23,7 @@ type updateDatesProps = {
   row: number
 }
 
-const LessonCell = styled.td`
+const LessonCell = styled(TableCell)`
   background-color: #eff0f0;
   cursor: default;
   padding-left: 4px;
@@ -40,7 +42,7 @@ export const Compensation = () => {
   const teacher = useMemo(() => location.state?.versions[currentYear].id || auth.user.versions[currentYear].id, [currentYear])
   const userCourses: Course[] = useMemo(() => location.state?.courses || auth.user?.versions[currentYear].courses, [location, auth])
 
-  const year = getYearByMonth(month, currentYear);
+  const year = SECOND_PERIOD_MONTHS.includes(month) ? currentYear + 1 : currentYear;
 
   const onYearChange = useCallback((year: number) => {
     setCurrentYear(year);
@@ -178,7 +180,7 @@ export const Compensation = () => {
         {studentData.map((item) => {
           return (
             <tr>
-              <td className='name_cell'>{`${item.student.surname} ${item.student.name}`}</td>
+              <NameView surname={item.student.surname} name={item.student.name}/>
               {times(10, (index: number) => {
                 let lesson = null;
                 let lesson_date = null;
@@ -194,7 +196,7 @@ export const Compensation = () => {
                     <LessonCell>
                       {lesson_date ? `${lesson_date.split('-')[2]}.${lesson_date.split('-')[1]}.${lesson_date.split('-')[0]}` : ''}
                     </LessonCell>
-                    <td>
+                    <TableCell>
                       {lesson && <DateCell
                           initialValue={repl ? moment(repl.date) : undefined}
                           column={repl ? repl.id : 0}
@@ -205,7 +207,7 @@ export const Compensation = () => {
                           year={currentYear}
                           unlimited
                       />}
-                    </td>
+                    </TableCell>
                   </Fragment>)
               })}
             </tr>

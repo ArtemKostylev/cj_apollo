@@ -3,8 +3,8 @@ import {Months, Periods, Quarters} from '../constants/date';
 
 const INACTIVE_MONTHS = [Months.JUNE, Months.JULY, Months.AUGUST];
 
-const SECOND_PERIOD_MONTHS = [Months.JANUARY, Months.FEBRUARY, Months.MARCH, Months.APRIL, Months.MAY];
-const FIRST_PERIOD_MONTHS = [Months.SEPTEMBER, Months.OCTOBER, Months.NOVEMBER, Months.DECEMBER];
+export const SECOND_PERIOD_MONTHS = [Months.JANUARY, Months.FEBRUARY, Months.MARCH, Months.APRIL, Months.MAY];
+export const FIRST_PERIOD_MONTHS = [Months.SEPTEMBER, Months.OCTOBER, Months.NOVEMBER, Months.DECEMBER];
 
 export const MONTHS_IN_PERIODS = {
   [Periods.FIRST]: FIRST_PERIOD_MONTHS,
@@ -44,13 +44,8 @@ export const getCurrentAcademicYear = () => {
 export const getDatesFromMonth = (month: Months, selectedYear: number) => {
 
   let year = selectedYear || moment().year();
-  const currentPeriod = getCurrentAcademicPeriod();
 
-  if (currentPeriod === Periods.FIRST) {
-    if (SECOND_PERIOD_MONTHS.includes(month)) year += 1;
-  } else {
-    if (FIRST_PERIOD_MONTHS.includes(month)) year -= 1;
-  }
+  if (SECOND_PERIOD_MONTHS.includes(month)) year += 1;
 
   const result = [];
   const startDate = moment().month(month).year(year).startOf('month');

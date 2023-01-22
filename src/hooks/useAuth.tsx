@@ -1,8 +1,7 @@
 import React, {useState, useContext, createContext, useMemo} from 'react';
 import {USER_ALIAS} from '../constants/localStorageAliases';
 import {fromPairs} from 'lodash';
-import moment from 'moment';
-import {getYearByMonth} from '../utils/academicDate';
+import {getCurrentAcademicYear} from '../utils/academicDate';
 import {useHistory} from 'react-router-dom';
 import {ROUTES} from '../constants/routes';
 
@@ -20,7 +19,7 @@ type AuthContextProps = {
 
 const AuthContext = createContext({} as AuthContextProps);
 
-export function ProvideAuth({children}: PrimitiveComponentProps) {
+export function AuthProvider({children}: PrimitiveComponentProps) {
   const auth = useProvideAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
@@ -51,7 +50,7 @@ function useProvideAuth(): AuthContextProps {
       return;
     }
 
-    const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getYearByMonth(moment().month()),
+    const versions = fromPairs(payload.user.teacher?.map(it => [it.freezeVersion?.year || getCurrentAcademicYear(),
       {
         id: it.id,
         courses: it.relations.map(it => it.course)

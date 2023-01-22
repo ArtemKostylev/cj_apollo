@@ -6,8 +6,7 @@ import {FETCH_SUBGROUPS_QUERY} from '../../graphql/queries/fetchSubgroups';
 import {useAuth} from '../../hooks/useAuth';
 import '../../styles/Subgroups.css';
 import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
-import moment from 'moment';
-import {getYearByMonth} from '../../utils/academicDate';
+import {getCurrentAcademicYear} from '../../utils/academicDate';
 
 type ItemProps = {
   subgroup: number | undefined;
@@ -38,7 +37,7 @@ const Item = ({subgroup, id, group, updateData, name, surname}: ItemProps) => {
 
 export const Subgroups = () => {
   const auth = useAuth();
-  const year = useMemo(() => getYearByMonth(moment().month()), [])
+  const year = useMemo(() => getCurrentAcademicYear(), [])
 
   const userCourses = auth.user.versions[year].courses.filter((course) => course.group);
 

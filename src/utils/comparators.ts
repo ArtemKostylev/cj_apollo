@@ -1,8 +1,8 @@
 export const compareStudents = (a: TeacherCourseStudent, b: TeacherCourseStudent) => {
-  if (a.student.surname < b.student.surname) {
+  if (a.student?.surname < b.student?.surname) {
     return -1;
   }
-  if (a.student.surname > b.student.surname) {
+  if (a.student?.surname > b.student?.surname) {
     return 1;
   }
   return 0;

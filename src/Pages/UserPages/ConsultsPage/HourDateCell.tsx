@@ -3,6 +3,7 @@ import {DateCell} from '../../../ui/cells/DateCell';
 import {HOURS} from '../../../constants/hours';
 import moment, {Moment} from 'moment';
 import {UpdateDatesProps} from './ConsultController';
+import {TableCell} from '../../../ui/cells/styles/TableCell.styled';
 
 type Props = {
   column: number;
@@ -28,15 +29,15 @@ const HourDateCell = ({column, hours, date, row, updateDates, year}: Props) => {
 
   return (
     <React.Fragment>
-      <td>
+      <TableCell>
         <DateCell month={moment().month()} initialValue={date} column={column || 0} row={row || 0} updateDates={updateDates} unlimited
                   year={year}/>
-      </td>
-      <td>
+      </TableCell>
+      <TableCell>
         <select value={hoursValue} onChange={onChange}>
           {HOURS.map(it => <option value={it} key={it}>{it}</option>)}
         </select>
-      </td>
+      </TableCell>
     </React.Fragment>
   );
 };

@@ -19,10 +19,6 @@ export const USER_RESOURCES: Resources = {
     path: '/notes',
     title: 'Заметки',
   },
-  midtermExam: {
-    path: ROUTES.MIDTERM_EXAM,
-    title: 'Промежуточная аттестация'
-  }
 };
 
 export const ADMIN_RESOURCES: Resources = {

@@ -15,8 +15,7 @@ import {DATE_FORMAT, Months, MONTHS_RU, Periods, PERIODS_RU, YEARS} from '../../
 import {
   getCurrentAcademicMonth,
   getCurrentAcademicPeriod,
-  getCurrentAcademicYear,
-  getYearByMonth,
+  getCurrentAcademicYear, getDatesFromMonth,
   MONTHS_IN_PERIODS
 } from '../../../utils/academicDate';
 import {useLocation} from 'react-router-dom';
@@ -46,9 +45,9 @@ export default function Journal() {
 
   const userCourses: Course[] = useMemo(() => location.state?.versions[currentYear].courses || auth.user?.versions[currentYear].courses, [location.state, auth.user, currentYear]);
 
-  const startDate = useMemo(() => moment().month(month).year(getYearByMonth(month, currentYear)), [month, currentYear]);
+  const parsedDates = useMemo(() => getDatesFromMonth(month, currentYear), [month, currentYear]);
 
-  const parsedDates = useMemo(() => createDates(startDate), [startDate]);
+  console.log(parsedDates);
 
   const onYearChange = useCallback((year: number) => {
     setCurrentYear(year);
@@ -227,17 +226,11 @@ export default function Journal() {
   };
 
 
-  let {
-    loading,
-    data,
-    error,
-    refetch,
-    networkStatus,
-  } = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
+  let {loading, data, error, refetch, networkStatus} = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
     variables: {
       teacherId: location.state?.versions[currentYear].id || auth.user?.versions[currentYear].id,
       courseId: userCourses[course].id,
-      year: moment().month() > 7 ? currentYear : currentYear - 1,
+      year: currentYear
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
@@ -460,14 +453,3 @@ export default function Journal() {
     </>
   );
 }
-
-const createDates = (initialDate: Moment) => {
-  let result = [];
-  let start = initialDate.clone().startOf('month');
-  let end = initialDate.clone().endOf('month');
-
-  for (let date = start; date <= end; date.add(1, 'day')) {
-    if (date.isoWeekday() !== 7) result.push(date.clone());
-  }
-  return result;
-};

@@ -87,8 +87,8 @@ export const ConsultController = () => {
     data = updateInPosition(data, [{key: 'consult', index: entityIndex}, {index: dateIndex}], {
       date: date || consult.date,
       hours: hours || 0,
-      delete_flag: !!date,
-      update_flag: !date,
+      delete_flag: !date,
+      update_flag: !!date,
     })
   };
 
@@ -156,11 +156,6 @@ export const ConsultController = () => {
       },
     });
 
-    await clear({
-      variables: {
-        ids: createClearData(),
-      },
-    });
     refetch();
   };
 

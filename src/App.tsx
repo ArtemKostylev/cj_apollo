@@ -5,8 +5,8 @@ import {ErrorScreen} from './Pages/ErrorScreen';
 import {ROUTES} from './constants/routes';
 import {MainLayout} from './ui/MainLayout';
 import {theme} from './styles/theme';
-import {ApolloClient, ApolloLink, ApolloProvider, InMemoryCache} from '@apollo/client';
-import {ProvideAuth} from './hooks/useAuth';
+import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
+import {AuthProvider} from './hooks/useAuth';
 import {ThemeProvider} from 'styled-components';
 import {setContext} from '@apollo/client/link/context';
 import {USER_ALIAS} from './constants/localStorageAliases';
@@ -45,7 +45,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <ProvideAuth>
+        <AuthProvider>
           <ThemeProvider theme={theme}>
             <Switch>
               <Route path={ROUTES.LOGIN} component={Login}/>
@@ -53,7 +53,7 @@ export default function App() {
               <Route path={ROUTES.HOME} component={MainLayout}/>
             </Switch>
           </ThemeProvider>
-        </ProvideAuth>
+        </AuthProvider>
       </ApolloProvider>
     </BrowserRouter>
   );

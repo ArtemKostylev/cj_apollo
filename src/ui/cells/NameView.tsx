@@ -4,7 +4,7 @@ import {theme} from '../../styles/theme';
 
 export const NameCellBase = styled.td<{ archived?: boolean }>`
   cursor: default;
-  text-align: left;
+  text-align: center;
   color: ${props => props.archived ? 'gray' : 'black'};
   line-height: 6vh;
   border: 1px solid ${theme.border};
@@ -20,7 +20,7 @@ export const NameView = memo(({name, surname, archived}: Props) => {
   return (
     <NameCellBase archived={archived}>
       {
-        `${surname} ${name} ${archived && '(A)'}`
+        `${surname} ${name} ${archived ? '(A)' : ''}`
       }
     </NameCellBase>
   )
