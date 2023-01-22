@@ -51,7 +51,6 @@ declare interface MidtermExam extends PrimitiveCacheEntity {
   [key: string]: any;
 }
 
-declare type MidtermExamType = {
-  id: number;
+declare interface MidtermExamType extends PrimitiveCacheEntity {
   name: string;
 }

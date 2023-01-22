@@ -5,7 +5,6 @@ import {theme} from '../../styles/theme';
 export const NameCellBase = styled.td<{ archived?: boolean }>`
   cursor: default;
   text-align: left;
-  padding-left: 10px;
   color: ${props => props.archived ? 'gray' : 'black'};
   line-height: 6vh;
   border: 1px solid ${theme.border};

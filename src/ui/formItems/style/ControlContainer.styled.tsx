@@ -5,6 +5,7 @@ export const ControlContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 10vw;
+  position: relative;
   border-right: 1px solid ${theme.border};
 
   div {

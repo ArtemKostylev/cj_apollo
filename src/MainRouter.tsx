@@ -8,6 +8,7 @@ import {ConsultController} from './Pages/UserPages/ConsultsPage/ConsultControlle
 import {Reports} from './Pages/AdminPages/ReportsPage/Reports';
 import {Subgroups} from './Pages/UserPages/Subgroups';
 import {Specialization} from './Pages/AdminPages/SpecPage';
+import {MidtermExamTypes} from './Pages/AdminPages/MidtermExamTypes';
 import {MidtermExamWithContext as MidtermExam} from './Pages/UserPages/MidtermExam';
 import React, {memo} from 'react';
 import {useAuth} from './hooks/useAuth';
@@ -25,6 +26,7 @@ const AdminRoutes = () => (
     <Route path={ROUTES.CONSULT} render={ConsultController}/>
     <Route path={ROUTES.REPORTS} component={Reports}/>
     <Route path={ROUTES.SPECS} component={Specialization}/>
+    <Route path={ROUTES.MIDTERM_EXAM_TYPES} component={MidtermExamTypes}/>
     <Redirect from={ROUTES.HOME} to={ROUTES.JOURNALS}/>
   </Switch>
 );

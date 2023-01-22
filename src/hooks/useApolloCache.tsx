@@ -14,13 +14,14 @@ export type UseApollo<T> = [
     data: T[] | undefined;
     loading: boolean;
     error: ApolloError | undefined;
+    refetch: () => void;
   },
   modifyEntity<T>,
   addToQuery<T>
 ];
 
 export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, variables: Record<string, any>, dataKey: string): UseApollo<T> => {
-  const {data, loading, error} = useQuery<Data<T>>(query, {variables});
+  const {data, loading, error, refetch} = useQuery<Data<T>>(query, {variables});
 
   const client = useApolloClient();
   const cache = client.cache;
@@ -43,6 +44,12 @@ export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, v
 
     const items = cachedData?.[dataKey] || [];
 
+    if (items.find(it => {
+      return cache.identify(value) === cache.identify(it)
+    })) {
+      return;
+    }
+
     client.writeQuery({
       query,
       data: {
@@ -52,5 +59,5 @@ export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, v
     });
   }, [cache, client, variables, query, dataKey]);
 
-  return [{data: data?.[dataKey], loading, error}, modifyEntity, addToQuery];
+  return [{data: data?.[dataKey], loading, error, refetch}, modifyEntity, addToQuery];
 }

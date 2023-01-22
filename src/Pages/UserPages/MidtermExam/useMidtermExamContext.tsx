@@ -6,7 +6,7 @@ import {FETCH_MIDTERM_EXAMS} from '../../../graphql/queries/fetchMidtermExams';
 import {getBorderDatesForPeriod, getCurrentAcademicPeriod, getCurrentAcademicYear} from '../../../utils/academicDate';
 import {Periods} from '../../../constants/date';
 import {FETCH_MIDTERM_EXAM_TYPES} from '../../../graphql/queries/fetchMidterExamTypes';
-import {addToQuery, Data, modifyEntity, useApollo} from '../../../hooks/useApolloCache';
+import {addToQuery, modifyEntity, useApollo} from '../../../hooks/useApolloCache';
 import {normalizeByKey, toDropdownOption} from '../../../utils/normalizer';
 
 const MidtermExamContext = createContext({} as MidtermExamContext);
@@ -26,9 +26,9 @@ interface StudentsData {
 type MidtermExamContext = {
   loading: boolean;
   data: {
-    table: Record<string, MidtermExam> | undefined;
+    table: MidtermExam[] | undefined;
     select: Map<string | number, DropdownOptionType>;
-    types: MidtermExamType[] | undefined;
+    types: Map<string | number, DropdownOptionType>;
   };
   error: any;
   selectedRecord: number | undefined;
@@ -39,6 +39,8 @@ type MidtermExamContext = {
   type: number;
   year: number;
   period: Periods;
+  teacherId: number;
+  refetch: () => void;
   modifyMidtermExam: modifyEntity<MidtermExam>,
   addMidtermExam: addToQuery<MidtermExam>
 }
@@ -87,9 +89,9 @@ function useProvideMidtermExam() {
     loading: midtermExamTypesLoading,
     data: midtermExamTypes,
     error: midtermExamTypesError
-  } = useQuery<MidtermExamsTypeData>(FETCH_MIDTERM_EXAM_TYPES);  //? is this needed here????
+  } = useQuery<MidtermExamsTypeData>(FETCH_MIDTERM_EXAM_TYPES, {onCompleted: (data) => setType(data.fetchMidtermExamTypes[0].id)});  //? is this needed here????
 
-  const [{loading, error, data}, modifyMidtermExam, addMidtermExam] = useApollo<MidtermExam>(
+  const [{loading, error, data, refetch}, modifyMidtermExam, addMidtermExam] = useApollo<MidtermExam>(
     FETCH_MIDTERM_EXAMS, {
       teacherId: versions[year].id, year, typeId: type, ...getBorderDatesForPeriod(period, year)
     },
@@ -98,9 +100,9 @@ function useProvideMidtermExam() {
 
   return {
     data: {
-      table: data?.reduce(normalizeByKey<MidtermExam>('id'), {}),
+      table: data,
       select: toDropdownOption<Student>(studentsData?.fetchTeacherStudents, it => `${it.surname || ''} ${it.name || ''}`),
-      types: midtermExamTypes?.fetchMidtermExamTypes
+      types: toDropdownOption<MidtermExamType>(midtermExamTypes?.fetchMidtermExamTypes, it => it.name)
     },
     loading: loading || studentsLoading || midtermExamTypesLoading,
     error: studentsError || error || midtermExamTypesError,
@@ -112,6 +114,8 @@ function useProvideMidtermExam() {
     type,
     year,
     period,
+    refetch,
+    teacherId: versions[year].id,
     modifyMidtermExam,
     addMidtermExam
   }

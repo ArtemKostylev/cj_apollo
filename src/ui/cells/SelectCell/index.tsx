@@ -11,9 +11,10 @@ type Props = {
   onSelect: OnSelectType;
   disabled?: boolean;
   renderItem?: (onClick: () => void) => ReactElement;
+  error?: boolean;
 }
 
-export const SelectCell = memo(({value = '', options, isWeekend = false, onSelect, disabled = false, renderItem}: Props) => {
+export const SelectCell = memo(({value = '', options, isWeekend = false, onSelect, disabled = false, error}: Props) => {
   const [dropdownValue, setDropdownValue] = useState<string | number>(value);
   const [opened, setOpened] = useState(false);
 
@@ -30,7 +31,7 @@ export const SelectCell = memo(({value = '', options, isWeekend = false, onSelec
   const onClick = () => setOpened((prev) => !prev);
 
   return (
-    <SelectCellLayout ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
+    <SelectCellLayout error={error} ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
       <CellText>{dropdownValue === '.' ? '✓' : dropdownValue}</CellText>
       {!disabled && (
         <Dropdown opened={opened} options={options} width={width} onSelect={(value) => {

@@ -13,7 +13,7 @@ export const DropdownLayout = styled.div<DropdownLayoutProps>`
   width: ${({width}) => `${width}px`};
   box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
   position: absolute;
-  top: 0;
+  top: 100%;
   left: 0;
   height: fit-content;
   overflow: visible;

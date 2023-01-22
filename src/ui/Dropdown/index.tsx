@@ -8,7 +8,6 @@ type DropdownOptionsListProps = {
 }
 
 const DropdownOptionsList = ({options, onClick}: DropdownOptionsListProps) => {
-  console.log(options)
   return <>
     {Array.from(options.values()).map((option) => (
       <DropdownOption short={option.short} key={option.value} onClick={() => onClick(option.value)}>

@@ -1,6 +1,6 @@
 import styled, {css} from 'styled-components';
 import {theme} from '../../../../styles/theme';
-import {TableCell} from '../../TableCell.styled';
+import {TableCell} from '../../styles/TableCell.styled';
 
 export const SelectCellLayout = styled(TableCell)<{ isWeekend: boolean }>`
 

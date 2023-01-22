@@ -10,6 +10,7 @@ export const ROUTES = {
   HOME: '/',
   SUBGROUPS: '/subgroups',
   MIDTERM_EXAM: '/midtermExam',
+  MIDTERM_EXAM_TYPES: '/midtermExamTypes',
   LOGIN: '/login',
   ERROR: '/error'
 }

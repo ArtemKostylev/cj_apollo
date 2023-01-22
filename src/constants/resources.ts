@@ -41,6 +41,10 @@ export const ADMIN_RESOURCES: Resources = {
   specs: {
     path: '/specs',
     title: 'Специальности',
+  },
+  midtermExamTypes: {
+    path: ROUTES.MIDTERM_EXAM_TYPES,
+    title: 'Типы промежуточной аттестации'
   }
 };
 
