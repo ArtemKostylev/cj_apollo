@@ -13,6 +13,7 @@ import {Header} from '../../../ui/Table/style/Header.styled';
 import {PeriodQuarters} from './PeriodQuarters';
 import {NameView} from '../../../ui/cells/NameView';
 import {Table} from '../../../ui/Table';
+import moment from 'moment';
 
 type Props = {
   datesByGroup: DateByGroup[][];
@@ -25,7 +26,7 @@ type Props = {
   year: number;
 }
 
-export const GroupJournalView = memo(({datesByGroup, groupedData, period, updateDates, updateMyData, updateQuarterData, onlyHours, year}: Props) => {
+export const GroupJournalView = memo(({datesByGroup, groupedData, period, updateDates, updateMyData, updateQuarterData, onlyHours}: Props) => {
   const selectCellOptions = useMemo(() => onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS, [onlyHours]);
   return (<div>
     {datesByGroup.map((group, gIndex) => {
@@ -38,13 +39,13 @@ export const GroupJournalView = memo(({datesByGroup, groupedData, period, update
           <tr>
             <NameHeader rowSpan={2}/>
             {MONTHS_IN_PERIODS[period].map((month) => (
-              <Header key={month} colSpan={month === Months.JANUARY ? 4 : 5}>{MONTHS_RU.get(month)?.text}c</Header>))}
+              <Header key={month} colSpan={month === Months.JANUARY ? 4 : 5}>{MONTHS_RU.get(month)?.text}</Header>))}
             <PeriodQuarters period={period} onlyHours={onlyHours}/>
           </tr>
           <tr>
             {group.map((date, id) => <Header hoverable>
               <DateCell initialValue={date.date} column={id} month={date.month} group={gIndex} updateDates={updateDates}
-                        full={false} key={id} year={year}/>
+                        full={false} key={id} year={moment().year()}/>
             </Header>)}
           </tr>
           </thead>

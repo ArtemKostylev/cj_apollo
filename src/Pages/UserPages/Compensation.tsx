@@ -204,7 +204,7 @@ export const Compensation = () => {
                           row={item.student.id}
                           updateDates={updateDates}
                           month={month - 1}
-                          year={currentYear}
+                          year={moment().year()}
                           unlimited
                       />}
                     </TableCell>

@@ -14,7 +14,7 @@ type Props = {
   year: number;
 }
 
-const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props) => {
+const IndividualConsultsView = ({controlsConfig, data, updateDates}: Props) => {
   return (
     <div className='consult_container'>
       <TableControls config={controlsConfig}/>
@@ -39,7 +39,7 @@ const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props
                 date={item.consult[index] && moment(item.consult[index].date)}
                 hours={item.consult[index]?.hours}
                 key={index}
-                year={year}
+                year={moment().year()}
               />
             ))}
           </tr>
