@@ -1,7 +1,7 @@
 import React from 'react';
 import {PROGRAMS} from '../../../constants/programs';
 import HourDateCell from './HourDateCell';
-import {TableControls, TableControlsConfig} from '../../../ui/TableControls';
+import {TableControlsConfig} from '../../../ui/TableControls/types';
 import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
 import moment from 'moment';
@@ -18,7 +18,6 @@ type Props = {
 
 const GroupConsultsView = ({data, controlsConfig, updateDates, long = false, year}: Props) => (
   <div className='consult_container'>
-    <TableControls config={controlsConfig}/>
     <table className='consult_table'>
       <thead>
       <tr>

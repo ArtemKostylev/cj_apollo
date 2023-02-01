@@ -11,6 +11,7 @@ import {ThemeProvider} from 'styled-components';
 import {setContext} from '@apollo/client/link/context';
 import {USER_ALIAS} from './constants/localStorageAliases';
 import {createUploadLink} from 'apollo-upload-client';
+import moment from 'moment';
 
 const pathMap: Record<string, string> = {
   development: 'http://localhost:4000',
@@ -42,6 +43,8 @@ const client = new ApolloClient({
 });
 
 export default function App() {
+  moment.locale('ru');
+
   return (
     <BrowserRouter>
       <ApolloProvider client={client}>

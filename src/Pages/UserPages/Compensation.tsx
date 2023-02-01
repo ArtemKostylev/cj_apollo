@@ -5,7 +5,7 @@ import {UPDATE_REPLACEMENTS_MUTATION} from '../../graphql/mutations/updateReplac
 import {FETCH_REPLACEMENTS_QUERY} from '../../graphql/queries/fetchReplacements';
 import {useAuth} from '../../hooks/useAuth';
 import {DateCell} from '../../ui/cells/DateCell';
-import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
+import {TableControlsConfig, TableControlType} from '../../ui/TableControls/types';
 import '../../styles/Compensation.css';
 import {useLocation} from "react-router-dom";
 import times from 'lodash/times';
@@ -109,31 +109,34 @@ export const Compensation = () => {
     refetch();
   };
 
-  const controlsConfig: TableControlsConfig = useMemo(() => [
-    {
-      type: TableControlType.SELECT,
-      options: MONTHS_RU,
-      text: MONTHS_RU.get(month)?.text,
-      onClick: onMonthChange,
-    },
-    {
-      type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
-      text: userCourses[course].name,
-      onClick: onCourseChange,
-    },
-    {
-      type: TableControlType.SELECT,
-      options: YEARS,
-      text: YEARS.get(currentYear)?.text,
-      onClick: onYearChange,
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: "Сохранить",
-      onClick: save,
-    },
-  ], [userCourses, currentYear, course, studentData]);
+  /*
+  
+    const controlsConfig: TableControlsConfig = useMemo(() => [
+      {
+        type: TableControlType.SELECT,
+        options: MONTHS_RU,
+        text: MONTHS_RU.get(month)?.text,
+        onClick: onMonthChange,
+      },
+      {
+        type: TableControlType.SELECT,
+        options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+        text: userCourses[course].name,
+        onClick: onCourseChange,
+      },
+      {
+        type: TableControlType.SELECT,
+        options: YEARS,
+        text: YEARS.get(currentYear)?.text,
+        onClick: onYearChange,
+      },
+      {
+        type: TableControlType.BUTTON,
+        text: "Сохранить",
+        onClick: save,
+      },
+    ], [userCourses, currentYear, course, studentData]);
+  */
 
 
   if (loading || networkStatus === NetworkStatus.refetch) return <div>Загрузка</div>;
@@ -163,7 +166,6 @@ export const Compensation = () => {
 
   return (
     <>
-      <TableControls config={controlsConfig}/>
       <table className='compensation_table'>
         <thead>
         <tr>

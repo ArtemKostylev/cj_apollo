@@ -1,24 +1,20 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import moment, {Moment} from 'moment';
 import 'moment/locale/ru';
-import {TableControls, TableControlType} from '../../../ui/TableControls';
+import {TableControlsConfig, TableControlType} from '../../../ui/TableControls/types';
 import {IndividualJournalView} from './IndividualJournalView';
 import {GroupJournalView} from './GroupJournalView';
-import {useMutation, useQuery, NetworkStatus} from '@apollo/client';
+import {makeVar, NetworkStatus, useMutation, useQuery, useReactiveVar} from '@apollo/client';
 import {FETCH_JOURNAL_QUERY} from '../../../graphql/queries/fetchJournal';
 import {useAuth} from '../../../hooks/useAuth';
 import {UPDATE_JOURNAL_MUTATION} from '../../../graphql/mutations/updateJournal';
 import {t} from '../../../static/text';
 import times from 'lodash/times';
-import {DATE_FORMAT, Months, MONTHS_RU, Periods, PERIODS_RU, YEARS} from '../../../constants/date';
-import {
-  getCurrentAcademicMonth,
-  getCurrentAcademicPeriod,
-  getCurrentAcademicYear, getDatesFromMonth,
-  MONTHS_IN_PERIODS
-} from '../../../utils/academicDate';
+import {DATE_FORMAT, Months, Periods} from '../../../constants/date';
+import {getCurrentAcademicYear, getDatesFromMonth, MONTHS_IN_PERIODS} from '../../../utils/academicDate';
 import {useLocation} from 'react-router-dom';
+import {useTableControls} from '../../../ui/TableControls/useTableControls';
 
 export type Pair = {
   class: number,
@@ -32,36 +28,57 @@ export type UpdateQuarterData = (args: { row: number, column: string, value: str
 export type UpdateData = (args: { row: number, column: number, value: string, group?: number }) => boolean;
 export type UpdateDates = (args: { date: Moment, column: number, group: number }) => void;
 
+
 export default function Journal() {
-  moment.locale('ru');
   const location = useLocation() as any;
+  const auth = useAuth();
+  const [update] = useMutation(UPDATE_JOURNAL_MUTATION);
 
-  let auth = useAuth();
+  const save = () => {
+    update({
+      variables: {
+        data: {
+          updateCasual: createUpdateData(),
+          updatePeriod: createQuaterData(),
+          deleteCasual: createClearData(),
+          deletePeriod: createQuaterClearData(),
+        },
+      }
+    }).then(() => refetch());
+  };
 
-  const [month, setMonth] = React.useState<Months>(getCurrentAcademicMonth());
-  const [course, setCourse] = useState(0);
-  const [period, setPeriod] = useState<Periods>(getCurrentAcademicPeriod());
-  const [currentYear, setCurrentYear] = useState(getCurrentAcademicYear());
+  const yearVar = useMemo(() => makeVar(getCurrentAcademicYear()), []);
+  const year = useReactiveVar(yearVar);
 
-  const userCourses: Course[] = useMemo(() => location.state?.versions[currentYear].courses || auth.user?.versions[currentYear].courses, [location.state, auth.user, currentYear]);
+  const userCourses: Course[] = useMemo(() => location.state?.versions[year].courses || auth.user?.versions[year].courses, [location.state, auth.user, year]);
 
-  const parsedDates = useMemo(() => getDatesFromMonth(month, currentYear), [month, currentYear]);
+  const controlsConfig = useMemo(() => [
+    /*userCourses[course].group ? {type: TableControlType.PERIOD} :*/
+    {
+      name: 'month',
+      type: TableControlType.MONTH
+    },
+    {
+      name: 'course',
+      type: TableControlType.SELECT,
+      initialValue: 0,
+      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+    },
+    {
+      name: 'year',
+      type: TableControlType.YEAR,
+      customVar: yearVar
+    },
+    {
+      type: TableControlType.BUTTON,
+      label: "Сохранить",
+      onClick: save,
+    }
+  ], []);
 
-  console.log(parsedDates);
+  const [TableControls, {month, course}] = useTableControls(controlsConfig as TableControlsConfig);
 
-  const onYearChange = useCallback((year: number) => {
-    setCurrentYear(year);
-  }, []);
-
-  const onCourseChange = useCallback((course: number) => {
-    setCourse(course);
-  }, []);
-
-  const onMonthChange = useCallback((month: number) => {
-    setMonth(month);
-  }, []);
-
-  const onPeriodChange = useCallback((period: Periods) => setPeriod(period), [])
+  const parsedDates = useMemo(() => getDatesFromMonth(month, year), [month, year]);
 
   const updateMyData: UpdateData = ({row, column, value, group}) => {
     let date: Moment | undefined;
@@ -134,10 +151,10 @@ export default function Journal() {
         id: 0,
         mark: value,
         period: column,
-        year: currentYear,
+        year: year,
         studentId: student.id,
-        teacherId: location.state?.versions[currentYear].id || auth.user.versions[currentYear].id,
-        courseId: userCourses[course].id,
+        teacherId: location.state?.versions[year].id || auth.user.versions[year].id,
+        courseId: userCourses[0].id,
         update_flag: true,
         delete_flag: false
       };
@@ -228,61 +245,16 @@ export default function Journal() {
 
   let {loading, data, error, refetch, networkStatus} = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
     variables: {
-      teacherId: location.state?.versions[currentYear].id || auth.user?.versions[currentYear].id,
+      teacherId: location.state?.versions[year].id || auth.user?.versions[year].id,
       courseId: userCourses[course].id,
-      year: currentYear
+      year: year
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
   });
 
-  const [update] = useMutation(UPDATE_JOURNAL_MUTATION);
-
-  const save = () => {
-    update({
-      variables: {
-        data: {
-          updateCasual: createUpdateData(),
-          updatePeriod: createQuaterData(),
-          deleteCasual: createClearData(),
-          deletePeriod: createQuaterClearData(),
-        },
-      }
-    }).then(() => refetch());
-  };
 
   let studentData: TeacherCourseStudent[] = [];
-
-  const controlsConfig = useMemo(() => [
-    userCourses[course].group ? {
-      type: TableControlType.SELECT,
-      options: PERIODS_RU,
-      text: PERIODS_RU.get(period)?.text,
-      onClick: onPeriodChange
-    } : {
-      type: TableControlType.SELECT,
-      options: MONTHS_RU,
-      text: MONTHS_RU.get(month)?.text,
-      onClick: onMonthChange,
-    },
-    {
-      type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
-      text: userCourses[course].name,
-      onClick: onCourseChange,
-    },
-    {
-      type: TableControlType.SELECT,
-      options: YEARS,
-      text: YEARS.get(currentYear)?.text,
-      onClick: onYearChange,
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: "Сохранить",
-      onClick: save,
-    },
-  ], [userCourses, currentYear, course, month, period, studentData]);
 
   const spinner = <div>Загрузка</div>;
 
@@ -302,7 +274,7 @@ export default function Journal() {
   }
   let groupedData: Pair[] = [];
 
-  if (userCourses[course].group) {
+  if (userCourses[0].group) {
     let pairs: Pair[] = [];
     let classes: number[] = [];
     let programs: string[] = [];
@@ -359,7 +331,7 @@ export default function Journal() {
   let dates_by_group = groupedData.map((group) => {
     const dates = [...new Set(group.students.map((student) => student.journalEntry.map((item) => item.date)).flat())].map(it => moment(it));
 
-    const mappedDates = new Map(MONTHS_IN_PERIODS[period].map((it) => [it, [] as DateByGroup[]]));
+    const mappedDates = new Map(MONTHS_IN_PERIODS['firstHalf'].map((it) => [it, [] as DateByGroup[]]));
 
     const result: DateByGroup[] = [];
 
@@ -428,17 +400,17 @@ export default function Journal() {
 
   return (
     <>
-      <TableControls config={controlsConfig}/>
-      {userCourses[course].group ? (
+      <TableControls/>
+      {userCourses[0].group ? (
         <GroupJournalView
           datesByGroup={dates_by_group}
           groupedData={groupedData}
-          period={period}
-          year={currentYear}
+          period={Periods.FIRST}
+          year={year}
           updateDates={updateDates}
           updateMyData={updateMyData}
           updateQuarterData={updateQuarterData}
-          onlyHours={userCourses[course].onlyHours}
+          onlyHours={userCourses[year].onlyHours}
         />
       ) : (
         <IndividualJournalView
@@ -447,7 +419,7 @@ export default function Journal() {
           updateQuarterData={updateQuarterData}
           updateMyData={updateMyData}
           studentData={studentData}
-          onlyHours={userCourses[course].onlyHours}
+          onlyHours={userCourses[0].onlyHours}
         />
       )}
     </>

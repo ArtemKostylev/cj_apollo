@@ -1,6 +1,6 @@
 import {useAuth} from '../../hooks/useAuth';
 import '../../styles/Notes.css';
-import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
+import {TableControlsConfig, TableControlType} from '../../ui/TableControls/types';
 import {PageWrapper} from '../../ui/PageWrapper';
 import {useCallback, useMemo, useState} from 'react';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
@@ -73,25 +73,25 @@ export const Notes = () => {
     }
   );
 
-  const controlsConfig: TableControlsConfig = useMemo(() => [
-    {
-      type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
-      text: userCourses[course].name,
-      onClick: onCourseChange,
-    },
-    {
-      type: TableControlType.SELECT,
-      options: YEARS,
-      text: YEARS.get(currentYear)?.text,
-      onClick: onYearChange,
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: "Сохранить",
-      onClick: save,
-    }
-  ], [userCourses, currentYear, course, value, data]);
+  /*  const controlsConfig: TableControlsConfig = useMemo(() => [
+      {
+        type: TableControlType.SELECT,
+        options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+        text: userCourses[course].name,
+        onClick: onCourseChange,
+      },
+      {
+        type: TableControlType.SELECT,
+        options: YEARS,
+        text: YEARS.get(currentYear)?.text,
+        onClick: onYearChange,
+      },
+      {
+        type: TableControlType.BUTTON,
+        text: "Сохранить",
+        onClick: save,
+      }
+    ], [userCourses, currentYear, course, value, data]);*/
 
   const spinner = <div>Загрузка</div>;
 
@@ -104,7 +104,6 @@ export const Notes = () => {
 
   return (
     <PageWrapper>
-      <TableControls config={controlsConfig}/>
       <TextArea
         placeholder='Это - место для заметок...'
         value={value}

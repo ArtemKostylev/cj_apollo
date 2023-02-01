@@ -6,10 +6,6 @@ const NameHeaderWrapper = styled(Header)`
   width: 15rem;
 `;
 
-type Props = {
-  rowSpan?: number;
-}
-
-export const NameHeader = ({rowSpan}: Props) => (
-  <NameHeaderWrapper rowSpan={rowSpan}>Имя ученика</NameHeaderWrapper>
+export const NameHeader = ({rowSpan, width}: HeaderProps) => (
+  <NameHeaderWrapper rowSpan={rowSpan} width={width}>Имя ученика</NameHeaderWrapper>
 )

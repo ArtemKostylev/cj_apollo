@@ -14,7 +14,7 @@ const Base = styled(NameCellBase)`
   width: fit-content;
 `
 
-export const ClassView = memo(({classNum, program, archived}: Props) => {
+export const ClassView = memo(({value, disabled}: Partial<TableItemProps>) => {
   return (
     <Base archived={archived}>
       {`${classNum || ''}${program ? PROGRAMS[program] : ''} ${archived ? '(A)' : ''}`}

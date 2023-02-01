@@ -5,7 +5,7 @@ import {UPDATE_SUBGROUPS_MUTATION} from '../../graphql/mutations/updateSubgroups
 import {FETCH_SUBGROUPS_QUERY} from '../../graphql/queries/fetchSubgroups';
 import {useAuth} from '../../hooks/useAuth';
 import '../../styles/Subgroups.css';
-import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
+import {TableControlsConfig, TableControlType} from '../../ui/TableControls/types';
 import {getCurrentAcademicYear} from '../../utils/academicDate';
 
 type ItemProps = {
@@ -78,19 +78,19 @@ export const Subgroups = () => {
     }).then(() => refetch());
   };
 
-  const controlsConfig: TableControlsConfig = useMemo(() => [
-    {
-      type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
-      text: userCourses[course].name,
-      onClick: getCourse,
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: 'Сохранить',
-      onClick: save,
-    },
-  ], [userCourses, course, data]);
+  /*  const controlsConfig: TableControlsConfig = useMemo(() => [
+      {
+        type: TableControlType.SELECT,
+        options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+        text: userCourses[course].name,
+        onClick: getCourse,
+      },
+      {
+        type: TableControlType.BUTTON,
+        text: 'Сохранить',
+        onClick: save,
+      },
+    ], [userCourses, course, data]);*/
 
   const spinner = <div>Загрузка</div>;
 
@@ -125,7 +125,6 @@ export const Subgroups = () => {
 
   return (
     <div>
-      <TableControls config={controlsConfig}/>
       <div className='group_wrapper'>
         <ul className='group_list'>
           {data.map((group: any, index: number) => (

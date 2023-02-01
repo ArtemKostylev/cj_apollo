@@ -32,7 +32,7 @@ export const GroupJournalView = memo(({datesByGroup, groupedData, period, update
       const groupItem = groupedData[gIndex];
 
       return (
-        <Table key={gIndex}>
+        <table key={gIndex}>
           <thead>
           <GroupHeader period={period} classNumber={groupItem.class} program={groupItem.program} subgroup={groupItem.subgroup}/>
           <tr>
@@ -53,24 +53,25 @@ export const GroupJournalView = memo(({datesByGroup, groupedData, period, update
             <tr>
               <NameView name={student.name} surname={student.surname} archived={archived}/>
               {group.map((date, index) => (
-                <SelectCell disabled={archived} value={findMark(date.date, journalEntry)} key={index} options={selectCellOptions}
-                            onSelect={(value) => updateMyData({row: student.id, column: index, group: gIndex, value: (value as string)})}/>
+                <SelectCell disabled={archived} value={findMark(date.date, journalEntry)} key={index} options={{selectOptions: selectCellOptions}}
+                            onChange={(value) => updateMyData({row: student.id, column: index, group: gIndex, value: (value as string)})}
+                            error={false}/>
               ))}
               {!onlyHours &&
                 QUARTERS_IN_PERIODS[period].map((quarter) => {
                   const mark = quaterMark.find((mark) => mark.period === quarter);
 
-                  return <SelectCell value={mark?.mark} key={quarter} options={MARKS_OPTIONS}
-                                     onSelect={(value) => updateQuarterData({
+                  return <SelectCell value={mark?.mark} key={quarter} options={{selectOptions: MARKS_OPTIONS}}
+                                     onChange={(value) => updateQuarterData({
                                        row: student.id ? student.id : 0,
                                        column: quarter,
                                        value: (value as string)
-                                     })}/>
+                                     })} error={false}/>
                 })}
             </tr>
           ))}
           </tbody>
-        </Table>
+        </table>
       );
     })}
   </div>)

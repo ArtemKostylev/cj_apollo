@@ -1,11 +1,13 @@
-import React, {forwardRef, useState, useEffect, ForwardedRef, MouseEventHandler, ReactNode} from 'react';
+import React, {forwardRef, useState, useEffect, ForwardedRef, MouseEventHandler, ReactNode, useCallback, useMemo, memo} from 'react';
 import styled from 'styled-components';
 import DatePicker, {CalendarContainer} from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
 import moment, {Moment} from 'moment';
 import {UpdateDatesProps} from '../../Pages/UserPages/ConsultsPage/ConsultController';
-import {getYearByMonth} from '../../utils/academicDate';
+import {getCurrentAcademicMonth, getYearByMonth} from '../../utils/academicDate';
+import {TableCell} from './styles/TableCell.styled';
+import {DATE_FORMAT} from '../../constants/date';
 
 const DATE_PLACEHOLDER = '.....';
 
@@ -70,6 +72,7 @@ type EditableDateCellProps = {
   full?: boolean;
   disabled?: boolean;
   year: number;
+  error?: boolean;
 }
 
 export const DateCell = ({
@@ -82,7 +85,8 @@ export const DateCell = ({
                            unlimited,
                            full = true,
                            disabled,
-                           year
+                           year,
+                           error
                          }: EditableDateCellProps) => {
   const [value, setValue] = useState(initialValue?.toDate());
 
@@ -98,19 +102,31 @@ export const DateCell = ({
   const endDate = unlimited ? null : moment().clone().year(getYearByMonth(month, year)).month(month).endOf('month').toDate();
 
   return (
-    <DatePicker
-      selected={value}
-      onChange={(date: Date) => {
-        updateDates({date: moment(date), column: column || 0, group: group || 0, row: row || 0});
-        setValue(date);
-      }}
-      customInput={<Input full={full}/>}
-      popperPlacement='auto'
-      minDate={startDate}
-      maxDate={endDate}
-      openToDate={unlimited ? moment().year(year).toDate() : undefined}
-      locale={ru}
-      calendarContainer={Container}
-    />
+    <TableCell error={error}>
+      <DatePicker
+        selected={value}
+        onChange={(date: Date) => {
+          updateDates({date: moment(date), column: column || 0, group: group || 0, row: row || 0});
+          setValue(date);
+        }}
+        customInput={<Input full={full}/>}
+        popperPlacement='auto'
+        minDate={startDate}
+        maxDate={endDate}
+        openToDate={unlimited ? moment().year(year).toDate() : undefined}
+        locale={ru}
+        calendarContainer={Container}
+      />
+    </TableCell>
   );
 };
+
+export const DateInput = memo(({value, onChange, disabled, error, options}: TableItemProps) => {
+  const year = options?.year || moment().year();
+  const month = useMemo(() => getCurrentAcademicMonth(), []);
+  const updateDates: (props: UpdateDatesProps) => void = useCallback(({date}) => {
+    onChange(date.format(DATE_FORMAT));
+  }, [onChange])
+
+  return <DateCell initialValue={value} updateDates={updateDates} month={month} year={year} unlimited disabled={disabled} error={error}/>
+})

@@ -1,6 +1,5 @@
 import React, {memo, useEffect, useState} from 'react';
 import moment from 'moment';
-import {TableControls, TableControlsConfig} from '../../../ui/TableControls';
 import {useMidtermExamContext} from './useMidtermExamContext';
 import {Table} from '../../../ui/Table';
 import {Header} from '../../../ui/Table/style/Header.styled';
@@ -21,20 +20,7 @@ import styled from 'styled-components';
 import {MIDTERM_EXAM_TYPE_FRAGMENT} from '../../../graphql/fragments/midtermExamType';
 import fromPairs from 'lodash/fromPairs';
 import {theme} from '../../../styles/theme';
-
-const Row = styled.tr<{ selected: boolean }>`
-  height: 10em;
-  background-color: ${props => props.selected ? theme.darkBg : 'none'};
-
-  td {
-    border-color: ${theme.thBorder};
-  }
-`;
-
-
-type Props = {
-  controlsConfig: TableControlsConfig
-}
+import {FETCH_MIDTERM_EXAMS} from '../../../graphql/queries/fetchMidtermExams';
 
 const validate = (item: MidtermExam) => {
   const errors = [] as string[];
@@ -46,13 +32,13 @@ const validate = (item: MidtermExam) => {
   return errors
 }
 
-const getFragment = (keys: string[]) => {
+const getFragment = (keys: string[], typeName: string) => {
   const content = keys.join(' ');
-    return gql`
-        fragment Fragment on MidtermExam {
-            ${content}
-        }
-    `
+  const str = `fragment Fragment on Master {
+  obama
+  }
+  `
+    return gql`${str}`
 }
 
 const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
@@ -82,24 +68,22 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
           number: item.number
         }
       },
+      refetchQueries: [{
+        query: FETCH_MIDTERM_EXAMS
+      }]
     })
-      .then(() => {
-        console.log('Saved');
-        refetch();
-      })
-      .catch(() => console.log('Error'));
   }
 
   const onSelect = (id: number, typeName: string, fragment: DocumentNode, key: string) => {
     const fragmentData = client.readFragment({id: `${typeName}:${id}`, fragment});
-    modifyMidtermExam({...item, [key]: fragmentData}, getFragment([key]));
+    modifyMidtermExam({...item, [key]: fragmentData}, getFragment([''], ''));
   }
 
   return (
-    <Row selected={item.id === selectedRecord} onBlur={onBlur} onClick={() => {
+    <div onBlur={onBlur} onClick={() => {
       onRowClick(item.id)
     }}>
-      <TableCell error={erroredFields.number}>{item.number}</TableCell>
+      {/*<TableCell error={erroredFields.number}>{item.number}</TableCell>
       <SelectCell error={erroredFields.student} value={`${item.student?.surname || ''} ${item.student?.name || ''}`} options={select}
                   onSelect={(id) => onSelect(id as number, 'Student', STUDENT_FRAGMENT, 'student')}/>
       <ClassView classNum={item.student?.class} program={item.student?.program}/>
@@ -117,15 +101,15 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
       <InputCell rows={10} error={erroredFields.contents} value={item.contents}
                  onChange={value => modifyMidtermExam({...item, contents: value}, getFragment(['contents']))}/>
       <InputCell rows={10} error={erroredFields.result} value={item.result}
-                 onChange={value => modifyMidtermExam({...item, result: value}, getFragment(['result']))}/>
-    </Row>
+                 onChange={value => modifyMidtermExam({...item, result: value}, getFragment(['result']))}/>*/}
+    </div>
   )
 });
 
 const TableHeader = () => (
   <tr>
     <Header width={60}>Номер</Header>
-    <NameHeader/>
+    {/*    <NameHeader/>*/}
     <Header width={80}>Класс</Header>
     <Header width={100}>Дата</Header>
     <Header width={200}>Тип</Header>
@@ -134,7 +118,7 @@ const TableHeader = () => (
   </tr>
 )
 
-export const Layout = ({controlsConfig}: Props) => {
+export const MidtermExamLayout = () => {
 
   const {data} = useMidtermExamContext();
 
@@ -142,11 +126,10 @@ export const Layout = ({controlsConfig}: Props) => {
 
   return (
     <div>
-      <TableControls config={controlsConfig}/>
-      <Table>
+      {/*      <Table>
         <TableHeader/>
         {Object.values(table).map((it) => <TableRow key={it.id} item={it}/>)}
-      </Table>
+      </Table>*/}
     </div>
   )
 }

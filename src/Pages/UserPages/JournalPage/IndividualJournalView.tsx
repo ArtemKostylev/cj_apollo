@@ -34,15 +34,15 @@ export const IndividualJournalView = memo(({parsedDates, month, updateQuarterDat
 
     return (
       <>
-        <SelectCell value={mark?.mark} options={MARKS_OPTIONS}
-                    onSelect={(value) => updateQuarterData({
+        <SelectCell value={mark?.mark} options={{selectOptions: MARKS_OPTIONS}}
+                    onChange={(value) => updateQuarterData({
                       row: student.id,
                       column: mark ? mark.period : QUARTER_END[month],
                       value: (value as string)
                     })}
         />
-        {year && (<SelectCell value={year.mark} options={MARKS_OPTIONS}
-                              onSelect={(value) => updateQuarterData({
+        {year && (<SelectCell value={year.mark} options={{selectOptions: MARKS_OPTIONS}}
+                              onChange={(value) => updateQuarterData({
                                 row: student.id,
                                 column: year.period,
                                 value: (value as string)
@@ -54,7 +54,7 @@ export const IndividualJournalView = memo(({parsedDates, month, updateQuarterDat
 
   return (
     <>
-      <Table>
+      <table>
         <thead>
         <tr>
           <NameHeader rowSpan={2}/>
@@ -73,28 +73,27 @@ export const IndividualJournalView = memo(({parsedDates, month, updateQuarterDat
         {studentData.sort(compareByClass).map(({student, archived, journalEntry, quaterMark}) => (
           <tr key={student.id}>
             <NameView name={student.name} surname={student.surname} archived={archived}/>
-            <ClassView classNum={student.class} program={student.program} archived={archived}/>
+            <ClassView/>
             {parsedDates.map((date, index) => (
               <SelectCell
                 key={date.format()}
                 value={findMark(date, journalEntry)}
-                onSelect={(value) =>
+                onChange={(value) =>
                   updateMyData({
                     row: student.id,
                     column: index,
                     value: (value as string),
                   })
                 }
-                isWeekend={date.isoWeekday() === 6}
                 disabled={archived}
-                options={onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS}
+                options={{selectOptions: onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS, isWeekend: date.isoWeekday() === 6}}
               />
             ))}
             {!onlyHours && getQuarterMark(quaterMark, student)}
           </tr>
         ))}
         </tbody>
-      </Table>
+      </table>
     </>
   );
 });

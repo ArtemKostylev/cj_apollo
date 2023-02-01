@@ -1,6 +1,6 @@
 import React from 'react';
 import HourDateCell from './HourDateCell';
-import {TableControls, TableControlsConfig} from '../../../ui/TableControls';
+import {TableControlsConfig} from '../../../ui/TableControls/types';
 import '../../../styles/Consult.css';
 import {UpdateDatesProps} from './ConsultController';
 import times from 'lodash/times';
@@ -17,7 +17,6 @@ type Props = {
 const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props) => {
   return (
     <div className='consult_container'>
-      <TableControls config={controlsConfig}/>
       <table className='consult_table'>
         <thead>
         <tr>

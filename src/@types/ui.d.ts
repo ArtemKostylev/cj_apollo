@@ -8,4 +8,7 @@ declare type DropdownOptionType = { value: string | number, text: string, short?
 
 declare type OnSelectType = (value: string | number) => void;
 
-declare type PrimitiveCacheEntity = { __typename: string, id: number };
+declare interface PrimitiveCacheEntity extends Record<string, string | number | boolean | PrimitiveCacheEntity> {
+  __typename: string;
+  id: number;
+}

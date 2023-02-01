@@ -10,7 +10,7 @@ import {NetworkStatus, useMutation, useQuery} from "@apollo/client";
 import IndividualConsultsView from "./IndividualConsultsView";
 import GroupConsultsView from "./GroupConsultsView";
 import moment, {Moment} from "moment";
-import {TableControlsConfig, TableControlType} from '../../../ui/TableControls';
+import {TableControlsConfig, TableControlType} from '../../../ui/TableControls/types';
 import {YEARS} from '../../../constants/date';
 import {useLocation} from "react-router-dom";
 import {insertInPosition, updateInPosition} from '../../../utils/crud';
@@ -174,25 +174,25 @@ export const ConsultController = () => {
     return userCourses[course].group ? saveGroup() : saveIndividual();
   };
 
-  const controlsConfig: TableControlsConfig = useMemo(() => [
-    {
-      type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
-      text: userCourses[course].name,
-      onClick: onCourseChange,
-    },
-    {
-      type: TableControlType.SELECT,
-      options: YEARS,
-      text: YEARS.get(currentYear)?.text,
-      onClick: onYearChange,
-    },
-    {
-      type: TableControlType.BUTTON,
-      text: "Сохранить",
-      onClick: save,
-    },
-  ], [userCourses, currentYear, course, data]);
+  /* const controlsConfig: TableControlsConfig = useMemo(() => [
+     {
+       type: TableControlType.SELECT,
+       options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+       text: userCourses[course].name,
+       onClick: onCourseChange,
+     },
+     {
+       type: TableControlType.SELECT,
+       options: YEARS,
+       text: YEARS.get(currentYear)?.text,
+       onClick: onYearChange,
+     },
+     {
+       type: TableControlType.BUTTON,
+       text: "Сохранить",
+       onClick: save,
+     },
+   ], [userCourses, currentYear, course, data]);*/
 
   const spinner = <div>Загрузка</div>;
 
@@ -202,14 +202,14 @@ export const ConsultController = () => {
 
   data = userCourses[course].group ? data.fetchGroupConsults : data.fetchConsults;
 
-  if (userCourses[course].group) return <GroupConsultsView data={data} controlsConfig={controlsConfig}
+  if (userCourses[course].group) return <GroupConsultsView data={data} controlsConfig={[]}
                                                            updateDates={(props) => updateData({
                                                              ...props,
                                                              predicate: (item: any) => item.group === props.row
                                                            })}
                                                            year={currentYear}/>
 
-  return <IndividualConsultsView data={data} controlsConfig={controlsConfig}
+  return <IndividualConsultsView data={data} controlsConfig={[]}
                                  updateDates={(props) => updateData({
                                    ...props,
                                    predicate: (item: any) => item.student.id === props.row

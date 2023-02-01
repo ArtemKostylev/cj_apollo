@@ -34,7 +34,6 @@ export const AutocompleteCell = memo(({value, searchQuery, searchVariables, onSe
   if (error) throw new Error('500');
 
   return (
-    <SelectCell value={value} options={options} onSelect={onSelect}
-                renderItem={(onClick: () => void) => <CellInput value={search} onChange={onInputChange} onClick={onClick}/>}/>
+    <SelectCell value={value} options={{selectOptions: options}} onChange={onSelect}/>
   )
 });

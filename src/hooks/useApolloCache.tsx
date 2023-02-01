@@ -6,7 +6,7 @@ export type Data<T> = {
   [key: string]: T[];
 }
 
-export type modifyEntity<T> = (value: T, fragment: DocumentNode) => void;
+export type modifyEntity<T> = (value: Partial<T> & { id: number, __typename: string }, fragment: DocumentNode) => void;
 export type addToQuery<T> = (value: T) => void;
 
 export type UseApollo<T> = [
@@ -26,7 +26,7 @@ export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, v
   const client = useApolloClient();
   const cache = client.cache;
 
-  const modifyEntity = useCallback((value: Partial<T> & { id: number, __typename: string }, fragment: DocumentNode) => {
+  const modifyEntity: modifyEntity<T> = useCallback((value, fragment) => {
     const id = cache.identify(value);
 
     client.writeFragment({
