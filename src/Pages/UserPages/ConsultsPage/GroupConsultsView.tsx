@@ -12,9 +12,7 @@ type Props = {
   controlsConfig: TableControlsConfig;
   updateDates: (props: UpdateDatesProps) => void;
   long?: boolean;
-  year: number;
 }
-
 
 const GroupConsultsView = ({data, controlsConfig, updateDates, long = false}: Props) => (
   <div className='consult_container'>
@@ -41,7 +39,6 @@ const GroupConsultsView = ({data, controlsConfig, updateDates, long = false}: Pr
               row={item.group}
               date={item.consult[index] && moment(item.consult[index].date)}
               hours={item.consult[index]?.hours}
-              year={moment().year()}
             />
           ))}
         </tr>
