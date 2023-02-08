@@ -42,10 +42,9 @@ export const DateCell = ({
 
   const openToDate = useMemo(() => {
     if (unlimited) {
-      if (!year) throw new EmptyYearException();
-      return moment().year(year).toDate();
+      return moment().toDate();
     }
-  }, [unlimited, year]);
+  }, [unlimited]);
 
   const { dateGte, dateLte } = useMemo(() => {
     if (!disabled && !unlimited) {

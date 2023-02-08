@@ -11,7 +11,7 @@ export type ButtonProps = {
 export const ButtonBase = styled.button`
   border: 0;
   background-color: transparent;
-  padding: 1em;
+  padding: 1em 0;
   cursor: pointer;
   width: 100%;
 

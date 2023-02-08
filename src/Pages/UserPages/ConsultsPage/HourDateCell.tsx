@@ -37,7 +37,9 @@ const HourDateCell = ({ column, hours, date, row, updateDates }: Props) => {
           initialValue={date}
           column={column || 0}
           row={row || 0}
-          updateDates={updateDates}
+          updateDates={({ date, column, row }) =>
+            updateDates({ date, column, row, hours })
+          }
           unlimited
         />
       </TableCell>

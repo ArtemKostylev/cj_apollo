@@ -110,6 +110,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
                     date: date.format(DATE_FORMAT)
                   }, getFragment(['date']))}
                   month={getCurrentAcademicMonth()}
+                  short
                   year={year}/>
       </TableCell>
       <SelectCell error={erroredFields.type} value={item.type?.name || ''} options={types}

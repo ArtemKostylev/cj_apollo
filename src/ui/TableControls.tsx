@@ -1,25 +1,28 @@
-import React, {Fragment} from 'react';
-import {ButtonProps, Button} from './formItems/Button';
-import {SelectProps, Select} from './formItems/Select';
+import React, { Fragment } from 'react';
+import { ButtonProps, Button } from './formItems/Button';
+import { SelectProps, Select } from './formItems/Select';
 import styled from 'styled-components';
 import omit from 'lodash/omit';
-import {theme} from '../styles/theme';
+import { theme } from '../styles/theme';
 
 export enum TableControlType {
   BUTTON,
-  SELECT
+  SELECT,
 }
 
-export type TableControlsConfig = ({ type: TableControlType } & (ButtonProps | SelectProps))[]
+export type TableControlsConfig = ({ type: TableControlType } & (
+  | ButtonProps
+  | SelectProps
+))[];
 
 type Props = {
-  config: TableControlsConfig
-}
+  config: TableControlsConfig;
+};
 
 const ComponentMap = {
-  [TableControlType.BUTTON]: <Button/>,
-  [TableControlType.SELECT]: <Select/>
-}
+  [TableControlType.BUTTON]: Button,
+  [TableControlType.SELECT]: Select,
+};
 
 const ControlsContainer = styled.div`
   width: 100%;
@@ -30,15 +33,18 @@ const ControlsContainer = styled.div`
   justify-content: start;
   align-items: center;
   border-bottom: 1px solid ${theme.border};
-`
+`;
 
-export const TableControls = ({config}: Props) => (
+export const TableControls = ({ config }: Props) => (
   <ControlsContainer>
-    {config.map((it, index) => (
+    {config.map((it, index) => {
+      const Component = ComponentMap[it.type];
+
+      return (
         <Fragment key={index}>
-          {React.cloneElement(ComponentMap[it.type], {...omit(it, 'type')})}
+          <Component {...omit(it, 'type')}/>
         </Fragment>
-      )
-    )}
+      );
+    })}
   </ControlsContainer>
-)
+);
