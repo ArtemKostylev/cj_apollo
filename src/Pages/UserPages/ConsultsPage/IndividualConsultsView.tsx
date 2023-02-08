@@ -38,7 +38,6 @@ const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props
                 date={item.consult[index] && moment(item.consult[index].date)}
                 hours={item.consult[index]?.hours}
                 key={index}
-                year={year}
               />
             ))}
           </tr>

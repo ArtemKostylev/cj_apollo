@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, ReactElement, memo} from 'react';
+import React, {useState, useEffect, useRef, memo} from 'react';
 import {useOnClickOutside} from '../../../hooks/useOnClickOutside';
 import {Dropdown} from '../../Dropdown';
 import {SelectCellLayout} from './style/SelectCellLayout.styled';

@@ -1,13 +1,6 @@
-import React, {memo} from 'react';
+import {memo} from 'react';
 import {NameCellBase} from './NameView';
-import {PROGRAMS} from '../../constants/programs';
 import styled from 'styled-components';
-
-type Props = {
-  classNum: number | undefined;
-  program: string | undefined;
-  archived?: boolean;
-}
 
 const Base = styled(NameCellBase)`
   text-align: center;
@@ -16,8 +9,8 @@ const Base = styled(NameCellBase)`
 
 export const ClassView = memo(({value, disabled}: Partial<TableItemProps>) => {
   return (
-    <Base archived={archived}>
-      {`${classNum || ''}${program ? PROGRAMS[program] : ''} ${archived ? '(A)' : ''}`}
+    <Base archived={disabled}>
+      {value}
     </Base>
   )
 });

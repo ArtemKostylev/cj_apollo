@@ -40,7 +40,6 @@ const GroupConsultsView = ({data, controlsConfig, updateDates, long = false, yea
               row={item.group}
               date={item.consult[index] && moment(item.consult[index].date)}
               hours={item.consult[index]?.hours}
-              year={year}
             />
           ))}
         </tr>
