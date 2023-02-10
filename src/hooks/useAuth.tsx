@@ -1,18 +1,23 @@
-import React, {useState, useContext, createContext, useMemo} from 'react';
+import React, {useState, useContext, createContext, useMemo, useEffect} from 'react';
 import {USER_ALIAS} from '../constants/localStorageAliases';
 import {fromPairs} from 'lodash';
 import {getCurrentAcademicYear} from '../utils/academicDate';
 import {useHistory} from 'react-router-dom';
 import {ROUTES} from '../constants/routes';
+import {useQuery} from '@apollo/client';
+import {UPDATE_USER_INFO} from '../graphql/queries/updateUserInfo';
 
 type signInCallback = (payload: AuthPayload, nav: () => void) => void;
 type signOutCallback = (nav: () => void) => void;
+
+interface IUser {
+  role: string;
+  versions: Record<string, { id: number, courses: Course[] }>;
+  token: string;
+};
 type AuthContextProps = {
-  user: {
-    role: string;
-    versions: Record<string, { id: number, courses: Course[] }>;
-    token: string;
-  };
+  loading: boolean;
+  user: IUser;
   signIn: signInCallback;
   signOut: signOutCallback;
 }
@@ -29,20 +34,32 @@ export const useAuth = () => {
 };
 
 function useProvideAuth(): AuthContextProps {
-  const cashed_user = useMemo(() => localStorage.getItem(USER_ALIAS), []);
   const history = useHistory();
-
-  const [user, setUser] = useState(() => {
-    const userObj = cashed_user ? JSON.parse(cashed_user) : undefined;
-
-    if (userObj?.role?.name) {
-      localStorage.removeItem(USER_ALIAS);
-      return undefined;   // Old version of user object detection
+  const cashedUser = useMemo(() => {
+    try {
+      const storageItem = localStorage.getItem(USER_ALIAS);
+      if (!storageItem) {
+        history.replace(ROUTES.LOGIN);
+        return;
+      }
+      return JSON.parse(storageItem);
+    } catch (e) {
+      history.replace(ROUTES.LOGIN);
     }
-    return userObj
-  })
+  }, []);
 
-  if (!user) history.replace(ROUTES.LOGIN);
+  const [user, setUser] = useState<IUser | null>(cashedUser);
+  const {loading} = useQuery(UPDATE_USER_INFO, {
+    variables: {
+      token: cashedUser?.token
+    },
+    onError: () => {
+      history.replace(ROUTES.LOGIN)
+    },
+    onCompleted: (data) => {
+      signIn(data.updateUserInfo, () => history.push('/'))
+    }
+  });
 
   const signIn: signInCallback = (payload, nav) => {
     if (!payload?.user?.role) {
@@ -70,12 +87,13 @@ function useProvideAuth(): AuthContextProps {
 
   const signOut: signOutCallback = (nav) => {
     nav();
-    setUser(undefined);
+    setUser(null);
     localStorage.removeItem(USER_ALIAS);
   };
 
   return {
-    user,
+    loading,
+    user: user as IUser,
     signIn,
     signOut,
   };

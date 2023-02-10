@@ -15,6 +15,10 @@ import {useAuth} from './hooks/useAuth';
 import {ADMIN, TEACHER} from './constants/roles';
 import get from 'lodash/get';
 import {ROUTES} from './constants/routes';
+import {Login} from './Pages/Login';
+import {ErrorScreen} from './Pages/ErrorScreen';
+import {MainLayout} from './ui/MainLayout';
+import {Spinner} from './ui/Spinner';
 
 const AdminRoutes = () => (
   <Switch>
@@ -42,7 +46,7 @@ const TeacherRoutes = () => (<Switch>
   </Switch>
 )
 
-export const MainRouter = memo(() => {
+export const AppRouter = memo(() => {
   const auth = useAuth();
   const role = get(auth, 'user.role');
 
@@ -50,4 +54,18 @@ export const MainRouter = memo(() => {
   if (role == TEACHER) return <TeacherRoutes/>
 
   return null;
+});
+
+export const MainRouter = memo(() => {
+  const {loading} = useAuth();
+
+  if (loading) return <Spinner/>;
+
+  return (
+    <Switch>
+      <Route path={ROUTES.LOGIN} component={Login}/>
+      <Route path={ROUTES.ERROR} component={ErrorScreen}/>
+      <Route path={ROUTES.HOME} component={MainLayout}/>
+    </Switch>
+  )
 });
