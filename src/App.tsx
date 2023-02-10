@@ -1,9 +1,5 @@
 import React from 'react';
-import {Login} from './Pages/Login';
-import {Switch, Route, BrowserRouter} from 'react-router-dom';
-import {ErrorScreen} from './Pages/ErrorScreen';
-import {ROUTES} from './constants/routes';
-import {MainLayout} from './ui/MainLayout';
+import {BrowserRouter} from 'react-router-dom';
 import {theme} from './styles/theme';
 import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 import {AuthProvider} from './hooks/useAuth';
@@ -11,6 +7,8 @@ import {ThemeProvider} from 'styled-components';
 import {setContext} from '@apollo/client/link/context';
 import {USER_ALIAS} from './constants/localStorageAliases';
 import {createUploadLink} from 'apollo-upload-client';
+import {MainRouter} from './MainRouter';
+
 import moment from 'moment';
 
 const pathMap: Record<string, string> = {
@@ -50,11 +48,7 @@ export default function App() {
       <ApolloProvider client={client}>
         <AuthProvider>
           <ThemeProvider theme={theme}>
-            <Switch>
-              <Route path={ROUTES.LOGIN} component={Login}/>
-              <Route path={ROUTES.ERROR} component={ErrorScreen}/>
-              <Route path={ROUTES.HOME} component={MainLayout}/>
-            </Switch>
+            <MainRouter/>
           </ThemeProvider>
         </AuthProvider>
       </ApolloProvider>

@@ -23,7 +23,7 @@ export default function MainHeader({onMenuClick, menuRef}: Props) {
 
   const logout = () => {
     auth.signOut(() => {
-      history.push("/");
+      history.push("/login");
     });
   };
   return (

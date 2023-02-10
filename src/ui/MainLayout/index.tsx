@@ -3,7 +3,7 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {ErrorScreen} from '../../Pages/ErrorScreen';
 import Menu from '../Menu';
 import MainHeader from '../MainHeader';
-import {MainRouter} from '../../MainRouter';
+import {AppRouter} from '../../MainRouter';
 import {AppWrapper} from './style/AppWrapper.styled';
 import {Cover} from './style/Cover.styled';
 import {Content} from './style/Content.styled';
@@ -23,7 +23,7 @@ export const MainLayout = () => {
         <Cover menuVisible={menuVisible} onClick={() => setMenuVisible((prev) => !prev)}/>
         <Content menuVisible={menuVisible}>
           <MainHeader onMenuClick={onMenuClick} menuRef={menuRef}/>
-          <MainRouter/>
+          <AppRouter/>
         </Content>
       </ErrorBoundary>
     </AppWrapper>
