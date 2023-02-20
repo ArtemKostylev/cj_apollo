@@ -10,6 +10,7 @@ import {FETCH_MIDTERM_EXAM_TYPES} from "../../../../graphql/queries/fetchMidterE
 interface Props {
   initialData?: MidtermExamType;
   isEnabled: boolean;
+  placeholder?: string;
 }
 
 const InputWrapper = styled.div`
@@ -20,7 +21,7 @@ const InputWrapper = styled.div`
   width: 70%;
 `;
 
-export const Input = ({initialData = {id: 0, name: ''} as MidtermExamType, isEnabled}: Props) => {
+export const Input = ({initialData = {id: 0, name: ''} as MidtermExamType, isEnabled, placeholder = 'Введите название специальности'}: Props) => {
 
     const [update] = useMutation(UPDATE_MIDTERM_EXAM_TYPE, {refetchQueries: [{query: FETCH_MIDTERM_EXAM_TYPES}]});
     const [remove] = useMutation(DELETE_MIDTERM_EXAM_TYPE, {refetchQueries: [{query: FETCH_MIDTERM_EXAM_TYPES}]});
@@ -60,7 +61,7 @@ export const Input = ({initialData = {id: 0, name: ''} as MidtermExamType, isEna
           onChange={handleChange}
           value={inputData.name}
           disabled={!enabled}
-          placeholder={'Введите название специальности'}
+          placeholder={placeholder}
           size={35}
         />
         {enabled ? (

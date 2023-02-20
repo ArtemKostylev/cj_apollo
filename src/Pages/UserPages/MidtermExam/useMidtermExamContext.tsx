@@ -3,11 +3,11 @@ import {useQuery} from '@apollo/client';
 import {FETCH_TEACHER_STUDENTS} from '../../../graphql/queries/fetchStudentsForTeacher';
 import {useAuth} from '../../../hooks/useAuth';
 import {FETCH_MIDTERM_EXAMS} from '../../../graphql/queries/fetchMidtermExams';
-import {getBorderDatesForPeriod, getCurrentAcademicPeriod, getCurrentAcademicYear} from '../../../utils/academicDate';
+import {getCurrentAcademicPeriod, getCurrentAcademicYear} from '../../../utils/academicDate';
 import {Periods} from '../../../constants/date';
 import {FETCH_MIDTERM_EXAM_TYPES} from '../../../graphql/queries/fetchMidterExamTypes';
 import {addToQuery, modifyEntity, useApollo} from '../../../hooks/useApolloCache';
-import {normalizeByKey, toDropdownOption} from '../../../utils/normalizer';
+import {toDropdownOption} from '../../../utils/normalizer';
 
 const MidtermExamContext = createContext({} as MidtermExamContext);
 
@@ -93,7 +93,7 @@ function useProvideMidtermExam() {
 
   const [{loading, error, data, refetch}, modifyMidtermExam, addMidtermExam] = useApollo<MidtermExam>(
     FETCH_MIDTERM_EXAMS, {
-      teacherId: versions[year].id, year, typeId: type, ...getBorderDatesForPeriod(period, year)
+      teacherId: versions[year].id, year, typeId: type
     },
     'fetchMidtermExams'
   );

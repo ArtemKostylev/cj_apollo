@@ -61,14 +61,15 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
   const client = useApolloClient();
   const [erroredFields, setErroredFields] = useState<Record<string, boolean>>({});
 
-  const onBlur = () => {
+  useEffect(() => {
     const errors = validate(item);
+    setErroredFields(fromPairs(errors.map(it => [it, true])));
+  }, [item])
 
-    if (errors.length) {
-      setErroredFields(fromPairs(errors.map(it => [it, true])));
+  const onBlur = () => {
+    if (!isEmpty(erroredFields)) {
       return;
     }
-
     update({
       variables: {
         data: {
@@ -110,7 +111,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
                     date: date.format(DATE_FORMAT)
                   }, getFragment(['date']))}
                   month={getCurrentAcademicMonth()}
-                  short
+                  unlimited
                   year={year}/>
       </TableCell>
       <SelectCell error={erroredFields.type} value={item.type?.name || ''} options={types}

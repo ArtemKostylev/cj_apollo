@@ -5,7 +5,6 @@ import {Spinner} from '../../../ui/Spinner';
 import {TableControlsConfig, TableControlType} from '../../../ui/TableControls';
 import {YEARS} from '../../../constants/date';
 import {useMutation} from '@apollo/client';
-import {UPDATE_MIDTERM_EXAM} from '../../../graphql/mutations/updateMidtermExam';
 import {DELETE_MIDTERM_EXAM} from '../../../graphql/mutations/deleteMidtermExam';
 
 const MidtermExam = () => {
@@ -30,13 +29,14 @@ const MidtermExam = () => {
         type: TableControlType.BUTTON,
         text: "Добавить",
         onClick: () => {
-          addMidtermExam({...DEFAULT_MIDTERM_EXAM, number: 1 + (data?.table?.[data?.table?.length - 1].number || 0)})
+          addMidtermExam({...DEFAULT_MIDTERM_EXAM, number: 1 + (data?.table?.[data?.table?.length - 1]?.number || 0)})
         },
       },
       {
         type: TableControlType.BUTTON,
         text: 'Удалить',
         onClick: async () => {
+          if (!selectedRecord) return;
           await remove({variables: {id: selectedRecord}});
           refetch();
         },

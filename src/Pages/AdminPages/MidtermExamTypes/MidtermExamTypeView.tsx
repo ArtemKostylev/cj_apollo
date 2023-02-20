@@ -12,9 +12,9 @@ export const MidtermExamTypeView = ({initialData}: Props) => {
     <PageWrapper>
       <FormWrapper>
         {initialData.map((type) => (
-          <Input isEnabled={false} initialData={type} key={type.name}/>
+          <Input isEnabled={false} initialData={type} key={type.name} placeholder='Введите название типа аттестации'/>
         ))}
-        <Input isEnabled={true}/>
+        <Input isEnabled={true} placeholder='Введите название типа аттестации'/>
       </FormWrapper>
     </PageWrapper>
   );

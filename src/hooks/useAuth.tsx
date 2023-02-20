@@ -1,8 +1,8 @@
-import React, {useState, useContext, createContext, useMemo, useEffect} from 'react';
+import React, {useState, useContext, createContext, useMemo} from 'react';
 import {USER_ALIAS} from '../constants/localStorageAliases';
 import {fromPairs} from 'lodash';
 import {getCurrentAcademicYear} from '../utils/academicDate';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {ROUTES} from '../constants/routes';
 import {useQuery} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../graphql/queries/updateUserInfo';
@@ -14,7 +14,8 @@ interface IUser {
   role: string;
   versions: Record<string, { id: number, courses: Course[] }>;
   token: string;
-};
+}
+
 type AuthContextProps = {
   loading: boolean;
   user: IUser;
@@ -35,6 +36,8 @@ export const useAuth = () => {
 
 function useProvideAuth(): AuthContextProps {
   const history = useHistory();
+  const location = useLocation();
+
   const cashedUser = useMemo(() => {
     try {
       const storageItem = localStorage.getItem(USER_ALIAS);
@@ -57,7 +60,7 @@ function useProvideAuth(): AuthContextProps {
       history.replace(ROUTES.LOGIN)
     },
     onCompleted: (data) => {
-      signIn(data.updateUserInfo, () => history.push('/'))
+      signIn(data.updateUserInfo, () => history.push(location.pathname))
     }
   });
 

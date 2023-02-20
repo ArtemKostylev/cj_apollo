@@ -36,12 +36,12 @@ const AdminRoutes = () => (
 );
 
 const TeacherRoutes = () => (<Switch>
-    <Route path={ROUTES.JOURNAL} component={Journal}/>
     <Route path={ROUTES.COMPENSATION} component={Compensation}/>
     <Route path={ROUTES.NOTES} component={Notes}/>
     <Route path={ROUTES.CONSULT} component={ConsultController}/>
     <Route path={ROUTES.SUBGROUPS} component={Subgroups}/>
     <Route path={ROUTES.MIDTERM_EXAM} component={MidtermExam}/>
+    <Route path={ROUTES.JOURNAL} component={Journal}/>
     <Redirect from={ROUTES.HOME} to={ROUTES.JOURNAL}/>
   </Switch>
 )
