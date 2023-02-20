@@ -1,41 +1,31 @@
 import {gql} from "@apollo/client";
 
-export const FETCH_JOURNAL_QUERY = gql`
-    query fetchJournalQuery(
-        $courseId: Int!
-        $teacherId: Int!
+export const FETCH_INDIVIDUAL_JOURNAL_QUERY = gql`
+    query fetchIndividualJournalQuery(
+        $course: Int!
         $year: Int!
-        $date_gte: Date
-        $date_lte: Date
+        $dateGte: Date!
+        $dateLte: Date!
     ) {
-        fetchJournal(
+        fetchIndividualJournal(
             courseId: $courseId
-            teacherId: $teacherId
             year: $year
             date_gte: $date_gte
             date_lte: $date_lte
         ) {
             id
-            student {
+            studentName
+            studentClass
+            marks {
                 id
-                name
-                surname
-                class
-                program
-            }
-            subgroup
-            journalEntry {
-                id
-                mark
                 date
+                value
             }
-            quaterMark {
+            quarterMarks {
                 id
-                mark
                 period
+                value
             }
-            archived
-            hours
         }
     }
 `;

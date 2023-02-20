@@ -28,8 +28,3 @@ export interface Mark {
   value: string;
   date: Date;
 }
-
-export const Journal2 = () => {
-
-
-}

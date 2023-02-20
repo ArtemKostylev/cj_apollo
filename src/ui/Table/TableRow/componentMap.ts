@@ -1,9 +1,9 @@
 import {SelectCell} from '../../cells/SelectCell';
-import {DateInput} from '../../cells/DateCell';
 import {InputCell} from '../../cells/InputCell';
 import {MemoExoticComponent} from 'react';
 import {ClassView} from '../../cells/ClassView';
 import {NameHeader} from '../NameHeader';
+import {DateInput} from '../../cells/DateCell/DateInput';
 
 export const componentMap: Record<AttrType, MemoExoticComponent<(props: TableItemProps) => JSX.Element>> = {
   [AttrType.NAME]: SelectCell,

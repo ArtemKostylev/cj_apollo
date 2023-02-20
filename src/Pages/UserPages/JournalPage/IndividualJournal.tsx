@@ -1,56 +1,46 @@
-import React, {memo, useCallback} from 'react';
-import {QUARTER_END, QUARTERS_RU} from '../../../constants/quarters';
+import React, {memo, useMemo} from 'react';
+import {QUARTERS_RU} from '../../../constants/quarters';
 import {findMark} from './JournalPageHelpers';
-import moment, {Moment} from 'moment';
+import moment from 'moment';
 import {SelectCell} from '../../../ui/cells/SelectCell';
 import {Months} from '../../../constants/date';
-import {UpdateData, UpdateQuarterData} from './Journal';
 import {HOURS_OPTIONS, MARKS_OPTIONS} from '../../../constants/selectCellOptions';
-import {Table} from '../../../ui/Table';
 import {NameHeader} from '../../../ui/Table/NameHeader';
 import {Header} from '../../../ui/Table/style/Header.styled';
 import {QuarterHeader} from './style/QuarterHeader.styled';
 import {compareByClass} from '../../../utils/comparators';
 import {NameView} from '../../../ui/cells/NameView';
 import {ClassView} from '../../../ui/cells/ClassView';
+import {useQuery} from '@apollo/client';
+import {FETCH_INDIVIDUAL_JOURNAL_QUERY} from '../../../graphql/queries/fetchJournal';
+import {IndividualJournalEntry} from './types';
+import {useAuth} from '../../../hooks/useAuth';
+import {useLocation} from 'react-router-dom';
+import {getBorderDatesForMonth} from '../../../utils/academicDate';
+import {Spinner} from '../../../ui/Spinner';
 
 const QUARTER_END_MONTHS = [9, 11, 2, 4];
 
 type Props = {
-  parsedDates: Moment[];
   month: Months;
-  updateQuarterData: UpdateQuarterData;
-  updateMyData: UpdateData;
-  studentData: TeacherCourseStudent[];
+  year: number;
+  course: number;
   onlyHours: boolean;
 }
 
-export const IndividualJournalView = memo(({parsedDates, month, updateQuarterData, updateMyData, studentData, onlyHours}: Props) => {
-  const getQuarterMark = useCallback((quaterMarks: QuarterMark[], student: Student) => {
-    if (!QUARTER_END[month]) return;
+const useTeacherId = (year: number) => {
+  const auth = useAuth();
+  const location = useLocation() as any;
 
-    const mark = quaterMarks.find((mark) => mark.period === QUARTER_END[month]);
-    const year = month === Months.MAY && quaterMarks.find((mark) => mark.period === 'year');
+  return useMemo(() => {
+    return location.state?.versions[year].id || auth.user?.versions[year].id
+  }, [year])
+}
 
-    return (
-      <>
-        <SelectCell value={mark?.mark} options={{selectOptions: MARKS_OPTIONS}}
-                    onChange={(value) => updateQuarterData({
-                      row: student.id,
-                      column: mark ? mark.period : QUARTER_END[month],
-                      value: (value as string)
-                    })}
-        />
-        {year && (<SelectCell value={year.mark} options={{selectOptions: MARKS_OPTIONS}}
-                              onChange={(value) => updateQuarterData({
-                                row: student.id,
-                                column: year.period,
-                                value: (value as string)
-                              })}/>
-        )}
-      </>
-    )
-  }, [month]);
+export const IndividualJournal = memo(({month, year, course, onlyHours}: Props) => {
+
+  const {dateGte, dateLte} = useMemo(() => getBorderDatesForMonth(month, year), [month, year]);
+
 
   return (
     <>

@@ -17,6 +17,7 @@ interface TableRowProps<T extends PrimitiveCacheEntity> {
   typeName: string;
 }
 
+// TODO: field can be an array (nested data)
 export const TableRow = <T extends PrimitiveCacheEntity>({
                                                            item,
                                                            updateMutation,

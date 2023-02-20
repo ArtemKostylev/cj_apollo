@@ -21,7 +21,12 @@ export type UseApollo<T> = [
 ];
 
 export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, variables: Record<string, any>, dataKey: string): UseApollo<T> => {
-  const {data, loading, error, refetch} = useQuery<Data<T>>(query, {variables});
+  const {data, loading, error, refetch} = useQuery<Data<T>>(query, {
+    variables,
+    onError: (error) => {
+      throw new Error(error.message);
+    }
+  });
 
   const client = useApolloClient();
   const cache = client.cache;

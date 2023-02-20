@@ -9,14 +9,12 @@ import {TableCell} from '../../../ui/cells/styles/TableCell.styled';
 
 type Props = {
   data: any;
-  controlsConfig: TableControlsConfig;
   updateDates: (props: UpdateDatesProps) => void;
   long?: boolean;
-  year: number;
 }
 
 
-const GroupConsultsView = ({data, controlsConfig, updateDates, long = false, year}: Props) => (
+const GroupConsultsView = ({data, updateDates, long = false}: Props) => (
   <div className='consult_container'>
     <table className='consult_table'>
       <thead>

@@ -9,7 +9,6 @@ export enum TableControlType {
   YEAR = 'YEAR',
   MONTH = 'MONTH',
   PERIOD = 'PERIOD',
-  REMOTE_SELECT = "REMOTE_SELECT"
 }
 
 export interface SelectConfig {

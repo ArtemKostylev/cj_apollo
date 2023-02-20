@@ -3,7 +3,7 @@ import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import moment, {Moment} from 'moment';
 import 'moment/locale/ru';
 import {TableControlsConfig, TableControlType} from '../../../ui/TableControls/types';
-import {IndividualJournalView} from './IndividualJournalView';
+import {IndividualJournal} from './IndividualJournalView';
 import {GroupJournalView} from './GroupJournalView';
 import {makeVar, NetworkStatus, useMutation, useQuery, useReactiveVar} from '@apollo/client';
 import {FETCH_JOURNAL_QUERY} from '../../../graphql/queries/fetchJournal';
@@ -15,6 +15,7 @@ import {DATE_FORMAT, Months, Periods} from '../../../constants/date';
 import {getCurrentAcademicYear, getDatesFromMonth, MONTHS_IN_PERIODS} from '../../../utils/academicDate';
 import {useLocation} from 'react-router-dom';
 import {useTableControls} from '../../../ui/TableControls/useTableControls';
+import {Spinner} from '../../../ui/Spinner';
 
 export type Pair = {
   class: number,
@@ -28,24 +29,10 @@ export type UpdateQuarterData = (args: { row: number, column: string, value: str
 export type UpdateData = (args: { row: number, column: number, value: string, group?: number }) => boolean;
 export type UpdateDates = (args: { date: Moment, column: number, group: number }) => void;
 
-
 export default function Journal() {
   const location = useLocation() as any;
   const auth = useAuth();
   const [update] = useMutation(UPDATE_JOURNAL_MUTATION);
-
-  const save = () => {
-    update({
-      variables: {
-        data: {
-          updateCasual: createUpdateData(),
-          updatePeriod: createQuaterData(),
-          deleteCasual: createClearData(),
-          deletePeriod: createQuaterClearData(),
-        },
-      }
-    }).then(() => refetch());
-  };
 
   const yearVar = useMemo(() => makeVar(getCurrentAcademicYear()), []);
   const year = useReactiveVar(yearVar);
@@ -72,178 +59,14 @@ export default function Journal() {
     {
       type: TableControlType.BUTTON,
       label: "Сохранить",
-      onClick: save,
     }
-  ], []);
+  ], [year]);
 
   const [TableControls, {month, course}] = useTableControls(controlsConfig as TableControlsConfig);
 
   const parsedDates = useMemo(() => getDatesFromMonth(month, year), [month, year]);
 
-  const updateMyData: UpdateData = ({row, column, value, group}) => {
-    let date: Moment | undefined;
-    if (group !== undefined && group > -1) {
-      date = dates_by_group[group][column].date;
-      if (!date) {
-        alert(t('empty_date'));
-        return false;
-      }
-    } else {
-      date = parsedDates[column];
-    }
-    const student = studentData.find((item) => item.student.id === row);
-    if (!student) throw new Error(`Can't find relation with id ${row}`)
-    const marks = student.journalEntry;
-    const cell = marks.find((el) => moment(el.date).isSame(date, 'days'));
-
-    const studentId = studentData.indexOf(student);
-
-    if (cell === undefined) {
-      studentData = [
-        ...studentData.slice(0, studentId),
-        {
-          ...studentData[studentId],
-          journalEntry: [
-            ...studentData[studentId].journalEntry,
-            {
-              id: 0,
-              mark: value,
-              date: date?.format(DATE_FORMAT),
-              delete_flag: false,
-              update_flag: true,
-            },
-          ],
-        },
-        ...studentData.slice(studentId + 1),
-      ];
-    } else {
-      let index = marks.indexOf(cell);
-      let flag = value === '';
-      studentData = [
-        ...studentData.slice(0, studentId),
-        {
-          ...studentData[studentId],
-          journalEntry: [
-            ...studentData[studentId].journalEntry.slice(0, index),
-            {
-              ...studentData[studentId].journalEntry[index],
-              mark: value,
-              delete_flag: flag,
-              update_flag: !flag,
-            },
-            ...studentData[studentId].journalEntry.slice(index + 1),
-          ],
-        },
-        ...studentData.slice(studentId + 1),
-      ];
-    }
-    return true;
-  };
-
-  const updateQuarterData: UpdateQuarterData = ({row, column, value}) => {
-    const student = studentData.find(item => item.student.id === row);
-    if (!student) throw new Error(`Can't find relation with id ${row}`);
-    const studentIndex = studentData.indexOf(student);
-
-    let mark = student.quaterMark.find((item) => item.period === column);
-    if (!mark) {
-      const newMark = {
-        id: 0,
-        mark: value,
-        period: column,
-        year: year,
-        studentId: student.id,
-        teacherId: location.state?.versions[year].id || auth.user.versions[year].id,
-        courseId: userCourses[0].id,
-        update_flag: true,
-        delete_flag: false
-      };
-      studentData[studentIndex].quaterMark = [...studentData[studentIndex].quaterMark, newMark,];
-      return true;
-    }
-    const markIndex = student.quaterMark.indexOf(mark);
-    let flag = value === '';
-    studentData = [
-      ...studentData.slice(0, studentIndex),
-      {
-        ...studentData[studentIndex],
-        quaterMark: [
-          ...studentData[studentIndex].quaterMark.slice(0, markIndex),
-          {
-            ...studentData[studentIndex].quaterMark[markIndex],
-            mark: value,
-            delete_flag: flag,
-            update_flag: !flag,
-          },
-          ...studentData[studentIndex].quaterMark.slice(markIndex + 1),
-        ],
-      },
-      ...studentData.slice(studentIndex + 1),
-    ];
-    return true;
-  };
-
-  const createUpdateData = () => {
-    let result = [];
-
-    for (let i = 0; i < studentData.length; i++) {
-      let student = studentData[i].journalEntry;
-      for (let j = 0; j < student.length; j++) {
-        let entry = student[j];
-        if (entry.update_flag)
-          result.push({
-            id: entry.id,
-            mark: entry.mark,
-            date: entry.date,
-            relationId: studentData[i].id,
-          });
-      }
-    }
-
-    return result;
-  };
-
-  const createClearData = () => {
-    let result = [];
-    for (let i = 0; i < studentData.length; i++) {
-      let student = studentData[i].journalEntry;
-      for (let j = 0; j < student.length; j++) {
-        let entry = student[j];
-        if (entry.delete_flag && entry.id !== 0) result.push(entry.id);
-      }
-    }
-    return result;
-  };
-
-  const createQuaterData = () => {
-    let result: QuarterMark[] = [];
-    studentData.forEach((student) => {
-      student.quaterMark.forEach((mark) => {
-        if (mark.update_flag)
-          result.push({
-            id: mark.id,
-            mark: mark.mark,
-            period: mark.period,
-            year: mark.year,
-            relationId: student.id,
-          });
-      });
-    });
-    return result;
-  };
-
-  const createQuaterClearData = () => {
-    let result: number[] = [];
-    studentData.forEach((student) => {
-      student.quaterMark.forEach((mark) => {
-        if (mark.delete_flag && mark.id !== 0) result.push(mark.id);
-      });
-    });
-    return result;
-  };
-
-
-  let {loading, data, error, refetch, networkStatus} = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
+  let {loading, data} = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
     variables: {
       teacherId: location.state?.versions[year].id || auth.user?.versions[year].id,
       courseId: userCourses[course].id,
@@ -251,17 +74,14 @@ export default function Journal() {
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
+    onError: (error) => {
+      throw new Error(error.message);
+    }
   });
-
 
   let studentData: TeacherCourseStudent[] = [];
 
-  const spinner = <div>Загрузка</div>;
-
-  if (error) throw new Error(error.message);
-  if (loading) return spinner;
-  if (networkStatus === NetworkStatus.refetch) return spinner;
-  if (!data) throw new Error('500');
+  if (loading || !data) return <Spinner/>;  // TODO: this should lead to no content screen and allow further interaction with ui
 
   studentData = data.fetchJournal.map((student: TeacherCourseStudent) => ({
     ...student,
@@ -413,7 +233,7 @@ export default function Journal() {
           onlyHours={userCourses[year].onlyHours}
         />
       ) : (
-        <IndividualJournalView
+        <IndividualJournal
           parsedDates={parsedDates}
           month={month}
           updateQuarterData={updateQuarterData}

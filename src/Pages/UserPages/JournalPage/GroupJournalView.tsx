@@ -44,7 +44,7 @@ export const GroupJournalView = memo(({datesByGroup, groupedData, period, update
           <tr>
             {group.map((date, id) => <Header hoverable>
               <DateCell initialValue={date.date} column={id} month={date.month} group={gIndex} updateDates={updateDates}
-                        full={false} key={id} year={year}/>
+                        short={true} key={id} year={year}/>
             </Header>)}
           </tr>
           </thead>

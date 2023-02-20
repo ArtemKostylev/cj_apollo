@@ -8,13 +8,11 @@ import {NameView} from '../../../ui/cells/NameView';
 import moment from 'moment';
 
 type Props = {
-  controlsConfig: TableControlsConfig;
   data: any;
   updateDates: (props: UpdateDatesProps) => void;
-  year: number;
 }
 
-const IndividualConsultsView = ({controlsConfig, data, updateDates, year}: Props) => {
+const IndividualConsultsView = ({data, updateDates}: Props) => {
   return (
     <div className='consult_container'>
       <table className='consult_table'>

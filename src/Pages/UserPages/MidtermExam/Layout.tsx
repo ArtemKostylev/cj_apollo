@@ -100,9 +100,9 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
       onRowClick(item.id)
     }}>
       <TableCell error={erroredFields.number}>{item.number}</TableCell>
-      <SelectCell error={erroredFields.student} value={`${item.student?.surname || ''} ${item.student?.name || ''}`} options={select}
+      {/* <SelectCell error={erroredFields.student} value={`${item.student?.surname || ''} ${item.student?.name || ''}`} options={select}
                   onSelect={(id) => onSelect(id as number, 'Student', STUDENT_FRAGMENT, 'student')}/>
-      <ClassView classNum={item.student?.class} program={item.student?.program}/>
+      <ClassView classNum={item.student?.class} program={item.student?.program}/>*/}
       <TableCell error={erroredFields.date}>
         <DateCell initialValue={item.date ? moment(item.date) : undefined}
                   updateDates={({date}) => modifyMidtermExam({
@@ -113,12 +113,12 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
                   short
                   year={year}/>
       </TableCell>
-      <SelectCell error={erroredFields.type} value={item.type?.name || ''} options={types}
+      {/*      <SelectCell error={erroredFields.type} value={item.type?.name || ''} options={types}
                   onSelect={(id) => onSelect(id as number, 'MidtermExamType', MIDTERM_EXAM_TYPE_FRAGMENT, 'type')}/>
       <InputCell rows={10} error={erroredFields.contents} value={item.contents}
                  onChange={value => modifyMidtermExam({...item, contents: value}, getFragment(['contents']))}/>
       <InputCell rows={10} error={erroredFields.result} value={item.result}
-                 onChange={value => modifyMidtermExam({...item, result: value}, getFragment(['result']))}/>
+                 onChange={value => modifyMidtermExam({...item, result: value}, getFragment(['result']))}/>*/}
     </Row>
   )
 });
@@ -126,7 +126,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
 const TableHeader = () => (
   <tr>
     <Header width={60}>Номер</Header>
-    <NameHeader/>
+    {/*    <NameHeader/>*/}
     <Header width={80}>Класс</Header>
     <Header width={100}>Дата</Header>
     <Header width={200}>Тип</Header>
@@ -144,10 +144,10 @@ export const Layout = ({controlsConfig}: Props) => {
   return (
     <div>
       <TableControls config={controlsConfig}/>
-      <Table>
+      {/*      <Table>
         <TableHeader/>
         {Object.values(table).map((it) => <TableRow key={it.id} item={it}/>)}
-      </Table>
+      </Table>*/}
     </div>
   )
 }
