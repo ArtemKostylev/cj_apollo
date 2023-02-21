@@ -1,6 +1,6 @@
-import { ForwardedRef, MouseEventHandler, forwardRef, memo } from 'react';
+import {ForwardedRef, MouseEventHandler, forwardRef, memo} from 'react';
 import styled from 'styled-components';
-import { convertDate } from './utils';
+import {convertDate} from './utils';
 
 interface InputProps {
   value?: string;
@@ -10,6 +10,7 @@ interface InputProps {
 
 const InputWrapper = styled.div`
   width: 100%;
+  height: 100%;
   text-align: center;
   cursor: pointer;
   padding-left: 4px;
@@ -18,7 +19,7 @@ const InputWrapper = styled.div`
 `;
 
 export const Input = memo(
-  forwardRef(({ value, onClick, short }: InputProps, ref: ForwardedRef<any>) => (
+  forwardRef(({value, onClick, short}: InputProps, ref: ForwardedRef<any>) => (
     <InputWrapper onClick={onClick} ref={ref}>
       {convertDate(value, !short)}
     </InputWrapper>

@@ -16,7 +16,8 @@ export const DropdownLayout = styled.div<DropdownLayoutProps>`
   top: 100%;
   left: 0;
   height: fit-content;
-  overflow: visible;
+  max-height: 450px;
+  overflow: auto;
   margin: 0;
   z-index: 10;
   background-color: #f1f1f1;

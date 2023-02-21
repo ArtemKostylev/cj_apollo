@@ -1,8 +1,8 @@
 const DATE_PLACEHOLDER = '.....';
 
-export class EmptyYearException extends Error {
+export class LimitException extends Error {
   constructor() {
-    super('year was not provided to limited date picker');
+    super('limiting date was not provided to limited date picker');
   }
 }
 

@@ -3,12 +3,36 @@ import {Layout} from './Layout';
 import {DEFAULT_MIDTERM_EXAM, ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
 import {Spinner} from '../../../ui/Spinner';
 import {TableControlsConfig, TableControlType} from '../../../ui/TableControls';
-import {YEARS} from '../../../constants/date';
+import {PERIODS_RU, YEARS} from '../../../constants/date';
 import {useMutation} from '@apollo/client';
 import {DELETE_MIDTERM_EXAM} from '../../../graphql/mutations/deleteMidtermExam';
+import {getBorderDatesForPeriod} from '../../../utils/academicDate';
+import moment from 'moment';
+
+const getType = (data: DropdownOptionType | undefined): MidtermExamType | null => {
+  if (!data) return null;
+  return {
+    __typename: 'MidtermExamType',
+    id: (data.value as number),
+    name: data.text
+  }
+};
 
 const MidtermExam = () => {
-  const {loading, error, selectedRecord, type, onTypeChange, year, onYearChange, data, addMidtermExam, refetch} = useMidtermExamContext();
+  const {
+    loading,
+    error,
+    selectedRecord,
+    type,
+    onTypeChange,
+    year,
+    period,
+    onPeriodChange,
+    onYearChange,
+    data,
+    addMidtermExam,
+    refetch
+  } = useMidtermExamContext();
   const [remove] = useMutation(DELETE_MIDTERM_EXAM);
 
   const controlsConfig: TableControlsConfig = useMemo(() => {
@@ -21,6 +45,12 @@ const MidtermExam = () => {
       },
       {
         type: TableControlType.SELECT,
+        options: PERIODS_RU,
+        text: PERIODS_RU.get(period)?.text,
+        onClick: onPeriodChange
+      },
+      {
+        type: TableControlType.SELECT,
         options: YEARS,
         text: YEARS.get(year)?.text,
         onClick: onYearChange
@@ -29,7 +59,12 @@ const MidtermExam = () => {
         type: TableControlType.BUTTON,
         text: "Добавить",
         onClick: () => {
-          addMidtermExam({...DEFAULT_MIDTERM_EXAM, number: 1 + (data?.table?.[data?.table?.length - 1]?.number || 0)})
+          addMidtermExam({
+            ...DEFAULT_MIDTERM_EXAM,
+            number: 1 + (data?.table?.[data?.table?.length - 1]?.number || 0),
+            type: getType(data.types?.get(type)),
+            date: getBorderDatesForPeriod(period, moment().year()).dateGte.add(1, 'days').format()
+          })
         },
       },
       {
@@ -48,7 +83,7 @@ const MidtermExam = () => {
   if (loading) return <Spinner/>
   if (error) throw new Error('503')
 
-  return (<Layout controlsConfig={controlsConfig}/>)
+  return <Layout controlsConfig={controlsConfig}/>
 }
 
 export const MidtermExamWithContext = () => (

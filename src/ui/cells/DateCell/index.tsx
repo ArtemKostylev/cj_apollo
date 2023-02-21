@@ -1,13 +1,14 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import {useState, useEffect, useMemo, useCallback} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
-import moment, { Moment } from 'moment';
-import { UpdateDatesProps } from '../../../Pages/UserPages/ConsultsPage/ConsultController';
-import { getBorderDatesForMonth } from '../../../utils/academicDate';
-import { EmptyYearException, convertDate } from './utils';
-import { Container } from './Container';
-import { Input } from './Input';
+import moment, {Moment} from 'moment';
+import {UpdateDatesProps} from '../../../Pages/UserPages/ConsultsPage/ConsultController';
+import {getBorderDatesForMonth, getBorderDatesForPeriod} from '../../../utils/academicDate';
+import {convertDate, LimitException} from './utils';
+import {Container} from './Container';
+import {Input} from './Input';
+import {Periods} from '../../../constants/date';
 
 interface EditableDateCellProps {
   initialValue: Moment | undefined;
@@ -22,21 +23,23 @@ interface EditableDateCellProps {
   short?: boolean;
   disabled?: boolean;
   year?: number;
+  period?: Periods;
 }
 
 //? Should column group, month and row be defaulted to 0?
 export const DateCell = ({
-  initialValue,
-  updateDates,
-  column = 0,
-  group = 0,
-  month = 0,
-  row = 0,
-  unlimited,
-  short,
-  disabled,
-  year,
-}: EditableDateCellProps) => {
+                           initialValue,
+                           updateDates,
+                           column = 0,
+                           group = 0,
+                           month = 0,
+                           row = 0,
+                           unlimited,
+                           short,
+                           disabled,
+                           year,
+                           period
+                         }: EditableDateCellProps) => {
   // TODO: move component state to higher level and get rid of effect
   const [value, setValue] = useState(initialValue?.toDate());
 
@@ -46,18 +49,23 @@ export const DateCell = ({
     }
   }, [unlimited]);
 
-  const { dateGte, dateLte } = useMemo(() => {
+  const {dateGte, dateLte} = useMemo(() => {
     if (!disabled && !unlimited) {
-      if (!year) throw new EmptyYearException();
-      return getBorderDatesForMonth(month, year);
+      if (period) {
+        return getBorderDatesForPeriod(period, moment().year())
+      }
+      if (year) {
+        return getBorderDatesForMonth(month, year);
+      }
+      throw new LimitException();
     }
 
-    return { dateGte: null, dateLte: null };
+    return {dateGte: null, dateLte: null};
   }, [disabled, unlimited, month, year]);
 
   const onChange = useCallback(
     (date: Date) => {
-      updateDates({ date: moment(date), column, group, row });
+      updateDates({date: moment(date), column, group, row});
       setValue(date);
     },
     [column, group, row, updateDates]
@@ -75,7 +83,7 @@ export const DateCell = ({
     <DatePicker
       selected={value}
       onChange={onChange}
-      customInput={<Input short={short} />}
+      customInput={<Input short={short}/>}
       popperPlacement='auto'
       minDate={dateGte?.toDate()}
       maxDate={dateLte?.toDate()}

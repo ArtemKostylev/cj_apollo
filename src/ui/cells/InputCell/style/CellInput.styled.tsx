@@ -4,6 +4,7 @@ import {errorStyles} from '../../styles/error';
 export const CellInput = styled.textarea<{ error?: boolean }>`
   border: none;
   position: absolute;
+  cursor: pointer;
   top: 0;
   left: 0;
   height: calc(100% - 4px);

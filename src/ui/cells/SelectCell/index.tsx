@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef, ReactElement, memo} from 'react';
 import {useOnClickOutside} from '../../../hooks/useOnClickOutside';
 import {Dropdown} from '../../Dropdown';
-import {SelectCellLayout} from './style/SelectCellLayout.styled';
 import {CellText} from './style/CellText.styled';
+import {TableCell} from '../styles/TableCell.styled';
 
 type Props = {
   value: string | number | undefined;
@@ -31,7 +31,7 @@ export const SelectCell = memo(({value = '', options, isWeekend = false, onSelec
   const onClick = () => setOpened((prev) => !prev);
 
   return (
-    <SelectCellLayout error={error} ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
+    <TableCell error={error} ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
       <CellText>{dropdownValue === '.' ? '✓' : dropdownValue}</CellText>
       {!disabled && (
         <Dropdown opened={opened} options={options} width={width} onSelect={(value) => {
@@ -39,6 +39,6 @@ export const SelectCell = memo(({value = '', options, isWeekend = false, onSelec
           setDropdownValue(value);
         }}/>
       )}
-    </SelectCellLayout>
+    </TableCell>
   );
 });

@@ -36,14 +36,17 @@ type Props = {
   controlsConfig: TableControlsConfig
 }
 
+const requiredFields = ['student'];
+
 const validate = (item: MidtermExam) => {
   const errors = [] as string[];
   Object.entries(item).forEach(([key, value]) => {
-    if (key === 'id' || key === 'number') return;
-    if (isEmpty(value)) errors.push(key);
+    if (requiredFields.includes(key)) {
+      if (isEmpty(value)) errors.push(key);
+    }
   })
 
-  return errors
+  return errors;
 }
 
 const getFragment = (keys: string[]) => {
@@ -56,7 +59,7 @@ const getFragment = (keys: string[]) => {
 }
 
 const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
-  const {year, modifyMidtermExam, data: {select, types}, onRowClick, selectedRecord, teacherId, refetch} = useMidtermExamContext();
+  const {year, modifyMidtermExam, period, data: {select}, onRowClick, selectedRecord, teacherId, refetch} = useMidtermExamContext();
   const [update] = useMutation(UPDATE_MIDTERM_EXAM);
   const client = useApolloClient();
   const [erroredFields, setErroredFields] = useState<Record<string, boolean>>({});
@@ -64,10 +67,8 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
   useEffect(() => {
     const errors = validate(item);
     setErroredFields(fromPairs(errors.map(it => [it, true])));
-  }, [item])
 
-  const onBlur = () => {
-    if (!isEmpty(erroredFields)) {
+    if (!isEmpty(errors)) {
       return;
     }
     update({
@@ -89,7 +90,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
         refetch();
       })
       .catch(() => console.log('Error'));
-  }
+  }, [item])
 
   const onSelect = (id: number, typeName: string, fragment: DocumentNode, key: string) => {
     const fragmentData = client.readFragment({id: `${typeName}:${id}`, fragment});
@@ -97,10 +98,10 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
   }
 
   return (
-    <Row selected={item.id === selectedRecord} onBlur={onBlur} onClick={() => {
+    <Row selected={item.id === selectedRecord} onClick={() => {
       onRowClick(item.id)
     }}>
-      <TableCell error={erroredFields.number}>{item.number}</TableCell>
+      <TableCell>{item.number}</TableCell>
       <SelectCell error={erroredFields.student} value={`${item.student?.surname || ''} ${item.student?.name || ''}`} options={select}
                   onSelect={(id) => onSelect(id as number, 'Student', STUDENT_FRAGMENT, 'student')}/>
       <ClassView classNum={item.student?.class} program={item.student?.program}/>
@@ -111,11 +112,10 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
                     date: date.format(DATE_FORMAT)
                   }, getFragment(['date']))}
                   month={getCurrentAcademicMonth()}
-                  unlimited
+                  period={period}
                   year={year}/>
       </TableCell>
-      <SelectCell error={erroredFields.type} value={item.type?.name || ''} options={types}
-                  onSelect={(id) => onSelect(id as number, 'MidtermExamType', MIDTERM_EXAM_TYPE_FRAGMENT, 'type')}/>
+      <TableCell>{item.type?.name || ''}</TableCell>
       <InputCell rows={10} error={erroredFields.contents} value={item.contents}
                  onChange={value => modifyMidtermExam({...item, contents: value}, getFragment(['contents']))}/>
       <InputCell rows={10} error={erroredFields.result} value={item.result}
