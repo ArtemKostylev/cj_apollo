@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import moment from 'moment';
 import {TableControls, TableControlsConfig} from '../../../ui/TableControls';
 import {useMidtermExamContext} from './useMidtermExamContext';
@@ -18,9 +18,9 @@ import {SelectCell} from '../../../ui/cells/SelectCell';
 import {ClassView} from '../../../ui/cells/ClassView';
 import {InputCell} from '../../../ui/cells/InputCell';
 import styled from 'styled-components';
-import {MIDTERM_EXAM_TYPE_FRAGMENT} from '../../../graphql/fragments/midtermExamType';
 import fromPairs from 'lodash/fromPairs';
 import {theme} from '../../../styles/theme';
+import {useDebounce} from 'react-use';
 
 const Row = styled.tr<{ selected: boolean }>`
   height: 10em;
@@ -30,7 +30,6 @@ const Row = styled.tr<{ selected: boolean }>`
     border-color: ${theme.thBorder};
   }
 `;
-
 
 type Props = {
   controlsConfig: TableControlsConfig
@@ -59,18 +58,25 @@ const getFragment = (keys: string[]) => {
 }
 
 const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
-  const {year, modifyMidtermExam, period, data: {select}, onRowClick, selectedRecord, teacherId, refetch} = useMidtermExamContext();
+  const {year, modifyMidtermExam, period, data: {select}, onRowClick, selectedRecord, teacherId} = useMidtermExamContext();
   const [update] = useMutation(UPDATE_MIDTERM_EXAM);
   const client = useApolloClient();
   const [erroredFields, setErroredFields] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
+  const runValidation = useCallback(() => {
     const errors = validate(item);
     setErroredFields(fromPairs(errors.map(it => [it, true])));
+
+    return errors;
+  }, [item]);
+
+  useDebounce(() => {
+    const errors = runValidation();
 
     if (!isEmpty(errors)) {
       return;
     }
+
     update({
       variables: {
         data: {
@@ -84,12 +90,12 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
           number: item.number
         }
       },
+      onError: (error) => console.log(error)
     })
-      .then(() => {
-        console.log('Saved');
-        refetch();
-      })
-      .catch(() => console.log('Error'));
+  }, 2000, [item, teacherId]);
+
+  useEffect(() => {
+    runValidation();
   }, [item])
 
   const onSelect = (id: number, typeName: string, fragment: DocumentNode, key: string) => {
@@ -98,9 +104,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
   }
 
   return (
-    <Row selected={item.id === selectedRecord} onClick={() => {
-      onRowClick(item.id)
-    }}>
+    <Row selected={item.number === selectedRecord?.number} onClick={() => onRowClick(item)}>
       <TableCell>{item.number}</TableCell>
       <SelectCell error={erroredFields.student} value={`${item.student?.surname || ''} ${item.student?.name || ''}`} options={select}
                   onSelect={(id) => onSelect(id as number, 'Student', STUDENT_FRAGMENT, 'student')}/>
@@ -147,7 +151,9 @@ export const Layout = ({controlsConfig}: Props) => {
       <TableControls config={controlsConfig}/>
       <Table>
         <TableHeader/>
-        {Object.values(table).map((it) => <TableRow key={it.id} item={it}/>)}
+        <tbody>
+        {Object.values(table).map((it) => <TableRow key={it.number} item={it}/>)}
+        </tbody>
       </Table>
     </div>
   )

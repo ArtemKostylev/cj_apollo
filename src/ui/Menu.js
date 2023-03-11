@@ -24,7 +24,7 @@ const MenuItemWrapper = styled.div`
 `;
 
 const MenuItemText = styled.p`
-  margin: 0px;
+  margin: 0;
   padding-left: 20px;
   font-size: 1rem;
 `;
@@ -52,9 +52,9 @@ const MenuWrapper = styled.div`
   box-shadow: 4px 5px 5px lightgray;
   line-height: 78px;
   transform: ${(props) =>
-          props.isOpen ? 'translateX(0vw)' : 'translateX(-20vw)'};
+          props.isOpen ? 'translateX(0vw)' : 'translateX(-21vw)'};
   transition: transform 0.5s;
-  margin: 0px;
+  margin: 0;
   font-family: 'IBM Plex Serif', serif;
   user-select: none;
 `;
@@ -89,7 +89,7 @@ export default function Menu({onClose, isOpen}) {
     }, [auth.user]);
 
     if (!resources) return null;
-    
+
     return (
         <MenuWrapper isOpen={isOpen}>
             <MenuItemWrapper>

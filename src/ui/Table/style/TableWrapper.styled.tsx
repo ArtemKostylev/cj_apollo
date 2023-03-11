@@ -8,4 +8,8 @@ export const TableWrapper = styled.table<{ fixed?: boolean }>`
   line-height: 0.9vw;
   empty-cells: show;
   table-layout: ${props => props.fixed ? 'fixed' : 'auto'};
+
+  tbody {
+    width: 100%;
+  }
 `;

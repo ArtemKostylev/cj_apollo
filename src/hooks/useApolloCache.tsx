@@ -8,6 +8,7 @@ export type Data<T> = {
 
 export type modifyEntity<T> = (value: T, fragment: DocumentNode) => void;
 export type addToQuery<T> = (value: T) => void;
+export type removeFromQuery<T> = (value: T) => void;
 
 export type UseApollo<T> = [
   {
@@ -17,7 +18,8 @@ export type UseApollo<T> = [
     refetch: () => void;
   },
   modifyEntity<T>,
-  addToQuery<T>
+  addToQuery<T>,
+  removeFromQuery<T>
 ];
 
 export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, variables: Record<string, any>, dataKey: string): UseApollo<T> => {
@@ -44,11 +46,7 @@ export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, v
 
     const items = cachedData?.[dataKey] || [];
 
-    if (items.find(it => {
-      return cache.identify(value) === cache.identify(it)
-    })) {
-      return;
-    }
+    if (items.find(it => cache.identify(value) === cache.identify(it))) return;
 
     client.writeQuery({
       query,
@@ -59,5 +57,23 @@ export const useApollo = <T extends PrimitiveCacheEntity>(query: DocumentNode, v
     });
   }, [cache, client, variables, query, dataKey]);
 
-  return [{data: data?.[dataKey], loading, error, refetch}, modifyEntity, addToQuery];
+  const removeFromQuery = useCallback((value: T) => {
+    const cachedData = client.readQuery<Data<T>>({
+      query,
+      variables
+    }) || {};
+
+    const items = cachedData?.[dataKey] || [];
+    const filteredItems = items.filter(it => cache.identify(it) !== cache.identify(value))
+
+    client.writeQuery({
+      query,
+      data: {
+        [dataKey]: filteredItems
+      },
+      variables
+    });
+  }, [cache, client, variables, query, dataKey])
+
+  return [{data: data?.[dataKey], loading, error, refetch}, modifyEntity, addToQuery, removeFromQuery];
 }

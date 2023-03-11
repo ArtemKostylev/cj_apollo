@@ -31,7 +31,7 @@ const MidtermExam = () => {
     onYearChange,
     data,
     addMidtermExam,
-    refetch
+    removeMidtermExam,
   } = useMidtermExamContext();
   const [remove] = useMutation(DELETE_MIDTERM_EXAM);
 
@@ -72,8 +72,10 @@ const MidtermExam = () => {
         text: 'Удалить',
         onClick: async () => {
           if (!selectedRecord) return;
-          await remove({variables: {id: selectedRecord}});
-          refetch();
+          if (selectedRecord.id) {
+            await remove({variables: {id: selectedRecord.id}});
+          }
+          removeMidtermExam(selectedRecord);
         },
         disabled: selectedRecord === undefined
       }
