@@ -92,7 +92,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
       },
       onError: (error) => console.log(error)
     })
-  }, 300, [item, teacherId]);
+  }, 800, [item, teacherId]);
 
   useEffect(() => {
     runValidation();
