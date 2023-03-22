@@ -41,11 +41,11 @@ declare type FreezeVersion = {
 }
 
 declare interface MidtermExam extends PrimitiveCacheEntity {
-  student: Student | null;
-  date: string | null;
+  student: Student;
+  date: string;
   contents: string;
   result: string;
-  type: MidtermExamType | null;
+  type: MidtermExamType;
   number: number;
 
   [key: string]: any;

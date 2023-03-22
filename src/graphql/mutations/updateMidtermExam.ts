@@ -18,7 +18,6 @@ export const UPDATE_MIDTERM_EXAM = gql`
                 id
                 name
             }
-            number
         }
     }
 `;

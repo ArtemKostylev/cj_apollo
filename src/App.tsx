@@ -29,13 +29,7 @@ const httpLink = createUploadLink({uri: pathMap[process.env.REACT_APP_ENV as str
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink as any),
-  cache: new InMemoryCache({
-    typePolicies: {
-      MidtermExam: {
-        keyFields: ["number"]
-      }
-    }
-  }),
+  cache: new InMemoryCache(),
 });
 
 export default function App() {

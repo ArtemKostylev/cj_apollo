@@ -59,3 +59,4 @@ export const YEARS = new Map<number, DropdownOptionType>([
 ])
 
 export const DATE_FORMAT = "YYYY-MM-DDT00:00:00.000[Z]";
+export const UI_DATE_FORMAT = "DD.MM.YYYY";

@@ -1,22 +1,56 @@
-import React, {useMemo} from 'react';
-import {Layout} from './Layout';
-import {DEFAULT_MIDTERM_EXAM, ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
+import React, {memo, useMemo, useState} from 'react';
+import {ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
 import {Spinner} from '../../../ui/Spinner';
-import {TableControlsConfig, TableControlType} from '../../../ui/TableControls';
-import {PERIODS_RU, YEARS} from '../../../constants/date';
+import {TableControls, TableControlsConfig, TableControlType} from '../../../ui/TableControls';
+import {PERIODS_RU, UI_DATE_FORMAT, YEARS} from '../../../constants/date';
 import {useMutation} from '@apollo/client';
 import {DELETE_MIDTERM_EXAM} from '../../../graphql/mutations/deleteMidtermExam';
-import {getBorderDatesForPeriod} from '../../../utils/academicDate';
+import styled from 'styled-components';
+import {theme} from '../../../styles/theme';
+import {TableCell} from '../../../ui/cells/styles/TableCell.styled';
+import {Header} from '../../../ui/Table/style/Header.styled';
+import {NameHeader} from '../../../ui/Table/NameHeader';
+import {Table} from '../../../ui/Table';
+import ReactModal from 'react-modal';
+import {UpdateForm} from './UpdateForm';
 import moment from 'moment';
 
-const getType = (data: DropdownOptionType | undefined): MidtermExamType | null => {
-  if (!data) return null;
-  return {
-    __typename: 'MidtermExamType',
-    id: (data.value as number),
-    name: data.text
+const Row = styled.tr<{ selected: boolean }>`
+  height: 10em;
+  background-color: ${props => props.selected ? theme.darkBg : 'none'};
+
+  td {
+    border-color: ${theme.thBorder};
   }
-};
+`;
+
+const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
+  const {onRowClick, selectedRecord} = useMidtermExamContext();
+
+  return (
+    <Row selected={item.number === selectedRecord?.number} onClick={() => onRowClick(item)}>
+      <TableCell>{item.number + 1}</TableCell>
+      <TableCell>{`${item.student?.surname || ''} ${item.student?.name || ''}`}</TableCell>
+      <TableCell>{item.student.class}</TableCell>
+      <TableCell>{moment(item.date).format(UI_DATE_FORMAT)}</TableCell>
+      <TableCell>{item.type?.name || ''}</TableCell>
+      <TableCell>{item.contents}</TableCell>
+      <TableCell>{item.result}</TableCell>
+    </Row>
+  )
+});
+
+const TableHeader = () => (
+  <tr>
+    <Header width={60}>Номер</Header>
+    <NameHeader/>
+    <Header width={80}>Класс</Header>
+    <Header width={100}>Дата</Header>
+    <Header width={200}>Тип</Header>
+    <Header>Программа</Header>
+    <Header>Результат</Header>
+  </tr>
+)
 
 const MidtermExam = () => {
   const {
@@ -30,10 +64,11 @@ const MidtermExam = () => {
     onPeriodChange,
     onYearChange,
     data,
-    addMidtermExam,
-    removeMidtermExam,
+    refetch
   } = useMidtermExamContext();
   const [remove] = useMutation(DELETE_MIDTERM_EXAM);
+  const [createFormVisible, setCreateFormVisible] = useState(false);
+  const [updateFormVisible, setUpdateFormVisible] = useState(false);
 
   const controlsConfig: TableControlsConfig = useMemo(() => {
     return [
@@ -58,26 +93,23 @@ const MidtermExam = () => {
       {
         type: TableControlType.BUTTON,
         text: "Добавить",
-        onClick: () => {
-          addMidtermExam({
-            ...DEFAULT_MIDTERM_EXAM,
-            number: 1 + (data?.table?.[data?.table?.length - 1]?.number || 0),
-            type: getType(data.types?.get(type)),
-            date: getBorderDatesForPeriod(period, moment().year()).dateGte.add(1, 'days').format()
-          })
-        },
+        onClick: () => setCreateFormVisible(true)
+      },
+      {
+        type: TableControlType.BUTTON,
+        text: 'Изменить',
+        onClick: () => setUpdateFormVisible(true),
+        disabled: !selectedRecord
       },
       {
         type: TableControlType.BUTTON,
         text: 'Удалить',
         onClick: async () => {
-          if (!selectedRecord) return;
-          if (selectedRecord.id) {
-            await remove({variables: {id: selectedRecord.id}});
+          if (selectedRecord?.id) {
+            remove({variables: {id: selectedRecord.id}}).then(refetch);
           }
-          removeMidtermExam(selectedRecord);
         },
-        disabled: selectedRecord === undefined
+        disabled: !selectedRecord
       }
     ]
   }, [year, type, selectedRecord, data.types])
@@ -85,7 +117,26 @@ const MidtermExam = () => {
   if (loading) return <Spinner/>
   if (error) throw new Error('503')
 
-  return <Layout controlsConfig={controlsConfig}/>
+  return (
+    <div>
+      <TableControls config={controlsConfig}/>
+      <Table>
+        <TableHeader/>
+        <tbody>
+        {Object.values(data.table || {}).map((it, index) => <TableRow key={it.id} item={{...it, number: index}}/>)}
+        </tbody>
+      </Table>
+      <ReactModal isOpen={createFormVisible}>
+        <UpdateForm onClose={() => setCreateFormVisible(false)}/>
+      </ReactModal>
+      <ReactModal isOpen={updateFormVisible}>
+        <UpdateForm data={selectedRecord} onClose={(submitted: boolean) => {
+          setUpdateFormVisible(false);
+          submitted && refetch();
+        }}/>
+      </ReactModal>
+    </div>
+  )
 }
 
 export const MidtermExamWithContext = () => (

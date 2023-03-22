@@ -17,7 +17,6 @@ export const FETCH_MIDTERM_EXAMS = gql`
             type {
                 ...MidtermExamTypeFragment
             }
-            number
         }
     }
 `;

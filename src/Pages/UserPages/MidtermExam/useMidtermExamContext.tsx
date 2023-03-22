@@ -56,17 +56,6 @@ export const useMidtermExamContext = () => {
   return useContext(MidtermExamContext);
 };
 
-export const DEFAULT_MIDTERM_EXAM = {
-  __typename: 'MidtermExam',
-  id: 0,
-  number: 1,
-  contents: '',
-  student: null,
-  date: null,
-  result: '',
-  type: null,
-};
-
 function useProvideMidtermExam() {
   const [type, setType] = useState<number>(0);
   const [year, setYear] = useState<number>(getCurrentAcademicYear());
