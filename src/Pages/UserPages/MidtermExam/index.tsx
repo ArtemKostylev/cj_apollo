@@ -14,6 +14,7 @@ import {Table} from '../../../ui/Table';
 import ReactModal from 'react-modal';
 import {UpdateForm} from './UpdateForm';
 import moment from 'moment';
+import {ClassView} from '../../../ui/cells/ClassView';
 
 const Row = styled.tr<{ selected: boolean }>`
   height: 10em;
@@ -31,7 +32,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
     <Row selected={item.number === selectedRecord?.number} onClick={() => onRowClick(item)}>
       <TableCell>{item.number + 1}</TableCell>
       <TableCell>{`${item.student?.surname || ''} ${item.student?.name || ''}`}</TableCell>
-      <TableCell>{item.student.class}</TableCell>
+      <ClassView classNum={item.student.class} program={item.student.program}/>
       <TableCell>{moment(item.date).format(UI_DATE_FORMAT)}</TableCell>
       <TableCell>{item.type?.name || ''}</TableCell>
       <TableCell>{item.contents}</TableCell>
