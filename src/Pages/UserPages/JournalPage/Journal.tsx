@@ -47,8 +47,6 @@ export default function Journal() {
 
   const parsedDates = useMemo(() => getDatesFromMonth(month, currentYear), [month, currentYear]);
 
-  console.log(parsedDates);
-
   const onYearChange = useCallback((year: number) => {
     setCurrentYear(year);
   }, []);
