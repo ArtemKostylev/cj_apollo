@@ -30,7 +30,7 @@ export const IndividualJournalView = memo(({parsedDates, month, updateQuarterDat
     if (!QUARTER_END[month]) return;
 
     const mark = quaterMarks.find((mark) => mark.period === QUARTER_END[month]);
-    const year = month === Months.MAY && quaterMarks.find((mark) => mark.period === 'year');
+    const year = quaterMarks.find((mark) => mark.period === 'year');
 
     return (
       <>
@@ -41,12 +41,12 @@ export const IndividualJournalView = memo(({parsedDates, month, updateQuarterDat
                       value: (value as string)
                     })}
         />
-        {year && (<SelectCell value={year.mark} options={MARKS_OPTIONS}
-                              onSelect={(value) => updateQuarterData({
-                                row: student.id,
-                                column: year.period,
-                                value: (value as string)
-                              })}/>
+        {month === Months.MAY && (<SelectCell value={year?.mark} options={MARKS_OPTIONS}
+                                              onSelect={(value) => updateQuarterData({
+                                                row: student.id,
+                                                column: year?.period || 'year',
+                                                value: (value as string)
+                                              })}/>
         )}
       </>
     )
