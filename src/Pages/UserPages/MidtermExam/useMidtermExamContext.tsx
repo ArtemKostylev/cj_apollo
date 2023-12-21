@@ -82,7 +82,7 @@ function useProvideMidtermExam() {
     error: midtermExamTypesError
   } = useQuery<MidtermExamsTypeData>(FETCH_MIDTERM_EXAM_TYPES, {onCompleted: (data) => setType(data.fetchMidtermExamTypes[0].id)});  //? is this needed here????
 
-  const {dateGte, dateLte} = useMemo(() => getBorderDatesForPeriod(period, moment().year()), [period]);
+  const {dateGte, dateLte} = useMemo(() => getBorderDatesForPeriod(period, year), [period, year]);
 
   const [{loading, error, data, refetch}, modifyMidtermExam, addMidtermExam, removeMidtermExam] = useApollo<MidtermExam>(
     FETCH_MIDTERM_EXAMS, {
