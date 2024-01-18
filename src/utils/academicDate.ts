@@ -93,6 +93,13 @@ export const getBorderDatesForPeriod = (period: Periods, year: number) => {
   };
 };
 
+export const getBorderDatesForMidtermExam = (period: Periods, year: number) => {
+
+  const currentPeriod = getCurrentAcademicPeriod();
+
+  return getBorderDatesForPeriod(period, currentPeriod === Periods.SECOND ? year + 1 : year);
+};
+
 export const getBorderDatesForMonth = (month: Months, year: number) => {
   const currentPeriod = getCurrentAcademicPeriod();
 

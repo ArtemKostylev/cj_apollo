@@ -3,12 +3,11 @@ import {useQuery} from '@apollo/client';
 import {FETCH_TEACHER_STUDENTS} from '../../../graphql/queries/fetchStudentsForTeacher';
 import {useAuth} from '../../../hooks/useAuth';
 import {FETCH_MIDTERM_EXAMS} from '../../../graphql/queries/fetchMidtermExams';
-import {getBorderDatesForPeriod, getCurrentAcademicPeriod, getCurrentAcademicYear} from '../../../utils/academicDate';
+import {getBorderDatesForMidtermExam, getCurrentAcademicPeriod, getCurrentAcademicYear} from '../../../utils/academicDate';
 import {Periods} from '../../../constants/date';
 import {FETCH_MIDTERM_EXAM_TYPES} from '../../../graphql/queries/fetchMidterExamTypes';
 import {addToQuery, modifyEntity, removeFromQuery, useApollo} from '../../../hooks/useApolloCache';
 import {toDropdownOption} from '../../../utils/normalizer';
-import moment from 'moment';
 
 const MidtermExamContext = createContext({} as MidtermExamContext);
 
@@ -82,7 +81,7 @@ function useProvideMidtermExam() {
     error: midtermExamTypesError
   } = useQuery<MidtermExamsTypeData>(FETCH_MIDTERM_EXAM_TYPES, {onCompleted: (data) => setType(data.fetchMidtermExamTypes[0].id)});  //? is this needed here????
 
-  const {dateGte, dateLte} = useMemo(() => getBorderDatesForPeriod(period, year), [period, year]);
+  const {dateGte, dateLte} = useMemo(() => getBorderDatesForMidtermExam(period, year), [period, year]);
 
   const [{loading, error, data, refetch}, modifyMidtermExam, addMidtermExam, removeMidtermExam] = useApollo<MidtermExam>(
     FETCH_MIDTERM_EXAMS, {
