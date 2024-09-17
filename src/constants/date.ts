@@ -56,7 +56,8 @@ export const MONTHS_RU = new Map<number, DropdownOptionType>(
 export const YEARS = new Map<number, DropdownOptionType>([
   [2021, {value: 2021, text: '2021/2022'}],
   [2022, {value: 2022, text: '2022/2023'}],
-  [2023, {value: 2023, text: '2023/2024'}]
+  [2023, {value: 2023, text: '2023/2024'}],
+  [2024, {value: 2024, text: '2024/2025'}]
 ])
 
 export const DATE_FORMAT = "YYYY-MM-DDT00:00:00.000[Z]";
