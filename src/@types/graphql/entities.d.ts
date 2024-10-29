@@ -30,6 +30,8 @@ declare type Course = {
   id: number;
   name: string;
   group: boolean;
+  onlyHours: boolean;
+  excludeFromReport: boolean;
   freezeVersion?: FreezeVersion;
 
   [key: string]: any;

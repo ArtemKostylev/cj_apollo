@@ -1,12 +1,12 @@
-import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
-import React, {useState, useMemo, ChangeEvent} from 'react';
-import {PROGRAMS} from '../../constants/programs';
-import {UPDATE_SUBGROUPS_MUTATION} from '../../graphql/mutations/updateSubgroups';
-import {FETCH_SUBGROUPS_QUERY} from '../../graphql/queries/fetchSubgroups';
-import {useAuth} from '../../hooks/useAuth';
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import React, { useState, useMemo, ChangeEvent } from 'react';
+import { PROGRAMS } from '../../constants/programs';
+import { UPDATE_SUBGROUPS_MUTATION } from '../../graphql/mutations/updateSubgroups';
+import { FETCH_SUBGROUPS_QUERY } from '../../graphql/queries/fetchSubgroups';
+import { useAuth } from '../../hooks/useAuth';
 import '../../styles/Subgroups.css';
-import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
-import {getCurrentAcademicYear} from '../../utils/academicDate';
+import { TableControls, TableControlsConfig, TableControlType } from '../../ui/TableControls';
+import { getCurrentAcademicYear } from '../../utils/academicDate';
 
 type ItemProps = {
   subgroup: number | undefined;
@@ -17,7 +17,7 @@ type ItemProps = {
   surname: string;
 }
 
-const Item = ({subgroup, id, group, updateData, name, surname}: ItemProps) => {
+const Item = ({ subgroup, id, group, updateData, name, surname }: ItemProps) => {
   const [value, setValue] = useState(`${subgroup}`);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +30,7 @@ const Item = ({subgroup, id, group, updateData, name, surname}: ItemProps) => {
     <li className='item'>
       <p>{`${surname} ${name}`}</p>
       <label> Группа:</label>
-      <input value={value} onChange={onChange} maxLength={1}/>
+      <input value={value} onChange={onChange} maxLength={1} />
     </li>
   );
 };
@@ -47,7 +47,7 @@ export const Subgroups = () => {
     setCourse(course);
   };
 
-  let {loading, data, error, refetch, networkStatus} = useQuery(
+  let { loading, data, error, refetch, networkStatus } = useQuery(
     FETCH_SUBGROUPS_QUERY,
     {
       variables: {
@@ -81,7 +81,7 @@ export const Subgroups = () => {
   const controlsConfig: TableControlsConfig = useMemo(() => [
     {
       type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+      options: new Map(userCourses.map((it, index) => [index, { value: index, text: it.name }])),
       text: userCourses[course].name,
       onClick: getCourse,
     },
@@ -125,7 +125,7 @@ export const Subgroups = () => {
 
   return (
     <div>
-      <TableControls config={controlsConfig}/>
+      <TableControls config={controlsConfig} />
       <div className='group_wrapper'>
         <ul className='group_list'>
           {data.map((group: any, index: number) => (

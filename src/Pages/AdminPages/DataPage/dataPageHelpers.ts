@@ -1,4 +1,5 @@
 import { DATA_PAGE_FIELD_TYPES } from '../../../constants/dataPageFieldTypes';
+import { ClassProgramPair } from './types';
 
 export const createConditionalState = (type, data = {}) => {
   switch (type) {
@@ -21,7 +22,7 @@ export const createConditionalState = (type, data = {}) => {
         surname: data.surname || '',
         class: data.class || '',
         program: data.program || 'PP_5',
-        spec: data.specialization ? data.specialization.id.toString() : '',
+        specialization: data.specialization ? data.specialization.id.toString() : '',
       };
     default:
       return {};
@@ -37,7 +38,7 @@ export const setFieldType = (field) => {
 };
 
 export const setFieldValue = (field) => {
-  
+
 }
 
 export const computeUpdateList = (oldList, newList) => {
@@ -59,3 +60,13 @@ export const computeUpdateList = (oldList, newList) => {
 
   return result.filter((el) => el !== undefined);
 };
+
+export function classProgramPairSorter(a: ClassProgramPair, b: ClassProgramPair): number {
+  if (a.class < b.class) {
+    return -1;
+  }
+  if (a.class > b.class) {
+    return 1;
+  }
+  return 0;
+}

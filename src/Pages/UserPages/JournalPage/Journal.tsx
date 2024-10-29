@@ -1,24 +1,24 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import moment, {Moment} from 'moment';
+import moment, { Moment } from 'moment';
 import 'moment/locale/ru';
-import {TableControls, TableControlType} from '../../../ui/TableControls';
-import {IndividualJournalView} from './IndividualJournalView';
-import {GroupJournalView} from './GroupJournalView';
-import {useMutation, useQuery, NetworkStatus} from '@apollo/client';
-import {FETCH_JOURNAL_QUERY} from '../../../graphql/queries/fetchJournal';
-import {useAuth} from '../../../hooks/useAuth';
-import {UPDATE_JOURNAL_MUTATION} from '../../../graphql/mutations/updateJournal';
-import {t} from '../../../static/text';
+import { TableControls, TableControlType } from '../../../ui/TableControls';
+import { IndividualJournalView } from './IndividualJournalView';
+import { GroupJournalView } from './GroupJournalView';
+import { useMutation, useQuery, NetworkStatus } from '@apollo/client';
+import { FETCH_JOURNAL_QUERY } from '../../../graphql/queries/fetchJournal';
+import { useAuth } from '../../../hooks/useAuth';
+import { UPDATE_JOURNAL_MUTATION } from '../../../graphql/mutations/updateJournal';
+import { t } from '../../../static/text';
 import times from 'lodash/times';
-import {DATE_FORMAT, Months, MONTHS_RU, Periods, PERIODS_RU, YEARS} from '../../../constants/date';
+import { DATE_FORMAT, Months, MONTHS_RU, Periods, PERIODS_RU, YEARS } from '../../../constants/date';
 import {
   getCurrentAcademicMonth,
   getCurrentAcademicPeriod,
   getCurrentAcademicYear, getDatesFromMonth,
   MONTHS_IN_PERIODS
 } from '../../../utils/academicDate';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export type Pair = {
   class: number,
@@ -61,7 +61,7 @@ export default function Journal() {
 
   const onPeriodChange = useCallback((period: Periods) => setPeriod(period), [])
 
-  const updateMyData: UpdateData = ({row, column, value, group}) => {
+  const updateMyData: UpdateData = ({ row, column, value, group }) => {
     let date: Moment | undefined;
     if (group !== undefined && group > -1) {
       date = dates_by_group[group][column].date;
@@ -121,7 +121,7 @@ export default function Journal() {
     return true;
   };
 
-  const updateQuarterData: UpdateQuarterData = ({row, column, value}) => {
+  const updateQuarterData: UpdateQuarterData = ({ row, column, value }) => {
     const student = studentData.find(item => item.student.id === row);
     if (!student) throw new Error(`Can't find relation with id ${row}`);
     const studentIndex = studentData.indexOf(student);
@@ -224,7 +224,7 @@ export default function Journal() {
   };
 
 
-  let {loading, data, error, refetch, networkStatus} = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
+  let { loading, data, error, refetch, networkStatus } = useQuery<{ fetchJournal: TeacherCourseStudent[] }>(FETCH_JOURNAL_QUERY, {
     variables: {
       teacherId: location.state?.versions[currentYear].id || auth.user?.versions[currentYear].id,
       courseId: userCourses[course].id,
@@ -265,7 +265,7 @@ export default function Journal() {
     },
     {
       type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+      options: new Map(userCourses.map((it, index) => [index, { value: index, text: it.name }])),
       text: userCourses[course].name,
       onClick: onCourseChange,
     },
@@ -291,8 +291,8 @@ export default function Journal() {
 
   studentData = data.fetchJournal.map((student: TeacherCourseStudent) => ({
     ...student,
-    journalEntry: [...student.journalEntry.map((entry) => ({...entry, delete_flag: false, update_flag: false}))],
-    quaterMark: [...student.quaterMark.map((entry) => ({...entry, delete_flag: false, update_flag: false}))],
+    journalEntry: [...student.journalEntry.map((entry) => ({ ...entry, delete_flag: false, update_flag: false }))],
+    quaterMark: [...student.quaterMark.map((entry) => ({ ...entry, delete_flag: false, update_flag: false }))],
   }));
 
   if (studentData[0].student === null) {
@@ -368,7 +368,7 @@ export default function Journal() {
         const datesArray = mappedDates.get(month);
 
         if (datesArray) {
-          mappedDates.set(month, [...datesArray, {date, month}]);
+          mappedDates.set(month, [...datesArray, { date, month }]);
         }
       }
     });
@@ -376,13 +376,13 @@ export default function Journal() {
     mappedDates.forEach((value, key) => {
       const maxDates = key === Months.JANUARY ? 4 : 5;
       const emptyCount = maxDates - value.length;
-      result.push(...value, ...times(emptyCount, () => ({date: undefined, month: key})));
+      result.push(...value, ...times(emptyCount, () => ({ date: undefined, month: key })));
     });
 
     return result;
   });
 
-  const updateDates: UpdateDates = ({date, column, group}) => {
+  const updateDates: UpdateDates = ({ date, column, group }) => {
     const oldDate = dates_by_group[group][column].date;
 
     let students = groupedData[group].students.map((item) => item.id);
@@ -426,7 +426,7 @@ export default function Journal() {
 
   return (
     <>
-      <TableControls config={controlsConfig}/>
+      <TableControls config={controlsConfig} />
       {userCourses[course].group ? (
         <GroupJournalView
           datesByGroup={dates_by_group}

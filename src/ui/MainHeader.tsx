@@ -1,4 +1,4 @@
-import React, {MouseEventHandler, RefObject} from "react";
+import {MouseEventHandler, RefObject} from "react";
 import "../styles/Header.css";
 import {useAuth} from "../hooks/useAuth";
 import {useHistory, useLocation} from "react-router-dom";

@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
-import { ButtonProps, Button } from './formItems/Button';
-import { SelectProps, Select } from './formItems/Select';
+import { ControlButtonProps, ControlButton } from './ControlButton';
+import { ControlSelectProps, ControlSelect } from './ControlSelect';
 import styled from 'styled-components';
 import omit from 'lodash/omit';
-import { theme } from '../styles/theme';
+import { theme } from '../../styles/theme';
 
 export enum TableControlType {
   BUTTON,
@@ -11,8 +10,8 @@ export enum TableControlType {
 }
 
 export type TableControlsConfig = ({ type: TableControlType } & (
-  | ButtonProps
-  | SelectProps
+  | ControlButtonProps
+  | ControlSelectProps
 ))[];
 
 type Props = {
@@ -20,8 +19,8 @@ type Props = {
 };
 
 const ComponentMap = {
-  [TableControlType.BUTTON]: Button,
-  [TableControlType.SELECT]: Select,
+  [TableControlType.BUTTON]: ControlButton,
+  [TableControlType.SELECT]: ControlSelect,
 };
 
 const ControlsContainer = styled.div`
@@ -39,12 +38,7 @@ export const TableControls = ({ config }: Props) => (
   <ControlsContainer>
     {config.map((it, index) => {
       const Component = ComponentMap[it.type];
-
-      return (
-        <Fragment key={index}>
-          <Component {...omit(it, 'type')}/>
-        </Fragment>
-      );
+      return <Component key={index} {...omit(it, 'type')} />;
     })}
   </ControlsContainer>
 );

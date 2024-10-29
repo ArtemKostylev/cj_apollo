@@ -1,6 +1,6 @@
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 import moment, { Moment } from 'moment';
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { UPDATE_REPLACEMENTS_MUTATION } from '../../graphql/mutations/updateReplacement';
 import { FETCH_REPLACEMENTS_QUERY } from '../../graphql/queries/fetchReplacements';
 import { useAuth } from '../../hooks/useAuth';
@@ -230,9 +230,8 @@ export const Compensation = () => {
                     <Fragment key={index}>
                       <LessonCell>
                         {lesson_date
-                          ? `${lesson_date.split('-')[2]}.${
-                              lesson_date.split('-')[1]
-                            }.${lesson_date.split('-')[0]}`
+                          ? `${lesson_date.split('-')[2]}.${lesson_date.split('-')[1]
+                          }.${lesson_date.split('-')[0]}`
                           : ''}
                       </LessonCell>
                       <TableCell>

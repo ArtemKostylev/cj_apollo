@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {useFormik} from 'formik';
 import {useMutation} from '@apollo/client';
 import {UPDATE_MIDTERM_EXAM} from '../../../graphql/mutations/updateMidtermExam';
@@ -35,6 +35,8 @@ const ButtonRow = styled.div`
   justify-content: flex-end;
   gap: 20px;
 `;
+
+// TODO: remove formik
 
 export const UpdateForm = ({data = {} as MidtermExam, onClose}: Props) => {
   const [update] = useMutation(UPDATE_MIDTERM_EXAM);

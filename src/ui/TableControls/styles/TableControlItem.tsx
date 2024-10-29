@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import {theme} from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 
-export const ControlContainer = styled.div`
+export const TableControlItem = styled.div`
   display: flex;
   justify-content: center;
   width: 12vw;

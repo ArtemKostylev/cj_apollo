@@ -1,16 +1,16 @@
-import {useAuth} from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import '../../styles/Notes.css';
-import {TableControls, TableControlsConfig, TableControlType} from '../../ui/TableControls';
-import {PageWrapper} from '../../ui/PageWrapper';
-import {useCallback, useMemo, useState} from 'react';
-import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
-import {FETCH_NOTES_QUERY} from '../../graphql/queries/fetchNotes';
-import {UPDATE_NOTE_MUTATION} from '../../graphql/mutations/updateNotes';
-import {useLocation} from 'react-router-dom';
-import {YEARS} from '../../constants/date';
+import { TableControls, TableControlsConfig, TableControlType } from '../../ui/TableControls';
+import { PageWrapper } from '../../ui/PageWrapper';
+import { useCallback, useMemo, useState } from 'react';
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import { FETCH_NOTES_QUERY } from '../../graphql/queries/fetchNotes';
+import { UPDATE_NOTE_MUTATION } from '../../graphql/mutations/updateNotes';
+import { useLocation } from 'react-router-dom';
+import { YEARS } from '../../constants/date';
 import styled from 'styled-components';
-import {theme} from '../../styles/theme';
-import {getCurrentAcademicYear} from '../../utils/academicDate';
+import { theme } from '../../styles/theme';
+import { getCurrentAcademicYear } from '../../utils/academicDate';
 
 const TextArea = styled.textarea`
   border: 1px solid ${theme.borderDark};
@@ -59,7 +59,7 @@ export const Notes = () => {
     });
   };
 
-  const {loading, data, error, refetch, networkStatus} = useQuery(
+  const { loading, data, error, refetch, networkStatus } = useQuery(
     FETCH_NOTES_QUERY,
     {
       variables: {
@@ -76,7 +76,7 @@ export const Notes = () => {
   const controlsConfig: TableControlsConfig = useMemo(() => [
     {
       type: TableControlType.SELECT,
-      options: new Map(userCourses.map((it, index) => [index, {value: index, text: it.name}])),
+      options: new Map(userCourses.map((it, index) => [index, { value: index, text: it.name }])),
       text: userCourses[course].name,
       onClick: onCourseChange,
     },
@@ -104,7 +104,7 @@ export const Notes = () => {
 
   return (
     <PageWrapper>
-      <TableControls config={controlsConfig}/>
+      <TableControls config={controlsConfig} />
       <TextArea
         placeholder='Это - место для заметок...'
         value={value}

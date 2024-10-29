@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 // TODO: add styles, and proper animation
 export const Spinner = styled.div`

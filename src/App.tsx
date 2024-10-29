@@ -1,4 +1,3 @@
-import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {theme} from './styles/theme';
 import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';

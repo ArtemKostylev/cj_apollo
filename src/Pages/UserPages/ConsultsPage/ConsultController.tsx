@@ -6,7 +6,7 @@ import { NetworkStatus, useQuery } from '@apollo/client';
 import IndividualConsultsView from './IndividualConsultsView';
 import GroupConsultsView from './GroupConsultsView';
 import moment, { Moment } from 'moment';
-import { TableControlsConfig} from '../../../ui/TableControls';
+import { TableControlsConfig } from '../../../ui/TableControls';
 import { useLocation } from 'react-router-dom';
 import { insertInPosition, updateInPosition } from '../../../utils/crud';
 import { DATE_FORMAT } from '../../../constants/date';

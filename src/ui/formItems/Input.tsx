@@ -1,33 +1,17 @@
-import styled from 'styled-components';
-import {FormItemWrapper} from './FormItemWrapper';
-import {Label} from './Label';
-import {BaseFormItemProps} from './types';
+import { FormItemProps } from './types';
+import * as S from './styles';
 
-interface InputProps extends BaseFormItemProps {
-  type?: string;
-  children?: any;
+interface InputProps extends FormItemProps<string> {
+  pattern?: string;
 }
 
-const InputComponent = styled.input`
-  text-indent: 5px;
-  line-height: 3rem;
-  font-size: 1.3rem;
-  outline: none;
-  border: none;
-  width: 70%;
-  min-width: 400px;
-  background-color: #e6eaea;
+export function Input(props: InputProps) {
+  const { name, defaultValue, label, required, pattern } = props;
 
-  &:-webkit-autofill::first-line {
-    font-size: 1.3rem;
-  }
-`;
-
-export const Input = ({name, value, onChange, label, type = 'text', children, required}: InputProps) => (
-  <FormItemWrapper>
-    <Label htmlFor={name}>{label}:</Label>
-    <InputComponent name={name} type={type} id={name} value={value} onChange={e => onChange(name, e.target.value)} required={required}>
-      {children}
-    </InputComponent>
-  </FormItemWrapper>
-)
+  return (
+    <S.FormItem>
+      <S.Label htmlFor={name}>{label}:</S.Label>
+      <S.Input name={name} type='text' defaultValue={defaultValue} required={required} pattern={pattern} />
+    </S.FormItem>
+  )
+}

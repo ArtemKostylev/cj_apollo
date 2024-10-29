@@ -1,9 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
 
 interface Props extends PrimitiveComponentProps {
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const ButtonBase = styled.button`
@@ -20,8 +20,16 @@ const ButtonBase = styled.button`
   }
 `;
 
-export const Button = ({children, onClick, type, className}: Props) => (
-  <ButtonBase onClick={onClick} type={type} className={className}>
-    {children}
-  </ButtonBase>
-);
+export function Button(props: Props) {
+  const { children, onClick, type, className, disabled } = props;
+
+  return (
+    <ButtonBase 
+      onClick={onClick} 
+      type={type} 
+      className={className}
+      disabled={disabled}>
+      {children}
+    </ButtonBase>
+  )
+};

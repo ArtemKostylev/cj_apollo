@@ -1,20 +1,20 @@
-import React, {memo, useMemo, useState} from 'react';
-import {ProvideMidtermExam, useMidtermExamContext} from './useMidtermExamContext';
-import {Spinner} from '../../../ui/Spinner';
-import {TableControls, TableControlsConfig, TableControlType} from '../../../ui/TableControls';
-import {PERIODS_RU, UI_DATE_FORMAT, YEARS} from '../../../constants/date';
-import {useMutation} from '@apollo/client';
-import {DELETE_MIDTERM_EXAM} from '../../../graphql/mutations/deleteMidtermExam';
+import React, { memo, useMemo, useState } from 'react';
+import { ProvideMidtermExam, useMidtermExamContext } from './useMidtermExamContext';
+import { Spinner } from '../../../ui/Spinner';
+import { TableControls, TableControlsConfig, TableControlType } from '../../../ui/TableControls';
+import { PERIODS_RU, UI_DATE_FORMAT, YEARS } from '../../../constants/date';
+import { useMutation } from '@apollo/client';
+import { DELETE_MIDTERM_EXAM } from '../../../graphql/mutations/deleteMidtermExam';
 import styled from 'styled-components';
-import {theme} from '../../../styles/theme';
-import {TableCell} from '../../../ui/cells/styles/TableCell.styled';
-import {Header} from '../../../ui/Table/style/Header.styled';
-import {NameHeader} from '../../../ui/Table/NameHeader';
-import {Table} from '../../../ui/Table';
+import { theme } from '../../../styles/theme';
+import { TableCell } from '../../../ui/cells/styles/TableCell.styled';
+import { Header } from '../../../ui/Table/style/Header.styled';
+import { NameHeader } from '../../../ui/Table/NameHeader';
+import { Table } from '../../../ui/Table';
 import ReactModal from 'react-modal';
-import {UpdateForm} from './UpdateForm';
+import { UpdateForm } from './UpdateForm';
 import moment from 'moment';
-import {ClassView} from '../../../ui/cells/ClassView';
+import { ClassView } from '../../../ui/cells/ClassView';
 
 const Row = styled.tr<{ selected: boolean }>`
   height: 10em;
@@ -25,14 +25,14 @@ const Row = styled.tr<{ selected: boolean }>`
   }
 `;
 
-const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
-  const {onRowClick, selectedRecord} = useMidtermExamContext();
+const TableRow = memo(({ item = {} as MidtermExam }: { item: MidtermExam }) => {
+  const { onRowClick, selectedRecord } = useMidtermExamContext();
 
   return (
     <Row selected={item.number === selectedRecord?.number} onClick={() => onRowClick(item)}>
       <TableCell>{item.number + 1}</TableCell>
       <TableCell>{`${item.student?.surname || ''} ${item.student?.name || ''}`}</TableCell>
-      <ClassView classNum={item.student.class} program={item.student.program}/>
+      <ClassView classNum={item.student.class} program={item.student.program} />
       <TableCell>{moment(item.date).format(UI_DATE_FORMAT)}</TableCell>
       <TableCell>{item.type?.name || ''}</TableCell>
       <TableCell>{item.contents}</TableCell>
@@ -44,7 +44,7 @@ const TableRow = memo(({item = {} as MidtermExam}: { item: MidtermExam }) => {
 const TableHeader = () => (
   <tr>
     <Header width={60}>Номер</Header>
-    <NameHeader/>
+    <NameHeader />
     <Header width={80}>Класс</Header>
     <Header width={100}>Дата</Header>
     <Header width={200}>Тип</Header>
@@ -107,7 +107,7 @@ const MidtermExam = () => {
         text: 'Удалить',
         onClick: async () => {
           if (selectedRecord?.id) {
-            remove({variables: {id: selectedRecord.id}}).then(refetch);
+            remove({ variables: { id: selectedRecord.id } }).then(refetch);
           }
         },
         disabled: !selectedRecord
@@ -115,26 +115,26 @@ const MidtermExam = () => {
     ]
   }, [year, type, selectedRecord, data.types])
 
-  if (loading) return <Spinner/>
+  if (loading) return <Spinner />
   if (error) throw new Error('503')
 
   return (
     <div>
-      <TableControls config={controlsConfig}/>
+      <TableControls config={controlsConfig} />
       <Table>
-        <TableHeader/>
+        <TableHeader />
         <tbody>
-        {Object.values(data.table || {}).map((it, index) => <TableRow key={it.id} item={{...it, number: index}}/>)}
+          {Object.values(data.table || {}).map((it, index) => <TableRow key={it.id} item={{ ...it, number: index }} />)}
         </tbody>
       </Table>
       <ReactModal isOpen={createFormVisible}>
-        <UpdateForm onClose={() => setCreateFormVisible(false)}/>
+        <UpdateForm onClose={() => setCreateFormVisible(false)} />
       </ReactModal>
       <ReactModal isOpen={updateFormVisible}>
         <UpdateForm data={selectedRecord} onClose={(submitted: boolean) => {
           setUpdateFormVisible(false);
           submitted && refetch();
-        }}/>
+        }} />
       </ReactModal>
     </div>
   )
@@ -142,6 +142,6 @@ const MidtermExam = () => {
 
 export const MidtermExamWithContext = () => (
   <ProvideMidtermExam>
-    <MidtermExam/>
+    <MidtermExam />
   </ProvideMidtermExam>
 )

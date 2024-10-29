@@ -1,26 +1,17 @@
-import {BaseFormItemProps} from './types';
-import {FormItemWrapper} from './FormItemWrapper';
-import {Label} from './Label';
-import styled from 'styled-components';
+import { FormItemProps } from './types';
+import * as S from './styles';
 
-interface TextAreaProps extends BaseFormItemProps {
+interface TextAreaProps extends FormItemProps<string> {
   rows?: number;
 }
 
-const TextAreaStyled = styled.textarea`
-  line-height: 2rem;
-  font-size: 1.3rem;
-  outline: none;
-  border: none;
-  width: 70%;
-  min-width: 400px;
-  background-color: #e6eaea;
-  height: 100% !important;
-`
+export function TextArea(props: TextAreaProps) {
+  const { name, label, defaultValue, rows, required } = props;
 
-export const TextArea = ({name, label, value, onChange, rows, required}: TextAreaProps) => (
-  <FormItemWrapper>
-    <Label htmlFor={name}>{label}</Label>
-    <TextAreaStyled name={name} value={value} onChange={e => onChange(name, e.target.value)} rows={rows} id={name} required={required}/>
-  </FormItemWrapper>
-)
+  return (
+    <S.FormItem>
+      <S.Label htmlFor={name}>{label}</S.Label>
+      <S.TextArea name={name} rows={rows} required={required} defaultValue={defaultValue} />
+    </S.FormItem>
+  )
+}
