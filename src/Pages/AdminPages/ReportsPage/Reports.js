@@ -8,7 +8,7 @@ import {Spinner} from '../../../ui/Spinner';
 export const Reports = () => {
     const {data, loading, error, refetch} = useQuery(FETCH_ANNUAL_REPORT, {
         variables: {
-            year: 2023,
+            year: 2024,
         },
         notifyOnNetworkStatusChange: true,
         fetchPolicy: 'network-only',
