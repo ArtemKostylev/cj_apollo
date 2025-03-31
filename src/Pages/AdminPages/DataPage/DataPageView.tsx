@@ -12,9 +12,9 @@ import {
 import { IoMdListBox } from 'react-icons/io';
 
 import ReactModal from 'react-modal';
-import { computeUpdateList, createConditionalState } from './dataPageHelpers';
+import { computeUpdateList, createConditionalState } from './utils';
 import { ModalContent } from './ModalContent';
-import { FilePicker } from './FilePicker';
+import { FilePicker } from './components/FilePicker';
 import { PROGRAMS } from '../../../constants/programs';
 import { compareStudents } from '../../../utils/comparators';
 import { TeacherCreateForm } from './components/createForms/TeacherCreateForm';
@@ -24,6 +24,9 @@ import { TeacherUpdateForm } from './components/updateForms/TeacherUpdateForm';
 import { CourseUpdateForm } from './components/updateForms/CourseUpdateForm';
 import { StudentUpdateForm } from './components/updateForms/StudentUpdateForm';
 import { EntityFormProps } from './types';
+import styled from 'styled-components';
+import { DataPageWrapper } from './styles';
+import { DataPageBlock } from './components/DataPageBlock';
 
 enum FormModes {
     TEACHER_CREATE = 'TEACHER_CREATE',
@@ -52,6 +55,8 @@ const DEFAULT_FORM_STATE: FormState = {
     visible: false,
     mode: undefined,
 }
+
+
 
 export default function DataPageView(props) {
     const [formState, setFormState] = useState(DEFAULT_FORM_STATE);
@@ -82,8 +87,8 @@ export default function DataPageView(props) {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className='page'>
-            <div className={`changes_block left visible`}>
+        <DataPageWrapper>
+            <DataPageBlock>
                 <div className='block_header'>
                     <h2 style={{ flex: '15' }}>Преподаватели</h2>
                     <IoMdListBox
@@ -113,8 +118,8 @@ export default function DataPageView(props) {
                         ))}
                     </ul>
                 </div>
-            </div>
-            <div className={`changes_block center visible`}>
+            </DataPageBlock>
+            <DataPageBlock>
                 <div className='block_header'>
                     <h2 style={{ flex: '15' }}>Учебные предметы</h2>
                     <IoMdListBox
@@ -203,8 +208,8 @@ export default function DataPageView(props) {
                             ))}
                     </ul>
                 </div>
-            </div>
-            <div className={`changes_block right visible`}>
+            </DataPageBlock>
+            <DataPageBlock>
                 <div className='block_header'>
                     <h2 style={{ flex: '15' }}>Учащиеся</h2>
                     <IoMdListBox
@@ -333,13 +338,13 @@ export default function DataPageView(props) {
                         ))}
                     </ul>
                 </div>
-            </div>
+            </DataPageBlock>
             <ReactModal isOpen={formState.visible} className='modal' overlayClassName='overlay'>
                 <CurrentForm />
             </ReactModal>
             <ReactModal isOpen={filePickerShown} className='modalfile' overlayClassName='overlay'>
                 <FilePicker type={fileType} close={setFilePickerShown} />
             </ReactModal>
-        </div>
+        </DataPageWrapper>
     );
 }

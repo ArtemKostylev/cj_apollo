@@ -8,7 +8,7 @@ import { DELETE_TEACHER_MUTATION } from "../../../graphql/mutations/deleteTeache
 import { UPDATE_COURSE_RELATIONS_MUTATION } from "../../../graphql/mutations/updateCourseRelation";
 import { UPDATE_STUDENT_RELATIONS_MUTATION } from "../../../graphql/mutations/updateStudentRelation";
 import type { ClassProgramPair, Relation, StudentType, TeacherType } from './types';
-import { classProgramPairSorter } from './dataPageHelpers';
+import { classProgramPairSorter } from './utils';
 
 export default function DataPageController() {
     let { loading, data, error, refetch, networkStatus } = useQuery(
