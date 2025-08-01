@@ -1,5 +1,6 @@
 import {FETCH_FULL_INFO} from '../../../graphql/queries/fetchFullInfo';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
+import {useMutation as useTanstackMutation} from '@tanstack/react-query';
 import DataPageView from './DataPageView';
 import {UPDATE_TEACHER_MUTATION} from "../../../graphql/mutations/updateTeacher";
 import {UPDATE_COURSE_MUTATION} from "../../../graphql/mutations/updateCourse";
@@ -23,15 +24,21 @@ export default function DataPageController() {
         }
     );
 
-    const [updateTeacher] = useMutation(UPDATE_TEACHER_MUTATION);
+    const [updateTeacher] = useTanstackMutation({
+        mutationFn: updateTeacher,
+    });
     const [updateCourse] = useMutation(UPDATE_COURSE_MUTATION);
     const [updateStudent] = useMutation(UPDATE_STUDENT_MUTATION);
 
-    const [createTeacher] = useMutation(CREATE_TEACHER_MUTATION);
+    const [createTeacher] = useTanstackMutation({
+        mutationFn: createTeacher,
+    });
     const [createCourse] = useMutation(CREATE_COURSE_MUTATION);
     const [createStudent] = useMutation(CREATE_STUDENT_MUTATION);
 
-    const [deleteTeacher] = useMutation(DELETE_TEACHER_MUTATION);
+    const [deleteTeacher] = useTanstackMutation({
+        mutationFn: deleteTeacher,
+    });
     const [deleteCourse] = useMutation(DELETE_COURSE_MUTATION);
     const [deleteStudent] = useMutation(DELETE_STUDENT_MUTATION);
 
@@ -103,15 +110,11 @@ export default function DataPageController() {
     const update = async (type, values) => {
         switch (type) {
             case 'teacher':
-                await updateTeacher({
-                    variables: {
-                        data: {
-                            id: values.id,
-                            name: values.name,
-                            surname: values.surname,
-                            parent: values.parent,
-                        },
-                    },
+                await updateTeacher( {
+                    id: values.id,
+                    name: values.name,
+                    surname: values.surname,
+                    parent: values.parent,
                 });
                 break;
             case 'course':
@@ -153,11 +156,7 @@ export default function DataPageController() {
     const clear = async (type, id) => {
         switch (type) {
             case 'teacher':
-                await deleteTeacher({
-                    variables: {
-                        id: id,
-                    },
-                });
+                await deleteTeacher(id);
                 break;
 
             case 'course':

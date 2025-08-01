@@ -16,13 +16,9 @@ export const ModalContent = ({
   const submit = async () => {
     if (type === 'teacher') {
       await createTeacher({
-        variables: {
-          data: {
-            name: values.name,
-            surname: values.surname,
-            parent: values?.parent || '',
-          },
-        },
+        name: values.name,
+        surname: values.surname,
+        parent: values?.parent || '',
       });
     } else if (type === 'course') {
       await createCourse({
