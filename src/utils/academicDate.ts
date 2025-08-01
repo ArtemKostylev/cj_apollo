@@ -1,5 +1,6 @@
 import moment from 'moment';
-import {Months, Periods, Quarters} from '../constants/date';
+import {Months, MONTHS_IN_QUARTERS, Periods, Quarters} from '../constants/date';
+import { QUARTERS } from '../constants/quarters';
 
 const INACTIVE_MONTHS = [Months.JUNE, Months.JULY, Months.AUGUST];
 
@@ -160,4 +161,13 @@ export function getYearByMonth(targetMonth: Months, year: number | null = null) 
 
   }
   return currentYear + 1;
+}
+
+export function getQuarter(month: number) {
+  if (MONTHS_IN_QUARTERS[Quarters.FIRST].includes(month)) return Quarters.FIRST;
+  if (MONTHS_IN_QUARTERS[Quarters.SECOND].includes(month)) return Quarters.SECOND;
+  if (MONTHS_IN_QUARTERS[Quarters.THIRD].includes(month)) return Quarters.THIRD;
+  if (MONTHS_IN_QUARTERS[Quarters.FOURTH].includes(month)) return Quarters.FOURTH;
+
+  return Quarters.THIRD;
 }

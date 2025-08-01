@@ -1,6 +1,6 @@
 import {FETCH_FULL_INFO} from '../../../graphql/queries/fetchFullInfo';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
-import DataPageView from './DataPageView.js';
+import DataPageView from './DataPageView';
 import {UPDATE_TEACHER_MUTATION} from "../../../graphql/mutations/updateTeacher";
 import {UPDATE_COURSE_MUTATION} from "../../../graphql/mutations/updateCourse";
 import {UPDATE_STUDENT_MUTATION} from "../../../graphql/mutations/updateStudent";
@@ -12,6 +12,7 @@ import {DELETE_STUDENT_MUTATION} from "../../../graphql/mutations/deleteStudent"
 import {DELETE_TEACHER_MUTATION} from "../../../graphql/mutations/deleteTeacher";
 import {UPDATE_COURSE_RELATIONS_MUTATION} from "../../../graphql/mutations/updateCourseRelation";
 import {UPDATE_STUDENT_RELATIONS_MUTATION} from "../../../graphql/mutations/updateStudentRelation";
+import { LegacySpinner } from '../../../ui/LegacySpinner';
 
 export default function DataPageController() {
     let {loading, data, error, refetch, networkStatus} = useQuery(
@@ -37,10 +38,8 @@ export default function DataPageController() {
     const [updateCourseRelations] = useMutation(UPDATE_COURSE_RELATIONS_MUTATION);
     const [updateStudentRelations] = useMutation(UPDATE_STUDENT_RELATIONS_MUTATION);
 
-    const spinner = <div>Загрузка</div>;
-
-    if (loading) return spinner;
-    if (networkStatus === NetworkStatus.refetch) return spinner;
+    if (loading) return <LegacySpinner/>;
+    if (networkStatus === NetworkStatus.refetch) return <LegacySpinner/>;
     if (error) throw new Error(503);
 
     let {teachers, courses, students, relations, specializations} = data.fetchFullInfo;

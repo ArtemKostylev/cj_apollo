@@ -14,7 +14,7 @@ export const QUARTER_END: Record<number, string> = {
   [Months.DECEMBER]: 'second',
 };
 
-export const QUARTERS_RU = [
+export const QUARTERS_RU_OLD = [
   'I четверть',
   'II четверть',
   'III четверть',

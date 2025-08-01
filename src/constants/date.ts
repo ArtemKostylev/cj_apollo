@@ -26,7 +26,7 @@ export enum Quarters {
   YEAR = 'year'
 }
 
-export const QuartersRu = {
+export const QUARTERS_RU = {
   [Quarters.FIRST]: 'I четверть',
   [Quarters.SECOND]: 'II четверть',
   [Quarters.THIRD]: 'III четверть',
@@ -59,6 +59,13 @@ export const YEARS = new Map<number, DropdownOptionType>([
   [2023, {value: 2023, text: '2023/2024'}],
   [2024, {value: 2024, text: '2024/2025'}]
 ])
+
+export const MONTHS_IN_QUARTERS = {
+  [Quarters.FIRST]: [8, 9],
+  [Quarters.SECOND]: [10, 11],
+  [Quarters.THIRD]: [0, 1, 2],
+  [Quarters.FOURTH]: [3, 4],
+}
 
 export const DATE_FORMAT = "YYYY-MM-DDT00:00:00.000[Z]";
 export const UI_DATE_FORMAT = "DD.MM.YYYY";

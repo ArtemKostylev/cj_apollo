@@ -1,5 +1,4 @@
 import {QUARTERS} from '../constants/quarters';
-import moment from "moment";
 
 export function getQuarter(month: number) {
   let quarter = null;
