@@ -18,16 +18,16 @@ export const Journals = memo(() => {
     queryFn: getAllTeachers,
   });
 
-  if (isPending) return <LegacySpinner />;
-  if (isError) throw new Error("503");
-
   const courseId = useMemo(() => {
     return (
       teachers?.find(
         (teacher) => teacher.id === (teacherIndex || teachers[0].id)
       )?.relations[0]?.course?.id || 0
     );
-  }, [teacherIndex]);
+  }, [teacherIndex, teachers]);
+
+  if (isPending) return <LegacySpinner />;
+  if (isError) throw new Error("503");
 
   return (
     <div className="page">

@@ -4,8 +4,12 @@ import { StudentRow } from "./StudentRow";
 import { FETCH_JOURNAL_QUERY } from "../../../graphql/queries/fetchJournal";
 import moment from "moment";
 import { NetworkStatus } from "@apollo/client";
-import { getCurrentAcademicYear, getQuarter } from "../../../utils/academicDate";
-import { MONTHS_IN_QUARTERS } from "../../../constants/date";
+import {
+  getCurrentAcademicYear,
+  getQuarter,
+} from "../../../utils/academicDate";
+import { MONTHS_IN_QUARTERS, Quarters } from "../../../constants/date";
+import { QUARTERS } from "../../../constants/quarters";
 
 interface Props {
   courseId: number;
@@ -15,8 +19,12 @@ interface Props {
 export const TeacherJournal = (props: Props) => {
   const { courseId, teacherIndex } = props;
 
-  const period = getQuarter(moment().month());
+  const quarter = getQuarter(moment().month());
   const year = getCurrentAcademicYear();
+
+  const yearForDates = [Quarters.THIRD, Quarters.FOURTH].includes(quarter)
+    ? year + 1
+    : year;
 
   const {
     loading,
@@ -28,15 +36,15 @@ export const TeacherJournal = (props: Props) => {
       courseId,
       teacherId: teacherIndex,
       date_gte: moment()
-        .month(MONTHS_IN_QUARTERS[period][0])
-        .year(year)
+        .month(MONTHS_IN_QUARTERS[quarter][0])
+        .year(yearForDates)
         .startOf("month")
         .utc()
         .format("YYYY-MM-DDTHH:mm:ss.SSS")
         .concat("Z"),
       date_lte: moment()
-        .month(MONTHS_IN_QUARTERS[period].slice(-1)[0])
-        .year(year)
+        .month(MONTHS_IN_QUARTERS[quarter].slice(-1)[0])
+        .year(yearForDates)
         .endOf("month")
         .utc()
         .format("YYYY-MM-DDTHH:mm:ss.SSS")

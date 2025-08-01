@@ -1,19 +1,18 @@
+import React from 'react';
 import {FETCH_FULL_INFO} from '../../../graphql/queries/fetchFullInfo';
 import {NetworkStatus, useMutation, useQuery} from '@apollo/client';
 import {useMutation as useTanstackMutation} from '@tanstack/react-query';
 import DataPageView from './DataPageView';
-import {UPDATE_TEACHER_MUTATION} from "../../../graphql/mutations/updateTeacher";
 import {UPDATE_COURSE_MUTATION} from "../../../graphql/mutations/updateCourse";
 import {UPDATE_STUDENT_MUTATION} from "../../../graphql/mutations/updateStudent";
-import {CREATE_TEACHER_MUTATION} from "../../../graphql/mutations/createTeacher";
 import {CREATE_STUDENT_MUTATION} from "../../../graphql/mutations/createStudent";
 import {CREATE_COURSE_MUTATION} from "../../../graphql/mutations/createCourse";
 import {DELETE_COURSE_MUTATION} from "../../../graphql/mutations/deleteCourse";
 import {DELETE_STUDENT_MUTATION} from "../../../graphql/mutations/deleteStudent";
-import {DELETE_TEACHER_MUTATION} from "../../../graphql/mutations/deleteTeacher";
 import {UPDATE_COURSE_RELATIONS_MUTATION} from "../../../graphql/mutations/updateCourseRelation";
 import {UPDATE_STUDENT_RELATIONS_MUTATION} from "../../../graphql/mutations/updateStudentRelation";
 import { LegacySpinner } from '../../../ui/LegacySpinner';
+import { updateTeacher as updateTeacherApi, createTeacher as createTeacherApi, deleteTeacher as deleteTeacherApi } from '../../../api/teacher';
 
 export default function DataPageController() {
     let {loading, data, error, refetch, networkStatus} = useQuery(
@@ -24,20 +23,20 @@ export default function DataPageController() {
         }
     );
 
-    const [updateTeacher] = useTanstackMutation({
-        mutationFn: updateTeacher,
+    const updateTeacher = useTanstackMutation({
+        mutationFn: updateTeacherApi,
     });
     const [updateCourse] = useMutation(UPDATE_COURSE_MUTATION);
     const [updateStudent] = useMutation(UPDATE_STUDENT_MUTATION);
 
-    const [createTeacher] = useTanstackMutation({
-        mutationFn: createTeacher,
+    const createTeacher = useTanstackMutation({
+        mutationFn: createTeacherApi,
     });
     const [createCourse] = useMutation(CREATE_COURSE_MUTATION);
     const [createStudent] = useMutation(CREATE_STUDENT_MUTATION);
 
-    const [deleteTeacher] = useTanstackMutation({
-        mutationFn: deleteTeacher,
+    const deleteTeacher = useTanstackMutation({
+        mutationFn: deleteTeacherApi,
     });
     const [deleteCourse] = useMutation(DELETE_COURSE_MUTATION);
     const [deleteStudent] = useMutation(DELETE_STUDENT_MUTATION);

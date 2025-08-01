@@ -169,5 +169,5 @@ export function getQuarter(month: number) {
   if (MONTHS_IN_QUARTERS[Quarters.THIRD].includes(month)) return Quarters.THIRD;
   if (MONTHS_IN_QUARTERS[Quarters.FOURTH].includes(month)) return Quarters.FOURTH;
 
-  return Quarters.THIRD;
+  return Quarters.FOURTH;
 }
