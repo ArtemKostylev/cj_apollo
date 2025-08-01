@@ -25,9 +25,6 @@ export const Subgroups = () => {
   // TODO: add types to version data
   const courses = userVersionData.courses.filter((course: any) => course.group);
 
-  console.log(userVersionData);
-  console.log(courses);
-
   const [course, setCourse] = useState(0);
 
   const teacherId = userVersionData.id;
