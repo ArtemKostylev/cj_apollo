@@ -9,3 +9,8 @@ declare type DropdownOptionType = { value: string | number, text: string, short?
 declare type OnSelectType = (value: string | number) => void;
 
 declare type PrimitiveCacheEntity = { __typename: string, id: number };
+
+declare module "*.module.css" {
+  const classes: {[key: string]: string};
+  export default classes;
+}
