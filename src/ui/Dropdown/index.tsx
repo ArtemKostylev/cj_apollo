@@ -1,45 +1,55 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {DropdownOption} from './style/DropdownOption.styled';
-import {DropdownLayout} from './style/DropdownLayout.styled';
+import { useEffect, useRef, useState } from 'react';
+import { DropdownOption } from './DropdownOption';
+import styles from './styles/dropdown.module.css';
+import classNames from 'classnames';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 
-type DropdownOptionsListProps = {
-  options: Map<string | number, DropdownOptionType>
-  onClick: (value: string | number) => void;
-}
-
-const DropdownOptionsList = ({options, onClick}: DropdownOptionsListProps) => {
-  return <>
-    {Array.from(options.values()).map((option) => (
-      <DropdownOption short={option.short} key={option.value} onClick={() => onClick(option.value)}>
-        {option.text}
-      </DropdownOption>
-    ))}
-  </>;
+type Props = {
+    opened: boolean;
+    options: DropdownOptionType[];
+    onSelect: (value: string | number) => void;
+    width?: string;
 };
 
-type DropdownProps = {
-  opened: boolean;
-  options: Map<string | number, DropdownOptionType>;
-  onSelect: (value: string | number) => void;
-  width?: string;
-}
+export const Dropdown = (props: Props) => {
+    const { opened, options, onSelect, width = 'auto' } = props;
+    const [inverted, setInverted] = useState(false);
+    const [visible, setVisible] = useState(opened);
 
-export const Dropdown = ({opened, options, onSelect, width = 'auto'}: DropdownProps) => {
-  const [inverted, setInverted] = useState(false);
+    const ref = useRef(null);
 
-  const ref = useRef(null);
+    useOnClickOutside(ref, () => setVisible(false));
 
-  useEffect(() => {
-    const bounds = (ref.current as any).getBoundingClientRect();
+    useEffect(() => {
+        const bounds = (ref.current as any).getBoundingClientRect();
+        const height =
+            window.innerHeight || document.documentElement.clientHeight;
 
-    if (bounds.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
-      setInverted(true);
-    }
-  }, [setInverted, opened]);
+        if (bounds.bottom > height) {
+            setInverted(true);
+        }
+    }, [setInverted, visible]);
 
-  return (
-    <DropdownLayout open={opened} inverted={inverted} width={width} ref={ref}>
-      <DropdownOptionsList options={options} onClick={onSelect}/>
-    </DropdownLayout>
-  );
+    useEffect(() => {
+        setVisible(opened);
+    }, [opened]);
+
+    const className = classNames(styles.dropdown, {
+        [styles.opened]: visible,
+        [styles.inverted]: inverted
+    });
+
+    return (
+        <div className={className} style={{ width }} ref={ref}>
+            {options.map((option) => (
+                <DropdownOption
+                    short={option.short}
+                    key={option.value}
+                    onClick={() => onSelect(option.value)}
+                >
+                    {option.text}
+                </DropdownOption>
+            ))}
+        </div>
+    );
 };

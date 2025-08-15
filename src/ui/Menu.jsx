@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
-import {useAuth} from '../hooks/useAuth';
+import {useUserData} from '../hooks/useUserData';
 import {ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE,} from '../constants/resources';
 import {ADMIN, TEACHER} from '../constants/roles';
 import {t} from '../static/text';
@@ -76,7 +76,7 @@ const resourceMap = {
 };
 
 export default function Menu({onClose, isOpen}) {
-    const auth = useAuth();
+    const auth = useUserData();
 
     const resources = useMemo(() => {
         const res = resourceMap[auth.user?.role];

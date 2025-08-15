@@ -1,0 +1,15 @@
+.selectButton {
+    border: 0;
+    background-color: transparent;
+    padding: 1em 0;
+    cursor: pointer;
+    width: 100%;
+}
+
+.selectButton:hover {
+    background-color: #e6eaea;
+}
+
+.selectButton:focus {
+    outline: 0;
+}

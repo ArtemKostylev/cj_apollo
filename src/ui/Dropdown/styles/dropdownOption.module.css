@@ -1,0 +1,18 @@
+.option {
+    display: inline-block;
+    grid-column: span 2;
+    line-height: 1.4rem;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: center;
+    padding: 10px 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.option:hover {
+    background-color: #ddd;
+}
+
+.short {
+    grid-column: span 1;
+}

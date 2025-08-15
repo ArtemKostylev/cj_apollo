@@ -1,0 +1,23 @@
+.dropdown {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    display: none;
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: fit-content;
+    max-height: 350px;
+    overflow: auto;
+    margin: 0;
+    z-index: 10;
+    background-color: #f1f1f1;
+}
+
+.opened {
+    display: grid;
+}
+
+.inverted {
+    transform: translateY(-100%);
+}
