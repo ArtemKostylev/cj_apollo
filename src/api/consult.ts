@@ -6,7 +6,7 @@ interface GetConsultsParams {
     year: number;
 }
 
-interface ConsultDto {
+interface UpdateConsultDto {
     id: number | undefined;
     date: string;
     hours: number | undefined;
@@ -15,10 +15,18 @@ interface ConsultDto {
 }
 
 interface UpdateConsultParams {
-    consults: ConsultDto[];
+    consults: UpdateConsultDto[];
 }
 
-export async function getConsults(params: GetConsultsParams) {
+interface ConsultDto {
+    id: number;
+    student: Student;
+    consults: Consult[] | null;
+}
+
+export async function getConsults(
+    params: GetConsultsParams
+): Promise<ConsultDto[]> {
     const response = await httpClient.get('/consults', {
         params
     });

@@ -20,7 +20,7 @@ const IndividualConsultsView = ({controlsConfig, data, updateDates}: Props) => {
       <table className='consult_table'>
         <thead>
         <tr>
-          <th className='name_column'>Имя ученика</th>
+          <th className='name_column'></th>
           <th className='date_columns' colSpan={32}>
             Даты/Часы
           </th>

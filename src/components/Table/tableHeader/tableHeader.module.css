@@ -1,0 +1,12 @@
+.tableHeader {
+    line-height: 6vh;
+    empty-cells: show;
+    border: 1px solid #d6d8d8;
+    border-top: none;
+    border-collapse: collapse;
+    background-color: #eff0f0;
+}
+
+.hoverEnabled:hover {
+    background-color: #e6eaea;
+}

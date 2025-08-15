@@ -11,7 +11,7 @@ import {
 } from "../../../constants/selectCellOptions";
 import { Table } from "../../../ui/Table";
 import { NameHeader } from "../../../ui/Table/NameHeader";
-import { Header } from "../../../ui/Table/style/Header.styled";
+import { TableHeader } from "../../../ui/Table/tableHeader";
 import { QuarterHeader } from "./style/QuarterHeader.styled";
 import { compareByClass } from "../../../utils/comparators";
 import { NameView } from "../../../ui/cells/NameView";
@@ -84,9 +84,9 @@ export const IndividualJournalView = memo(
           <thead>
             <tr>
               <NameHeader rowSpan={2} />
-              <Header rowSpan={2}>Класс</Header>
+              <TableHeader rowSpan={2}>Класс</TableHeader>
               {parsedDates.map((date) => (
-                <Header key={date.format()}>{date.format("DD.MM")}</Header>
+                <TableHeader key={date.format()}>{date.format("DD.MM")}</TableHeader>
               ))}
               {!onlyHours && QUARTER_END_MONTHS.includes(month) && (
                 <QuarterHeader rowSpan={2}>{`${
@@ -99,9 +99,9 @@ export const IndividualJournalView = memo(
             </tr>
             <tr>
               {parsedDates.map((date) => (
-                <Header key={date.format()}>
+                <TableHeader key={date.format()}>
                   {moment.weekdaysMin(date.isoWeekday())}
-                </Header>
+                </TableHeader>
               ))}
             </tr>
           </thead>
