@@ -1,24 +1,25 @@
-import { Redirect, Route, Switch } from "react-router-dom";
-import { Journals } from "./Pages/AdminPages/JournalsPage/Journals";
-import DataPageApollo from "./Pages/AdminPages/DataPage/DataPageApollo";
-import Journal from "./Pages/UserPages/JournalPage/Journal";
-import { Compensation } from "./Pages/UserPages/Compensation";
-import { Notes } from "./Pages/UserPages/Notes";
-import { ConsultController } from "./Pages/UserPages/ConsultsPage/ConsultController";
-import { Reports } from "./Pages/AdminPages/ReportsPage/Reports";
-import { Subgroups } from "./Pages/UserPages/Subgroups";
-import { Specialization } from "./Pages/AdminPages/SpecPage";
-import { MidtermExamTypes } from "./Pages/AdminPages/MidtermExamTypes";
-import { MidtermExamWithContext as MidtermExam } from "./Pages/UserPages/MidtermExam";
-import React, { memo } from "react";
-import { useUserData } from "./hooks/useUserData";
-import { ADMIN, TEACHER } from "./constants/roles";
-import get from "lodash/get";
-import { ROUTES } from "./constants/routes";
-import { Login } from "./Pages/Login";
-import { ErrorScreen } from "./Pages/ErrorScreen";
-import { MainLayout } from "./ui/MainLayout";
-import { Spinner } from "./ui/Spinner";
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { Journals } from './Pages/AdminPages/JournalsPage/Journals';
+import DataPageApollo from './Pages/AdminPages/DataPage/DataPageApollo';
+import Journal from './Pages/UserPages/JournalPage/Journal';
+import { Compensation } from './Pages/UserPages/Compensation';
+import { Notes } from './Pages/UserPages/Notes';
+import { Reports } from './Pages/AdminPages/ReportsPage/Reports';
+import { Subgroups } from './Pages/UserPages/Subgroups';
+import { Specialization } from './Pages/AdminPages/SpecPage';
+import { MidtermExamTypes } from './Pages/AdminPages/MidtermExamTypes';
+import { MidtermExamWithContext as MidtermExam } from './Pages/UserPages/MidtermExam';
+import { memo } from 'react';
+import { useUserData } from './hooks/useUserData';
+import { ADMIN, TEACHER } from './constants/roles';
+import get from 'lodash/get';
+import { ROUTES } from './constants/routes';
+import { Login } from './Pages/Login';
+import { ErrorScreen } from './Pages/ErrorScreen';
+import { MainLayout } from './components/MainLayout';
+import { Spinner } from './components/Spinner';
+import { Consults } from './Pages/UserPages/Consults';
+import { GroupConsults } from './Pages/UserPages/GroupConsults';
 
 const AdminRoutes = () => (
     <Switch>
@@ -27,7 +28,8 @@ const AdminRoutes = () => (
         <Route path={ROUTES.JOURNAL} component={Journal} />
         <Route path={ROUTES.COMPENSATION} component={Compensation} />
         <Route path={ROUTES.NOTES} component={Notes} />
-        <Route path={ROUTES.CONSULT} render={ConsultController} />
+        <Route path={ROUTES.CONSULT} render={Consults} />
+        <Route path={ROUTES.GROUP_CONSULT} render={GroupConsults} />
         <Route path={ROUTES.REPORTS} component={Reports} />
         <Route path={ROUTES.SPECS} component={Specialization} />
         <Route path={ROUTES.MIDTERM_EXAM_TYPES} component={MidtermExamTypes} />
@@ -39,7 +41,8 @@ const TeacherRoutes = () => (
     <Switch>
         <Route path={ROUTES.COMPENSATION} component={Compensation} />
         <Route path={ROUTES.NOTES} component={Notes} />
-        <Route path={ROUTES.CONSULT} component={ConsultController} />
+        <Route path={ROUTES.CONSULT} component={Consults} />
+        <Route path={ROUTES.GROUP_CONSULT} render={GroupConsults} />
         <Route path={ROUTES.SUBGROUPS} component={Subgroups} />
         <Route path={ROUTES.MIDTERM_EXAM} component={MidtermExam} />
         <Route path={ROUTES.JOURNAL} component={Journal} />
@@ -49,7 +52,7 @@ const TeacherRoutes = () => (
 
 export const AppRouter = memo(() => {
     const auth = useUserData();
-    const role = get(auth, "user.role");
+    const role = get(auth, 'user.role');
 
     if (role == ADMIN) return <AdminRoutes />;
     if (role == TEACHER) return <TeacherRoutes />;

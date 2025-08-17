@@ -2,20 +2,20 @@ import React, { memo, useCallback } from "react";
 import { QUARTER_END, QUARTERS_RU_OLD } from "../../../constants/quarters";
 import { findMark } from "./JournalPageHelpers";
 import moment, { Moment } from "moment";
-import { SelectCell } from "../../../ui/cells/SelectCell";
+import { SelectCell } from "../../../components/cells/SelectCell";
 import { Months } from "../../../constants/date";
 import { UpdateData, UpdateQuarterData } from "./Journal";
 import {
   HOURS_OPTIONS,
   MARKS_OPTIONS,
 } from "../../../constants/selectCellOptions";
-import { Table } from "../../../ui/Table";
-import { NameHeader } from "../../../ui/Table/NameHeader";
-import { TableHeader } from "../../../ui/Table/tableHeader";
+import { Table } from "../../../components/Table";
+import { NameHeader } from "../../../components/Table/NameHeader";
+import { TableHeader } from "../../../components/Table/tableHeader";
 import { QuarterHeader } from "./style/QuarterHeader.styled";
 import { compareByClass } from "../../../utils/comparators";
-import { NameView } from "../../../ui/cells/NameView";
-import { ClassView } from "../../../ui/cells/ClassView";
+import { NameView } from "../../../components/cells/NameView";
+import { ClassView } from "../../../components/cells/ClassView";
 
 const QUARTER_END_MONTHS = [9, 11, 2, 4];
 

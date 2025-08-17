@@ -11,6 +11,10 @@ export const USER_RESOURCES: Resources = {
     path: '/consult',
     title: 'Консультации',
   },
+  groupConsult: {
+    path: '/groupConsult',
+    title: 'Групповые консультации',
+  },
   compensation: {
     path: '/compensation',
     title: 'Возмещение',

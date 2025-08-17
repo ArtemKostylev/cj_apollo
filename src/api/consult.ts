@@ -1,4 +1,5 @@
 import { httpClient } from './httpClient';
+import { AvailableYears } from '~/constants/date';
 
 interface GetConsultsParams {
     courseId: number;
@@ -8,10 +9,10 @@ interface GetConsultsParams {
 
 interface UpdateConsultDto {
     id: number | undefined;
-    date: string;
+    date: string | undefined;
     hours: number | undefined;
     relationId: number;
-    year: number;
+    year: AvailableYears;
 }
 
 interface UpdateConsultParams {
@@ -27,7 +28,7 @@ interface ConsultDto {
 export async function getConsults(
     params: GetConsultsParams
 ): Promise<ConsultDto[]> {
-    const response = await httpClient.get('/consults', {
+    const response = await httpClient.get('/consult', {
         params
     });
 
@@ -35,7 +36,7 @@ export async function getConsults(
 }
 
 export async function updateConsults(params: UpdateConsultParams) {
-    await httpClient.post('/consults', {
+    await httpClient.post('/consult', {
         params
     });
 }

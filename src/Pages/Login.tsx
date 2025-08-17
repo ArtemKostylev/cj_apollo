@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useFormik } from "formik";
-import { useMutation } from "@apollo/client";
-import { SIGN_IN } from "../graphql/mutations/signIn";
-import { useHistory } from "react-router-dom";
-import { Button } from "../ui/Button";
-import { useUserData } from "../hooks/useUserData";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useFormik } from 'formik';
+import { useMutation } from '@apollo/client';
+import { SIGN_IN } from '../graphql/mutations/signIn';
+import { useHistory } from 'react-router-dom';
+import { Button } from '~/components/Button';
+import { useUserData } from '../hooks/useUserData';
 
 const LoginFormLayout = styled.form`
     width: 40%;
@@ -56,38 +56,38 @@ const Input = styled.input`
 export const Login = () => {
     const history = useHistory();
     let auth = useUserData();
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [login, { loading }] = useMutation(SIGN_IN, {
         onCompleted: (payload) => {
             auth.signIn(payload.signIn, () => {
-                history.push("/");
+                history.push('/');
             });
         },
         onError: (e: any) => {
-            setErrorMessage("Неправильное имя пользователя или пароль");
-        },
+            setErrorMessage('Неправильное имя пользователя или пароль');
+        }
     });
 
     const formik = useFormik({
         initialValues: {
-            login: "",
-            password: "",
+            login: '',
+            password: ''
         },
         onSubmit: (values) =>
             login({
                 variables: {
                     login: values.login.trim().toLowerCase(),
-                    password: values.password,
-                },
-            }),
+                    password: values.password
+                }
+            })
     });
 
     return (
         <LoginFormLayout
             onSubmit={formik.handleSubmit}
             onKeyDown={(e) => {
-                if (e.code === "Enter") formik.handleSubmit();
+                if (e.code === 'Enter') formik.handleSubmit();
             }}
         >
             <FormHeader>Добро пожаловать!</FormHeader>

@@ -1,22 +1,25 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getConsults, updateConsults } from '../../../api/consult';
-import { useUserData } from '../../../hooks/useUserData';
-import { getCurrentAcademicYear } from '../../../utils/academicDate';
+import { last, times } from 'lodash';
 import { useRef, useState } from 'react';
+import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
+import { ClassView } from '~/components/cells/ClassView';
+import {
+    ConsultCell,
+    type UpdatedConsult
+} from '~/components/cells/ConsultCell';
 import { LegacySpinner } from '~/components/LegacySpinner';
-import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/PageWrapper';
-import { ControlSelect } from '~/components/tableControls/controlSelect';
-import { toSelectOptions } from '~/utils/toSelectOptions';
-import { AvailableYears, YEARS, YEARS_NAMES } from '~/constants/date';
-import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/Table';
 import { TableHeader } from '~/components/Table/tableHeader';
-import { NameView } from '~/components/cells/NameView';
-import { times } from 'lodash';
-import { ConsultCell, UpdatedConsult } from '~/components/cells/ConsultCell';
+import { TableControls } from '~/components/tableControls';
+import { ControlButton } from '~/components/tableControls/controlButton';
+import { ControlSelect } from '~/components/tableControls/controlSelect';
+import { YEARS, YEARS_NAMES, type AvailableYears } from '~/constants/date';
+import { useUserData } from '~/hooks/useUserData';
+import { getCurrentAcademicYear } from '~/utils/academicDate';
+import { toSelectOptions } from '~/utils/toSelectOptions';
 
-export const Consults = () => {
+export const GroupConsults = () => {
     const { user } = useUserData();
     const [year, setYear] = useState(
         getCurrentAcademicYear() as AvailableYears
@@ -39,9 +42,9 @@ export const Consults = () => {
         isLoading: isConsultsLoading,
         isError: isConsultsError
     } = useQuery({
-        queryKey: ['consults'],
+        queryKey: ['groupConsults'],
         queryFn: () =>
-            getConsults({
+            getAllGroupConsults({
                 courseId: currentVersion.id,
                 teacherId: courses[course].id,
                 year: year
@@ -52,15 +55,18 @@ export const Consults = () => {
         mutationFn: () => {
             const data = Object.values(changedConsults.current).map(
                 (consult) => ({
-                    id: consult.id,
-                    date: consult.date,
-                    hours: consult.hours,
-                    relationId: consult.relationId as number,
+                    ...consult,
+                    consultId: consult.id,
+                    class: consult.class as number,
+                    program: consult.program as string,
+                    subgroup: consult.subgroup as number,
                     year: year
                 })
             );
 
-            return updateConsults({
+            return updateGroupConsults({
+                teacher: currentVersion.id,
+                course,
                 consults: data
             });
         }
@@ -91,27 +97,30 @@ export const Consults = () => {
             <Table>
                 <thead>
                     <tr>
-                        <TableHeader width="30%">Имя ученика</TableHeader>
-                        <TableHeader width="70%" colSpan={32}>
+                        <TableHeader width="30%">Группа</TableHeader>
+                        <TableHeader width="70%" colSpan={16}>
                             Дата/Часы
                         </TableHeader>
                     </tr>
                 </thead>
                 <tbody>
-                    {consults?.map((relation) => (
-                        <tr key={relation.id}>
-                            <NameView
-                                name={relation.student?.name}
-                                surname={relation.student?.surname}
+                    {consults?.map((group) => (
+                        <tr key={group.group}>
+                            <ClassView
+                                classNum={group.class}
+                                program={group.program}
+                                subgroup={group.subgroup}
                             />
-                            {times(16, (index) => (
+                            {times(8).map((index) => (
                                 <ConsultCell
-                                    clientId={`${relation.id}-${index}`}
+                                    clientId={`${group}-${index}`}
                                     onChange={onCellValueChange}
-                                    consultId={relation.consults?.[index]?.id}
-                                    date={relation.consults?.[index]?.date}
-                                    hours={relation.consults?.[index]?.hours}
-                                    relationId={relation.id}
+                                    consultId={group.consults?.[index]?.id}
+                                    date={group.consults?.[index]?.date}
+                                    hours={group.consults?.[index]?.hours}
+                                    class={group.class}
+                                    program={group.program}
+                                    subgroup={group.subgroup}
                                     year={year}
                                     key={index}
                                 />
