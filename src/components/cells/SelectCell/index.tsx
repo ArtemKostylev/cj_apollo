@@ -1,44 +1,65 @@
-import React, {useState, useEffect, useRef, ReactElement, memo} from 'react';
-import {useOnClickOutside} from '../../../hooks/useOnClickOutside';
-import {Dropdown} from '../../Dropdown';
-import {CellText} from './style/CellText.styled';
-import {TableCell} from '../styles/TableCell.styled';
+import { useState, useEffect, useRef, ReactElement, memo } from 'react';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { Dropdown } from '../../dropdown';
+import { TableCell } from '../TableCell';
+import styles from './selectCell.module.css';
 
 type Props = {
-  value: string | number | undefined;
-  options: Map<string | number, DropdownOptionType>;
-  isWeekend?: boolean;
-  onSelect: OnSelectType;
-  disabled?: boolean;
-  renderItem?: (onClick: () => void) => ReactElement;
-  error?: boolean;
-}
+    value: string | number | undefined;
+    options: DropdownOptionType[];
+    isWeekend?: boolean;
+    onSelect: OnSelectType;
+    disabled?: boolean;
+    renderItem?: (onClick: () => void) => ReactElement;
+};
 
-export const SelectCell = memo(({value = '', options, isWeekend = false, onSelect, disabled = false, error}: Props) => {
-  const [dropdownValue, setDropdownValue] = useState<string | number>(value);
-  const [opened, setOpened] = useState(false);
+export const SelectCell = memo(
+    ({
+        value = '',
+        options,
+        isWeekend = false,
+        onSelect,
+        disabled = false
+    }: Props) => {
+        const [dropdownValue, setDropdownValue] = useState<string | number>(
+            value
+        );
+        const [opened, setOpened] = useState(false);
 
-  useEffect(() => {
-    setDropdownValue(value);
-  }, [value]);
+        useEffect(() => {
+            setDropdownValue(value);
+        }, [value]);
 
-  const ref = useRef() as any;
+        const ref = useRef<HTMLDivElement>(null);
 
-  const width = ref.current?.clientWidth || 0;
+        const width = ref.current?.clientWidth || 0;
 
-  useOnClickOutside(ref, () => setOpened(false));
+        useOnClickOutside(ref, () => setOpened(false));
 
-  const onClick = () => setOpened((prev) => !prev);
+        const onClick = () => setOpened((prev) => !prev);
 
-  return (
-    <TableCell error={error} ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
-      <CellText>{dropdownValue === '.' ? '✓' : dropdownValue}</CellText>
-      {!disabled && (
-        <Dropdown opened={opened} options={options} width={width} onSelect={(value) => {
-          onSelect(value);
-          setDropdownValue(value);
-        }}/>
-      )}
-    </TableCell>
-  );
-});
+        return (
+            <TableCell
+                ref={ref}
+                onClick={onClick}
+                isWeekend={isWeekend}
+                disabled={disabled}
+            >
+                <p className={styles.cellText}>
+                    {dropdownValue === '.' ? '✓' : dropdownValue}
+                </p>
+                {!disabled && (
+                    <Dropdown
+                        opened={opened}
+                        options={options}
+                        width={`${width}px`}
+                        onSelect={(value) => {
+                            onSelect(value);
+                            setDropdownValue(value);
+                        }}
+                    />
+                )}
+            </TableCell>
+        );
+    }
+);

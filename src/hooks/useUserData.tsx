@@ -1,18 +1,21 @@
-import React, { useState, useContext, createContext, useMemo } from "react";
-import { USER_ALIAS } from "../constants/localStorageAliases";
-import { fromPairs } from "lodash";
-import { getCurrentAcademicYear } from "../utils/academicDate";
-import { useHistory, useLocation } from "react-router-dom";
-import { ROUTES } from "../constants/routes";
-import { useQuery } from "@apollo/client";
-import { UPDATE_USER_INFO } from "../graphql/queries/updateUserInfo";
+import { useState, useContext, createContext, useMemo } from 'react';
+import { USER_ALIAS } from '../constants/localStorageAliases';
+import { fromPairs } from 'lodash';
+import { getCurrentAcademicYear } from '../utils/academicDate';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
+import { useQuery } from '@apollo/client';
+import { UPDATE_USER_INFO } from '../graphql/queries/updateUserInfo';
 
 type signInCallback = (payload: AuthPayload, nav: () => void) => void;
 type signOutCallback = (nav: () => void) => void;
 
 interface IUser {
     role: string;
-    versions: Record<string, { id: number; courses: Course[] }>;
+    versions: Record<
+        string,
+        { id: number; coursesById: Record<number, Course>; courses: Course[] }
+    >;
     token: string;
 }
 
@@ -54,14 +57,14 @@ function useProvideAuth(): AuthContextProps {
     const [user, setUser] = useState<IUser | null>(cashedUser);
     const { loading } = useQuery(UPDATE_USER_INFO, {
         variables: {
-            token: cashedUser?.token,
+            token: cashedUser?.token
         },
         onError: () => {
             history.replace(ROUTES.LOGIN);
         },
         onCompleted: (data) => {
             signIn(data.updateUserInfo, () => history.push(location.pathname));
-        },
+        }
     });
 
     const signIn: signInCallback = (payload, nav) => {
@@ -75,15 +78,19 @@ function useProvideAuth(): AuthContextProps {
                 it.freezeVersion?.year || getCurrentAcademicYear(),
                 {
                     id: it.id,
-                    courses: it.relations.map((it) => it.course),
-                },
+                    coursesById: it.relations.reduce((acc, it) => {
+                        acc[it.course.id] = it.course;
+                        return acc;
+                    }, {} as Record<number, Course>),
+                    courses: it.relations.map((it) => it.course)
+                }
             ])
         );
 
         const newUser = {
             role: payload.user.role.name,
             versions,
-            token: payload.token,
+            token: payload.token
         };
 
         setUser(newUser);
@@ -101,6 +108,6 @@ function useProvideAuth(): AuthContextProps {
         loading,
         user: user as IUser,
         signIn,
-        signOut,
+        signOut
     };
 }

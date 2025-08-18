@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import styles from './subgroups.module.css';
 
 interface SubgroupItemProps {
   relationId: number;
@@ -18,7 +19,7 @@ export const SubgroupItem = (props: SubgroupItemProps) => {
   };
 
   return (
-    <li className="item">
+    <li className={styles.item}>
       <span>{studentName}</span>
       <span>Группа:</span>
       <input value={value} onChange={handleChange} maxLength={1} />

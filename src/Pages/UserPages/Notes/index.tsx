@@ -1,51 +1,40 @@
-import { useUserData } from "../../../hooks/useUserData";
-import "../../styles/Notes.css";
-import {
-    TableControls,
-    TableControlsConfig,
-    TableControlType,
-} from "../../../ui/TableControls";
-import { PageWrapper } from "../../../ui/PageWrapper";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { YEARS } from "../../../constants/date";
-import { getCurrentAcademicYear } from "../../../utils/academicDate";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getNote, updateNote } from "../../../api/note";
-import { LegacySpinner } from "../../../ui/LegacySpinner";
+import { useUserData } from '../../../hooks/useUserData';
+import { TableControls } from '~/components/tableControls';
+import { PageWrapper } from '~/components/PageWrapper';
+import { useCallback, useEffect, useState } from 'react';
+import { AvailableYears, YEARS, YEARS_NAMES } from '../../../constants/date';
+import { getCurrentAcademicYear } from '../../../utils/academicDate';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getNote, updateNote } from '../../../api/note';
+import { LegacySpinner } from '~/components/LegacySpinner';
 
-import styles from "./notes.module.css";
+import styles from './notes.module.css';
+import { ControlButton } from '~/components/tableControls/controlButton';
+import { ControlSelect } from '~/components/tableControls/controlSelect';
+import { toSelectOptions } from '~/utils/toSelectOptions';
 
 export const Notes = () => {
-    const auth = useUserData();
-    const location = useLocation() as any;
-
+    const { user } = useUserData();
     const [year, setYear] = useState(getCurrentAcademicYear());
-    const [course, setCourse] = useState(0);
 
-    const [value, setValue] = useState("");
+    const currentVersion = user.versions[year];
+    const { coursesById, courses } = currentVersion;
 
-    const onYearChange = useCallback((year: number) => {
-        setYear(year);
+    const [course, setCourse] = useState(courses[0].id);
+
+    const [value, setValue] = useState('');
+
+    const onYearChange = useCallback((year: string | number) => {
+        setYear(year as AvailableYears);
     }, []);
 
-    const onCourseChange = useCallback((course: number) => {
-        setCourse(course);
+    const onCourseChange = useCallback((course: string | number) => {
+        setCourse(course as number);
     }, []);
 
     const onTextAreaValueChange = useCallback((e: any) => {
         setValue(e.target.value);
     }, []);
-
-    const teacherId = useMemo(
-        () => location.state?.versions[year].id || auth.user.versions[year].id,
-        [year, auth]
-    );
-    const courses: Course[] = useMemo(
-        () => location.state?.courses || auth.user?.versions[year].courses,
-        [location, auth, year]
-    );
-    const { courseId, courseName } = courses[course];
 
     const update = useMutation({ mutationFn: updateNote });
 
@@ -53,60 +42,48 @@ export const Notes = () => {
         update.mutate({
             noteId: data?.id || 0,
             text: value,
-            teacherId,
-            courseId,
-            year,
+            teacherId: currentVersion.id,
+            courseId: coursesById[course].id,
+            year
         });
     }, []);
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ["note"],
+        queryKey: ['note'],
         queryFn: () =>
             getNote({
-                courseId,
-                teacherId,
-                year,
-            }),
+                courseId: coursesById[course].id,
+                teacherId: currentVersion.id,
+                year
+            })
     });
-
-    const controlsConfig: TableControlsConfig = useMemo(
-        () => [
-            {
-                type: TableControlType.SELECT,
-                options: new Map(
-                    courses.map((it, index) => [
-                        index,
-                        { value: index, text: it.name },
-                    ])
-                ),
-                text: courseName,
-                onClick: onCourseChange,
-            },
-            {
-                type: TableControlType.SELECT,
-                options: YEARS,
-                text: YEARS.get(year)?.text,
-                onClick: onYearChange,
-            },
-            {
-                type: TableControlType.BUTTON,
-                text: "Сохранить",
-                onClick: onSave,
-            },
-        ],
-        [year, course, value, data, courseName]
-    );
 
     useEffect(() => {
         data?.text && setValue(data?.text);
     }, [data?.text]);
 
     if (isPending) return <LegacySpinner />;
-    if (isError) throw new Error("503");
+    if (isError) throw new Error('503');
 
     return (
         <PageWrapper>
-            <TableControls config={controlsConfig} />
+            <TableControls>
+                <ControlSelect
+                    options={toSelectOptions(courses, 'id', 'name')}
+                    buttonText={coursesById[course].name}
+                    onSelect={onCourseChange}
+                />
+                <ControlSelect
+                    options={YEARS}
+                    buttonText={YEARS_NAMES[year]}
+                    onSelect={onYearChange}
+                />
+                <ControlButton
+                    text="Сохранить"
+                    onClick={onSave}
+                    disabled={update.isPending}
+                />
+            </TableControls>
             <textarea
                 className={styles.notesTextarea}
                 placeholder="Это - место для заметок..."

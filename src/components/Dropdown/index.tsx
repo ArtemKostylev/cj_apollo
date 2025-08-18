@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { DropdownOption } from './DropdownOption';
-import styles from './styles/dropdown.module.css';
 import classNames from 'classnames';
-import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useOnClickOutside } from '~/hooks/useOnClickOutside';
+import styles from './styles/dropdown.module.css';
+import { DropdownOption } from './DropdownOption';
 
 type Props = {
     opened: boolean;

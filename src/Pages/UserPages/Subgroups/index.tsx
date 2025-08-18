@@ -1,55 +1,51 @@
-import { useState, useMemo, useCallback } from "react";
-import { useUserData } from "../../../hooks/useUserData";
-import "../../../styles/Subgroups.css";
-import {
-    TableControls,
-    TableControlsConfig,
-    TableControlType,
-} from "../../../ui/TableControls";
-import { getCurrentAcademicYear } from "../../../utils/academicDate";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getSubgroups, saveSubgroups } from "../../../api/subgroup";
-import { LegacySpinner } from "../../../ui/LegacySpinner";
-import { SubgroupItem } from "./SubgroupItem";
+import { useState, useMemo, useCallback, useRef } from 'react';
+import { useUserData } from '../../../hooks/useUserData';
+import { TableControls } from '~/components/tableControls';
+import { getCurrentAcademicYear } from '../../../utils/academicDate';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { getSubgroups, saveSubgroups } from '../../../api/subgroup';
+import { LegacySpinner } from '~/components/LegacySpinner';
+import { SubgroupItem } from './SubgroupItem';
+import { ControlSelect } from '~/components/tableControls/controlSelect';
+import { ControlButton } from '~/components/tableControls/controlButton';
+import { toSelectOptions } from '~/utils/toSelectOptions';
+import { PageWrapper } from '~/components/PageWrapper';
+import styles from './subgroups.module.css';
 
 export const Subgroups = () => {
-    // TODO: this can be combined into a single hook
-    const auth = useUserData();
+    const { user } = useUserData();
     const year = useMemo(() => getCurrentAcademicYear(), []);
 
-    const [changedSubgroups, setChangedSubgroups] = useState(
-        {} as Record<number, number>
-    );
+    const changedSubgroups = useRef<Record<number, number>>({});
 
-    const userVersionData = auth.user.versions[year];
-    // TODO: add types to version data
-    const courses = userVersionData.courses.filter(
-        (course: any) => course.group
-    );
+    const currentVersion = user.versions[year];
+    const { coursesById, courses: allCourses } = currentVersion;
+
+    const courses = allCourses.filter((it) => it.group);
 
     const [course, setCourse] = useState(0);
 
-    const teacherId = userVersionData.id;
-    const courseId = courses[course]?.id;
+    const teacherId = currentVersion.id;
+    const courseId = coursesById[course].id;
 
-    const getCourse = (course: number) => {
-        setCourse(course);
+    const getCourse = (course: string | number) => {
+        setCourse(course as number);
     };
 
     const { data, isPending, isError } = useQuery({
-        queryKey: ["subgroups", courseId, teacherId],
-        queryFn: () => getSubgroups(courseId, teacherId),
+        queryKey: ['subgroups', courseId, teacherId],
+        queryFn: () => getSubgroups(courseId, teacherId)
     });
 
     const updateSubgroups = useMutation({
-        mutationFn: saveSubgroups,
+        mutationFn: saveSubgroups
     });
 
     const save = useCallback(() => {
-        const subgroups = Object.entries(changedSubgroups).map(
-            ([group, subgroups]) => ({
-                relationId: parseInt(group),
-                subgroup: subgroups,
+        const subgroups = Object.entries(changedSubgroups.current).map(
+            ([relationId, subgroups]) => ({
+                relationId: parseInt(relationId),
+                subgroup: subgroups
             })
         );
         updateSubgroups.mutate(subgroups);
@@ -57,47 +53,33 @@ export const Subgroups = () => {
 
     const handleSubgroupChange = useCallback(
         (relationId: number, subgroup: number) => {
-            setChangedSubgroups((prev) => ({
-                ...prev,
-                [relationId]: subgroup,
-            }));
+            changedSubgroups.current[relationId] = subgroup;
         },
         []
     );
 
-    const controlsConfig: TableControlsConfig = useMemo(
-        () => [
-            {
-                type: TableControlType.SELECT,
-                options: new Map(
-                    courses.map((it, index) => [
-                        index,
-                        { value: index, text: it?.name },
-                    ])
-                ),
-                text: courses[course]?.name,
-                onClick: getCourse,
-            },
-            {
-                type: TableControlType.BUTTON,
-                text: "Сохранить",
-                onClick: save,
-            },
-        ],
-        [courses, course, data]
-    );
-
     if (isPending) return <LegacySpinner />;
-    if (isError) throw new Error("503");
+    if (isError) throw new Error('503');
 
     return (
-        <div>
-            <TableControls config={controlsConfig} />
-            <div className="group_wrapper">
-                <ul className="group_list">
-                    {data.map((subgroup, index) => (
+        <PageWrapper>
+            <TableControls>
+                <ControlSelect
+                    options={toSelectOptions(courses, 'id', 'name')}
+                    buttonText={coursesById[course].name}
+                    onSelect={getCourse}
+                />
+                <ControlButton
+                    text="Сохранить"
+                    onClick={save}
+                    disabled={updateSubgroups.isPending}
+                />
+            </TableControls>
+            <div className={styles.groupWrapper}>
+                <ul className={styles.groupList}>
+                    {data.map((subgroup) => (
                         <>
-                            <li className="group_header">
+                            <li className={styles.groupHeader}>
                                 Класс: {subgroup.subgroupName}
                             </li>
                             {subgroup.students.map((item) => (
@@ -113,6 +95,6 @@ export const Subgroups = () => {
                     ))}
                 </ul>
             </div>
-        </div>
+        </PageWrapper>
     );
 };

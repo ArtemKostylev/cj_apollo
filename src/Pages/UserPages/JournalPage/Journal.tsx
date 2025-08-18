@@ -27,6 +27,7 @@ import {
     MONTHS_IN_PERIODS,
 } from "../../../utils/academicDate";
 import { useLocation } from "react-router-dom";
+import { PageWrapper } from "~/components/PageWrapper";
 
 export type Pair = {
     class: number;
@@ -515,7 +516,7 @@ export default function Journal() {
     };
 
     return (
-        <>
+        <PageWrapper>
             <TableControls config={controlsConfig} />
             {userCourses[course].group ? (
                 <GroupJournalView
@@ -538,6 +539,6 @@ export default function Journal() {
                     onlyHours={userCourses[course].onlyHours}
                 />
             )}
-        </>
+        </PageWrapper>
     );
 }

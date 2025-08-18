@@ -1,18 +1,14 @@
 import { ReactNode, memo } from 'react';
 import { CalendarContainer } from 'react-datepicker';
-import styled from 'styled-components';
+import styles from './dateCell.module.css';
 
 interface ContainerProps {
-  className: string;
-  children: ReactNode;
-};
-
-const ContainerWrapper = styled.div`
-  line-height: 1em;
-`;
+    className: string;
+    children: ReactNode;
+}
 
 export const Container = memo(({ className, children }: ContainerProps) => (
-  <ContainerWrapper>
-    <CalendarContainer className={className}>{children}</CalendarContainer>
-  </ContainerWrapper>
+    <div className={styles.container}>
+        <CalendarContainer className={className}>{children}</CalendarContainer>
+    </div>
 ));

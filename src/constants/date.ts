@@ -34,22 +34,22 @@ export const QUARTERS_RU = {
     [Quarters.YEAR]: 'Год'
 };
 
-export const PERIODS_RU = new Map<string, DropdownOptionType>([
-    [Periods.FIRST, { value: Periods.FIRST, text: 'Первое полугодие' }],
-    [Periods.SECOND, { value: Periods.SECOND, text: 'Второе полугодие' }]
-]);
+export const PERIODS_RU: DropdownOptionType[] = [
+    { value: Periods.FIRST, text: 'Первое полугодие' },
+    { value: Periods.SECOND, text: 'Второе полугодие' }
+];
 
-export const MONTHS_RU = new Map<number, DropdownOptionType>([
-    [Months.SEPTEMBER, { value: Months.SEPTEMBER, text: 'Сентябрь' }],
-    [Months.OCTOBER, { value: Months.OCTOBER, text: 'Октябрь' }],
-    [Months.NOVEMBER, { value: Months.NOVEMBER, text: 'Ноябрь' }],
-    [Months.DECEMBER, { value: Months.DECEMBER, text: 'Декабрь' }],
-    [Months.JANUARY, { value: Months.JANUARY, text: 'Январь' }],
-    [Months.FEBRUARY, { value: Months.FEBRUARY, text: 'Февраль' }],
-    [Months.MARCH, { value: Months.MARCH, text: 'Март' }],
-    [Months.APRIL, { value: Months.APRIL, text: 'Апрель' }],
-    [Months.MAY, { value: Months.MAY, text: 'Май' }]
-]);
+export const MONTHS_RU: DropdownOptionType[] = [
+    { value: Months.SEPTEMBER, text: 'Сентябрь' },
+    { value: Months.OCTOBER, text: 'Октябрь' },
+    { value: Months.NOVEMBER, text: 'Ноябрь' },
+    { value: Months.DECEMBER, text: 'Декабрь' },
+    { value: Months.JANUARY, text: 'Январь' },
+    { value: Months.FEBRUARY, text: 'Февраль' },
+    { value: Months.MARCH, text: 'Март' },
+    { value: Months.APRIL, text: 'Апрель' },
+    { value: Months.MAY, text: 'Май' }
+];
 
 export type AvailableYears = 2021 | 2022 | 2023 | 2024 | 2025;
 

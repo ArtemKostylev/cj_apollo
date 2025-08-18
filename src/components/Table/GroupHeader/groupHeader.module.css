@@ -1,0 +1,18 @@
+.groupHeader {
+    border: none;
+    font-weight: normal;
+}
+
+.groupHeader th {
+    background-color: transparent;
+    border: 0;
+}
+
+.groupHeader div {
+    display: flex;
+    flex-direction: row;
+}
+
+.groupHeader p {
+    margin: 0 3rem;
+}

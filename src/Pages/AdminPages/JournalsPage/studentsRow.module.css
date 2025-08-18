@@ -1,0 +1,9 @@
+.teacherItem {
+    width: 100%;
+}
+
+.itemHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

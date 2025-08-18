@@ -1,7 +1,7 @@
-import { FormItemWrapper } from '../FormItemWrapper';
 import { BaseFormItemProps } from '../types';
 import { Label } from '../label';
-import styles from './select.module.css';
+import styles from './formSelect.module.css';
+import formStyles from '../formItem.module.css';
 import { useCallback } from 'react';
 
 interface FormSelectProps extends BaseFormItemProps {
@@ -19,7 +19,7 @@ export const FormSelect = (props: FormSelectProps) => {
     );
 
     return (
-        <FormItemWrapper>
+        <div className={formStyles.formItem}>
             <Label htmlFor={name}>{label}:</Label>
             <select
                 className={styles.select}
@@ -36,6 +36,6 @@ export const FormSelect = (props: FormSelectProps) => {
                     </option>
                 ))}
             </select>
-        </FormItemWrapper>
+        </div>
     );
 };

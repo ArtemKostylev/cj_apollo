@@ -1,31 +1,44 @@
-import React, {useRef, useState} from 'react';
-import {ErrorBoundary} from 'react-error-boundary';
-import {ErrorScreen} from '../../Pages/ErrorScreen';
-import Menu from '../Menu';
-import MainHeader from '../MainHeader';
-import {AppRouter} from '../../MainRouter';
-import {AppWrapper} from './style/AppWrapper.styled';
-import {Cover} from './style/Cover.styled';
-import {Content} from './style/Content.styled';
+import { useRef, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorScreen } from '~/Pages/ErrorScreen';
+import Menu from '~/components/Menu';
+import { AppRouter } from '~/MainRouter';
+import classNames from 'classnames';
+import styles from './mainLayout.module.css';
+import Header from './Header';
 
 export const MainLayout = () => {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const menuRef = useRef();
+    const [menuVisible, setMenuVisible] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
-  const onMenuClick = () => {
-    setMenuVisible((prev) => !prev);
-  };
+    const onMenuClick = () => {
+        setMenuVisible((prev) => !prev);
+    };
 
-  return (
-    <AppWrapper>
-      <ErrorBoundary FallbackComponent={ErrorScreen}>
-        <Menu isOpen={menuVisible} onClose={() => setMenuVisible((prev) => !prev)}/>
-        <Cover menuVisible={menuVisible} onClick={() => setMenuVisible((prev) => !prev)}/>
-        <Content menuVisible={menuVisible}>
-          <MainHeader onMenuClick={onMenuClick} menuRef={menuRef}/>
-          <AppRouter/>
-        </Content>
-      </ErrorBoundary>
-    </AppWrapper>
-  );
-}
+    const coverClassName = classNames(styles.cover, {
+        [styles.visible]: menuVisible
+    });
+
+    const contentClassName = classNames(styles.content, {
+        [styles.visible]: menuVisible
+    });
+
+    return (
+        <div className={styles.appWrapper}>
+            <ErrorBoundary FallbackComponent={ErrorScreen}>
+                <Menu
+                    isOpen={menuVisible}
+                    onClose={() => setMenuVisible((prev) => !prev)}
+                />
+                <div
+                    className={coverClassName}
+                    onClick={() => setMenuVisible((prev) => !prev)}
+                />
+                <div className={contentClassName}>
+                    <Header onMenuClick={onMenuClick} menuRef={menuRef} />
+                    <AppRouter />
+                </div>
+            </ErrorBoundary>
+        </div>
+    );
+};

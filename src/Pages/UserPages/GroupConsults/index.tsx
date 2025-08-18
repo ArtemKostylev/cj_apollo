@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { last, times } from 'lodash';
+import { times } from 'lodash';
 import { useRef, useState } from 'react';
 import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
-import { ClassView } from '~/components/cells/ClassView';
+import { ClassCell } from '~/components/cells/ClassCell';
 import {
     ConsultCell,
     type UpdatedConsult
 } from '~/components/cells/ConsultCell';
 import { LegacySpinner } from '~/components/LegacySpinner';
 import { PageWrapper } from '~/components/PageWrapper';
-import { Table } from '~/components/Table';
-import { TableHeader } from '~/components/Table/tableHeader';
+import { Table } from '~/components/table';
+import { TableHeader } from '~/components/table/tableHeader';
 import { TableControls } from '~/components/tableControls';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -26,7 +26,7 @@ export const GroupConsults = () => {
     );
 
     const currentVersion = user.versions[year];
-    const courses = currentVersion.courses;
+    const { coursesById, courses } = currentVersion;
 
     const [course, setCourse] = useState(courses[0].id);
     const courseOptions = toSelectOptions(courses, 'id', 'name');
@@ -45,8 +45,8 @@ export const GroupConsults = () => {
         queryKey: ['groupConsults'],
         queryFn: () =>
             getAllGroupConsults({
-                courseId: currentVersion.id,
-                teacherId: courses[course].id,
+                courseId: coursesById[course].id,
+                teacherId: currentVersion.id,
                 year: year
             })
     });
@@ -80,7 +80,7 @@ export const GroupConsults = () => {
             <TableControls>
                 <ControlSelect
                     options={courseOptions}
-                    buttonText={courses[course].name}
+                    buttonText={coursesById[course].name}
                     onSelect={(value) => setCourse(value as number)}
                 />
                 <ControlSelect
@@ -106,7 +106,7 @@ export const GroupConsults = () => {
                 <tbody>
                     {consults?.map((group) => (
                         <tr key={group.group}>
-                            <ClassView
+                            <ClassCell
                                 classNum={group.class}
                                 program={group.program}
                                 subgroup={group.subgroup}

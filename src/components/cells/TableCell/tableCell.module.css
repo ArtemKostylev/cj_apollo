@@ -1,0 +1,38 @@
+.outer {
+    border: 1px solid #e6eaea;
+    position: relative;
+    padding: 0;
+    height: inherit;
+}
+
+.weekend {
+    background-color: #eff0f0;
+    border-color: #e6eaea;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    background-color: #e6eaea;
+}
+
+.disabled {
+    background-color: #e6eaea;
+}
+
+.inner {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.text {
+    height: fit-content;
+    width: 100%;
+    line-height: 1.5rem;
+    text-align: center;
+}

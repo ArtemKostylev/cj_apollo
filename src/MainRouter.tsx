@@ -16,7 +16,7 @@ import get from 'lodash/get';
 import { ROUTES } from './constants/routes';
 import { Login } from './Pages/Login';
 import { ErrorScreen } from './Pages/ErrorScreen';
-import { MainLayout } from './components/MainLayout';
+import { MainLayout } from './components/mainLayout';
 import { Spinner } from './components/Spinner';
 import { Consults } from './Pages/UserPages/Consults';
 import { GroupConsults } from './Pages/UserPages/GroupConsults';

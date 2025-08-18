@@ -10,9 +10,9 @@ import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { AvailableYears, YEARS, YEARS_NAMES } from '~/constants/date';
 import { ControlButton } from '~/components/tableControls/controlButton';
-import { Table } from '~/components/Table';
-import { TableHeader } from '~/components/Table/tableHeader';
-import { NameView } from '~/components/cells/NameView';
+import { Table } from '~/components/table';
+import { TableHeader } from '~/components/table/tableHeader';
+import { NameCell } from '~/components/cells/NameCell';
 import { times } from 'lodash';
 import { ConsultCell, UpdatedConsult } from '~/components/cells/ConsultCell';
 
@@ -23,7 +23,7 @@ export const Consults = () => {
     );
 
     const currentVersion = user.versions[year];
-    const courses = currentVersion.courses;
+    const { coursesById, courses } = currentVersion;
 
     const [course, setCourse] = useState(courses[0].id);
     const courseOptions = toSelectOptions(courses, 'id', 'name');
@@ -42,8 +42,8 @@ export const Consults = () => {
         queryKey: ['consults'],
         queryFn: () =>
             getConsults({
-                courseId: currentVersion.id,
-                teacherId: courses[course].id,
+                courseId: coursesById[course].id,
+                teacherId: currentVersion.id,
                 year: year
             })
     });
@@ -74,7 +74,7 @@ export const Consults = () => {
             <TableControls>
                 <ControlSelect
                     options={courseOptions}
-                    buttonText={courses[course].name}
+                    buttonText={coursesById[course].name}
                     onSelect={(value) => setCourse(value as number)}
                 />
                 <ControlSelect
@@ -100,7 +100,7 @@ export const Consults = () => {
                 <tbody>
                     {consults?.map((relation) => (
                         <tr key={relation.id}>
-                            <NameView
+                            <NameCell
                                 name={relation.student?.name}
                                 surname={relation.student?.surname}
                             />

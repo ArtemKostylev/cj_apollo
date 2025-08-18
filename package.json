@@ -22,7 +22,6 @@
         "react-modal": "^3.16.3",
         "react-modern-calendar-datepicker": "^3.1.6",
         "react-router-dom": "^5.2.0",
-        "styled-components": "^5.3.3",
         "use-file-picker": "^1.2.0"
     },
     "scripts": {
@@ -35,7 +34,6 @@
         "@types/react": "^19.1.9",
         "@types/react-dom": "^19.1.7",
         "@types/react-router-dom": "^5.3.3",
-        "@types/styled-components": "^5.1.26",
         "@types/classnames": "^2.3.0",
         "@types/graphql": "^14.2.3",
         "@vitejs/plugin-react": "^4.7.0",
