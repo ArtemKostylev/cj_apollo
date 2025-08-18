@@ -1,0 +1,18 @@
+.errorContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.errorCode {
+    font-size: 20rem;
+    color: grey;
+    margin: 0;
+}
+
+.errorMessage {
+    font-size: 3rem;
+    color: grey;
+}

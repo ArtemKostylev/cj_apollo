@@ -11,10 +11,11 @@ interface Props {
     onClick?: MouseEventHandler<HTMLDivElement> & ((e: HTMLDivElement) => void);
     isWeekend?: boolean;
     className?: string;
+    style?: React.CSSProperties;
 }
 
 export const TableCell = forwardRef<any, PropsWithChildren<Props>>(
-    ({ disabled, onClick, children, isWeekend, className }, ref) => {
+    ({ disabled, onClick, children, isWeekend, className, style }, ref) => {
         const outerClassName = classNames(
             styles.outer,
             {
@@ -25,7 +26,7 @@ export const TableCell = forwardRef<any, PropsWithChildren<Props>>(
             className
         );
         return (
-            <td ref={ref} className={outerClassName} onClick={onClick}>
+            <td ref={ref} className={outerClassName} onClick={onClick} style={style}>
                 <div className={styles.inner}>
                     <span className={styles.text}>{children}</span>
                 </div>

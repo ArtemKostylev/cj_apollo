@@ -6,16 +6,22 @@ import type { BaseFormItemProps } from '../types';
 interface InputProps extends BaseFormItemProps {
     type?: string;
     children?: any;
+    disabled?: boolean;
+    placeholder?: string;
+    size?: number;
 }
 
-export const Input = ({
+export const FormInput = ({
     name,
     value,
     onChange,
     label,
     type = 'text',
     children,
-    required
+    required,
+    disabled,
+    placeholder,
+    size
 }: InputProps) => (
     <div className={formStyles.formItem}>
         <Label htmlFor={name}>{label}:</Label>
@@ -27,6 +33,9 @@ export const Input = ({
             value={value}
             onChange={(e) => onChange(name, e.target.value)}
             required={required}
+            disabled={disabled}
+            placeholder={placeholder}
+            style={{ width: size }}
         >
             {children}
         </input>

@@ -1,0 +1,45 @@
+.formLayout {
+    width: 40%;
+    height: 40%;
+    margin: auto;
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    justify-items: center;
+    align-items: center;
+    row-gap: 25px;
+}
+
+.formLayout span {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.formItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.header {
+    text-transform: uppercase;
+    margin: 0;
+    min-width: 400px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.input {
+    text-indent: 10px;
+    line-height: 3rem;
+    font-size: 1.3rem;
+    outline: none;
+    border: none;
+    width: 70%;
+    min-width: 400px;
+    background-color: #e6eaea;
+}
+
+.input:-webkit-autofill::first-line {
+    font-size: 1.3rem;
+}

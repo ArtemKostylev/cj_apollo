@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorScreen } from '~/Pages/ErrorScreen';
+import { ErrorScreen } from '~/pages/error';
 import Menu from '~/components/Menu';
 import { AppRouter } from '~/MainRouter';
 import classNames from 'classnames';
