@@ -4,9 +4,8 @@ import {
     MONTHS_IN_QUARTERS,
     Periods,
     Quarters,
-    type AvailableYears
+    type AcademicYears
 } from '../constants/date';
-import { QUARTERS } from '../constants/quarters';
 
 const INACTIVE_MONTHS = [Months.JUNE, Months.JULY, Months.AUGUST];
 
@@ -55,26 +54,20 @@ export const getLessonsInMonth = (month: Months) => {
     return 5;
 };
 
-// TODO: this function should calculate accurate year based on the current month
-export const getCurrentAcademicYear = (): AvailableYears => {
+export const getCurrentAcademicYear = (): AcademicYears => {
     return moment().month() > 7
-        ? (moment().year() as AvailableYears)
-        : ((moment().year() - 1) as AvailableYears);
+        ? (moment().year() as AcademicYears)
+        : ((moment().year() - 1) as AcademicYears);
 };
 
-export const getDatesFromMonth = (month: Months, selectedYear: number) => {
-    let year = selectedYear || moment().year();
+export const academicYearToCalendar = (year: AcademicYears, month: Months) => {
+    const isFirstPeriod = FIRST_PERIOD_MONTHS.includes(month);
 
-    if (SECOND_PERIOD_MONTHS.includes(month)) year += 1;
-
-    const result = [];
-    const startDate = moment().month(month).year(year).startOf('month');
-    const endDate = startDate.clone().endOf('month');
-
-    for (let date = startDate; date <= endDate; date.add(1, 'day')) {
-        if (date.isoWeekday() !== 7) result.push(date.clone());
+    if (isFirstPeriod) {
+        return year;
     }
-    return result;
+
+    return year + 1;
 };
 
 export const getQuartersInPeriod = (period: Periods) => {
@@ -223,7 +216,7 @@ export function getYearByMonth(
     return currentYear + 1;
 }
 
-export function getQuarter(month: number) {
+export function getQuarter(month: Months) {
     if (MONTHS_IN_QUARTERS[Quarters.FIRST].includes(month))
         return Quarters.FIRST;
     if (MONTHS_IN_QUARTERS[Quarters.SECOND].includes(month))

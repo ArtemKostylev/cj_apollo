@@ -2,7 +2,7 @@ import { useUserData } from '../../hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
 import { useCallback, useEffect, useState } from 'react';
-import { AvailableYears, YEARS, YEARS_NAMES } from '../../constants/date';
+import { AcademicYears, YEARS, YEARS_NAMES } from '../../constants/date';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getNote, updateNote } from '../../api/note';
@@ -25,7 +25,7 @@ export const Notes = () => {
     const [value, setValue] = useState('');
 
     const onYearChange = useCallback((year: string | number) => {
-        setYear(year as AvailableYears);
+        setYear(year as AcademicYears);
     }, []);
 
     const onCourseChange = useCallback((course: string | number) => {

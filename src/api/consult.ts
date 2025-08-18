@@ -1,5 +1,5 @@
 import { httpClient } from './httpClient';
-import { AvailableYears } from '~/constants/date';
+import { AcademicYears } from '~/constants/date';
 
 interface GetConsultsParams {
     courseId: number;
@@ -12,7 +12,7 @@ interface UpdateConsultDto {
     date: string | undefined;
     hours: number | undefined;
     relationId: number;
-    year: AvailableYears;
+    year: AcademicYears;
 }
 
 interface UpdateConsultParams {

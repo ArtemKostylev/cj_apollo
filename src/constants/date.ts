@@ -39,21 +39,36 @@ export const PERIODS_RU: DropdownOptionType[] = [
     { value: Periods.SECOND, text: 'Второе полугодие' }
 ];
 
+export const MONTHS_NAMES: Record<Months, string> = {
+    [Months.SEPTEMBER]: 'Сентябрь',
+    [Months.OCTOBER]: 'Октябрь',
+    [Months.NOVEMBER]: 'Ноябрь',
+    [Months.DECEMBER]: 'Декабрь',
+    [Months.JANUARY]: 'Январь',
+    [Months.FEBRUARY]: 'Февраль',
+    [Months.MARCH]: 'Март',
+    [Months.APRIL]: 'Апрель',
+    [Months.MAY]: 'Май',
+    [Months.JUNE]: 'Июнь',
+    [Months.JULY]: 'Июль',
+    [Months.AUGUST]: 'Август'
+};
+
 export const MONTHS_RU: DropdownOptionType[] = [
-    { value: Months.SEPTEMBER, text: 'Сентябрь' },
-    { value: Months.OCTOBER, text: 'Октябрь' },
-    { value: Months.NOVEMBER, text: 'Ноябрь' },
-    { value: Months.DECEMBER, text: 'Декабрь' },
-    { value: Months.JANUARY, text: 'Январь' },
-    { value: Months.FEBRUARY, text: 'Февраль' },
-    { value: Months.MARCH, text: 'Март' },
-    { value: Months.APRIL, text: 'Апрель' },
-    { value: Months.MAY, text: 'Май' }
+    { value: Months.SEPTEMBER, text: MONTHS_NAMES[Months.SEPTEMBER] },
+    { value: Months.OCTOBER, text: MONTHS_NAMES[Months.OCTOBER] },
+    { value: Months.NOVEMBER, text: MONTHS_NAMES[Months.NOVEMBER] },
+    { value: Months.DECEMBER, text: MONTHS_NAMES[Months.DECEMBER] },
+    { value: Months.JANUARY, text: MONTHS_NAMES[Months.JANUARY] },
+    { value: Months.FEBRUARY, text: MONTHS_NAMES[Months.FEBRUARY] },
+    { value: Months.MARCH, text: MONTHS_NAMES[Months.MARCH] },
+    { value: Months.APRIL, text: MONTHS_NAMES[Months.APRIL] },
+    { value: Months.MAY, text: MONTHS_NAMES[Months.MAY] }
 ];
 
-export type AvailableYears = 2021 | 2022 | 2023 | 2024 | 2025;
+export type AcademicYears = 2021 | 2022 | 2023 | 2024 | 2025;
 
-export const YEARS_NAMES: Record<AvailableYears, string> = {
+export const YEARS_NAMES: Record<AcademicYears, string> = {
     2021: '2021/2022',
     2022: '2022/2023',
     2023: '2023/2024',

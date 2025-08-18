@@ -76,24 +76,22 @@ export const Subgroups = () => {
                 />
             </TableControls>
             <div className={styles.groupWrapper}>
-                <ul className={styles.groupList}>
-                    {data.map((subgroup) => (
-                        <>
-                            <li className={styles.groupHeader}>
-                                Класс: {subgroup.subgroupName}
-                            </li>
-                            {subgroup.students.map((item) => (
-                                <SubgroupItem
-                                    key={item.relationId}
-                                    relationId={item.relationId}
-                                    subgroup={item.subgroup}
-                                    studentName={item.studentName}
-                                    onChange={handleSubgroupChange}
-                                />
-                            ))}
-                        </>
-                    ))}
-                </ul>
+                {data.map((subgroup) => (
+                    <>
+                        <div className={styles.groupHeader}>
+                            Класс: {subgroup.subgroupName}
+                        </div>
+                        {subgroup.students.map((item) => (
+                            <SubgroupItem
+                                key={item.relationId}
+                                relationId={item.relationId}
+                                subgroup={item.subgroup}
+                                studentName={item.studentName}
+                                onChange={handleSubgroupChange}
+                            />
+                        ))}
+                    </>
+                ))}
             </div>
         </PageWrapper>
     );

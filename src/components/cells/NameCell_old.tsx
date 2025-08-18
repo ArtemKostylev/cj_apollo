@@ -4,20 +4,18 @@ import styles from './nameCell.module.css';
 
 interface Props {
     name: string;
+    surname: string;
     archived?: boolean;
 }
 
-export const NameCell = memo((props: Props) => {
-    const { name, archived } = props;
-
+export const NameCell_old = memo(({ name, surname, archived }: Props) => {
     const className = classNames(styles.nameCell, {
         [styles.archived]: archived
     });
 
     return (
         <td className={className}>
-            {name}
-            {archived && '(A)'}
+            {`${surname} ${name} ${archived ? '(A)' : ''}`}
         </td>
     );
 });

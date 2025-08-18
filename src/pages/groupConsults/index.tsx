@@ -14,16 +14,14 @@ import { TableHeader } from '~/components/table/tableHeader';
 import { TableControls } from '~/components/tableControls';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
-import { YEARS, YEARS_NAMES, type AvailableYears } from '~/constants/date';
+import { YEARS, YEARS_NAMES, type AcademicYears } from '~/constants/date';
 import { useUserData } from '~/hooks/useUserData';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 
 export const GroupConsults = () => {
     const { user } = useUserData();
-    const [year, setYear] = useState(
-        getCurrentAcademicYear() as AvailableYears
-    );
+    const [year, setYear] = useState(getCurrentAcademicYear() as AcademicYears);
 
     const currentVersion = user.versions[year];
     const { coursesById, courses } = currentVersion;
@@ -86,7 +84,7 @@ export const GroupConsults = () => {
                 <ControlSelect
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
-                    onSelect={(value) => setYear(value as AvailableYears)}
+                    onSelect={(value) => setYear(value as AcademicYears)}
                 />
                 <ControlButton
                     text="Сохранить"

@@ -1,7 +1,7 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Journals } from './pages/admin/JournalsPage/Journals';
 import DataPageApollo from './pages/admin/DataPage/DataPageApollo';
-import Journal from './pages/journal/Journal';
+import Journal from './pages/journal_old/Journal';
 import { Compensation } from './pages/compensation';
 import { Notes } from './pages/notes';
 import { Reports } from './pages/admin/ReportsPage/Reports';

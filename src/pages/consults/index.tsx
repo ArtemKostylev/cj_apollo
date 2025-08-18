@@ -8,19 +8,17 @@ import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
-import { AvailableYears, YEARS, YEARS_NAMES } from '~/constants/date';
+import { AcademicYears, YEARS, YEARS_NAMES } from '~/constants/date';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell_old } from '~/components/cells/NameCell_old';
 import { times } from 'lodash';
 import { ConsultCell, UpdatedConsult } from '~/components/cells/ConsultCell';
 
 export const Consults = () => {
     const { user } = useUserData();
-    const [year, setYear] = useState(
-        getCurrentAcademicYear() as AvailableYears
-    );
+    const [year, setYear] = useState(getCurrentAcademicYear() as AcademicYears);
 
     const currentVersion = user.versions[year];
     const { coursesById, courses } = currentVersion;
@@ -80,7 +78,7 @@ export const Consults = () => {
                 <ControlSelect
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
-                    onSelect={(value) => setYear(value as AvailableYears)}
+                    onSelect={(value) => setYear(value as AcademicYears)}
                 />
                 <ControlButton
                     text="Сохранить"
@@ -100,7 +98,7 @@ export const Consults = () => {
                 <tbody>
                     {consults?.map((relation) => (
                         <tr key={relation.id}>
-                            <NameCell
+                            <NameCell_old
                                 name={relation.student?.name}
                                 surname={relation.student?.surname}
                             />

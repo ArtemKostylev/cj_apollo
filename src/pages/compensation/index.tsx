@@ -13,14 +13,14 @@ import {
     MONTHS_RU,
     YEARS,
     YEARS_NAMES,
-    type AvailableYears
+    type AcademicYears
 } from '~/constants/date';
 import {
     getCurrentAcademicYear,
     SECOND_PERIOD_MONTHS
 } from '~/utils/academicDate';
 import { TableCell } from '~/components/cells/TableCell';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell_old } from '~/components/cells/NameCell_old';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
@@ -36,7 +36,7 @@ export const Compensation = () => {
     const location = useLocation() as any;
     let studentData: TeacherCourseStudent[] = [];
 
-    const [currentYear, setCurrentYear] = useState<AvailableYears>(
+    const [currentYear, setCurrentYear] = useState<AcademicYears>(
         getCurrentAcademicYear()
     );
 
@@ -62,7 +62,7 @@ export const Compensation = () => {
         : currentYear;
 
     const onYearChange = useCallback((year: string | number) => {
-        setCurrentYear(year as AvailableYears);
+        setCurrentYear(year as AcademicYears);
     }, []);
 
     const onCourseChange = useCallback((course: string | number) => {
@@ -207,7 +207,7 @@ export const Compensation = () => {
                     {studentData.map((item) => {
                         return (
                             <tr>
-                                <NameCell
+                                <NameCell_old
                                     surname={item.student.surname}
                                     name={item.student.name}
                                 />

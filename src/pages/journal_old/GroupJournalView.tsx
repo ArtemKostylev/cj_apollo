@@ -23,7 +23,7 @@ import { GroupHeader } from '~/components/table/GroupHeader';
 import { NameHeader } from '~/components/table/nameHeader';
 import { TableHeader } from '~/components/table/tableHeader';
 import { PeriodQuarters } from './PeriodQuarters';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell_old } from '~/components/cells/NameCell_old';
 import { Table } from '~/components/table';
 import moment from 'moment';
 
@@ -115,7 +115,7 @@ export const GroupJournalView = memo(
                                             quaterMark
                                         }) => (
                                             <tr>
-                                                <NameCell
+                                                <NameCell_old
                                                     name={student.name}
                                                     surname={student.surname}
                                                     archived={archived}

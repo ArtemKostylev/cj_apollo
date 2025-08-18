@@ -13,7 +13,7 @@ import { Table } from '~/components/table';
 import { NameHeader } from '~/components/table/nameHeader';
 import { TableHeader } from '~/components/table/tableHeader';
 import { compareByClass } from '~/utils/comparators';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell_old } from '~/components/cells/NameCell_old';
 import { ClassCell } from '~/components/cells/ClassCell';
 import styles from './journal.module.css';
 
@@ -135,7 +135,7 @@ export const IndividualJournalView = memo(
                                     quaterMark
                                 }) => (
                                     <tr key={student.id}>
-                                        <NameCell
+                                        <NameCell_old
                                             name={student.name}
                                             surname={student.surname}
                                             archived={archived}
