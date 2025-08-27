@@ -2,6 +2,7 @@ export const ROUTES = {
     JOURNALS: '/journals',
     DATA: '/data',
     JOURNAL: '/journal',
+    GROUP_JOURNAL: '/groupJournal',
     COMPENSATION: '/compensation',
     NOTES: '/notes',
     CONSULT: '/consult',

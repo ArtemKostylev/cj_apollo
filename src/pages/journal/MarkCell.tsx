@@ -1,5 +1,5 @@
 import { SelectCell } from '~/components/cells/SelectCell';
-import type { ChangedMark, Mark } from './types';
+import type { ChangedMark, Mark } from '~/models/mark';
 import { useCallback } from 'react';
 import type { Moment } from 'moment';
 import { HOURS_OPTIONS, MARKS_OPTIONS } from '~/constants/selectCellOptions';
@@ -10,7 +10,7 @@ interface Props {
     relationId: number;
     onlyHours: boolean;
     archived: boolean;
-    onChange: (clientId: string, mark: ChangedMark) => void;
+    onChange: (columnId: string, mark: ChangedMark) => void;
 }
 
 export const MarkCell = (props: Props) => {
@@ -21,8 +21,8 @@ export const MarkCell = (props: Props) => {
 
     const onSelect = useCallback(
         (value: string | number) => {
-            const clientId = `${relationId}-${date.format('YYYY-MM-DD')}`;
-            onChange(clientId, {
+            const columnId = `${relationId}-${date.format('YYYY-MM-DD')}`;
+            onChange(columnId, {
                 id: mark.id || 0,
                 mark: value as string,
                 date: date.format('YYYY-MM-DD'),

@@ -4,7 +4,7 @@ import { Fragment, useCallback, useMemo, useState } from 'react';
 import { UPDATE_REPLACEMENTS_MUTATION } from '~/graphql/mutations/updateReplacement';
 import { FETCH_REPLACEMENTS_QUERY } from '~/graphql/queries/fetchReplacements';
 import { useUserData } from '~/hooks/useUserData';
-import { DateCell } from '~/components/cells/DateCell';
+import { DateCellOld } from '~/components/cells/DateCell_old';
 import { TableControls } from '~/components/tableControls';
 import { useLocation } from 'react-router-dom';
 import times from 'lodash/times';
@@ -245,7 +245,7 @@ export const Compensation = () => {
                                             </TableCell>
                                             <TableCell>
                                                 {lesson && (
-                                                    <DateCell
+                                                    <DateCellOld
                                                         initialValue={
                                                             repl
                                                                 ? moment(

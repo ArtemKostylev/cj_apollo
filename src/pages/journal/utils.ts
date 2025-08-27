@@ -1,14 +1,14 @@
 import type { Moment } from 'moment';
 import moment from 'moment';
 import { Months, type AcademicYears } from '~/constants/date';
-import { academicYearToCalendar } from '~/utils/academicDate';
+import { academicYearToCalendarByMonth } from '~/utils/academicDate';
 
 export function generateDatesForMonth(
     month: Months,
     year: AcademicYears
 ): Moment[] {
     const dates = [];
-    const calendarYear = academicYearToCalendar(year, month);
+    const calendarYear = academicYearToCalendarByMonth(year, month);
 
     const currentDate = moment()
         .year(calendarYear)

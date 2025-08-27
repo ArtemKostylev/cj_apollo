@@ -8,7 +8,7 @@ type Props = {
     onlyHours: boolean;
 };
 
-export const PeriodQuarters = memo(({ period, onlyHours }: Props) => {
+export const QuarterHeaders = memo(({ period, onlyHours }: Props) => {
     if (onlyHours) return null;
 
     if (period == Periods.FIRST)

@@ -1,5 +1,5 @@
 import { useState, useCallback, ChangeEvent, useMemo } from 'react';
-import { DateCell } from '~/components/cells/DateCell';
+import { DateCellOld } from '~/components/cells/DateCell_old';
 import { HOURS } from '~/constants/hours';
 import moment, { Moment } from 'moment';
 import { TableCell } from '~/components/cells/styles/TableCell.styled';
@@ -104,7 +104,7 @@ export const ConsultCell = (props: Props) => {
     return (
         <>
             <TableCell>
-                <DateCell
+                <DateCellOld
                     month={moment().month()}
                     initialValue={initialDateValue}
                     updateDates={onDateChange}

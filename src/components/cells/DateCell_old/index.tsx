@@ -30,7 +30,7 @@ interface EditableDateCellProps {
 }
 
 //? Should column group, month and row be defaulted to 0?
-export const DateCell = ({
+export const DateCellOld = ({
     initialValue,
     updateDates,
     column = 0,

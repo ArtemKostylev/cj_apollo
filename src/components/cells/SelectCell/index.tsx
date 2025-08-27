@@ -5,7 +5,7 @@ import { TableCell } from '../TableCell';
 import styles from './selectCell.module.css';
 
 type Props = {
-    value: string | number | undefined;
+    value: string | undefined;
     options: DropdownOptionType[];
     isWeekend?: boolean;
     onSelect: OnSelectType;
@@ -21,7 +21,7 @@ export const SelectCell = memo(
         onSelect,
         disabled = false
     }: Props) => {
-        const [dropdownValue, setDropdownValue] = useState<string | number>(
+        const [dropdownValue, setDropdownValue] = useState<string>(
             value
         );
         const [opened, setOpened] = useState(false);

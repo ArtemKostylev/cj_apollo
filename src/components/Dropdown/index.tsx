@@ -7,7 +7,7 @@ import { DropdownOption } from './DropdownOption';
 type Props = {
     opened: boolean;
     options: DropdownOptionType[];
-    onSelect: (value: string | number) => void;
+    onSelect: (value: string) => void;
     width?: string;
 };
 

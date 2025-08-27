@@ -1,7 +1,6 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Journals } from './pages/admin/JournalsPage/Journals';
 import DataPageApollo from './pages/admin/DataPage/DataPageApollo';
-import Journal from './pages/journal_old/Journal';
 import { Compensation } from './pages/compensation';
 import { Notes } from './pages/notes';
 import { Reports } from './pages/admin/ReportsPage/Reports';
@@ -17,15 +16,18 @@ import { ROUTES } from './constants/routes';
 import { Login } from './pages/login';
 import { ErrorScreen } from './pages/error';
 import { MainLayout } from './components/mainLayout';
-import { Spinner } from './components/Spinner';
+import { Spinner } from './components/spinner';
 import { Consults } from './pages/consults';
 import { GroupConsults } from './pages/groupConsults';
+import { Journal } from './pages/journal';
+import { GroupJournal } from './pages/groupJournal';
 
 const AdminRoutes = () => (
     <Switch>
         <Route path={ROUTES.JOURNALS} component={Journals} />
         <Route path={ROUTES.DATA} component={DataPageApollo} />
         <Route path={ROUTES.JOURNAL} component={Journal} />
+        <Route path={ROUTES.GROUP_JOURNAL} component={GroupJournal} />
         <Route path={ROUTES.COMPENSATION} component={Compensation} />
         <Route path={ROUTES.NOTES} component={Notes} />
         <Route path={ROUTES.CONSULT} render={Consults} />
@@ -46,6 +48,7 @@ const TeacherRoutes = () => (
         <Route path={ROUTES.SUBGROUPS} component={Subgroups} />
         <Route path={ROUTES.MIDTERM_EXAM} component={MidtermExam} />
         <Route path={ROUTES.JOURNAL} component={Journal} />
+        <Route path={ROUTES.GROUP_JOURNAL} component={GroupJournal} />
         <Redirect from={ROUTES.HOME} to={ROUTES.JOURNAL} />
     </Switch>
 );

@@ -1,8 +1,6 @@
-import type {
-    ChangedMark,
-    ChangedQuarterMark,
-    JournalRow
-} from '~/pages/journal/types';
+import type { ChangedMark } from '~/models/mark';
+import type { ChangedQuarterMark } from '~/models/quarterMark';
+import type { JournalRow } from '~/models/journal';
 import { httpClient } from './httpClient';
 
 export interface UpdateJournalParams {

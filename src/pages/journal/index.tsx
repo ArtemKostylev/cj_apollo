@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
 import { TableControls } from '~/components/tableControls';
-import { Loader } from './Loader';
+import { PageLoader } from '~/components/PageLoader';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import {
     MONTHS_RU,
@@ -25,7 +25,8 @@ import { generateDatesForMonth } from './utils';
 import { JournalHeader } from './JournalHeader';
 import { NameCell } from '~/components/cells/NameCell';
 import { TableCell } from '~/components/cells/TableCell';
-import { ChangedMark, type ChangedQuarterMark } from './types';
+import type { ChangedMark } from '~/models/mark';
+import type { ChangedQuarterMark } from '~/models/quarterMark';
 import { MarkCell } from './MarkCell';
 import { QuarterMarkCell } from './QuarterMarkCell';
 import {
@@ -48,7 +49,10 @@ export const Journal = () => {
 
     const currentVersion = user.versions[year];
     const { courses, coursesById } = currentVersion;
-    const courseSelectOptions = toSelectOptions(courses, 'id', 'name');
+    const courseSelectOptions = useMemo(
+        () => toSelectOptions(courses, 'id', 'name'),
+        [courses]
+    );
 
     // TODO: add separation between all courses, group and individual
     const [course, setCourse] = useState<number>(courses[0].id);
@@ -70,7 +74,8 @@ export const Journal = () => {
     );
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['journal'],
+        queryKey: ['journal', currentVersion.id, course, year, month],
+        networkMode: 'always',
         queryFn: () =>
             getJournal({
                 teacherId: currentVersion.id,
@@ -115,7 +120,7 @@ export const Journal = () => {
                     disabled={isPending}
                 />
             </TableControls>
-            <Loader loading={isLoading} error={isError}>
+            <PageLoader loading={isLoading} error={isError}>
                 <Table>
                     <JournalHeader dates={dates} quarters={quarters} />
                     <tbody>
@@ -153,7 +158,7 @@ export const Journal = () => {
                         ))}
                     </tbody>
                 </Table>
-            </Loader>
+            </PageLoader>
         </PageWrapper>
     );
 };

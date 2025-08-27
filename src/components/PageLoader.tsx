@@ -6,7 +6,7 @@ interface Props {
     error: boolean;
 }
 
-export const Loader = (props: PropsWithChildren<Props>) => {
+export const PageLoader = (props: PropsWithChildren<Props>) => {
     const { loading, error, children } = props;
 
     if (loading) return <Spinner />;

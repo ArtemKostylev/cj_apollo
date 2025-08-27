@@ -1,5 +1,6 @@
 import moment from 'moment';
 import {
+    FIRST_PERIOD_MONTHS,
     Months,
     MONTHS_IN_QUARTERS,
     Periods,
@@ -8,30 +9,6 @@ import {
 } from '../constants/date';
 
 const INACTIVE_MONTHS = [Months.JUNE, Months.JULY, Months.AUGUST];
-
-export const SECOND_PERIOD_MONTHS = [
-    Months.JANUARY,
-    Months.FEBRUARY,
-    Months.MARCH,
-    Months.APRIL,
-    Months.MAY
-];
-export const FIRST_PERIOD_MONTHS = [
-    Months.SEPTEMBER,
-    Months.OCTOBER,
-    Months.NOVEMBER,
-    Months.DECEMBER
-];
-
-export const MONTHS_IN_PERIODS = {
-    [Periods.FIRST]: FIRST_PERIOD_MONTHS,
-    [Periods.SECOND]: SECOND_PERIOD_MONTHS
-};
-
-export const QUARTERS_IN_PERIODS = {
-    [Periods.FIRST]: [Quarters.FIRST, Quarters.SECOND],
-    [Periods.SECOND]: [Quarters.THIRD, Quarters.FOURTH, Quarters.YEAR]
-};
 
 export const getCurrentAcademicMonth = (): Months => {
     const month = moment().month();
@@ -60,7 +37,20 @@ export const getCurrentAcademicYear = (): AcademicYears => {
         : ((moment().year() - 1) as AcademicYears);
 };
 
-export const academicYearToCalendar = (year: AcademicYears, month: Months) => {
+export const academicYearToCalendarByPeriod = (
+    year: AcademicYears,
+    period: Periods
+) => {
+    if (period === Periods.FIRST) {
+        return year;
+    }
+    return year + 1;
+};
+
+export const academicYearToCalendarByMonth = (
+    year: AcademicYears,
+    month: Months
+) => {
     const isFirstPeriod = FIRST_PERIOD_MONTHS.includes(month);
 
     if (isFirstPeriod) {

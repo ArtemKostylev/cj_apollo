@@ -1,3 +1,5 @@
+export const BACKEND_DATE_FORMAT = 'yyyy-MM-dd';
+
 export enum Months {
     JANUARY,
     FEBRUARY,
@@ -32,6 +34,11 @@ export const QUARTERS_RU = {
     [Quarters.THIRD]: 'III четверть',
     [Quarters.FOURTH]: 'IV четверть',
     [Quarters.YEAR]: 'Год'
+};
+
+export const PERIODS_NAMES: Record<Periods, string> = {
+    [Periods.FIRST]: 'Первое полугодие',
+    [Periods.SECOND]: 'Второе полугодие'
 };
 
 export const PERIODS_RU: DropdownOptionType[] = [
@@ -93,3 +100,27 @@ export const MONTHS_IN_QUARTERS = {
 
 export const DATE_FORMAT = 'YYYY-MM-DDT00:00:00.000[Z]';
 export const UI_DATE_FORMAT = 'DD.MM.YYYY';
+
+export const SECOND_PERIOD_MONTHS = [
+    Months.JANUARY,
+    Months.FEBRUARY,
+    Months.MARCH,
+    Months.APRIL,
+    Months.MAY
+];
+export const FIRST_PERIOD_MONTHS = [
+    Months.SEPTEMBER,
+    Months.OCTOBER,
+    Months.NOVEMBER,
+    Months.DECEMBER
+];
+
+export const MONTHS_IN_PERIODS = {
+    [Periods.FIRST]: FIRST_PERIOD_MONTHS,
+    [Periods.SECOND]: SECOND_PERIOD_MONTHS
+};
+
+export const QUARTERS_IN_PERIODS = {
+    [Periods.FIRST]: [Quarters.FIRST, Quarters.SECOND],
+    [Periods.SECOND]: [Quarters.THIRD, Quarters.FOURTH, Quarters.YEAR]
+};
