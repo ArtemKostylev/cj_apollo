@@ -1,18 +1,18 @@
 export const BACKEND_DATE_FORMAT = 'yyyy-MM-dd';
 
 export enum Months {
-    JANUARY,
-    FEBRUARY,
-    MARCH,
-    APRIL,
-    MAY,
-    JUNE,
-    JULY,
-    AUGUST,
-    SEPTEMBER,
-    OCTOBER,
-    NOVEMBER,
-    DECEMBER
+    JANUARY = '0',
+    FEBRUARY = '1',
+    MARCH = '2',
+    APRIL = '3',
+    MAY = '4',
+    JUNE = '5',
+    JULY = '6',
+    AUGUST = '7',
+    SEPTEMBER = '8',
+    OCTOBER = '9',
+    NOVEMBER = '10',
+    DECEMBER = '11'
 }
 
 export enum Periods {
@@ -84,11 +84,11 @@ export const YEARS_NAMES: Record<AcademicYears, string> = {
 };
 
 export const YEARS: DropdownOptionType[] = [
-    { value: 2021, text: YEARS_NAMES[2021] },
-    { value: 2022, text: YEARS_NAMES[2022] },
-    { value: 2023, text: YEARS_NAMES[2023] },
-    { value: 2024, text: YEARS_NAMES[2024] },
-    { value: 2025, text: YEARS_NAMES[2025] }
+    { value: '2021', text: YEARS_NAMES[2021] },
+    { value: '2022', text: YEARS_NAMES[2022] },
+    { value: '2023', text: YEARS_NAMES[2023] },
+    { value: '2024', text: YEARS_NAMES[2024] },
+    { value: '2025', text: YEARS_NAMES[2025] }
 ];
 
 export const MONTHS_IN_QUARTERS = {

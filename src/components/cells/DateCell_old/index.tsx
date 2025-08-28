@@ -10,7 +10,7 @@ import {
 import { convertDate, LimitException } from './utils';
 import { Container } from './Container';
 import { Input } from './Input';
-import { Periods } from '../../../constants/date';
+import { Periods, type Months } from '../../../constants/date';
 import { UpdateDatesProps } from '../../../types/updateDatesProps';
 
 interface EditableDateCellProps {
@@ -58,7 +58,7 @@ export const DateCellOld = ({
                 return getBorderDatesForPeriod(period, moment().year());
             }
             if (year) {
-                return getBorderDatesForMonth(month, year);
+                return getBorderDatesForMonth(String(month) as Months, year);
             }
             throw new LimitException();
         }
