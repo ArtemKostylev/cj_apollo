@@ -1,19 +1,13 @@
-import React, { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import {
     ProvideMidtermExam,
     useMidtermExamContext
 } from './useMidtermExamContext';
-import { Spinner } from '~/components/Spinner';
-import {
-    TableControls,
-    TableControlsConfig,
-    TableControlType
-} from '~/components/tableControls';
-import { PERIODS_RU, UI_DATE_FORMAT, YEARS } from '../../constants/date';
+import { Spinner } from '~/components/spinner';
+import { UI_DATE_FORMAT } from '../../constants/date';
 import { useMutation } from '@apollo/client';
 import { DELETE_MIDTERM_EXAM } from '../../graphql/mutations/deleteMidtermExam';
-import styled from 'styled-components';
-import { TableCell } from '~/components/cells/styles/TableCell';
+import { TableCell } from '~/components/cells/TableCell';
 import { TableHeader } from '~/components/table/tableHeader';
 import { NameHeader } from '~/components/table/nameHeader';
 import { Table } from '~/components/table';
@@ -21,22 +15,18 @@ import ReactModal from 'react-modal';
 import { UpdateForm } from './UpdateForm';
 import moment from 'moment';
 import { ClassCell } from '~/components/cells/ClassCell';
-
-const Row = styled.tr<{ selected: boolean }>`
-    height: 10em;
-    background-color: ${(props) => (props.selected ? '#eff0f0' : 'none')};
-
-    td {
-        border-color: #d6d8d8;
-    }
-`;
+import styles from './midtermExam.module.css';
+import classNames from 'classnames';
 
 const TableRow = memo(({ item = {} as MidtermExam }: { item: MidtermExam }) => {
     const { onRowClick, selectedRecord } = useMidtermExamContext();
+    const className = classNames(styles.row, {
+        [styles.selected]: item.number === selectedRecord?.number
+    });
 
     return (
-        <Row
-            selected={item.number === selectedRecord?.number}
+        <tr
+            className={className}
             onClick={() => onRowClick(item)}
         >
             <TableCell>{item.number + 1}</TableCell>
@@ -51,7 +41,7 @@ const TableRow = memo(({ item = {} as MidtermExam }: { item: MidtermExam }) => {
             <TableCell>{item.type?.name || ''}</TableCell>
             <TableCell>{item.contents}</TableCell>
             <TableCell>{item.result}</TableCell>
-        </Row>
+        </tr>
     );
 });
 
@@ -85,14 +75,15 @@ const MidtermExam = () => {
     const [createFormVisible, setCreateFormVisible] = useState(false);
     const [updateFormVisible, setUpdateFormVisible] = useState(false);
 
+    /*
     const controlsConfig: TableControlsConfig = useMemo(() => {
         return [
             {
                 type: TableControlType.SELECT,
-                options: data.types,
+                options: ,
                 text:
                     data.types?.get(type)?.text ||
-                    data?.types.values().next().value?.text,
+                    ,
                 onClick: onTypeChange
             },
             {
@@ -132,13 +123,13 @@ const MidtermExam = () => {
             }
         ];
     }, [year, type, selectedRecord, data.types]);
+    */
 
     if (loading) return <Spinner />;
     if (error) throw new Error('503');
 
     return (
         <div>
-            <TableControls config={controlsConfig} />
             <Table>
                 <TableHeaderRow />
                 <tbody>

@@ -92,10 +92,10 @@ export const YEARS: DropdownOptionType[] = [
 ];
 
 export const MONTHS_IN_QUARTERS = {
-    [Quarters.FIRST]: [8, 9],
-    [Quarters.SECOND]: [10, 11],
-    [Quarters.THIRD]: [0, 1, 2],
-    [Quarters.FOURTH]: [3, 4]
+    [Quarters.FIRST]: [Months.SEPTEMBER, Months.OCTOBER],
+    [Quarters.SECOND]: [Months.NOVEMBER, Months.DECEMBER],
+    [Quarters.THIRD]: [Months.JANUARY, Months.FEBRUARY, Months.MARCH],
+    [Quarters.FOURTH]: [Months.APRIL, Months.MAY]
 };
 
 export const DATE_FORMAT = 'YYYY-MM-DDT00:00:00.000[Z]';

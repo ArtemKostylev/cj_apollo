@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Periods } from '../../constants/date';
-import styles from './journal.module.css';
+import styles from './quarterHeader.module.css';
 import { TableHeader } from '~/components/table/tableHeader';
 
 type Props = {

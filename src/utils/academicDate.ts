@@ -10,8 +10,13 @@ import {
 
 const INACTIVE_MONTHS = [Months.JUNE, Months.JULY, Months.AUGUST];
 
-export const getCurrentAcademicMonth = (): Months => {
+export const getCurrentMonth = (): Months => {
     const month = moment().month();
+    return String(month) as Months;
+};
+
+export const getCurrentAcademicMonth = (): Months => {
+    const month = getCurrentMonth();
 
     if (INACTIVE_MONTHS.includes(month)) return Months.MAY;
 
@@ -19,7 +24,7 @@ export const getCurrentAcademicMonth = (): Months => {
 };
 
 export const getCurrentAcademicPeriod = (): Periods => {
-    const month = moment().month();
+    const month = getCurrentMonth();
 
     if (FIRST_PERIOD_MONTHS.includes(month)) return Periods.FIRST;
 
@@ -195,12 +200,12 @@ export function getYearByMonth(
     const currentYear = year || moment().year();
 
     if (currentMonth <= 7) {
-        if (targetMonth > 7) {
+        if (Number(targetMonth) > 7) {
             return currentYear - 1;
         }
         return currentYear;
     }
-    if (targetMonth > 7) {
+    if (Number(targetMonth) > 7) {
         return currentYear;
     }
     return currentYear + 1;

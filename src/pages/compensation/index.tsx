@@ -10,15 +10,15 @@ import { useLocation } from 'react-router-dom';
 import times from 'lodash/times';
 import { updateInPosition } from '~/utils/crud';
 import {
+    MONTHS_NAMES,
     MONTHS_RU,
+    SECOND_PERIOD_MONTHS,
     YEARS,
     YEARS_NAMES,
-    type AcademicYears
+    type AcademicYears,
+    type Months
 } from '~/constants/date';
-import {
-    getCurrentAcademicYear,
-    SECOND_PERIOD_MONTHS
-} from '~/utils/academicDate';
+import { getCurrentAcademicYear, getCurrentMonth } from '~/utils/academicDate';
 import { TableCell } from '~/components/cells/TableCell';
 import { NameCell_old } from '~/components/cells/NameCell_old';
 import { PageWrapper } from '~/components/pageWrapper';
@@ -48,7 +48,7 @@ export const Compensation = () => {
     const coursesById = auth.user.versions[currentYear].coursesById;
 
     const [course, setCourse] = useState(userCourses[0].id);
-    const [month, setMonth] = useState(moment().month());
+    const [month, setMonth] = useState(getCurrentMonth());
 
     const teacher = useMemo(
         () =>
@@ -70,7 +70,7 @@ export const Compensation = () => {
     }, []);
 
     const onMonthChange = useCallback((month: string | number) => {
-        setMonth(month as number);
+        setMonth(month as Months);
     }, []);
 
     const { loading, data, error, refetch, networkStatus } = useQuery(
@@ -172,7 +172,7 @@ export const Compensation = () => {
             <TableControls>
                 <ControlSelect
                     options={MONTHS_RU}
-                    buttonText={MONTHS_RU[month].text}
+                    buttonText={MONTHS_NAMES[month]}
                     onSelect={onMonthChange}
                 />
                 <ControlSelect
@@ -261,7 +261,9 @@ export const Compensation = () => {
                                                         updateDates={
                                                             updateDates
                                                         }
-                                                        month={month - 1}
+                                                        month={
+                                                            Number(month) - 1
+                                                        }
                                                         short
                                                         year={moment().year()}
                                                         unlimited

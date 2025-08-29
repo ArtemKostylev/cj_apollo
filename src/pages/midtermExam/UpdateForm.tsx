@@ -1,40 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import { useMutation } from '@apollo/client';
 import { UPDATE_MIDTERM_EXAM } from '../../graphql/mutations/updateMidtermExam';
-import styled from 'styled-components';
-import { FormSelect } from '../../../ui/formItems/FormSelect';
+import { FormSelect } from '~/components/formItems/formSelect';
 import { useMidtermExamContext } from './useMidtermExamContext';
-import { Input } from '../../../ui/formItems/Input';
-import { Button } from '../../../ui/Button';
-import { BlockingSpinner } from '../../../ui/Spinner';
+import { FormInput } from '~/components/formItems/formInput';
+import { Button } from '~/components/button';
+import { Spinner } from '~/components/spinner';
 import moment from 'moment';
-import { TextArea } from '../../../ui/formItems/TextArea';
+import { TextArea } from '~/components/formItems/formTextArea';
 import { DATE_FORMAT } from '../../constants/date';
+import styles from './midtermExam.module.css';
 
 interface Props {
     data?: MidtermExam | undefined;
     onClose: (submitted: boolean) => void;
 }
-
-const Wrapper = styled.div`
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 30px;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-`;
-
-const ButtonRow = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 20px;
-`;
 
 export const UpdateForm = ({ data = {} as MidtermExam, onClose }: Props) => {
     const [update] = useMutation(UPDATE_MIDTERM_EXAM);
@@ -79,8 +60,8 @@ export const UpdateForm = ({ data = {} as MidtermExam, onClose }: Props) => {
 
     return (
         <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-            <Wrapper>
-                {loading && <BlockingSpinner />}
+            <div className={styles.formWrapper}>
+                {loading && <Spinner />}
                 <FormSelect
                     name="student"
                     value={formik.values?.student}
@@ -89,7 +70,7 @@ export const UpdateForm = ({ data = {} as MidtermExam, onClose }: Props) => {
                     options={select}
                     required
                 />
-                <Input
+                <FormInput
                     name="date"
                     value={
                         formik.values.date &&
@@ -116,11 +97,11 @@ export const UpdateForm = ({ data = {} as MidtermExam, onClose }: Props) => {
                     required
                     rows={5}
                 />
-                <ButtonRow>
+                <div className={styles.buttonRow}>
                     <Button type="reset">Отмена</Button>
                     <Button type="submit">Сохранить</Button>
-                </ButtonRow>
-            </Wrapper>
+                </div>
+            </div>
         </form>
     );
 };

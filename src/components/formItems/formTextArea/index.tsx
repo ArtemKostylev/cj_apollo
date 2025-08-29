@@ -1,5 +1,5 @@
 import { Label } from '../label';
-import formStyles from './formItem.module.css';
+import formStyles from '../formItem.module.css';
 import styles from './formTextArea.module.css';
 import type { BaseFormItemProps } from '../types';
 

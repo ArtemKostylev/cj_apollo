@@ -2,7 +2,7 @@ import { useState, useCallback, ChangeEvent, useMemo } from 'react';
 import { DateCellOld } from '~/components/cells/DateCell_old';
 import { HOURS } from '~/constants/hours';
 import moment, { Moment } from 'moment';
-import { TableCell } from '~/components/cells/styles/TableCell.styled';
+import { TableCell } from '~/components/cells/TableCell';
 
 export interface UpdatedConsult {
     clientId: string;

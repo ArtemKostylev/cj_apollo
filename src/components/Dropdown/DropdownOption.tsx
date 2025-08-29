@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import styles from './styles/dropdownOption.module.css';
+import styles from './dropdownOption.module.css';
 import classNames from 'classnames';
 
 interface Props {

@@ -23,7 +23,7 @@ import {
     removeFromQuery,
     useApollo
 } from '../../hooks/useApolloCache';
-import { toDropdownOption } from '../../utils/normalizer';
+import { toSelectOptions } from '~/utils/toSelectOptions';
 
 const MidtermExamContext = createContext({} as MidtermExamContext);
 
@@ -43,8 +43,8 @@ type MidtermExamContext = {
     loading: boolean;
     data: {
         table: MidtermExam[] | undefined;
-        select: Map<string | number, DropdownOptionType>;
-        types: Map<string | number, DropdownOptionType>;
+        select: DropdownOptionType[];
+        types: DropdownOptionType[];
     };
     error: any;
     selectedRecord: MidtermExam | undefined;
@@ -138,13 +138,15 @@ function useProvideMidtermExam() {
     return {
         data: {
             table: data,
-            select: toDropdownOption<Student>(
-                studentsData?.fetchTeacherStudents,
-                (it) => `${it.surname || ''} ${it.name || ''}`
+            select: toSelectOptions(
+                studentsData?.fetchTeacherStudents || [],
+                'id',
+                'surname'
             ),
-            types: toDropdownOption<MidtermExamType>(
-                midtermExamTypes?.fetchMidtermExamTypes,
-                (it) => it.name
+            types: toSelectOptions(
+                midtermExamTypes?.fetchMidtermExamTypes || [],
+                'id',
+                'name'
             )
         },
         loading: loading || studentsLoading || midtermExamTypesLoading,

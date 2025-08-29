@@ -1,11 +1,11 @@
 import { BaseFormItemProps } from '../types';
 import { Label } from '../label';
-import styles from './formSelect.module.css';
+import styles from './select.module.css';
 import formStyles from '../formItem.module.css';
 import { useCallback } from 'react';
 
 interface FormSelectProps extends BaseFormItemProps {
-    options?: Map<string | number, DropdownOptionType>;
+    options?: DropdownOptionType[];
 }
 
 export const FormSelect = (props: FormSelectProps) => {

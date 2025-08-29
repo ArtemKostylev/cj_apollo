@@ -11,7 +11,7 @@ import {DELETE_COURSE_MUTATION} from "../../../graphql/mutations/deleteCourse";
 import {DELETE_STUDENT_MUTATION} from "../../../graphql/mutations/deleteStudent";
 import {UPDATE_COURSE_RELATIONS_MUTATION} from "../../../graphql/mutations/updateCourseRelation";
 import {UPDATE_STUDENT_RELATIONS_MUTATION} from "../../../graphql/mutations/updateStudentRelation";
-import { LegacySpinner } from '../../../ui/LegacySpinner';
+import { LegacySpinner } from '../../../components/LegacySpinner';
 import { updateTeacher as updateTeacherApi, createTeacher as createTeacherApi, deleteTeacher as deleteTeacherApi } from '../../../api/teacher';
 
 export default function DataPageController() {

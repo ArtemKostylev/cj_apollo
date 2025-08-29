@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useOnClickOutside } from '~/hooks/useOnClickOutside';
-import styles from './styles/dropdown.module.css';
+import styles from './dropdown.module.css';
 import { DropdownOption } from './DropdownOption';
 
 type Props = {

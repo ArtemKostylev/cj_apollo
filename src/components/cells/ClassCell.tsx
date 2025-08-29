@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { PROGRAMS } from '../../constants/programs';
 import classNames from 'classnames';
-import styles from './classCell.module.css';
+import styles from './nameCell.module.css';
 
 type Props = {
     classNum: number | undefined;
