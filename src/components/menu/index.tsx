@@ -2,18 +2,20 @@ import { useUserData } from '~/hooks/useUserData';
 import {
     ADMIN_RESOURCES,
     USER_RESOURCES,
-    SUBGROUPS_RESOURCE
+    SUBGROUPS_RESOURCE,
+    GROUP_JOURNAL_RESOURCE
 } from '~/constants/resources';
-import { ADMIN, TEACHER } from '~/constants/roles';
+import { ROLES } from '~/constants/roles';
 import { t } from '~/static/text';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { useMemo } from 'react';
-import { MenuItem } from './MenuItem';
+import { MenuItem } from '~/components/menu/MenuItem';
 import styles from './menu.module.css';
+import classNames from 'classnames';
 
 const resourceMap: Record<string, any> = {
-    [ADMIN]: ADMIN_RESOURCES,
-    [TEACHER]: USER_RESOURCES
+    [ROLES.ADMIN]: ADMIN_RESOURCES,
+    [ROLES.TEACHER]: USER_RESOURCES
 };
 
 interface Props {
@@ -22,35 +24,40 @@ interface Props {
 }
 
 export default function Menu({ onClose, isOpen }: Props) {
-    const auth = useUserData();
+    const { userData } = useUserData();
+    const academicYear = getCurrentAcademicYear();
 
     const resources = useMemo(() => {
-        const res = resourceMap[auth.user?.role];
+        if (!userData || !userData.role) return undefined;
+        const res = resourceMap[userData?.role];
 
-        if (
-            auth.user?.versions[getCurrentAcademicYear()]?.courses.some(
-                (course) => course.group
-            )
-        ) {
+        if (userData.versions[academicYear].groupCourses.length > 0) {
             res.subgroups = SUBGROUPS_RESOURCE;
+            res.groupJournal = GROUP_JOURNAL_RESOURCE;
         }
 
         return res;
-    }, [auth.user]);
+    }, [userData]);
+
+    const className = classNames(styles.menuWrapper, {
+        [styles.visible]: isOpen
+    });
 
     if (!resources) return null;
 
     return (
-        <div className={styles.menuWrapper}>
+        <div className={className}>
             <div className={styles.menuItemWrapper}>
                 <p className={styles.menuItemText}>МЕНЮ</p>
                 <div className={styles.menuCloseButton} onClick={onClose}>
                     {t('close')}
                 </div>
             </div>
-            {Object.keys(resources).map((key) => (
-                <MenuItem {...resources[key]} key={key} onClose={onClose} />
-            ))}
+            {Object.keys(resources)
+                .sort((a, b) => resources[a].order - resources[b].order)
+                .map((key) => (
+                    <MenuItem {...resources[key]} key={key} onClose={onClose} />
+                ))}
         </div>
     );
 }

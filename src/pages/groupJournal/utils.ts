@@ -1,6 +1,14 @@
 import type { Quarters } from '~/constants/date';
 
-export const getGroupHeaderColumnId = (month: string, index: number) => {
+interface GroupHeaderColumnId {
+    month: string;
+    index: number;
+}
+
+export const getGroupHeaderColumnId = ({
+    month,
+    index
+}: GroupHeaderColumnId) => {
     return `${month}-${index}`;
 };
 
@@ -12,16 +20,23 @@ export const parseGroupHeaderColumnId = (columnId: string) => {
     };
 };
 
-export const getMarkColumnId = (
-    tableIndex: string,
-    month: string,
-    relationId: number,
-    index: number
-) => {
-    return `${tableIndex}-${getGroupHeaderColumnId(
+interface MarkColumnId {
+    tableIndex: string;
+    month: string;
+    index: number;
+    relationId: number;
+}
+
+export const getMarkColumnId = ({
+    tableIndex,
+    month,
+    index,
+    relationId
+}: MarkColumnId) => {
+    return `${tableIndex}-${getGroupHeaderColumnId({
         month,
         index
-    )}-${relationId}`;
+    })}-${relationId}`;
 };
 
 export const parseMarkColumnId = (columnId: string) => {
@@ -34,11 +49,17 @@ export const parseMarkColumnId = (columnId: string) => {
     };
 };
 
-export const getQuarterMarkColumnId = (
-    tableIndex: string,
-    quarter: Quarters,
-    relationId: number
-) => {
+interface QuarterMarkColumnId {
+    tableIndex: string;
+    quarter: Quarters;
+    relationId: number;
+}
+
+export const getQuarterMarkColumnId = ({
+    tableIndex,
+    quarter,
+    relationId
+}: QuarterMarkColumnId) => {
     return `${tableIndex}-${quarter}-${relationId}`;
 };
 
@@ -50,3 +71,10 @@ export const parseQuarterMarkColumnId = (columnId: string) => {
         relationId: parseInt(relationId)
     };
 };
+
+export function sortMonths(
+    [a, _]: [string, string[]],
+    [b, __]: [string, string[]]
+) {
+    return Number(a) - Number(b);
+}

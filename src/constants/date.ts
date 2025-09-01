@@ -1,5 +1,3 @@
-export const BACKEND_DATE_FORMAT = 'yyyy-MM-dd';
-
 export enum Months {
     JANUARY = '0',
     FEBRUARY = '1',
@@ -98,8 +96,11 @@ export const MONTHS_IN_QUARTERS = {
     [Quarters.FOURTH]: [Months.APRIL, Months.MAY]
 };
 
-export const DATE_FORMAT = 'YYYY-MM-DDT00:00:00.000[Z]';
-export const UI_DATE_FORMAT = 'DD.MM.YYYY';
+export const DATE_FORMAT = 'dd.MM.yyyy';
+export const DATE_FORMAT_SHORT = 'dd.MM';
+export const DATE_FORMAT_WEEKDAY = 'EEEEEE';
+export const UI_DATE_FORMAT = 'dd.MM.yyyy';
+export const WEEKEND_DAY = 6;
 
 export const SECOND_PERIOD_MONTHS = [
     Months.JANUARY,

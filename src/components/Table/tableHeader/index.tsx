@@ -8,9 +8,15 @@ interface Props extends ThHTMLAttributes<HTMLTableCellElement> {
 }
 
 export const TableHeader = (props: PropsWithChildren<Props>) => {
-    const { children, hoverEnabled, width = 'auto', ...rest } = props;
+    const {
+        children,
+        hoverEnabled,
+        width = 'auto',
+        className: classNameProp,
+        ...rest
+    } = props;
 
-    const className = classNames(styles.tableHeader, {
+    const className = classNames(styles.tableHeader, classNameProp, {
         [styles.hoverEnabled]: hoverEnabled
     });
 

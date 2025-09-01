@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { SelectCell } from '~/components/cells/SelectCell';
 
 interface Props {
-    mark: QuarterMark;
+    mark: QuarterMark | undefined;
     period: Quarters;
     year: number;
     relationId: number;
@@ -22,7 +22,7 @@ export const QuarterMarkCell = (props: Props) => {
         (value: string | number) => {
             const clientId = `${relationId}-${period}`;
             onChange(clientId, {
-                id: mark.id || 0,
+                id: mark?.id || 0,
                 mark: value as string,
                 period,
                 year,
@@ -34,7 +34,7 @@ export const QuarterMarkCell = (props: Props) => {
 
     return (
         <SelectCell
-            value={mark.mark}
+            value={mark?.mark}
             options={options}
             onSelect={onSelect}
             disabled={archived}

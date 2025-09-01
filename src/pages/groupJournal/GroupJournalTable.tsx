@@ -4,17 +4,21 @@ import { GroupJournalHeader } from './GroupJournalHeader';
 import { Periods, type AcademicYears } from '~/constants/date';
 import { SelectCell } from '~/components/cells/SelectCell';
 import type { ChangedMark } from '~/models/mark';
-import { useCallback, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     getMarkColumnId,
     getQuarterMarkColumnId,
     parseGroupHeaderColumnId,
     parseMarkColumnId,
-    parseQuarterMarkColumnId
+    parseQuarterMarkColumnId,
+    sortMonths
 } from './utils';
 import { HOURS_OPTIONS, MARKS_OPTIONS } from '~/constants/selectCellOptions';
-import { getQuartersInPeriod } from '~/utils/academicDate';
+import { getCurrentAcademicYear, getQuartersInPeriod } from '~/utils/academicDate';
 import type { ChangedQuarterMark } from '~/models/quarterMark';
+import styles from './groupJournal.module.css';
+import { NameCell } from '~/components/cells/NameCell';
+import { MarkCell } from './MarkCell';
 
 interface Props {
     table: GroupJournalTableType;
@@ -24,13 +28,10 @@ interface Props {
     year: AcademicYears;
     onMarkChange: (columnId: string, mark: ChangedMark) => void;
     onMarkDateChange: (columnId: string, mark: ChangedMark) => void;
-    onQuarterMarkChange: (
-        columnId: string,
-        quarterMark: ChangedQuarterMark
-    ) => void;
+    onQuarterMarkChange: (columnId: string, quarterMark: ChangedQuarterMark) => void;
 }
 
-export const GroupJournalTable = (props: Props) => {
+export const GroupJournalTable = memo((props: Props) => {
     const {
         table,
         period,
@@ -41,26 +42,31 @@ export const GroupJournalTable = (props: Props) => {
         onMarkDateChange,
         onQuarterMarkChange: onQuarterMarkChangeProp
     } = props;
-
-    const dates = useRef<Record<string, string[]>>(table.dates);
+    const dates = useRef<Record<string, string[]>>(JSON.parse(JSON.stringify(table.dates)));
+    const [actualDates, setActualDates] = useState(dates.current);
     const quarters = useMemo(() => getQuartersInPeriod(period), [period]);
+
+    const datesDisabled = useMemo(() => {
+        return year !== getCurrentAcademicYear();
+    }, [year]);
 
     const onDateChange = useCallback(
         (columnId: string, value: string) => {
             const { month, index } = parseGroupHeaderColumnId(columnId);
             dates.current[month][index] = value;
+            setActualDates({ ...dates.current });
 
             const originalDate = table.dates[month][index];
 
             Object.values(table.rows).forEach((row) => {
                 const markToChange = row.marks[originalDate];
                 if (markToChange) {
-                    const markColumnId = getMarkColumnId(
+                    const markColumnId = getMarkColumnId({
                         tableIndex,
                         month,
-                        row.relationId,
-                        index
-                    );
+                        index,
+                        relationId: row.relationId
+                    });
                     onMarkDateChange(markColumnId, {
                         id: markToChange.id as number,
                         date: value,
@@ -79,11 +85,21 @@ export const GroupJournalTable = (props: Props) => {
             const originalDate = table.dates[month][index];
             const actualDate = dates.current[month][index];
 
+            if (!originalDate && !actualDate) {
+                throw new Error('Original date and actual date are not set');
+                // TODO: show notification
+            }
+
             const row = table.rows[relationId];
+
+            if (!row) {
+                throw new Error('Row not found');
+            }
+
             const markToChange = table.rows[relationId].marks[originalDate];
 
             onMarkChangeProp(columnId, {
-                id: markToChange.id as number,
+                id: (markToChange?.id as number) || 0,
                 date: actualDate,
                 relationId: row.relationId,
                 mark: value
@@ -101,69 +117,71 @@ export const GroupJournalTable = (props: Props) => {
 
             onQuarterMarkChangeProp(columnId, {
                 mark: value,
-                id: quarterMarkToChange.id as number,
-                period: quarterMarkToChange.period,
-                year: quarterMarkToChange.year,
+                id: (quarterMarkToChange?.id as number) || 0,
+                period: quarter,
+                year,
                 relationId: row.relationId
             });
         },
-        [onQuarterMarkChangeProp]
+        [onQuarterMarkChangeProp, year]
     );
 
-    const selectOptions = useMemo(
-        () => (onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS),
-        [onlyHours]
-    );
+    const selectOptions = useMemo(() => (onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS), [onlyHours]);
+
+    useEffect(() => {
+        setActualDates({ ...table.dates });
+        dates.current = { ...table.dates };
+    }, [table.dates]);
 
     return (
-        <div>
+        <div className={styles.groupJournalTable}>
             <div>{table.group}</div>
             <Table>
                 <GroupJournalHeader
                     initialDates={dates.current}
                     onDateChange={onDateChange}
-                    disabled={false}
+                    disabled={datesDisabled}
                     period={period}
                     onlyHours={onlyHours}
                     year={year}
-                    tableIndex={tableIndex}
+                    changedDates={actualDates}
                 />
                 <tbody>
                     {Object.values(table.rows).map((row, rowIndex) => (
                         <tr key={rowIndex}>
-                            {Object.entries(table.dates).map(([month, dates]) =>
-                                dates.map((date, dateIndex) => (
-                                    <SelectCell
-                                        options={selectOptions}
-                                        key={`${rowIndex}-${date}`}
-                                        value={row.marks[date]?.mark}
-                                        onSelect={(value: string) =>
-                                            onMarkChange(
-                                                getMarkColumnId(
-                                                    tableIndex,
-                                                    month,
-                                                    dateIndex,
-                                                    row.relationId
-                                                ),
-                                                value
-                                            )
-                                        }
-                                        disabled={row.archived}
-                                    />
-                                ))
-                            )}
+                            <NameCell name={row.studentName} archived={row.archived} />
+                            {Object.entries(table.dates)
+                                .sort(sortMonths)
+                                .map(([month, dates]) =>
+                                    dates.map((date, dateIndex) => (
+                                        <MarkCell
+                                            selectOptions={selectOptions}
+                                            key={`${rowIndex}-${date}-${dateIndex}`}
+                                            mark={row.marks[date]?.mark}
+                                            onMarkChange={onMarkChange}
+                                            archived={row.archived}
+                                            rowIndex={rowIndex}
+                                            date={date}
+                                            dateIndex={dateIndex}
+                                            relationId={row.relationId}
+                                            tableIndex={tableIndex}
+                                            month={month}
+                                        />
+                                    ))
+                                )}
                             {!onlyHours &&
                                 quarters.map((quarter) => (
                                     <SelectCell
-                                        value={row.quarterMarks[quarter].mark}
+                                        key={quarter}
+                                        value={row.quarterMarks[quarter]?.mark}
                                         options={selectOptions}
                                         onSelect={(value: string) =>
                                             onQuarterMarkChange(
-                                                getQuarterMarkColumnId(
+                                                getQuarterMarkColumnId({
                                                     tableIndex,
                                                     quarter,
-                                                    row.relationId
-                                                ),
+                                                    relationId: row.relationId
+                                                }),
                                                 value
                                             )
                                         }
@@ -176,4 +194,4 @@ export const GroupJournalTable = (props: Props) => {
             </Table>
         </div>
     );
-};
+});

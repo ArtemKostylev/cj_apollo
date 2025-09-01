@@ -6,8 +6,7 @@ import { FETCH_REPLACEMENTS_QUERY } from '~/graphql/queries/fetchReplacements';
 import { useUserData } from '~/hooks/useUserData';
 import { DateCellOld } from '~/components/cells/DateCell_old';
 import { TableControls } from '~/components/tableControls';
-import { useLocation } from 'react-router-dom';
-import times from 'lodash/times';
+import { useLocation } from '@tanstack/react-router';
 import { updateInPosition } from '~/utils/crud';
 import {
     MONTHS_NAMES,
@@ -30,9 +29,10 @@ import styles from './compensation.module.css';
 import { TableHeader } from '~/components/table/tableHeader';
 import { NameHeader } from '~/components/table/nameHeader';
 import { Table } from '~/components/table';
+import type { Course } from '~/models/course';
 
 export const Compensation = () => {
-    let auth = useUserData();
+    let { userData } = useUserData();
     const location = useLocation() as any;
     let studentData: TeacherCourseStudent[] = [];
 
@@ -42,10 +42,10 @@ export const Compensation = () => {
 
     const userCourses: Course[] = useMemo(
         () =>
-            location.state?.courses || auth.user?.versions[currentYear].courses,
-        [location, auth]
+            location.state?.courses || userData.versions[currentYear].courses,
+        [location, userData]
     );
-    const coursesById = auth.user.versions[currentYear].coursesById;
+    const coursesById = userData.versions[currentYear].coursesById;
 
     const [course, setCourse] = useState(userCourses[0].id);
     const [month, setMonth] = useState(getCurrentMonth());
@@ -53,7 +53,7 @@ export const Compensation = () => {
     const teacher = useMemo(
         () =>
             location.state?.versions[currentYear].id ||
-            auth.user.versions[currentYear].id,
+            userData.versions[currentYear].teacherId,
         [currentYear]
     );
 
@@ -177,7 +177,7 @@ export const Compensation = () => {
                 />
                 <ControlSelect
                     options={toSelectOptions(userCourses, 'id', 'name')}
-                    buttonText={coursesById[course].name}
+                    buttonText={coursesById?.[course]?.name}
                     onSelect={onCourseChange}
                 />
                 <ControlSelect
@@ -195,7 +195,7 @@ export const Compensation = () => {
                 <thead>
                     <tr>
                         <NameHeader />
-                        {times(10, (index) => (
+                        {Array.from({ length: 10 }, (_, index) => (
                             <Fragment key={index}>
                                 <TableHeader>Пропуск</TableHeader>
                                 <TableHeader>Выдано</TableHeader>
@@ -211,7 +211,7 @@ export const Compensation = () => {
                                     surname={item.student.surname}
                                     name={item.student.name}
                                 />
-                                {times(10, (index: number) => {
+                                {Array.from({ length: 10 }, (_, index) => {
                                     let lesson = null;
                                     let lesson_date = null;
                                     let repl = null;

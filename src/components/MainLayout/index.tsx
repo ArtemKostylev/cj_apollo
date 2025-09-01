@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorScreen } from '~/pages/error';
-import Menu from '~/components/Menu';
-import { AppRouter } from '~/MainRouter';
+import Menu from '~/components/menu';
 import classNames from 'classnames';
 import styles from './mainLayout.module.css';
-import Header from './Header';
+import { Header } from './Header';
+import { Outlet } from '@tanstack/react-router';
 
 export const MainLayout = () => {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -36,7 +36,7 @@ export const MainLayout = () => {
                 />
                 <div className={contentClassName}>
                     <Header onMenuClick={onMenuClick} menuRef={menuRef} />
-                    <AppRouter />
+                    <Outlet />
                 </div>
             </ErrorBoundary>
         </div>

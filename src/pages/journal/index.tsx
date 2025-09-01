@@ -11,7 +11,8 @@ import {
     type AcademicYears,
     MONTHS_NAMES,
     YEARS,
-    YEARS_NAMES
+    YEARS_NAMES,
+    DATE_FORMAT
 } from '~/constants/date';
 import {
     getCurrentAcademicMonth,
@@ -34,9 +35,10 @@ import {
     updateJournal,
     type UpdateJournalParams
 } from '~/api/journal';
+import { format } from 'date-fns';
 
 export const Journal = () => {
-    const { user } = useUserData();
+    const { userData } = useUserData();
 
     const [month, setMonth] = useState<Months>(getCurrentAcademicMonth());
     const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
@@ -47,17 +49,16 @@ export const Journal = () => {
     );
     const quarters = useMemo(() => getQuartersInMonth(month), [month]);
 
-    const currentVersion = user.versions[year];
+    const currentVersion = userData.versions[year];
     const { courses, coursesById } = currentVersion;
     const courseSelectOptions = useMemo(
         () => toSelectOptions(courses, 'id', 'name'),
         [courses]
     );
 
-    // TODO: add separation between all courses, group and individual
     const [course, setCourse] = useState<number>(courses[0].id);
 
-    const courseHasOnlyHours = coursesById[course].onlyHours;
+    const courseHasOnlyHours = !!coursesById[course].onlyHours;
 
     const changedMarks = useRef<Record<string, ChangedMark>>({});
     const changedQuarterMarks = useRef<Record<string, ChangedQuarterMark>>({});
@@ -74,14 +75,14 @@ export const Journal = () => {
     );
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['journal', currentVersion.id, course, year, month],
+        queryKey: ['journal', currentVersion.teacherId, course, year, month],
         networkMode: 'always',
         queryFn: () =>
             getJournal({
-                teacherId: currentVersion.id,
+                teacherId: currentVersion.teacherId,
                 courseId: course,
                 year,
-                month
+                month: Number(month)
             })
     });
 
@@ -94,6 +95,8 @@ export const Journal = () => {
             marks: Object.values(changedMarks.current),
             quarterMarks: Object.values(changedQuarterMarks.current)
         });
+        changedMarks.current = {};
+        changedQuarterMarks.current = {};
     }, [updateJournalMt]);
 
     return (
@@ -112,7 +115,10 @@ export const Journal = () => {
                 <ControlSelect
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
-                    onSelect={(value) => setYear(value as AcademicYears)}
+                    onSelect={(value) => {
+                        setYear(value as AcademicYears);
+                        setCourse(userData.versions[value].courses[0].id);
+                    }}
                 />
                 <ControlButton
                     text="Сохранить"
@@ -125,7 +131,7 @@ export const Journal = () => {
                     <JournalHeader dates={dates} quarters={quarters} />
                     <tbody>
                         {data?.map((row) => (
-                            <tr>
+                            <tr key={row.relationId}>
                                 <NameCell
                                     name={row.studentName}
                                     archived={row.archived}
@@ -133,8 +139,10 @@ export const Journal = () => {
                                 <TableCell>{row.class}</TableCell>
                                 {dates.map((date) => (
                                     <MarkCell
-                                        key={date.format()}
-                                        mark={row.marks[date.format()]}
+                                        key={date.toISOString()}
+                                        mark={
+                                            row.marks[format(date, DATE_FORMAT)]
+                                        }
                                         date={date}
                                         relationId={row.relationId}
                                         onlyHours={courseHasOnlyHours}

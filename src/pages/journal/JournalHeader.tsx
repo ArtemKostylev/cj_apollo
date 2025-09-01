@@ -1,15 +1,16 @@
+import { format } from 'date-fns';
 import { TableHeader } from '~/components/table/tableHeader';
-import type { Moment } from 'moment';
-import { QUARTERS_RU, type Quarters } from '~/constants/date';
-import moment from 'moment';
+import { DATE_FORMAT_WEEKDAY, DATE_FORMAT_SHORT, QUARTERS_RU, type Quarters } from '~/constants/date';
+import { ru } from 'date-fns/locale';
 
 interface Props {
-    dates: Moment[];
+    dates: Date[];
     quarters: Quarters[];
 }
 
 export const JournalHeader = (props: Props) => {
     const { dates, quarters } = props;
+    debugger;
 
     return (
         <thead>
@@ -19,9 +20,7 @@ export const JournalHeader = (props: Props) => {
                 </TableHeader>
                 <TableHeader rowSpan={2}>Класс</TableHeader>
                 {dates.map((date) => (
-                    <TableHeader key={date.format()}>
-                        {date.format('DD.MM')}
-                    </TableHeader>
+                    <TableHeader key={date.toISOString()}>{format(date, DATE_FORMAT_SHORT)}</TableHeader>
                 ))}
                 {quarters.map((quarter) => (
                     <TableHeader key={quarter} rowSpan={2}>
@@ -31,8 +30,8 @@ export const JournalHeader = (props: Props) => {
             </tr>
             <tr>
                 {dates.map((date) => (
-                    <TableHeader key={date.format()}>
-                        {moment.weekdaysMin(date.isoWeekday())}
+                    <TableHeader key={date.toISOString()}>
+                        {format(date, DATE_FORMAT_WEEKDAY, { locale: ru })}
                     </TableHeader>
                 ))}
             </tr>

@@ -4,38 +4,18 @@ import { PageLoader } from '~/components/PageLoader';
 import { PageWrapper } from '~/components/pageWrapper';
 import { TableControls } from '~/components/tableControls';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
-import {
-    Periods,
-    PERIODS_NAMES,
-    PERIODS_RU,
-    YEARS,
-    YEARS_NAMES,
-    type AcademicYears
-} from '~/constants/date';
+import { Periods, PERIODS_NAMES, PERIODS_RU, YEARS, YEARS_NAMES, type AcademicYears } from '~/constants/date';
 import { useUserData } from '~/hooks/useUserData';
-import type { GroupJournalTable as GroupJournalTableType } from '~/models/groupJournal';
 import type { ChangedMark } from '~/models/mark';
 import type { ChangedQuarterMark } from '~/models/quarterMark';
-import {
-    getCurrentAcademicPeriod,
-    getCurrentAcademicYear
-} from '~/utils/academicDate';
+import { getCurrentAcademicPeriod, getCurrentAcademicYear } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { ControlButton } from '~/components/tableControls/controlButton';
-import { updateJournal, type UpdateJournalParams } from '~/api/journal';
+import { getGroupJournal, updateJournal, type UpdateJournalParams } from '~/api/journal';
 import { GroupJournalTable } from './GroupJournalTable';
 
-function getGroupJournal(params: {
-    teacherId: number;
-    period: Periods;
-    courseId: number;
-    year: AcademicYears;
-}): Promise<GroupJournalTableType[]> {
-    return Promise.resolve([]);
-}
-
 export const GroupJournal = () => {
-    const { user } = useUserData();
+    const { userData } = useUserData();
 
     const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
     const [period, setPeriod] = useState<Periods>(getCurrentAcademicPeriod());
@@ -43,25 +23,22 @@ export const GroupJournal = () => {
     const changedMarks = useRef<Record<string, ChangedMark>>({});
     const changedQuarterMarks = useRef<Record<string, ChangedQuarterMark>>({});
 
-    const currentVersion = user.versions[year];
-    const { courses, coursesById } = currentVersion;
-    const courseSelectOptions = useMemo(
-        () => toSelectOptions(courses, 'id', 'name'),
-        [courses]
-    );
+    const currentVersion = useMemo(() => userData.versions[year], [userData.versions, year]);
+    const { groupCourses: courses, coursesById } = currentVersion;
+    const courseSelectOptions = useMemo(() => toSelectOptions(courses, 'id', 'name'), [courses]);
 
     const [course, setCourse] = useState<number>(courses[0].id);
 
     const courseHasOnlyHours = useMemo(() => {
-        return coursesById[course].hasOnlyHours;
+        return !!coursesById[course].onlyHours;
     }, [coursesById, course]);
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['groupJournal', currentVersion.id, period, year],
+        queryKey: ['groupJournal', currentVersion.teacherId, period, year, course],
         networkMode: 'always',
         queryFn: () =>
             getGroupJournal({
-                teacherId: currentVersion.id,
+                teacherId: currentVersion.teacherId,
                 period,
                 courseId: course,
                 year
@@ -77,30 +54,26 @@ export const GroupJournal = () => {
             marks: Object.values(changedMarks.current),
             quarterMarks: Object.values(changedQuarterMarks.current)
         });
+        changedMarks.current = {};
+        changedQuarterMarks.current = {};
     }, [updateJournalMt]);
 
     const onMarkChange = useCallback((columnId: string, mark: ChangedMark) => {
         changedMarks.current[columnId] = mark;
     }, []);
 
-    const onQuarterMarkChange = useCallback(
-        (columnId: string, quarterMark: ChangedQuarterMark) => {
-            changedQuarterMarks.current[columnId] = quarterMark;
-        },
-        []
-    );
+    const onQuarterMarkChange = useCallback((columnId: string, quarterMark: ChangedQuarterMark) => {
+        changedQuarterMarks.current[columnId] = quarterMark;
+    }, []);
 
-    const onMarkDateChange = useCallback(
-        (columnId: string, mark: ChangedMark) => {
-            const changedMark = changedMarks.current[columnId];
-            if (changedMark) {
-                changedMark.date = mark.date;
-            } else {
-                changedMarks.current[columnId] = mark;
-            }
-        },
-        []
-    );
+    const onMarkDateChange = useCallback((columnId: string, mark: ChangedMark) => {
+        const changedMark = changedMarks.current[columnId];
+        if (changedMark) {
+            changedMark.date = mark.date;
+        } else {
+            changedMarks.current[columnId] = mark;
+        }
+    }, []);
 
     return (
         <PageWrapper>
@@ -118,13 +91,12 @@ export const GroupJournal = () => {
                 <ControlSelect
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
-                    onSelect={(value) => setYear(value as AcademicYears)}
+                    onSelect={(value) => {
+                        setYear(value as AcademicYears);
+                        setCourse(userData.versions[value].groupCourses[0].id);
+                    }}
                 />
-                <ControlButton
-                    text="Сохранить"
-                    onClick={onSave}
-                    disabled={isPending}
-                />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 {data?.map((table, index) => (

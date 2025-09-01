@@ -1,7 +1,8 @@
 import { ForwardedRef, MouseEventHandler, forwardRef, memo } from 'react';
 import styles from './dateHeader.module.css';
-import { DATE_FORMAT, EMPTY_DATE } from './const';
+import { EMPTY_DATE } from './const';
 import { format } from 'date-fns';
+import { DATE_FORMAT_SHORT } from '~/constants/date';
 
 interface Props {
     value?: string;
@@ -11,7 +12,7 @@ interface Props {
 export const DateHeaderInput = memo(
     forwardRef(({ value, onClick }: Props, ref: ForwardedRef<any>) => (
         <div className={styles.dateHeaderInput} onClick={onClick} ref={ref}>
-            {value ? format(new Date(value), DATE_FORMAT) : EMPTY_DATE}
+            {value ? format(new Date(value), DATE_FORMAT_SHORT) : EMPTY_DATE}
         </div>
     ))
 );

@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import {
     ApolloClient,
     ApolloLink,
@@ -6,11 +5,14 @@ import {
     HttpLink,
     InMemoryCache
 } from '@apollo/client';
-import { AuthProvider } from './hooks/useUserData';
+import { UserDataProvider, useUserData } from './hooks/useUserData';
 import { setContext } from '@apollo/client/link/context';
 import { USER_ALIAS } from './constants/localStorageAliases';
-import { MainRouter } from './MainRouter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { router } from './utils/router';
+import { RouterProvider } from '@tanstack/react-router';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const authLink = setContext((_, { headers }) => {
     const user = JSON.parse(localStorage.getItem(USER_ALIAS) as string);
@@ -42,16 +44,24 @@ const queryClient = new QueryClient({
     }
 });
 
+const InnerApp = () => {
+    const { isAuthenticated, userData } = useUserData();
+    return (
+        <RouterProvider
+            router={router}
+            context={{ isAuthenticated, role: userData?.role }}
+        />
+    );
+};
+
 export default function App() {
     return (
-        <BrowserRouter>
-            <ApolloProvider client={apolloClient}>
-                <QueryClientProvider client={queryClient}>
-                    <AuthProvider>
-                        <MainRouter />
-                    </AuthProvider>
-                </QueryClientProvider>
-            </ApolloProvider>
-        </BrowserRouter>
+        <ApolloProvider client={apolloClient}>
+            <QueryClientProvider client={queryClient}>
+                <UserDataProvider>
+                    <InnerApp />
+                </UserDataProvider>
+            </QueryClientProvider>
+        </ApolloProvider>
     );
 }

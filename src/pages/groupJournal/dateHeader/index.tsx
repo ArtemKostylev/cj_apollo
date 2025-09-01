@@ -1,7 +1,7 @@
-import { endOfMonth, format } from 'date-fns';
+import { endOfMonth, format, parse } from 'date-fns';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { BACKEND_DATE_FORMAT, type AcademicYears } from '~/constants/date';
+import { DATE_FORMAT, type AcademicYears, type Months } from '~/constants/date';
 import { academicYearToCalendarByMonth } from '~/utils/academicDate';
 import ru from 'date-fns/locale/ru';
 import { DateHeaderInput } from './DateHeaderInput';
@@ -13,28 +13,23 @@ interface Props {
     month: string;
     year: AcademicYears;
     disabled?: boolean;
+    changedDates: Record<string, string[]>;
 }
 
 export const DateHeader = memo((props: Props) => {
-    const {
-        initialValue,
-        onChange: onChangeProp,
-        columnId,
-        month,
-        year,
-        disabled
-    } = props;
+    const { initialValue, onChange: onChangeProp, columnId, month, year, disabled, changedDates } = props;
 
     const [pickerValue, setPickerValue] = useState<Date | undefined>(undefined);
 
     useEffect(() => {
-        initialValue && setPickerValue(new Date(initialValue));
+        initialValue && setPickerValue(parse(initialValue, DATE_FORMAT, new Date()));
     }, [initialValue]);
 
     const onChange = useCallback(
         (date: Date | null) => {
             if (!date) return;
-            onChangeProp(columnId, format(date, BACKEND_DATE_FORMAT));
+            onChangeProp(columnId, format(date, DATE_FORMAT));
+            setPickerValue(date);
         },
         [onChangeProp, columnId]
     );
@@ -44,7 +39,7 @@ export const DateHeader = memo((props: Props) => {
             return { minDate: undefined, maxDate: undefined };
         }
 
-        const calendarYear = academicYearToCalendarByMonth(year, Number(month));
+        const calendarYear = academicYearToCalendarByMonth(year, ('' + Number(month)) as Months);
         const startDate = new Date(calendarYear, Number(month), 1);
         const endDate = endOfMonth(startDate);
 
@@ -54,8 +49,14 @@ export const DateHeader = memo((props: Props) => {
         };
     }, [disabled, month, year]);
 
+    const shouldRerenderDates = JSON.stringify(changedDates[month]);
+    const excludeDates = useMemo(() => {
+        return changedDates[month].map((date) => parse(date, DATE_FORMAT, new Date()));
+    }, [changedDates, month, shouldRerenderDates]);
+
     return (
         <DatePicker
+            excludeDates={excludeDates}
             selected={pickerValue}
             onChange={onChange}
             customInput={<DateHeaderInput />}

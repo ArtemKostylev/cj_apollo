@@ -1,29 +1,25 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { times } from 'lodash';
+import { getConsults, updateConsults } from '../../api/consult';
+import { useUserData } from '../../hooks/useUserData';
+import { getCurrentAcademicYear } from '../../utils/academicDate';
 import { useRef, useState } from 'react';
-import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
-import { ClassCell } from '~/components/cells/ClassCell';
-import {
-    ConsultCell,
-    type UpdatedConsult
-} from '~/components/cells/ConsultCell';
 import { LegacySpinner } from '~/components/LegacySpinner';
+import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
+import { ControlSelect } from '~/components/tableControls/controlSelect';
+import { toSelectOptions } from '~/utils/toSelectOptions';
+import { AcademicYears, YEARS, YEARS_NAMES } from '~/constants/date';
+import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';
-import { TableControls } from '~/components/tableControls';
-import { ControlButton } from '~/components/tableControls/controlButton';
-import { ControlSelect } from '~/components/tableControls/controlSelect';
-import { YEARS, YEARS_NAMES, type AcademicYears } from '~/constants/date';
-import { useUserData } from '~/hooks/useUserData';
-import { getCurrentAcademicYear } from '~/utils/academicDate';
-import { toSelectOptions } from '~/utils/toSelectOptions';
+import { NameCell_old } from '~/components/cells/NameCell_old';
+import { ConsultCell, UpdatedConsult } from '~/components/cells/ConsultCell';
 
-export const GroupConsults = () => {
-    const { user } = useUserData();
+export const Consult = () => {
+    const { userData } = useUserData();
     const [year, setYear] = useState(getCurrentAcademicYear() as AcademicYears);
 
-    const currentVersion = user.versions[year];
+    const currentVersion = userData.versions[year];
     const { coursesById, courses } = currentVersion;
 
     const [course, setCourse] = useState(courses[0].id);
@@ -40,11 +36,11 @@ export const GroupConsults = () => {
         isLoading: isConsultsLoading,
         isError: isConsultsError
     } = useQuery({
-        queryKey: ['groupConsults'],
+        queryKey: ['consults'],
         queryFn: () =>
-            getAllGroupConsults({
+            getConsults({
                 courseId: coursesById[course].id,
-                teacherId: currentVersion.id,
+                teacherId: currentVersion.teacherId,
                 year: year
             })
     });
@@ -53,18 +49,15 @@ export const GroupConsults = () => {
         mutationFn: () => {
             const data = Object.values(changedConsults.current).map(
                 (consult) => ({
-                    ...consult,
-                    consultId: consult.id,
-                    class: consult.class as number,
-                    program: consult.program as string,
-                    subgroup: consult.subgroup as number,
+                    id: consult.id,
+                    date: consult.date,
+                    hours: consult.hours,
+                    relationId: consult.relationId as number,
                     year: year
                 })
             );
 
-            return updateGroupConsults({
-                teacher: currentVersion.id,
-                course,
+            return updateConsults({
                 consults: data
             });
         }
@@ -78,7 +71,7 @@ export const GroupConsults = () => {
             <TableControls>
                 <ControlSelect
                     options={courseOptions}
-                    buttonText={coursesById[course].name}
+                    buttonText={coursesById?.[course]?.name}
                     onSelect={(value) => setCourse(value as number)}
                 />
                 <ControlSelect
@@ -95,30 +88,27 @@ export const GroupConsults = () => {
             <Table>
                 <thead>
                     <tr>
-                        <TableHeader width="30%">Группа</TableHeader>
-                        <TableHeader width="70%" colSpan={16}>
+                        <TableHeader width="30%">Имя ученика</TableHeader>
+                        <TableHeader width="70%" colSpan={32}>
                             Дата/Часы
                         </TableHeader>
                     </tr>
                 </thead>
                 <tbody>
-                    {consults?.map((group) => (
-                        <tr key={group.group}>
-                            <ClassCell
-                                classNum={group.class}
-                                program={group.program}
-                                subgroup={group.subgroup}
+                    {consults?.map((relation) => (
+                        <tr key={relation.id}>
+                            <NameCell_old
+                                name={relation.student?.name}
+                                surname={relation.student?.surname}
                             />
-                            {times(8).map((index) => (
+                            {Array.from({ length: 16 }, (_, index) => (
                                 <ConsultCell
-                                    clientId={`${group}-${index}`}
+                                    clientId={`${relation.id}-${index}`}
                                     onChange={onCellValueChange}
-                                    consultId={group.consults?.[index]?.id}
-                                    date={group.consults?.[index]?.date}
-                                    hours={group.consults?.[index]?.hours}
-                                    class={group.class}
-                                    program={group.program}
-                                    subgroup={group.subgroup}
+                                    consultId={relation.consults?.[index]?.id}
+                                    date={relation.consults?.[index]?.date}
+                                    hours={relation.consults?.[index]?.hours}
+                                    relationId={relation.id}
                                     year={year}
                                     key={index}
                                 />

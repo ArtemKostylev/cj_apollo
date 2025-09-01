@@ -1,113 +1,63 @@
-import { useState, useContext, createContext, useMemo } from 'react';
+import {
+    useState,
+    useContext,
+    createContext,
+    useMemo,
+    type PropsWithChildren
+} from 'react';
 import { USER_ALIAS } from '../constants/localStorageAliases';
-import { fromPairs } from 'lodash';
-import { getCurrentAcademicYear } from '../utils/academicDate';
-import { useHistory, useLocation } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { useQuery } from '@apollo/client';
-import { UPDATE_USER_INFO } from '../graphql/queries/updateUserInfo';
+import { UserData, userDataSchema } from '~/models/userData';
 
-type signInCallback = (payload: AuthPayload, nav: () => void) => void;
-type signOutCallback = (nav: () => void) => void;
-
-interface IUser {
-    role: string;
-    versions: Record<
-        string,
-        { id: number; coursesById: Record<number, Course>; courses: Course[] }
-    >;
-    token: string;
+interface AuthContextType {
+    userData: UserData;
+    isAuthenticated: boolean;
+    logIn: (userData: UserData) => void;
+    logOut: () => void;
 }
 
-type AuthContextProps = {
-    loading: boolean;
-    user: IUser;
-    signIn: signInCallback;
-    signOut: signOutCallback;
-};
+const AuthContext = createContext({} as AuthContextType);
 
-const AuthContext = createContext({} as AuthContextProps);
-
-export function AuthProvider({ children }: PrimitiveComponentProps) {
-    const auth = useProvideAuth();
-    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-}
-
-export const useUserData = () => {
-    return useContext(AuthContext);
-};
-
-function useProvideAuth(): AuthContextProps {
-    const history = useHistory();
-    const location = useLocation();
-
+export const UserDataProvider = ({ children }: PropsWithChildren) => {
     const cashedUser = useMemo(() => {
         try {
             const storageItem = localStorage.getItem(USER_ALIAS);
             if (!storageItem) {
-                history.replace(ROUTES.LOGIN);
-                return;
+                return undefined;
             }
-            return JSON.parse(storageItem);
+            const userCache = JSON.parse(storageItem);
+            return userDataSchema.parse(userCache);
         } catch (e) {
-            history.replace(ROUTES.LOGIN);
+            return undefined;
         }
     }, []);
 
-    const [user, setUser] = useState<IUser | null>(cashedUser);
-    const { loading } = useQuery(UPDATE_USER_INFO, {
-        variables: {
-            token: cashedUser?.token
-        },
-        onError: () => {
-            history.replace(ROUTES.LOGIN);
-        },
-        onCompleted: (data) => {
-            signIn(data.updateUserInfo, () => history.push(location.pathname));
-        }
-    });
+    const [userData, setUserData] = useState<UserData | undefined>(cashedUser);
+    const isAuthenticated = !!userData;
 
-    const signIn: signInCallback = (payload, nav) => {
-        if (!payload?.user?.role) {
-            localStorage.clear();
-            return;
-        }
-
-        const versions = fromPairs(
-            payload.user.teacher?.map((it) => [
-                it.freezeVersion?.year || getCurrentAcademicYear(),
-                {
-                    id: it.id,
-                    coursesById: it.relations.reduce((acc, it) => {
-                        acc[it.course.id] = it.course;
-                        return acc;
-                    }, {} as Record<number, Course>),
-                    courses: it.relations.map((it) => it.course)
-                }
-            ])
-        );
-
-        const newUser = {
-            role: payload.user.role.name,
-            versions,
-            token: payload.token
-        };
-
-        setUser(newUser);
-        localStorage.setItem(USER_ALIAS, JSON.stringify(newUser));
-        nav();
+    const logIn = (userData: UserData) => {
+        setUserData(userData);
+        localStorage.setItem(USER_ALIAS, JSON.stringify(userData));
     };
 
-    const signOut: signOutCallback = (nav) => {
-        nav();
-        setUser(null);
+    const logOut = () => {
+        setUserData(undefined);
         localStorage.removeItem(USER_ALIAS);
     };
 
-    return {
-        loading,
-        user: user as IUser,
-        signIn,
-        signOut
+    const contextValue = {
+        userData: userData || ({} as UserData),
+        isAuthenticated,
+        logIn,
+        logOut
     };
-}
+
+    return (
+        <AuthContext.Provider value={contextValue}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useUserData = () => {
+    return useContext(AuthContext);
+};

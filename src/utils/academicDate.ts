@@ -37,32 +37,24 @@ export const getLessonsInMonth = (month: Months) => {
 };
 
 export const getCurrentAcademicYear = (): AcademicYears => {
-    return moment().month() > 7
-        ? (moment().year() as AcademicYears)
-        : ((moment().year() - 1) as AcademicYears);
+    return moment().month() > 7 ? (moment().year() as AcademicYears) : ((moment().year() - 1) as AcademicYears);
 };
 
-export const academicYearToCalendarByPeriod = (
-    year: AcademicYears,
-    period: Periods
-) => {
+export const academicYearToCalendarByPeriod = (year: AcademicYears, period: Periods) => {
     if (period === Periods.FIRST) {
         return year;
     }
     return year + 1;
 };
 
-export const academicYearToCalendarByMonth = (
-    year: AcademicYears,
-    month: Months
-) => {
+export const academicYearToCalendarByMonth = (year: AcademicYears, month: Months): number => {
     const isFirstPeriod = FIRST_PERIOD_MONTHS.includes(month);
 
     if (isFirstPeriod) {
-        return year;
+        return Number(year);
     }
 
-    return year + 1;
+    return Number(year) + 1;
 };
 
 export const getQuartersInPeriod = (period: Periods) => {
@@ -76,43 +68,21 @@ export const getBorderDatesForPeriod = (period: Periods, year: number) => {
     if (currentPeriod === Periods.FIRST) {
         if (period === Periods.FIRST) {
             return {
-                dateGte: moment()
-                    .year(year)
-                    .month(Months.SEPTEMBER)
-                    .startOf('month'),
-                dateLte: moment()
-                    .year(year)
-                    .month(Months.DECEMBER)
-                    .endOf('month')
+                dateGte: moment().year(year).month(Months.SEPTEMBER).startOf('month'),
+                dateLte: moment().year(year).month(Months.DECEMBER).endOf('month')
             };
         }
 
         return {
-            dateGte: moment()
-                .year(year)
-                .month(Months.JANUARY)
-                .add(1, 'year')
-                .startOf('month'),
-            dateLte: moment()
-                .year(year)
-                .month(Months.MAY)
-                .add(1, 'year')
-                .endOf('month')
+            dateGte: moment().year(year).month(Months.JANUARY).add(1, 'year').startOf('month'),
+            dateLte: moment().year(year).month(Months.MAY).add(1, 'year').endOf('month')
         };
     }
 
     if (period === Periods.FIRST) {
         return {
-            dateGte: moment()
-                .year(year)
-                .month(Months.SEPTEMBER)
-                .subtract(1, 'year')
-                .startOf('month'),
-            dateLte: moment()
-                .year(year)
-                .month(Months.DECEMBER)
-                .subtract(1, 'year')
-                .endOf('month')
+            dateGte: moment().year(year).month(Months.SEPTEMBER).subtract(1, 'year').startOf('month'),
+            dateLte: moment().year(year).month(Months.DECEMBER).subtract(1, 'year').endOf('month')
         };
     }
 
@@ -125,10 +95,7 @@ export const getBorderDatesForPeriod = (period: Periods, year: number) => {
 export const getBorderDatesForMidtermExam = (period: Periods, year: number) => {
     const currentPeriod = getCurrentAcademicPeriod();
 
-    return getBorderDatesForPeriod(
-        period,
-        currentPeriod === Periods.SECOND ? year + 1 : year
-    );
+    return getBorderDatesForPeriod(period, currentPeriod === Periods.SECOND ? year + 1 : year);
 };
 
 export const getBorderDatesForMonth = (month: Months, year: number) => {
@@ -143,31 +110,15 @@ export const getBorderDatesForMonth = (month: Months, year: number) => {
         }
 
         return {
-            dateGte: moment()
-                .year(year)
-                .month(month)
-                .add(1, 'year')
-                .startOf('month'),
-            dateLte: moment()
-                .year(year)
-                .month(month)
-                .add(1, 'year')
-                .endOf('month')
+            dateGte: moment().year(year).month(month).add(1, 'year').startOf('month'),
+            dateLte: moment().year(year).month(month).add(1, 'year').endOf('month')
         };
     }
 
     if (month > Months.AUGUST) {
         return {
-            dateGte: moment()
-                .year(year)
-                .month(month)
-                .subtract(1, 'year')
-                .startOf('month'),
-            dateLte: moment()
-                .year(year)
-                .month(month)
-                .subtract(1, 'year')
-                .endOf('month')
+            dateGte: moment().year(year).month(month).subtract(1, 'year').startOf('month'),
+            dateLte: moment().year(year).month(month).subtract(1, 'year').endOf('month')
         };
     }
 
@@ -192,10 +143,7 @@ export const getQuartersInMonth = (month: Months) => {
     }
 };
 
-export function getYearByMonth(
-    targetMonth: Months,
-    year: number | null = null
-) {
+export function getYearByMonth(targetMonth: Months, year: number | null = null) {
     const currentMonth = moment().month();
     const currentYear = year || moment().year();
 
@@ -212,14 +160,10 @@ export function getYearByMonth(
 }
 
 export function getQuarter(month: Months) {
-    if (MONTHS_IN_QUARTERS[Quarters.FIRST].includes(month))
-        return Quarters.FIRST;
-    if (MONTHS_IN_QUARTERS[Quarters.SECOND].includes(month))
-        return Quarters.SECOND;
-    if (MONTHS_IN_QUARTERS[Quarters.THIRD].includes(month))
-        return Quarters.THIRD;
-    if (MONTHS_IN_QUARTERS[Quarters.FOURTH].includes(month))
-        return Quarters.FOURTH;
+    if (MONTHS_IN_QUARTERS[Quarters.FIRST].includes(month)) return Quarters.FIRST;
+    if (MONTHS_IN_QUARTERS[Quarters.SECOND].includes(month)) return Quarters.SECOND;
+    if (MONTHS_IN_QUARTERS[Quarters.THIRD].includes(month)) return Quarters.THIRD;
+    if (MONTHS_IN_QUARTERS[Quarters.FOURTH].includes(month)) return Quarters.FOURTH;
 
     return Quarters.FOURTH;
 }

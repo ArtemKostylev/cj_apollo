@@ -1,58 +1,82 @@
-import {ROUTES} from './routes';
+import { Route as MidtermExamRoute } from '~/routes/_main.midtermExam';
+import { Route as MidtermExamTypesRoute } from '~/routes/_main.midtermExamTypes';
+import { Route as NotesRoute } from '~/routes/_main.notes';
+import { Route as SubgroupsRoute } from '~/routes/_main.subgroups';
+import { Route as ReportsRoute } from '~/routes/_main.reports';
+import { Route as SpecializationsRoute } from '~/routes/_main.specializations';
+import { Route as JournalRoute } from '~/routes/_main.journal';
+import { Route as DataRoute } from '~/routes/_main.data';
+import { Route as ConsultRoute } from '~/routes/_main.consult';
+import { Route as GroupConsultRoute } from '~/routes/_main.groupConsult';
+import { Route as CompensationRoute } from '~/routes/_main.compensation';
+import { Route as GroupJournalRoute } from '~/routes/_main.groupJournal';
 
-type Resources = Record<string, { path: string, title: string }>;
+type Resources = Record<string, { path: string; title: string; order: number }>;
 
 export const USER_RESOURCES: Resources = {
-  journal: {
-    path: '/journal',
-    title: 'Классный журнал',
-  },
-  consult: {
-    path: '/consult',
-    title: 'Консультации',
-  },
-  groupConsult: {
-    path: '/groupConsult',
-    title: 'Групповые консультации',
-  },
-  compensation: {
-    path: '/compensation',
-    title: 'Возмещение',
-  },
-  midtermExam: {
-    path: ROUTES.MIDTERM_EXAM,
-    title: 'Промежуточная аттестация',
-  },
-  notes: {
-    path: '/notes',
-    title: 'Заметки',
-  },
+    journal: {
+        path: JournalRoute.fullPath,
+        title: 'Классный журнал',
+        order: 0
+    },
+    consult: {
+        path: ConsultRoute.fullPath,
+        title: 'Консультации',
+        order: 2
+    },
+    groupConsult: {
+        path: GroupConsultRoute.fullPath,
+        title: 'Групповые консультации',
+        order: 3
+    },
+    compensation: {
+        path: CompensationRoute.fullPath,
+        title: 'Возмещение',
+        order: 4
+    },
+    midtermExam: {
+        path: MidtermExamRoute.fullPath,
+        title: 'Промежуточная аттестация',
+        order: 5
+    },
+    notes: {
+        path: NotesRoute.fullPath,
+        title: 'Заметки',
+        order: 6
+    }
 };
 
 export const ADMIN_RESOURCES: Resources = {
-  journals: {
-    path: '/journals',
-    title: 'Журналы',
-  },
-  data: {
-    path: '/data',
-    title: 'Изменение данных',
-  },
-  reports: {
-    path: '/reports',
-    title: 'Отчеты',
-  },
-  specs: {
-    path: '/specs',
-    title: 'Специальности',
-  },
-  midtermExamTypes: {
-    path: ROUTES.MIDTERM_EXAM_TYPES,
-    title: 'Типы промежуточной аттестации'
-  }
+    data: {
+        path: DataRoute.fullPath,
+        title: 'Изменение данных',
+        order: 0
+    },
+    reports: {
+        path: ReportsRoute.fullPath,
+        title: 'Отчеты',
+        order: 1
+    },
+    specs: {
+        path: SpecializationsRoute.fullPath,
+        title: 'Специальности',
+        order: 2
+    },
+    midtermExamTypes: {
+        path: MidtermExamTypesRoute.fullPath,
+        title: 'Типы промежуточной аттестации',
+        order: 3
+    }
 };
 
 export const SUBGROUPS_RESOURCE = {
-  path: '/subgroups',
-  title: 'Группы',
+    path: SubgroupsRoute.fullPath,
+    title: 'Группы',
+    order: 7
+};
+
+export const GROUP_JOURNAL_RESOURCE = {
+    path: GroupJournalRoute.fullPath,
+    title: 'Групповой журнал',
+    order: 1
 };

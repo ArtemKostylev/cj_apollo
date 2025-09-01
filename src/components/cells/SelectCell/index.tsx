@@ -13,53 +13,36 @@ type Props = {
     renderItem?: (onClick: () => void) => ReactElement;
 };
 
-export const SelectCell = memo(
-    ({
-        value = '',
-        options,
-        isWeekend = false,
-        onSelect,
-        disabled = false
-    }: Props) => {
-        const [dropdownValue, setDropdownValue] = useState<string>(
-            value
-        );
-        const [opened, setOpened] = useState(false);
+export const SelectCell = memo(({ value = '', options, isWeekend = false, onSelect, disabled = false }: Props) => {
+    const [dropdownValue, setDropdownValue] = useState<string>(value);
+    const [opened, setOpened] = useState(false);
 
-        useEffect(() => {
-            setDropdownValue(value);
-        }, [value]);
+    useEffect(() => {
+        setDropdownValue(value);
+    }, [value]);
 
-        const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
 
-        const width = ref.current?.clientWidth || 0;
+    const width = ref.current?.clientWidth || 0;
 
-        useOnClickOutside(ref, () => setOpened(false));
+    useOnClickOutside(ref, () => setOpened(false));
 
-        const onClick = () => setOpened((prev) => !prev);
+    const onClick = () => setOpened((prev) => !prev);
 
-        return (
-            <TableCell
-                ref={ref}
-                onClick={onClick}
-                isWeekend={isWeekend}
-                disabled={disabled}
-            >
-                <p className={styles.cellText}>
-                    {dropdownValue === '.' ? '✓' : dropdownValue}
-                </p>
-                {!disabled && (
-                    <Dropdown
-                        opened={opened}
-                        options={options}
-                        width={`${width}px`}
-                        onSelect={(value) => {
-                            onSelect(value);
-                            setDropdownValue(value);
-                        }}
-                    />
-                )}
-            </TableCell>
-        );
-    }
-);
+    return (
+        <TableCell ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
+            <p className={styles.cellText}>{dropdownValue === '.' ? '✓' : dropdownValue}</p>
+            {!disabled && (
+                <Dropdown
+                    opened={opened}
+                    options={options}
+                    width={`${width}px`}
+                    onSelect={(value) => {
+                        onSelect(value);
+                        setDropdownValue(value);
+                    }}
+                />
+            )}
+        </TableCell>
+    );
+});

@@ -26,20 +26,6 @@ declare type Teacher = {
   freezeVersion?: FreezeVersion;
 }
 
-declare type Course = {
-  id: number;
-  name: string;
-  group: boolean;
-  freezeVersion?: FreezeVersion;
-
-  [key: string]: any;
-}
-
-declare type FreezeVersion = {
-  id: number;
-  year: number;
-}
-
 declare interface MidtermExam extends PrimitiveCacheEntity {
   student: Student;
   date: string;
