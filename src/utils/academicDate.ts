@@ -40,11 +40,11 @@ export const getCurrentAcademicYear = (): AcademicYears => {
     return moment().month() > 7 ? (moment().year() as AcademicYears) : ((moment().year() - 1) as AcademicYears);
 };
 
-export const academicYearToCalendarByPeriod = (year: AcademicYears, period: Periods) => {
+export const academicYearToCalendarByPeriod = (year: AcademicYears, period: Periods): number => {
     if (period === Periods.FIRST) {
-        return year;
+        return Number(year);
     }
-    return year + 1;
+    return Number(year) + 1;
 };
 
 export const academicYearToCalendarByMonth = (year: AcademicYears, month: Months): number => {
