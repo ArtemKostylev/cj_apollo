@@ -14,10 +14,10 @@ export const QuarterHeaders = memo(({ period, onlyHours }: Props) => {
     if (period == Periods.FIRST)
         return (
             <>
-                <TableHeader className={styles.quarterHeader} rowSpan={2}>
+                <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
                     I четверть
                 </TableHeader>
-                <TableHeader className={styles.quarterHeader} rowSpan={2}>
+                <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
                     II четверть
                 </TableHeader>
             </>
@@ -25,13 +25,13 @@ export const QuarterHeaders = memo(({ period, onlyHours }: Props) => {
 
     return (
         <>
-            <TableHeader className={styles.quarterHeader} rowSpan={2}>
+            <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
                 III четверть
             </TableHeader>
-            <TableHeader className={styles.quarterHeader} rowSpan={2}>
+            <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
                 IV четверть
             </TableHeader>
-            <TableHeader className={styles.quarterHeader} rowSpan={2}>
+            <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
                 Годовая оценка
             </TableHeader>
         </>

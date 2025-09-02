@@ -9,6 +9,7 @@ export const userDataSchema = z.object({
         z.object({
             teacherId: z.number(),
             coursesById: z.record(z.string(), courseSchema),
+            allCourses: z.array(courseSchema),
             courses: z.array(courseSchema),
             groupCourses: z.array(courseSchema)
         })

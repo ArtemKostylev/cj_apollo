@@ -9,7 +9,7 @@ interface Props {
     onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-export const DateHeaderInput = memo(
+export const DateCellCustomInput = memo(
     forwardRef(({ value, onClick }: Props, ref: ForwardedRef<any>) => (
         <div className={styles.dateHeaderInput} onClick={onClick} ref={ref}>
             {value ? format(new Date(value), DATE_FORMAT_SHORT) : EMPTY_DATE}

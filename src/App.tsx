@@ -1,10 +1,4 @@
-import {
-    ApolloClient,
-    ApolloLink,
-    ApolloProvider,
-    HttpLink,
-    InMemoryCache
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
 import { UserDataProvider, useUserData } from './hooks/useUserData';
 import { setContext } from '@apollo/client/link/context';
 import { USER_ALIAS } from './constants/localStorageAliases';
@@ -13,6 +7,7 @@ import { router } from './utils/router';
 import { RouterProvider } from '@tanstack/react-router';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import './styles/index.css';
 
 const authLink = setContext((_, { headers }) => {
     const user = JSON.parse(localStorage.getItem(USER_ALIAS) as string);
@@ -25,10 +20,7 @@ const authLink = setContext((_, { headers }) => {
     };
 });
 
-const httpLink = ApolloLink.from([
-    authLink,
-    new HttpLink({ uri: 'http://localhost:4000/graphql' })
-]);
+const httpLink = ApolloLink.from([authLink, new HttpLink({ uri: 'http://localhost:4000/graphql' })]);
 
 const apolloClient = new ApolloClient({
     link: httpLink,
@@ -46,12 +38,7 @@ const queryClient = new QueryClient({
 
 const InnerApp = () => {
     const { isAuthenticated, userData } = useUserData();
-    return (
-        <RouterProvider
-            router={router}
-            context={{ isAuthenticated, role: userData?.role }}
-        />
-    );
+    return <RouterProvider router={router} context={{ isAuthenticated, role: userData?.role }} />;
 };
 
 export default function App() {

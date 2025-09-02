@@ -19,6 +19,7 @@ import type { ChangedQuarterMark } from '~/models/quarterMark';
 import styles from './groupJournal.module.css';
 import { NameCell } from '~/components/cells/NameCell';
 import { MarkCell } from './MarkCell';
+import { GroupName } from './GroupName';
 
 interface Props {
     table: GroupJournalTableType;
@@ -135,7 +136,7 @@ export const GroupJournalTable = memo((props: Props) => {
 
     return (
         <div className={styles.groupJournalTable}>
-            <div>{table.group}</div>
+            <GroupName group={table.group} />
             <Table>
                 <GroupJournalHeader
                     initialDates={dates.current}

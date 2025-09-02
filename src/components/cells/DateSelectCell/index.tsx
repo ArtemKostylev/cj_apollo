@@ -1,7 +1,6 @@
 import { useState, useCallback, ChangeEvent, useMemo } from 'react';
-import { DateCellOld } from '~/components/cells/DateCell_old';
+import { DateCell } from '~/components/cells/dateCell';
 import { HOURS } from '~/constants/hours';
-import moment, { Moment } from 'moment';
 import { TableCell } from '~/components/cells/TableCell';
 
 export interface UpdatedConsult {
@@ -30,25 +29,11 @@ type Props = {
 };
 
 export const ConsultCell = (props: Props) => {
-    const {
-        clientId,
-        relationId,
-        consultId,
-        year,
-        date,
-        hours,
-        onChange,
-        program,
-        class: classProp,
-        subgroup
-    } = props;
+    const { clientId, relationId, consultId, year, date, hours, onChange, program, class: classProp, subgroup } = props;
     const [hoursValue, setHoursValue] = useState(hours);
     const [dateValue, setDateValue] = useState(date);
 
-    const initialDateValue = useMemo(
-        () => (date ? moment(date) : undefined),
-        [date]
-    );
+    const initialDateValue = useMemo(() => (date ? moment(date) : undefined), [date]);
 
     const onDateChange = useCallback(
         ({ date }: { date: Moment }) => {
@@ -104,7 +89,7 @@ export const ConsultCell = (props: Props) => {
     return (
         <>
             <TableCell>
-                <DateCellOld
+                <DateCell
                     month={moment().month()}
                     initialValue={initialDateValue}
                     updateDates={onDateChange}

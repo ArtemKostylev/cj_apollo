@@ -1,3 +1,16 @@
 .groupJournalTable {
     width: 100%;
 }
+
+.groupName {
+    padding-block: 10px;
+    padding-left: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: 20px;
+}
+
+.bold {
+    font-weight: bold;
+}

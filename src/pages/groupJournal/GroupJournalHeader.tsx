@@ -2,9 +2,9 @@ import { TableHeader } from '~/components/table/tableHeader';
 import { NameHeader } from '~/components/table/nameHeader';
 import { MONTHS_IN_PERIODS, Months, Periods, MONTHS_NAMES, type AcademicYears } from '~/constants/date';
 import { QuarterHeaders } from './QuarterHeaders';
-import { DateHeader } from './dateHeader';
 import { getGroupHeaderColumnId, sortMonths } from './utils';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
+import { DateCell } from '~/components/cells/dateCell';
 
 interface Props {
     initialDates: Record<string, string[]>;
@@ -18,6 +18,10 @@ interface Props {
 
 export const GroupJournalHeader = memo((props: Props) => {
     const { initialDates, period, onlyHours, year, disabled, onDateChange, changedDates } = props;
+
+    const monthWidth = useMemo(() => {
+        return period === Periods.FIRST ? '55px' : '45px';
+    }, [period]);
 
     return (
         <thead>
@@ -35,8 +39,8 @@ export const GroupJournalHeader = memo((props: Props) => {
                     .sort(sortMonths)
                     .map(([month, dates]) =>
                         dates.map((date, index) => (
-                            <TableHeader key={month + index} hoverEnabled>
-                                <DateHeader
+                            <TableHeader key={month + index} hoverEnabled width={monthWidth}>
+                                <DateCell
                                     changedDates={changedDates}
                                     initialValue={date}
                                     columnId={getGroupHeaderColumnId({

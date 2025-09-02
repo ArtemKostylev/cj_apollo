@@ -13,7 +13,7 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';
 import { NameCell_old } from '~/components/cells/NameCell_old';
-import { ConsultCell, UpdatedConsult } from '~/components/cells/ConsultCell';
+import { ConsultCell, UpdatedConsult } from '~/components/cells/DateSelectCell';
 
 export const Consult = () => {
     const { userData } = useUserData();
@@ -47,15 +47,13 @@ export const Consult = () => {
 
     const { isPending: isUpdatePending, mutate: save } = useMutation({
         mutationFn: () => {
-            const data = Object.values(changedConsults.current).map(
-                (consult) => ({
-                    id: consult.id,
-                    date: consult.date,
-                    hours: consult.hours,
-                    relationId: consult.relationId as number,
-                    year: year
-                })
-            );
+            const data = Object.values(changedConsults.current).map((consult) => ({
+                id: consult.id,
+                date: consult.date,
+                hours: consult.hours,
+                relationId: consult.relationId as number,
+                year: year
+            }));
 
             return updateConsults({
                 consults: data
@@ -79,11 +77,7 @@ export const Consult = () => {
                     buttonText={YEARS_NAMES[year]}
                     onSelect={(value) => setYear(value as AcademicYears)}
                 />
-                <ControlButton
-                    text="Сохранить"
-                    onClick={save}
-                    disabled={isUpdatePending}
-                />
+                <ControlButton text="Сохранить" onClick={save} disabled={isUpdatePending} />
             </TableControls>
             <Table>
                 <thead>
@@ -97,10 +91,7 @@ export const Consult = () => {
                 <tbody>
                     {consults?.map((relation) => (
                         <tr key={relation.id}>
-                            <NameCell_old
-                                name={relation.student?.name}
-                                surname={relation.student?.surname}
-                            />
+                            <NameCell_old name={relation.student?.name} surname={relation.student?.surname} />
                             {Array.from({ length: 16 }, (_, index) => (
                                 <ConsultCell
                                     clientId={`${relation.id}-${index}`}

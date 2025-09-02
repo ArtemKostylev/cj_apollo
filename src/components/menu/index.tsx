@@ -1,10 +1,5 @@
 import { useUserData } from '~/hooks/useUserData';
-import {
-    ADMIN_RESOURCES,
-    USER_RESOURCES,
-    SUBGROUPS_RESOURCE,
-    GROUP_JOURNAL_RESOURCE
-} from '~/constants/resources';
+import { ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE, GROUP_JOURNAL_RESOURCE } from '~/constants/resources';
 import { ROLES } from '~/constants/roles';
 import { t } from '~/static/text';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
@@ -31,7 +26,7 @@ export default function Menu({ onClose, isOpen }: Props) {
         if (!userData || !userData.role) return undefined;
         const res = resourceMap[userData?.role];
 
-        if (userData.versions[academicYear].groupCourses.length > 0) {
+        if (userData.versions[academicYear]?.groupCourses.length > 0 && userData.role === Number(ROLES.TEACHER)) {
             res.subgroups = SUBGROUPS_RESOURCE;
             res.groupJournal = GROUP_JOURNAL_RESOURCE;
         }

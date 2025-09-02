@@ -2,10 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
 import { ClassCell } from '~/components/cells/ClassCell';
-import {
-    ConsultCell,
-    type UpdatedConsult
-} from '~/components/cells/ConsultCell';
+import { ConsultCell, type UpdatedConsult } from '~/components/cells/DateSelectCell';
 import { LegacySpinner } from '~/components/LegacySpinner';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
@@ -50,16 +47,14 @@ export const GroupConsult = () => {
 
     const { isPending: isUpdatePending, mutate: save } = useMutation({
         mutationFn: () => {
-            const data = Object.values(changedConsults.current).map(
-                (consult) => ({
-                    ...consult,
-                    consultId: consult.id,
-                    class: consult.class as number,
-                    program: consult.program as string,
-                    subgroup: consult.subgroup as number,
-                    year: year
-                })
-            );
+            const data = Object.values(changedConsults.current).map((consult) => ({
+                ...consult,
+                consultId: consult.id,
+                class: consult.class as number,
+                program: consult.program as string,
+                subgroup: consult.subgroup as number,
+                year: year
+            }));
 
             return updateGroupConsults({
                 teacher: currentVersion.teacherId,
@@ -85,11 +80,7 @@ export const GroupConsult = () => {
                     buttonText={YEARS_NAMES[year]}
                     onSelect={(value) => setYear(value as AcademicYears)}
                 />
-                <ControlButton
-                    text="Сохранить"
-                    onClick={save}
-                    disabled={isUpdatePending}
-                />
+                <ControlButton text="Сохранить" onClick={save} disabled={isUpdatePending} />
             </TableControls>
             <Table>
                 <thead>
@@ -103,11 +94,7 @@ export const GroupConsult = () => {
                 <tbody>
                     {consults?.map((group) => (
                         <tr key={group.group}>
-                            <ClassCell
-                                classNum={group.class}
-                                program={group.program}
-                                subgroup={group.subgroup}
-                            />
+                            <ClassCell classNum={group.class} program={group.program} subgroup={group.subgroup} />
                             {Array.from({ length: 8 }, (_, index) => (
                                 <ConsultCell
                                     clientId={`${group}-${index}`}
