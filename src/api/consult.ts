@@ -21,13 +21,18 @@ interface UpdateConsultParams {
 
 interface ConsultDto {
     id: number;
-    student: Student;
-    consults: Consult[] | null;
+    date: string;
+    hours: number;
 }
 
-export async function getConsults(
-    params: GetConsultsParams
-): Promise<ConsultDto[]> {
+interface GetConsultsResponse {
+    relationId: number;
+    studentName: string;
+    archived: boolean;
+    consults: ConsultDto[] | null;
+}
+
+export async function getConsults(params: GetConsultsParams): Promise<GetConsultsResponse[]> {
     const response = await httpClient.get('/consult', {
         params
     });

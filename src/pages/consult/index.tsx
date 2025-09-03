@@ -11,10 +11,10 @@ import { AcademicYears, YEARS, YEARS_NAMES } from '~/constants/date';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';
-import { NameCell_old } from '~/components/cells/NameCell_old';
 import type { ChangedConsult } from '~/models/consult';
 import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { PageLoader } from '~/components/PageLoader';
+import { NameCell } from '~/components/cells/NameCell';
 
 export const Consult = () => {
     const { userData } = useUserData();
@@ -88,17 +88,17 @@ export const Consult = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {consults?.map((relation) => (
-                            <tr key={relation.id}>
-                                <NameCell_old name={relation.student?.name} surname={relation.student?.surname} />
+                        {consults?.map((row) => (
+                            <tr key={row.relationId}>
+                                <NameCell name={row.studentName} archived={row.archived} />
                                 {Array.from({ length: 16 }, (_, index) => (
                                     <DateSelectCell
-                                        columnId={`${relation.id}-${index}`}
+                                        columnId={`${row.relationId}-${index}`}
                                         onChange={onCellValueChange}
-                                        consultId={relation.consults?.[index]?.id}
-                                        date={relation.consults?.[index]?.date}
-                                        hours={relation.consults?.[index]?.hours}
-                                        relationId={relation.id}
+                                        consultId={row.consults?.[index]?.id}
+                                        date={row.consults?.[index]?.date}
+                                        hours={row.consults?.[index]?.hours}
+                                        relationId={row.relationId}
                                         year={year}
                                         key={index}
                                     />
