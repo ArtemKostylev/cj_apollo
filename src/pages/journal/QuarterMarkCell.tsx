@@ -2,7 +2,7 @@ import type { Quarters } from '~/constants/date';
 import type { ChangedQuarterMark, QuarterMark } from '~/models/quarterMark';
 import { MARKS_OPTIONS } from '~/constants/selectCellOptions';
 import { useCallback } from 'react';
-import { SelectCell } from '~/components/cells/SelectCell';
+import { SelectCell } from '~/components/cells/selectCell';
 
 interface Props {
     mark: QuarterMark | undefined;
@@ -32,12 +32,5 @@ export const QuarterMarkCell = (props: Props) => {
         [onChange]
     );
 
-    return (
-        <SelectCell
-            value={mark?.mark}
-            options={options}
-            onSelect={onSelect}
-            disabled={archived}
-        />
-    );
+    return <SelectCell value={mark?.mark} options={options} onSelect={onSelect} disabled={archived} />;
 };

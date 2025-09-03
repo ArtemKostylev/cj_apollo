@@ -3,6 +3,7 @@ import { Label } from '../label';
 import styles from './select.module.css';
 import formStyles from '../formItem.module.css';
 import { useCallback } from 'react';
+import type { DropdownOptionType } from '~/models/dropdownOption';
 
 interface FormSelectProps extends BaseFormItemProps {
     options?: DropdownOptionType[];

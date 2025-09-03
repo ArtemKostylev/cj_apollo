@@ -6,21 +6,21 @@ import { AcademicYears, YEARS, YEARS_NAMES } from '../../constants/date';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getNote, updateNote } from '../../api/note';
-import { LegacySpinner } from '~/components/LegacySpinner';
 
 import styles from './notes.module.css';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
+import { PageLoader } from '~/components/PageLoader';
 
 export const Notes = () => {
-    const { user } = useUserData();
+    const { userData } = useUserData();
     const [year, setYear] = useState(getCurrentAcademicYear());
 
-    const currentVersion = user.versions[year];
-    const { coursesById, courses } = currentVersion;
+    const currentVersion = userData.versions[year];
+    const { coursesById, allCourses } = currentVersion;
 
-    const [course, setCourse] = useState(courses[0].id);
+    const [course, setCourse] = useState(allCourses[0].id);
 
     const [value, setValue] = useState('');
 
@@ -36,24 +36,24 @@ export const Notes = () => {
         setValue(e.target.value);
     }, []);
 
-    const update = useMutation({ mutationFn: updateNote });
+    const { mutate: update, isPending } = useMutation({ mutationFn: updateNote });
 
     const onSave = useCallback(() => {
-        update.mutate({
+        update({
             noteId: data?.id || 0,
             text: value,
-            teacherId: currentVersion.id,
+            teacherId: currentVersion.teacherId,
             courseId: coursesById[course].id,
             year
         });
     }, []);
 
-    const { data, isPending, isError } = useQuery({
+    const { data, isLoading, isError } = useQuery({
         queryKey: ['note'],
         queryFn: () =>
             getNote({
                 courseId: coursesById[course].id,
-                teacherId: currentVersion.id,
+                teacherId: currentVersion.teacherId,
                 year
             })
     });
@@ -62,34 +62,25 @@ export const Notes = () => {
         data?.text && setValue(data?.text);
     }, [data?.text]);
 
-    if (isPending) return <LegacySpinner />;
-    if (isError) throw new Error('503');
-
     return (
         <PageWrapper>
             <TableControls>
                 <ControlSelect
-                    options={toSelectOptions(courses, 'id', 'name')}
+                    options={toSelectOptions(allCourses, 'id', 'name')}
                     buttonText={coursesById[course].name}
                     onSelect={onCourseChange}
                 />
-                <ControlSelect
-                    options={YEARS}
-                    buttonText={YEARS_NAMES[year]}
-                    onSelect={onYearChange}
-                />
-                <ControlButton
-                    text="Сохранить"
-                    onClick={onSave}
-                    disabled={update.isPending}
-                />
+                <ControlSelect options={YEARS} buttonText={YEARS_NAMES[year]} onSelect={onYearChange} />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={isPending} />
             </TableControls>
-            <textarea
-                className={styles.notesTextarea}
-                placeholder="Это - место для заметок..."
-                value={value}
-                onChange={onTextAreaValueChange}
-            />
+            <PageLoader loading={isLoading} error={isError}>
+                <textarea
+                    className={styles.notesTextarea}
+                    placeholder="Это - место для заметок..."
+                    value={value}
+                    onChange={onTextAreaValueChange}
+                />
+            </PageLoader>
         </PageWrapper>
     );
 };

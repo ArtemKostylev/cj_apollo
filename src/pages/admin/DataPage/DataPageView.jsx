@@ -17,12 +17,11 @@ import {ModalContent} from './ModalContent';
 import {FilePicker} from './FilePicker';
 import {PROGRAMS} from '../../../constants/programs';
 import {compareStudents} from '../../../utils/comparators';
-import {t} from '../../../static/text';
 
 const PROGRAM_MAPPER = [
-    {value: 'PP_5', text: t('PP_5')},
-    {value: 'PP_8', text: t('PP_8')},
-    {value: 'OP', text: t('OP')},
+    {value: 'PP_5', text: '(5)ПП'},
+    {value: 'PP_8', text: '(8)ПП'},
+    {value: 'OP', text: 'ОП'},
 ];
 
 const convertSpecToOptions = (spec) => [

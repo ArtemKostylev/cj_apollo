@@ -3,6 +3,7 @@ import { useOnClickOutside } from '~/hooks/useOnClickOutside';
 import styles from './controlSelect.module.css';
 import controlStyles from '../tableControls.module.css';
 import { Dropdown } from '~/components/dropdown';
+import type { DropdownOptionType } from '~/models/dropdownOption';
 
 export type SelectProps = {
     options?: DropdownOptionType[];

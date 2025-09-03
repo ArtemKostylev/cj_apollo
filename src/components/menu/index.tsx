@@ -1,7 +1,6 @@
 import { useUserData } from '~/hooks/useUserData';
 import { ADMIN_RESOURCES, USER_RESOURCES, SUBGROUPS_RESOURCE, GROUP_JOURNAL_RESOURCE } from '~/constants/resources';
 import { ROLES } from '~/constants/roles';
-import { t } from '~/static/text';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { useMemo } from 'react';
 import { MenuItem } from '~/components/menu/MenuItem';
@@ -45,7 +44,7 @@ export default function Menu({ onClose, isOpen }: Props) {
             <div className={styles.menuItemWrapper}>
                 <p className={styles.menuItemText}>МЕНЮ</p>
                 <div className={styles.menuCloseButton} onClick={onClose}>
-                    {t('close')}
+                    Закрыть
                 </div>
             </div>
             {Object.keys(resources)

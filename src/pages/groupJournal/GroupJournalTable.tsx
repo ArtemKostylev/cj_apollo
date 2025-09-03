@@ -2,7 +2,7 @@ import { Table } from '~/components/table';
 import type { GroupJournalTable as GroupJournalTableType } from '~/models/groupJournal';
 import { GroupJournalHeader } from './GroupJournalHeader';
 import { Periods, type AcademicYears } from '~/constants/date';
-import { SelectCell } from '~/components/cells/SelectCell';
+import { SelectCell } from '~/components/cells/selectCell';
 import type { ChangedMark } from '~/models/mark';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {

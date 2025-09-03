@@ -14,27 +14,19 @@ import {
     YEARS_NAMES,
     DATE_FORMAT
 } from '~/constants/date';
-import {
-    getCurrentAcademicMonth,
-    getCurrentAcademicYear,
-    getQuartersInMonth
-} from '~/utils/academicDate';
+import { getCurrentAcademicMonth, getCurrentAcademicYear, getQuartersInMonth } from '~/utils/academicDate';
 import { useUserData } from '~/hooks/useUserData';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { generateDatesForMonth } from './utils';
 import { JournalHeader } from './JournalHeader';
 import { NameCell } from '~/components/cells/NameCell';
-import { TableCell } from '~/components/cells/TableCell';
+import { TableCell } from '~/components/cells/tableCell';
 import type { ChangedMark } from '~/models/mark';
 import type { ChangedQuarterMark } from '~/models/quarterMark';
 import { MarkCell } from './MarkCell';
 import { QuarterMarkCell } from './QuarterMarkCell';
-import {
-    getJournal,
-    updateJournal,
-    type UpdateJournalParams
-} from '~/api/journal';
+import { getJournal, updateJournal, type UpdateJournalParams } from '~/api/journal';
 import { format } from 'date-fns';
 
 export const Journal = () => {
@@ -43,18 +35,12 @@ export const Journal = () => {
     const [month, setMonth] = useState<Months>(getCurrentAcademicMonth());
     const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
 
-    const dates = useMemo(
-        () => generateDatesForMonth(month, year),
-        [month, year]
-    );
+    const dates = useMemo(() => generateDatesForMonth(month, year), [month, year]);
     const quarters = useMemo(() => getQuartersInMonth(month), [month]);
 
     const currentVersion = userData.versions[year];
     const { courses, coursesById } = currentVersion;
-    const courseSelectOptions = useMemo(
-        () => toSelectOptions(courses, 'id', 'name'),
-        [courses]
-    );
+    const courseSelectOptions = useMemo(() => toSelectOptions(courses, 'id', 'name'), [courses]);
 
     const [course, setCourse] = useState<number>(courses[0].id);
 
@@ -67,12 +53,9 @@ export const Journal = () => {
         changedMarks.current[clientId] = mark;
     }, []);
 
-    const onQuarterMarkChange = useCallback(
-        (clientId: string, quarterMark: ChangedQuarterMark) => {
-            changedQuarterMarks.current[clientId] = quarterMark;
-        },
-        []
-    );
+    const onQuarterMarkChange = useCallback((clientId: string, quarterMark: ChangedQuarterMark) => {
+        changedQuarterMarks.current[clientId] = quarterMark;
+    }, []);
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['journal', currentVersion.teacherId, course, year, month],
@@ -120,11 +103,7 @@ export const Journal = () => {
                         setCourse(userData.versions[value].courses[0].id);
                     }}
                 />
-                <ControlButton
-                    text="Сохранить"
-                    onClick={onSave}
-                    disabled={isPending}
-                />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <Table>
@@ -132,17 +111,12 @@ export const Journal = () => {
                     <tbody>
                         {data?.map((row) => (
                             <tr key={row.relationId}>
-                                <NameCell
-                                    name={row.studentName}
-                                    archived={row.archived}
-                                />
+                                <NameCell name={row.studentName} archived={row.archived} />
                                 <TableCell>{row.class}</TableCell>
                                 {dates.map((date) => (
                                     <MarkCell
                                         key={date.toISOString()}
-                                        mark={
-                                            row.marks[format(date, DATE_FORMAT)]
-                                        }
+                                        mark={row.marks[format(date, DATE_FORMAT)]}
                                         date={date}
                                         relationId={row.relationId}
                                         onlyHours={courseHasOnlyHours}

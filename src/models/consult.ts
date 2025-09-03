@@ -1,5 +1,10 @@
-export interface ConsultDto {
+export interface ChangedConsult {
     id: number;
-    student: Student;
-    consults: Consult[] | null;
+    date: string;
+    hours: number | undefined;
+    relationId?: number | undefined;
+    class?: number | undefined;
+    program?: string | undefined;
+    subgroup?: number | undefined;
+    year: number;
 }

@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react';
-import { SelectCell } from '~/components/cells/SelectCell';
+import { SelectCell } from '~/components/cells/selectCell';
 import { getMarkColumnId } from './utils';
+import type { DropdownOptionType } from '~/models/dropdownOption';
 
 interface Props {
     tableIndex: string;

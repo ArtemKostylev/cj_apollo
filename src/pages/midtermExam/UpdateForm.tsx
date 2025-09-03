@@ -1,107 +1,105 @@
-import { useState } from 'react';
 import { useFormik } from 'formik';
-import { useMutation } from '@apollo/client';
-import { UPDATE_MIDTERM_EXAM } from '../../graphql/mutations/updateMidtermExam';
 import { FormSelect } from '~/components/formItems/formSelect';
-import { useMidtermExamContext } from './useMidtermExamContext';
 import { FormInput } from '~/components/formItems/formInput';
 import { Button } from '~/components/button';
-import { Spinner } from '~/components/spinner';
-import moment from 'moment';
 import { TextArea } from '~/components/formItems/formTextArea';
-import { DATE_FORMAT } from '../../constants/date';
 import styles from './midtermExam.module.css';
+import type { MidtermExam } from '~/models/midtermExam';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getStudents } from '~/api/student';
+import { updateMidtermExam, type UpdateMidtermExamRequest } from '~/api/midtermExam';
+import { PageLoader } from '~/components/PageLoader';
 
 interface Props {
-    data?: MidtermExam | undefined;
-    onClose: (submitted: boolean) => void;
+    midtermExam: MidtermExam | undefined;
+    teacherId: number;
+    onClose: () => void;
 }
 
-export const UpdateForm = ({ data = {} as MidtermExam, onClose }: Props) => {
-    const [update] = useMutation(UPDATE_MIDTERM_EXAM);
+export const UpdateForm = (props: Props) => {
+    const { midtermExam, teacherId, onClose } = props;
+    const queryClient = useQueryClient();
+
     const {
-        data: { select },
-        type,
-        teacherId,
-        refetch
-    } = useMidtermExamContext();
-    const [loading, setLoading] = useState(false);
+        data: students,
+        isLoading: isLoadingStudents,
+        isError: isErrorStudents
+    } = useQuery({
+        queryKey: ['students'],
+        queryFn: () =>
+            getStudents({
+                teacherId
+            })
+    });
+
+    const { mutate: updateMidtermExamMutation, isPending } = useMutation({
+        mutationFn: (values: UpdateMidtermExamRequest) => updateMidtermExam(values),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['midterm-exams'] });
+            onClose();
+        }
+    });
 
     const formik = useFormik({
-        initialValues: {
-            ...data,
-            student: data?.student?.id
-        },
-        onSubmit: (values) => {
-            setLoading(true);
-            update({
-                variables: {
-                    data: {
-                        date: moment(values.date).format(DATE_FORMAT),
-                        id: data?.id || 0,
-                        typeId: type,
-                        teacherId,
-                        studentId: values.student + '',
-                        contents: values.contents,
-                        result: values.result
-                    }
-                }
-            }).then(() => {
-                formik.resetForm();
-                setLoading(false);
-                refetch();
-                onClose(true);
+        initialValues: midtermExam ?? ({} as MidtermExam),
+        onSubmit: (values: MidtermExam) => {
+            updateMidtermExamMutation({
+                date: values.date,
+                id: midtermExam?.id || 0,
+                typeId: values.typeId,
+                teacherId,
+                studentId: values.studentId,
+                contents: values.contents,
+                result: values.result
             });
         },
         onReset: () => {
-            onClose(false);
+            onClose();
         }
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-            <div className={styles.formWrapper}>
-                {loading && <Spinner />}
-                <FormSelect
-                    name="student"
-                    value={formik.values?.student}
-                    onChange={formik.setFieldValue}
-                    label="Имя ученика"
-                    options={select}
-                    required
-                />
-                <FormInput
-                    name="date"
-                    value={
-                        formik.values.date &&
-                        moment(formik.values.date).format('YYYY-MM-DD')
-                    }
-                    onChange={formik.setFieldValue}
-                    label="Дата"
-                    type="date"
-                    required
-                />
-                <TextArea
-                    name="contents"
-                    value={formik.values.contents}
-                    onChange={formik.setFieldValue}
-                    label="Программа"
-                    required
-                    rows={7}
-                />
-                <TextArea
-                    name="result"
-                    value={formik.values.result}
-                    onChange={formik.setFieldValue}
-                    label="Результат"
-                    required
-                    rows={5}
-                />
-                <div className={styles.buttonRow}>
-                    <Button type="reset">Отмена</Button>
-                    <Button type="submit">Сохранить</Button>
+        <PageLoader loading={isLoadingStudents} error={isErrorStudents}>
+            <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
+                <div className={styles.formWrapper}>
+                    <FormSelect
+                        name="studentId"
+                        value={formik.values?.studentId}
+                        onChange={formik.setFieldValue}
+                        label="Имя ученика"
+                        options={students}
+                        required
+                    />
+                    <FormInput
+                        name="date"
+                        value={formik.values.date}
+                        onChange={formik.setFieldValue}
+                        label="Дата"
+                        type="date"
+                        required
+                    />
+                    <TextArea
+                        name="contents"
+                        value={formik.values.contents}
+                        onChange={formik.setFieldValue}
+                        label="Программа"
+                        required
+                        rows={7}
+                    />
+                    <TextArea
+                        name="result"
+                        value={formik.values.result}
+                        onChange={formik.setFieldValue}
+                        label="Результат"
+                        required
+                        rows={5}
+                    />
+                    <div className={styles.buttonRow}>
+                        <Button type="reset">Отмена</Button>
+                        <Button type="submit">Сохранить</Button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </PageLoader>
     );
 };

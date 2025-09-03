@@ -11,88 +11,72 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { PageWrapper } from '~/components/pageWrapper';
 import styles from './subgroups.module.css';
+import { PageLoader } from '~/components/PageLoader';
 
 export const Subgroups = () => {
-    const { user } = useUserData();
+    const { userData } = useUserData();
     const year = useMemo(() => getCurrentAcademicYear(), []);
 
     const changedSubgroups = useRef<Record<number, number>>({});
 
-    const currentVersion = user.versions[year];
-    const { coursesById, courses: allCourses } = currentVersion;
+    const currentVersion = userData.versions[year];
+    const { coursesById, groupCourses } = currentVersion;
 
-    const courses = allCourses.filter((it) => it.group);
-
-    const [course, setCourse] = useState(0);
-
-    const teacherId = currentVersion.id;
-    const courseId = coursesById[course].id;
+    const [course, setCourse] = useState(groupCourses[0].id);
 
     const getCourse = (course: string | number) => {
         setCourse(course as number);
     };
 
-    const { data, isPending, isError } = useQuery({
-        queryKey: ['subgroups', courseId, teacherId],
-        queryFn: () => getSubgroups(courseId, teacherId)
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['subgroups', course, currentVersion.teacherId],
+        queryFn: () => getSubgroups(course, currentVersion.teacherId)
     });
 
-    const updateSubgroups = useMutation({
+    const { mutate: updateSubgroups, isPending } = useMutation({
         mutationFn: saveSubgroups
     });
 
     const save = useCallback(() => {
-        const subgroups = Object.entries(changedSubgroups.current).map(
-            ([relationId, subgroups]) => ({
-                relationId: parseInt(relationId),
-                subgroup: subgroups
-            })
-        );
-        updateSubgroups.mutate(subgroups);
+        const subgroups = Object.entries(changedSubgroups.current).map(([relationId, subgroups]) => ({
+            relationId: parseInt(relationId),
+            subgroup: subgroups
+        }));
+        updateSubgroups(subgroups);
     }, [changedSubgroups, updateSubgroups]);
 
-    const handleSubgroupChange = useCallback(
-        (relationId: number, subgroup: number) => {
-            changedSubgroups.current[relationId] = subgroup;
-        },
-        []
-    );
-
-    if (isPending) return <LegacySpinner />;
-    if (isError) throw new Error('503');
+    const handleSubgroupChange = useCallback((relationId: number, subgroup: number) => {
+        changedSubgroups.current[relationId] = subgroup;
+    }, []);
 
     return (
         <PageWrapper>
             <TableControls>
                 <ControlSelect
-                    options={toSelectOptions(courses, 'id', 'name')}
+                    options={toSelectOptions(groupCourses, 'id', 'name')}
                     buttonText={coursesById[course].name}
                     onSelect={getCourse}
                 />
-                <ControlButton
-                    text="Сохранить"
-                    onClick={save}
-                    disabled={updateSubgroups.isPending}
-                />
+                <ControlButton text="Сохранить" onClick={save} disabled={isPending} />
             </TableControls>
-            <div className={styles.groupWrapper}>
-                {data.map((subgroup) => (
-                    <>
-                        <div className={styles.groupHeader}>
-                            Класс: {subgroup.subgroupName}
-                        </div>
-                        {subgroup.students.map((item) => (
-                            <SubgroupItem
-                                key={item.relationId}
-                                relationId={item.relationId}
-                                subgroup={item.subgroup}
-                                studentName={item.studentName}
-                                onChange={handleSubgroupChange}
-                            />
-                        ))}
-                    </>
-                ))}
-            </div>
+            <PageLoader loading={isLoading} error={isError}>
+                <div className={styles.groupWrapper}>
+                    {data?.map((subgroup) => (
+                        <>
+                            <div className={styles.groupHeader}>Класс: {subgroup.subgroupName}</div>
+                            {subgroup.students.map((item) => (
+                                <SubgroupItem
+                                    key={item.relationId}
+                                    relationId={item.relationId}
+                                    subgroup={item.subgroup}
+                                    studentName={item.studentName}
+                                    onChange={handleSubgroupChange}
+                                />
+                            ))}
+                        </>
+                    ))}
+                </div>
+            </PageLoader>
         </PageWrapper>
     );
 };

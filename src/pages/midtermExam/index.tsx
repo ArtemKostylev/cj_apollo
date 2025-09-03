@@ -1,161 +1,64 @@
-import { memo, useState } from 'react';
-import {
-    ProvideMidtermExam,
-    useMidtermExamContext
-} from './useMidtermExamContext';
-import { Spinner } from '~/components/spinner';
-import { UI_DATE_FORMAT } from '../../constants/date';
-import { useMutation } from '@apollo/client';
-import { DELETE_MIDTERM_EXAM } from '../../graphql/mutations/deleteMidtermExam';
-import { TableCell } from '~/components/cells/TableCell';
-import { TableHeader } from '~/components/table/tableHeader';
-import { NameHeader } from '~/components/table/nameHeader';
-import { Table } from '~/components/table';
+import { useState } from 'react';
 import ReactModal from 'react-modal';
 import { UpdateForm } from './UpdateForm';
-import moment from 'moment';
-import { ClassCell } from '~/components/cells/ClassCell';
-import styles from './midtermExam.module.css';
-import classNames from 'classnames';
+import { useQuery } from '@tanstack/react-query';
+import { getMidtermExamTypes } from '~/api/midtermExamType';
+import { PageWrapper } from '~/components/pageWrapper';
+import { PageLoader } from '~/components/PageLoader';
+import { MidtermExamTable } from './MidtermExamTable';
+import type { MidtermExam as IMidtermExam } from '~/models/midtermExam';
+import { getCurrentAcademicYear } from '~/utils/academicDate';
+import { useUserData } from '~/hooks/useUserData';
 
-const TableRow = memo(({ item = {} as MidtermExam }: { item: MidtermExam }) => {
-    const { onRowClick, selectedRecord } = useMidtermExamContext();
-    const className = classNames(styles.row, {
-        [styles.selected]: item.number === selectedRecord?.number
+export const MidtermExam = () => {
+    const [createFormVisible, setCreateFormVisible] = useState(false);
+    const [updateFormVisible, setUpdateFormVisible] = useState(false);
+    const [selectedRecord, setSelectedRecord] = useState<IMidtermExam | undefined>(undefined);
+    const [year, setYear] = useState(getCurrentAcademicYear());
+
+    const {
+        userData: { versions }
+    } = useUserData();
+    const currentVersion = versions[year];
+    const teacherId = currentVersion.teacherId;
+
+    const {
+        data: types,
+        isLoading: typesLoading,
+        isError: typesError
+    } = useQuery({
+        queryKey: ['midterm-exam-types'],
+        queryFn: getMidtermExamTypes
     });
 
     return (
-        <tr
-            className={className}
-            onClick={() => onRowClick(item)}
-        >
-            <TableCell>{item.number + 1}</TableCell>
-            <TableCell>{`${item.student?.surname || ''} ${
-                item.student?.name || ''
-            }`}</TableCell>
-            <ClassCell
-                classNum={item.student.class}
-                program={item.student.program}
-            />
-            <TableCell>{moment(item.date).format(UI_DATE_FORMAT)}</TableCell>
-            <TableCell>{item.type?.name || ''}</TableCell>
-            <TableCell>{item.contents}</TableCell>
-            <TableCell>{item.result}</TableCell>
-        </tr>
-    );
-});
-
-const TableHeaderRow = () => (
-    <tr>
-        <TableHeader width="60px">Номер</TableHeader>
-        <NameHeader />
-        <TableHeader width="80px">Класс</TableHeader>
-        <TableHeader width="100px">Дата</TableHeader>
-        <TableHeader width="200px">Тип</TableHeader>
-        <TableHeader>Программа</TableHeader>
-        <TableHeader>Результат</TableHeader>
-    </tr>
-);
-
-const MidtermExam = () => {
-    const {
-        loading,
-        error,
-        selectedRecord,
-        type,
-        onTypeChange,
-        year,
-        period,
-        onPeriodChange,
-        onYearChange,
-        data,
-        refetch
-    } = useMidtermExamContext();
-    const [remove] = useMutation(DELETE_MIDTERM_EXAM);
-    const [createFormVisible, setCreateFormVisible] = useState(false);
-    const [updateFormVisible, setUpdateFormVisible] = useState(false);
-
-    /*
-    const controlsConfig: TableControlsConfig = useMemo(() => {
-        return [
-            {
-                type: TableControlType.SELECT,
-                options: ,
-                text:
-                    data.types?.get(type)?.text ||
-                    ,
-                onClick: onTypeChange
-            },
-            {
-                type: TableControlType.SELECT,
-                options: PERIODS_RU,
-                text: PERIODS_RU.get(period)?.text,
-                onClick: onPeriodChange
-            },
-            {
-                type: TableControlType.SELECT,
-                options: YEARS,
-                text: YEARS.get(year)?.text,
-                onClick: onYearChange
-            },
-            {
-                type: TableControlType.BUTTON,
-                text: 'Добавить',
-                onClick: () => setCreateFormVisible(true)
-            },
-            {
-                type: TableControlType.BUTTON,
-                text: 'Изменить',
-                onClick: () => setUpdateFormVisible(true),
-                disabled: !selectedRecord
-            },
-            {
-                type: TableControlType.BUTTON,
-                text: 'Удалить',
-                onClick: async () => {
-                    if (selectedRecord?.id) {
-                        remove({ variables: { id: selectedRecord.id } }).then(
-                            refetch
-                        );
-                    }
-                },
-                disabled: !selectedRecord
-            }
-        ];
-    }, [year, type, selectedRecord, data.types]);
-    */
-
-    if (loading) return <Spinner />;
-    if (error) throw new Error('503');
-
-    return (
-        <div>
-            <Table>
-                <TableHeaderRow />
-                <tbody>
-                    {Object.values(data.table || {}).map((it, index) => (
-                        <TableRow key={it.id} item={{ ...it, number: index }} />
-                    ))}
-                </tbody>
-            </Table>
-            <ReactModal isOpen={createFormVisible}>
-                <UpdateForm onClose={() => setCreateFormVisible(false)} />
-            </ReactModal>
-            <ReactModal isOpen={updateFormVisible}>
-                <UpdateForm
-                    data={selectedRecord}
-                    onClose={(submitted: boolean) => {
-                        setUpdateFormVisible(false);
-                        submitted && refetch();
-                    }}
+        <PageWrapper>
+            <PageLoader loading={typesLoading} error={typesError}>
+                <MidtermExamTable
+                    year={year}
+                    setYear={setYear}
+                    types={types?.midtermExamTypes || []}
+                    typesById={types?.midtermExamTypesById || {}}
+                    openCreateForm={() => setCreateFormVisible(true)}
+                    openUpdateForm={() => setUpdateFormVisible(true)}
+                    selectedRecord={selectedRecord}
+                    setSelectedRecord={setSelectedRecord}
                 />
-            </ReactModal>
-        </div>
+                <ReactModal isOpen={createFormVisible}>
+                    <UpdateForm
+                        midtermExam={undefined}
+                        teacherId={teacherId}
+                        onClose={() => setCreateFormVisible(false)}
+                    />
+                </ReactModal>
+                <ReactModal isOpen={updateFormVisible}>
+                    <UpdateForm
+                        midtermExam={selectedRecord}
+                        teacherId={teacherId}
+                        onClose={() => setUpdateFormVisible(false)}
+                    />
+                </ReactModal>
+            </PageLoader>
+        </PageWrapper>
     );
 };
-
-export const MidtermExamWithContext = () => (
-    <ProvideMidtermExam>
-        <MidtermExam />
-    </ProvideMidtermExam>
-);

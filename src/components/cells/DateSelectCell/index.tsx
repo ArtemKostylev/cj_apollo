@@ -1,48 +1,36 @@
-import { useState, useCallback, ChangeEvent, useMemo } from 'react';
+import { useState, useCallback, ChangeEvent } from 'react';
 import { DateCell } from '~/components/cells/dateCell';
-import { HOURS } from '~/constants/hours';
-import { TableCell } from '~/components/cells/TableCell';
-
-export interface UpdatedConsult {
-    clientId: string;
-    id: number | undefined;
-    date: string | undefined;
-    hours: number | undefined;
-    class?: number;
-    program?: string;
-    subgroup?: number;
-    relationId?: number;
-    year: number;
-}
+import { TableCell } from '~/components/cells/tableCell';
+import type { ChangedConsult } from '~/models/consult';
+import type { AcademicYears } from '~/constants/date';
 
 type Props = {
-    clientId: string;
+    columnId: string;
     relationId?: number;
-    consultId: number | undefined;
-    year: number;
-    date: string | undefined;
-    hours: number | undefined;
+    consultId?: number;
+    class?: number;
     program?: string;
     subgroup?: number;
-    class?: number;
-    onChange: (updatedConsult: UpdatedConsult) => void;
+    year: AcademicYears;
+    date: string | undefined;
+    hours: number | undefined;
+    onChange: (columnId: string, updatedConsult: ChangedConsult) => void;
 };
 
-export const ConsultCell = (props: Props) => {
-    const { clientId, relationId, consultId, year, date, hours, onChange, program, class: classProp, subgroup } = props;
+const HOURS = [0, 1, 1.5, 2, 2.5, 3];
+
+export const DateSelectCell = (props: Props) => {
+    const { columnId, relationId, consultId, year, date, hours, onChange, class: classProp, program, subgroup } = props;
     const [hoursValue, setHoursValue] = useState(hours);
     const [dateValue, setDateValue] = useState(date);
 
-    const initialDateValue = useMemo(() => (date ? moment(date) : undefined), [date]);
-
     const onDateChange = useCallback(
-        ({ date }: { date: Moment }) => {
-            setDateValue(date.toISOString());
+        (columnId: string, value: string) => {
+            setDateValue(value);
 
-            const newData: UpdatedConsult = {
-                clientId,
-                id: consultId,
-                date: date.toISOString(),
+            const newData: ChangedConsult = {
+                id: consultId ?? 0,
+                date: value,
                 hours: hoursValue,
                 year
             };
@@ -50,14 +38,14 @@ export const ConsultCell = (props: Props) => {
             if (relationId) {
                 newData.relationId = relationId;
             } else {
-                newData.program = program;
                 newData.class = classProp;
+                newData.program = program;
                 newData.subgroup = subgroup;
             }
 
-            onChange(newData);
+            onChange(columnId, newData);
         },
-        [clientId, hoursValue, onChange]
+        [columnId, hoursValue, onChange]
     );
 
     const onHoursChange = useCallback(
@@ -65,9 +53,12 @@ export const ConsultCell = (props: Props) => {
             const value = parseFloat(event.target.value);
             setHoursValue(value);
 
-            const newData: UpdatedConsult = {
-                clientId,
-                id: consultId,
+            if (!dateValue) {
+                throw new Error('Date value is required');
+            }
+
+            const newData: ChangedConsult = {
+                id: consultId ?? 0,
                 date: dateValue,
                 hours: value,
                 year
@@ -76,28 +67,23 @@ export const ConsultCell = (props: Props) => {
             if (relationId) {
                 newData.relationId = relationId;
             } else {
-                newData.program = program;
                 newData.class = classProp;
+                newData.program = program;
                 newData.subgroup = subgroup;
             }
 
-            onChange(newData);
+            onChange(columnId, newData);
         },
-        [clientId, consultId, dateValue, relationId, year, onChange]
+        [columnId, consultId, dateValue, relationId, year, onChange]
     );
 
     return (
         <>
             <TableCell>
-                <DateCell
-                    month={moment().month()}
-                    initialValue={initialDateValue}
-                    updateDates={onDateChange}
-                    unlimited
-                />
+                <DateCell columnId={columnId} initialValue={dateValue} onChange={onDateChange} year={year} />
             </TableCell>
             <TableCell>
-                <select value={hoursValue} onChange={onHoursChange}>
+                <select disabled={!dateValue} value={hoursValue} onChange={onHoursChange}>
                     {HOURS.map((it) => (
                         <option value={it} key={it}>
                             {it}

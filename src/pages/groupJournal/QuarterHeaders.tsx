@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Periods } from '../../constants/date';
+import { Periods, Quarters, QUARTERS_RU } from '../../constants/date';
 import styles from './quarterHeader.module.css';
 import { TableHeader } from '~/components/table/tableHeader';
 
@@ -15,10 +15,10 @@ export const QuarterHeaders = memo(({ period, onlyHours }: Props) => {
         return (
             <>
                 <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
-                    I четверть
+                    {QUARTERS_RU[Quarters.FIRST]}
                 </TableHeader>
                 <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
-                    II четверть
+                    {QUARTERS_RU[Quarters.SECOND]}
                 </TableHeader>
             </>
         );
@@ -26,13 +26,13 @@ export const QuarterHeaders = memo(({ period, onlyHours }: Props) => {
     return (
         <>
             <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
-                III четверть
+                {QUARTERS_RU[Quarters.THIRD]}
             </TableHeader>
             <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
-                IV четверть
+                {QUARTERS_RU[Quarters.FOURTH]}
             </TableHeader>
             <TableHeader className={styles.quarterHeader} rowSpan={2} width="50px">
-                Годовая оценка
+                {QUARTERS_RU[Quarters.YEAR]}
             </TableHeader>
         </>
     );

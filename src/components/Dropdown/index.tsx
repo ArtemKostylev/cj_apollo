@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useOnClickOutside } from '~/hooks/useOnClickOutside';
 import styles from './dropdown.module.css';
 import { DropdownOption } from './DropdownOption';
+import type { DropdownOptionType } from '~/models/dropdownOption';
 
 type Props = {
     opened: boolean;

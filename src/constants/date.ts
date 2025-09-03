@@ -1,3 +1,5 @@
+import type { DropdownOptionType } from '~/models/dropdownOption';
+
 export enum Months {
     JANUARY = '0',
     FEBRUARY = '1',
@@ -89,39 +91,15 @@ export const YEARS: DropdownOptionType[] = [
     { value: '2025', text: YEARS_NAMES[2025] }
 ];
 
-export const MONTHS_IN_QUARTERS = {
-    [Quarters.FIRST]: [Months.SEPTEMBER, Months.OCTOBER],
-    [Quarters.SECOND]: [Months.NOVEMBER, Months.DECEMBER],
-    [Quarters.THIRD]: [Months.JANUARY, Months.FEBRUARY, Months.MARCH],
-    [Quarters.FOURTH]: [Months.APRIL, Months.MAY]
-};
-
 export const DATE_FORMAT = 'dd.MM.yyyy';
 export const DATE_FORMAT_SHORT = 'dd.MM';
 export const DATE_FORMAT_WEEKDAY = 'EEEEEE';
-export const UI_DATE_FORMAT = 'dd.MM.yyyy';
 export const WEEKEND_DAY = 6;
 
-export const SECOND_PERIOD_MONTHS = [
-    Months.JANUARY,
-    Months.FEBRUARY,
-    Months.MARCH,
-    Months.APRIL,
-    Months.MAY
-];
-export const FIRST_PERIOD_MONTHS = [
-    Months.SEPTEMBER,
-    Months.OCTOBER,
-    Months.NOVEMBER,
-    Months.DECEMBER
-];
+export const SECOND_PERIOD_MONTHS = [Months.JANUARY, Months.FEBRUARY, Months.MARCH, Months.APRIL, Months.MAY];
+export const FIRST_PERIOD_MONTHS = [Months.SEPTEMBER, Months.OCTOBER, Months.NOVEMBER, Months.DECEMBER];
 
 export const MONTHS_IN_PERIODS = {
     [Periods.FIRST]: FIRST_PERIOD_MONTHS,
     [Periods.SECOND]: SECOND_PERIOD_MONTHS
-};
-
-export const QUARTERS_IN_PERIODS = {
-    [Periods.FIRST]: [Quarters.FIRST, Quarters.SECOND],
-    [Periods.SECOND]: [Quarters.THIRD, Quarters.FOURTH, Quarters.YEAR]
 };

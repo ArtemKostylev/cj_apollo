@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
 import { ClassCell } from '~/components/cells/ClassCell';
-import { ConsultCell, type UpdatedConsult } from '~/components/cells/DateSelectCell';
+import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { LegacySpinner } from '~/components/LegacySpinner';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
@@ -14,21 +14,23 @@ import { YEARS, YEARS_NAMES, type AcademicYears } from '~/constants/date';
 import { useUserData } from '~/hooks/useUserData';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
+import type { ChangedConsult } from '~/models/consult';
+import { PageLoader } from '~/components/PageLoader';
 
 export const GroupConsult = () => {
     const { userData } = useUserData();
     const [year, setYear] = useState(getCurrentAcademicYear() as AcademicYears);
 
     const currentVersion = userData.versions[year];
-    const { coursesById, courses } = currentVersion;
+    const { coursesById, groupCourses } = currentVersion;
 
-    const [course, setCourse] = useState(courses[0].id);
-    const courseOptions = toSelectOptions(courses, 'id', 'name');
+    const [course, setCourse] = useState(groupCourses[0].id);
+    const courseOptions = toSelectOptions(groupCourses, 'id', 'name');
 
-    const changedConsults = useRef<Record<string, UpdatedConsult>>({});
+    const changedConsults = useRef<Record<string, ChangedConsult>>({});
 
-    const onCellValueChange = (consult: UpdatedConsult) => {
-        changedConsults.current[consult.clientId] = consult;
+    const onCellValueChange = (columnId: string, consult: ChangedConsult) => {
+        changedConsults.current[columnId] = consult;
     };
 
     const {
@@ -49,7 +51,7 @@ export const GroupConsult = () => {
         mutationFn: () => {
             const data = Object.values(changedConsults.current).map((consult) => ({
                 ...consult,
-                consultId: consult.id,
+                consultId: consult.id ?? undefined,
                 class: consult.class as number,
                 program: consult.program as string,
                 subgroup: consult.subgroup as number,
@@ -63,9 +65,6 @@ export const GroupConsult = () => {
             });
         }
     });
-
-    if (isConsultsLoading) return <LegacySpinner />;
-    if (isConsultsError) throw new Error('503');
 
     return (
         <PageWrapper>
@@ -82,6 +81,7 @@ export const GroupConsult = () => {
                 />
                 <ControlButton text="Сохранить" onClick={save} disabled={isUpdatePending} />
             </TableControls>
+            <PageLoader loading={isConsultsLoading} error={isConsultsError}>
             <Table>
                 <thead>
                     <tr>
@@ -96,8 +96,8 @@ export const GroupConsult = () => {
                         <tr key={group.group}>
                             <ClassCell classNum={group.class} program={group.program} subgroup={group.subgroup} />
                             {Array.from({ length: 8 }, (_, index) => (
-                                <ConsultCell
-                                    clientId={`${group}-${index}`}
+                                <DateSelectCell
+                                    columnId={`${group}-${index}`}
                                     onChange={onCellValueChange}
                                     consultId={group.consults?.[index]?.id}
                                     date={group.consults?.[index]?.date}
@@ -111,8 +111,9 @@ export const GroupConsult = () => {
                             ))}
                         </tr>
                     ))}
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            </PageLoader>
         </PageWrapper>
     );
 };

@@ -3,7 +3,6 @@ import { getConsults, updateConsults } from '../../api/consult';
 import { useUserData } from '../../hooks/useUserData';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
 import { useRef, useState } from 'react';
-import { LegacySpinner } from '~/components/LegacySpinner';
 import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -13,7 +12,9 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';
 import { NameCell_old } from '~/components/cells/NameCell_old';
-import { ConsultCell, UpdatedConsult } from '~/components/cells/DateSelectCell';
+import type { ChangedConsult } from '~/models/consult';
+import { DateSelectCell } from '~/components/cells/dateSelectCell';
+import { PageLoader } from '~/components/PageLoader';
 
 export const Consult = () => {
     const { userData } = useUserData();
@@ -25,10 +26,10 @@ export const Consult = () => {
     const [course, setCourse] = useState(courses[0].id);
     const courseOptions = toSelectOptions(courses, 'id', 'name');
 
-    const changedConsults = useRef<Record<string, UpdatedConsult>>({});
+    const changedConsults = useRef<Record<string, ChangedConsult>>({});
 
-    const onCellValueChange = (consult: UpdatedConsult) => {
-        changedConsults.current[consult.clientId] = consult;
+    const onCellValueChange = (columnId: string, consult: ChangedConsult) => {
+        changedConsults.current[columnId] = consult;
     };
 
     const {
@@ -61,9 +62,6 @@ export const Consult = () => {
         }
     });
 
-    if (isConsultsLoading) return <LegacySpinner />;
-    if (isConsultsError) throw new Error('503');
-
     return (
         <PageWrapper>
             <TableControls>
@@ -79,35 +77,37 @@ export const Consult = () => {
                 />
                 <ControlButton text="Сохранить" onClick={save} disabled={isUpdatePending} />
             </TableControls>
-            <Table>
-                <thead>
-                    <tr>
-                        <TableHeader width="30%">Имя ученика</TableHeader>
-                        <TableHeader width="70%" colSpan={32}>
-                            Дата/Часы
-                        </TableHeader>
-                    </tr>
-                </thead>
-                <tbody>
-                    {consults?.map((relation) => (
-                        <tr key={relation.id}>
-                            <NameCell_old name={relation.student?.name} surname={relation.student?.surname} />
-                            {Array.from({ length: 16 }, (_, index) => (
-                                <ConsultCell
-                                    clientId={`${relation.id}-${index}`}
-                                    onChange={onCellValueChange}
-                                    consultId={relation.consults?.[index]?.id}
-                                    date={relation.consults?.[index]?.date}
-                                    hours={relation.consults?.[index]?.hours}
-                                    relationId={relation.id}
-                                    year={year}
-                                    key={index}
-                                />
-                            ))}
+            <PageLoader loading={isConsultsLoading} error={isConsultsError}>
+                <Table>
+                    <thead>
+                        <tr>
+                            <TableHeader width="30%">Имя ученика</TableHeader>
+                            <TableHeader width="70%" colSpan={32}>
+                                Дата/Часы
+                            </TableHeader>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {consults?.map((relation) => (
+                            <tr key={relation.id}>
+                                <NameCell_old name={relation.student?.name} surname={relation.student?.surname} />
+                                {Array.from({ length: 16 }, (_, index) => (
+                                    <DateSelectCell
+                                        columnId={`${relation.id}-${index}`}
+                                        onChange={onCellValueChange}
+                                        consultId={relation.consults?.[index]?.id}
+                                        date={relation.consults?.[index]?.date}
+                                        hours={relation.consults?.[index]?.hours}
+                                        relationId={relation.id}
+                                        year={year}
+                                        key={index}
+                                    />
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </PageLoader>
         </PageWrapper>
     );
 };

@@ -1,19 +1,20 @@
 import { useState, useEffect, useRef, ReactElement, memo } from 'react';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { Dropdown } from '../../dropdown';
-import { TableCell } from '../TableCell';
+import { TableCell } from '../tableCell';
 import styles from './selectCell.module.css';
+import type { DropdownOptionType } from '~/models/dropdownOption';
 
 type Props = {
     value: string | undefined;
     options: DropdownOptionType[];
     isWeekend?: boolean;
-    onSelect: OnSelectType;
+    onSelect: (value: string) => void;
     disabled?: boolean;
-    renderItem?: (onClick: () => void) => ReactElement;
 };
 
-export const SelectCell = memo(({ value = '', options, isWeekend = false, onSelect, disabled = false }: Props) => {
+export const SelectCell = memo((props: Props) => {
+    const { value = '', options, isWeekend, onSelect, disabled } = props;
     const [dropdownValue, setDropdownValue] = useState<string>(value);
     const [opened, setOpened] = useState(false);
 

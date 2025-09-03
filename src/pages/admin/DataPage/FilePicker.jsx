@@ -4,7 +4,6 @@ import {UPLOAD_TEACHERS_FROM_FILE} from "../../../graphql/mutations/uploadTeache
 import {UPLOAD_STUDENTS_FROM_FILE} from "../../../graphql/mutations/uploadStudentsFromFile";
 import {UPLOAD_COURSES_FROM_FILE} from "../../../graphql/mutations/uploadCoursesFromFile";
 import '../../../styles/FilePicker.css';
-import {t} from '../../../static/text';
 
 export const FilePicker = ({type, close}) => {
     let title;
@@ -41,9 +40,9 @@ export const FilePicker = ({type, close}) => {
 
     return (
         <div className='filepicker_container'>
-            <h1>{t('list_loading', [title])}</h1>
+            <h1>Загрузка {title}</h1>
             <input type='file' required onChange={onChange}/>
-            <button onClick={() => close()}>{t('close')}</button>
+            <button onClick={() => close()}>Закрыть</button>
         </div>
     );
 };

@@ -1,3 +1,5 @@
+import type { DropdownOptionType } from "~/models/dropdownOption";
+
 export const QUARTER_MARKS_OPTIONS: DropdownOptionType[] = [
     { value: '', text: 'Пусто' },
     { value: '1', text: '1', short: true },

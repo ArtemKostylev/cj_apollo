@@ -1,4 +1,4 @@
-import { SelectCell } from '~/components/cells/SelectCell';
+import { SelectCell } from '~/components/cells/selectCell';
 import type { ChangedMark, Mark } from '~/models/mark';
 import { useCallback } from 'react';
 import { HOURS_OPTIONS, MARKS_OPTIONS } from '~/constants/selectCellOptions';

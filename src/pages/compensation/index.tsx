@@ -2,8 +2,8 @@ import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { useUserData } from '~/hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { MONTHS_NAMES, MONTHS_RU, YEARS, YEARS_NAMES, type AcademicYears, type Months } from '~/constants/date';
-import { academicYearToCalendarByMonth, getCurrentAcademicYear, getCurrentMonth } from '~/utils/academicDate';
-import { TableCell } from '~/components/cells/TableCell';
+import { academicYearToCalendarByMonth, getCurrentAcademicMonth, getCurrentAcademicYear } from '~/utils/academicDate';
+import { TableCell } from '~/components/cells/tableCell';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
@@ -23,7 +23,7 @@ export const Compensation = () => {
     let { userData } = useUserData();
 
     const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
-    const [month, setMonth] = useState(getCurrentMonth());
+    const [month, setMonth] = useState(getCurrentAcademicMonth());
 
     const currentVersion = useMemo(() => userData.versions[year], [userData, year]);
     const courses = currentVersion.allCourses;

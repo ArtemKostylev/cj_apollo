@@ -9,10 +9,10 @@ interface RequestDto {
 }
 
 export async function getReplacementList(params: RequestDto): Promise<ReplacementTable> {
-    const response = await httpClient.get('/replacement/list', { params });
+    const response = await httpClient.get('/replacement', { params });
     return response.data;
 }
 
 export async function updateReplacements(params: ChangedReplacement[]): Promise<void> {
-    await httpClient.post('/replacement/update', params);
+    await httpClient.post('/replacement', params);
 }
