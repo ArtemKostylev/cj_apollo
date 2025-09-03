@@ -20,7 +20,7 @@ import { toSelectOptions } from '~/utils/toSelectOptions';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { generateDatesForMonth } from './utils';
 import { JournalHeader } from './JournalHeader';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell } from '~/components/cells/nameCell';
 import { TableCell } from '~/components/cells/tableCell';
 import type { ChangedMark } from '~/models/mark';
 import type { ChangedQuarterMark } from '~/models/quarterMark';

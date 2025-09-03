@@ -16,7 +16,7 @@ import { getReplacementList, updateReplacements } from '~/api/replacement';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { PageLoader } from '~/components/PageLoader';
 import { ChangedReplacement } from '~/models/replacement';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell } from '~/components/cells/nameCell';
 import { DateCell } from '~/components/cells/dateCell';
 
 export const Compensation = () => {

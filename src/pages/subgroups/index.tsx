@@ -4,7 +4,6 @@ import { TableControls } from '~/components/tableControls';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getSubgroups, saveSubgroups } from '../../api/subgroup';
-import { LegacySpinner } from '~/components/LegacySpinner';
 import { SubgroupItem } from './SubgroupItem';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { ControlButton } from '~/components/tableControls/controlButton';

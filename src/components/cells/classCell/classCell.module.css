@@ -1,0 +1,8 @@
+.classCell {
+    text-align: center;
+    width: fit-content;
+}
+
+.archived {
+    color: gray;
+}

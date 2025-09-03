@@ -6,11 +6,6 @@
     border: 1px solid #e6eaea;
 }
 
-.classCell {
-    text-align: center;
-    width: fit-content;
-}
-
 .archived {
     color: gray;
 }

@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
-import { ClassCell } from '~/components/cells/ClassCell';
+import { ClassCell } from '~/components/cells/classCell';
 import { DateSelectCell } from '~/components/cells/dateSelectCell';
-import { LegacySpinner } from '~/components/LegacySpinner';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';

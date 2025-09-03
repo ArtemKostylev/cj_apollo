@@ -14,7 +14,7 @@ import { TableHeader } from '~/components/table/tableHeader';
 import type { ChangedConsult } from '~/models/consult';
 import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { PageLoader } from '~/components/PageLoader';
-import { NameCell } from '~/components/cells/NameCell';
+import { NameCell } from '~/components/cells/nameCell';
 
 export const Consult = () => {
     const { userData } = useUserData();
