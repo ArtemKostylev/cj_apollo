@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const Dropdown = (props: Props) => {
-    const { opened, options, onSelect, width = 'auto' } = props;
+    const { opened, options, onSelect, width = '100%' } = props;
     const [inverted, setInverted] = useState(false);
     const [visible, setVisible] = useState(opened);
 
@@ -23,8 +23,7 @@ export const Dropdown = (props: Props) => {
 
     useEffect(() => {
         const bounds = (ref.current as any).getBoundingClientRect();
-        const height =
-            window.innerHeight || document.documentElement.clientHeight;
+        const height = window.innerHeight || document.documentElement.clientHeight;
 
         if (bounds.bottom > height) {
             setInverted(true);
@@ -43,11 +42,7 @@ export const Dropdown = (props: Props) => {
     return (
         <div className={className} style={{ width }} ref={ref}>
             {options.map((option) => (
-                <DropdownOption
-                    short={option.short}
-                    key={option.value}
-                    onClick={() => onSelect(option.value)}
-                >
+                <DropdownOption short={option.short} key={option.value} onClick={() => onSelect(option.value)}>
                     {option.text}
                 </DropdownOption>
             ))}

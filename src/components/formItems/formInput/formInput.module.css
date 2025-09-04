@@ -1,7 +1,7 @@
 .formInput {
     text-indent: 5px;
     line-height: 3rem;
-    font-size: 1.3rem;
+    font-size: 20px;
     outline: none;
     border: none;
     width: 70%;
@@ -10,5 +10,5 @@
 }
 
 .formInput:-webkit-autofill::first-line {
-    font-size: 1.3rem;
+    font-size: 20px;
 }

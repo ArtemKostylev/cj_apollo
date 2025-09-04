@@ -32,7 +32,7 @@
 .input {
     text-indent: 10px;
     line-height: 3rem;
-    font-size: 1.3rem;
+    font-size: 20px;
     outline: none;
     border: none;
     width: 70%;
@@ -41,5 +41,5 @@
 }
 
 .input:-webkit-autofill::first-line {
-    font-size: 1.3rem;
+    font-size: 20px;
 }
