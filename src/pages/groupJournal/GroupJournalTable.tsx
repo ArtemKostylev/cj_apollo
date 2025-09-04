@@ -20,6 +20,7 @@ import styles from './groupJournal.module.css';
 import { NameCell } from '~/components/cells/nameCell';
 import { MarkCell } from './MarkCell';
 import { GroupName } from './GroupName';
+import { toast } from 'react-hot-toast';
 
 interface Props {
     table: GroupJournalTableType;
@@ -87,8 +88,8 @@ export const GroupJournalTable = memo((props: Props) => {
             const actualDate = dates.current[month][index];
 
             if (!originalDate && !actualDate) {
+                toast.error('Не заполнена дата оценки');
                 throw new Error('Original date and actual date are not set');
-                // TODO: show notification
             }
 
             const row = table.rows[relationId];

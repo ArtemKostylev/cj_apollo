@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const NameHeader = ({ rowSpan }: Props) => (
-    <TableHeader className={styles.header} rowSpan={rowSpan}>
+    <TableHeader className={styles.header} rowSpan={rowSpan} width="240px">
         Имя ученика
     </TableHeader>
 );

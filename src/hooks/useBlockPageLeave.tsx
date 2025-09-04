@@ -13,6 +13,7 @@ export const useBlockPageLeave = (changedData: Record<any, any> | string) => {
                 'В журнале остались несохраненные изменения. Вы уверены, что хотите покинуть страницу?'
             );
             return !shouldLeave;
-        }
+        },
+        enableBeforeUnload: false
     });
 };

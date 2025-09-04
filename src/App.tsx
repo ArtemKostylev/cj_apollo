@@ -8,6 +8,7 @@ import { RouterProvider } from '@tanstack/react-router';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './styles/index.css';
+import { Toaster } from 'react-hot-toast';
 
 const authLink = setContext((_, { headers }) => {
     const user = JSON.parse(localStorage.getItem(USER_ALIAS) as string);
@@ -47,6 +48,21 @@ export default function App() {
             <QueryClientProvider client={queryClient}>
                 <UserDataProvider>
                     <InnerApp />
+                    <Toaster
+                        position="bottom-center"
+                        toastOptions={{
+                            style: {
+                                backgroundColor: '#FF7C01',
+                                color: 'white'
+                            },
+                            error: {
+                                iconTheme: {
+                                    primary: 'white',
+                                    secondary: '#FF7C01'
+                                }
+                            }
+                        }}
+                    />
                 </UserDataProvider>
             </QueryClientProvider>
         </ApolloProvider>

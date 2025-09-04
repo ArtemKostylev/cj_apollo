@@ -10,7 +10,6 @@ interface Props {
 
 export const JournalHeader = (props: Props) => {
     const { dates, quarters } = props;
-    debugger;
 
     return (
         <thead>
