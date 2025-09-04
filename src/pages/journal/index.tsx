@@ -28,6 +28,7 @@ import { MarkCell } from './MarkCell';
 import { QuarterMarkCell } from './QuarterMarkCell';
 import { getJournal, updateJournal, type UpdateJournalParams } from '~/api/journal';
 import { format } from 'date-fns';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const Journal = () => {
     const { userData } = useUserData();
@@ -48,6 +49,8 @@ export const Journal = () => {
 
     const changedMarks = useRef<Record<string, ChangedMark>>({});
     const changedQuarterMarks = useRef<Record<string, ChangedQuarterMark>>({});
+    useBlockPageLeave(changedMarks.current);
+    useBlockPageLeave(changedQuarterMarks.current);
 
     const onMarkChange = useCallback((clientId: string, mark: ChangedMark) => {
         changedMarks.current[clientId] = mark;
@@ -70,7 +73,11 @@ export const Journal = () => {
     });
 
     const { mutate: updateJournalMt, isPending } = useMutation({
-        mutationFn: (params: UpdateJournalParams) => updateJournal(params)
+        mutationFn: (params: UpdateJournalParams) => updateJournal(params),
+        onSuccess: () => {
+            changedMarks.current = {};
+            changedQuarterMarks.current = {};
+        }
     });
 
     const onSave = useCallback(() => {

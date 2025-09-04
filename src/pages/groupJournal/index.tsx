@@ -13,6 +13,7 @@ import { toSelectOptions } from '~/utils/toSelectOptions';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { getGroupJournal, updateJournal, type UpdateJournalParams } from '~/api/journal';
 import { GroupJournalTable } from './GroupJournalTable';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const GroupJournal = () => {
     const { userData } = useUserData();
@@ -22,6 +23,8 @@ export const GroupJournal = () => {
 
     const changedMarks = useRef<Record<string, ChangedMark>>({});
     const changedQuarterMarks = useRef<Record<string, ChangedQuarterMark>>({});
+    useBlockPageLeave(changedMarks.current);
+    useBlockPageLeave(changedQuarterMarks.current);
 
     const currentVersion = useMemo(() => userData.versions[year], [userData.versions, year]);
     const { groupCourses: courses, coursesById } = currentVersion;
@@ -46,7 +49,11 @@ export const GroupJournal = () => {
     });
 
     const { mutate: updateJournalMt, isPending } = useMutation({
-        mutationFn: (params: UpdateJournalParams) => updateJournal(params)
+        mutationFn: (params: UpdateJournalParams) => updateJournal(params),
+        onSuccess: () => {
+            changedMarks.current = {};
+            changedQuarterMarks.current = {};
+        }
     });
 
     const onSave = useCallback(() => {
@@ -54,8 +61,6 @@ export const GroupJournal = () => {
             marks: Object.values(changedMarks.current),
             quarterMarks: Object.values(changedQuarterMarks.current)
         });
-        changedMarks.current = {};
-        changedQuarterMarks.current = {};
     }, [updateJournalMt]);
 
     const onMarkChange = useCallback((columnId: string, mark: ChangedMark) => {

@@ -2,7 +2,7 @@ import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { useUserData } from '~/hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { MONTHS_NAMES, MONTHS_RU, YEARS, YEARS_NAMES, type AcademicYears, type Months } from '~/constants/date';
-import { academicYearToCalendarByMonth, getCurrentAcademicMonth, getCurrentAcademicYear } from '~/utils/academicDate';
+import { getCurrentAcademicMonth, getCurrentAcademicYear } from '~/utils/academicDate';
 import { TableCell } from '~/components/cells/tableCell';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -18,6 +18,7 @@ import { PageLoader } from '~/components/PageLoader';
 import { ChangedReplacement } from '~/models/replacement';
 import { NameCell } from '~/components/cells/nameCell';
 import { DateCell } from '~/components/cells/dateCell';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const Compensation = () => {
     let { userData } = useUserData();
@@ -29,9 +30,8 @@ export const Compensation = () => {
     const courses = currentVersion.allCourses;
     const coursesById = currentVersion.coursesById;
 
-    const calendarYear = academicYearToCalendarByMonth(year, month);
-
     const changedReplacements = useRef<Record<number, ChangedReplacement>>({});
+    useBlockPageLeave(changedReplacements.current);
 
     const [course, setCourse] = useState(courses[0].id);
 
@@ -59,7 +59,10 @@ export const Compensation = () => {
     });
 
     const { mutate: updateReplacementsMutation, isPending } = useMutation({
-        mutationFn: updateReplacements
+        mutationFn: updateReplacements,
+        onSuccess: () => {
+            changedReplacements.current = {};
+        }
     });
 
     const save = useCallback(() => {

@@ -1,5 +1,5 @@
 import { ForwardedRef, MouseEventHandler, forwardRef, memo } from 'react';
-import styles from './dateHeader.module.css';
+import styles from './dateCell.module.css';
 import { EMPTY_DATE } from './const';
 import { format } from 'date-fns';
 import { DATE_FORMAT_SHORT } from '~/constants/date';

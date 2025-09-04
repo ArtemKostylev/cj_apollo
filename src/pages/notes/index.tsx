@@ -12,6 +12,7 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { PageLoader } from '~/components/PageLoader';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const Notes = () => {
     const { userData } = useUserData();
@@ -23,6 +24,8 @@ export const Notes = () => {
     const [course, setCourse] = useState(allCourses[0].id);
 
     const [value, setValue] = useState('');
+
+    useBlockPageLeave(value);
 
     const onYearChange = useCallback((year: string | number) => {
         setYear(year as AcademicYears);

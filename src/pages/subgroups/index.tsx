@@ -11,12 +11,14 @@ import { toSelectOptions } from '~/utils/toSelectOptions';
 import { PageWrapper } from '~/components/pageWrapper';
 import styles from './subgroups.module.css';
 import { PageLoader } from '~/components/PageLoader';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const Subgroups = () => {
     const { userData } = useUserData();
     const year = useMemo(() => getCurrentAcademicYear(), []);
 
     const changedSubgroups = useRef<Record<number, number>>({});
+    useBlockPageLeave(changedSubgroups.current);
 
     const currentVersion = userData.versions[year];
     const { coursesById, groupCourses } = currentVersion;
@@ -33,7 +35,10 @@ export const Subgroups = () => {
     });
 
     const { mutate: updateSubgroups, isPending } = useMutation({
-        mutationFn: saveSubgroups
+        mutationFn: saveSubgroups,
+        onSuccess: () => {
+            changedSubgroups.current = {};
+        }
     });
 
     const save = useCallback(() => {

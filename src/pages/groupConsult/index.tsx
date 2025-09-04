@@ -15,6 +15,7 @@ import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import type { ChangedConsult } from '~/models/consult';
 import { PageLoader } from '~/components/PageLoader';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const GroupConsult = () => {
     const { userData } = useUserData();
@@ -27,6 +28,7 @@ export const GroupConsult = () => {
     const courseOptions = toSelectOptions(groupCourses, 'id', 'name');
 
     const changedConsults = useRef<Record<string, ChangedConsult>>({});
+    useBlockPageLeave(changedConsults.current);
 
     const onCellValueChange = (columnId: string, consult: ChangedConsult) => {
         changedConsults.current[columnId] = consult;
@@ -62,6 +64,9 @@ export const GroupConsult = () => {
                 course,
                 consults: data
             });
+        },
+        onSuccess: () => {
+            changedConsults.current = {};
         }
     });
 

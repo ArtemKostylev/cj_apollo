@@ -15,6 +15,7 @@ import type { ChangedConsult } from '~/models/consult';
 import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { PageLoader } from '~/components/PageLoader';
 import { NameCell } from '~/components/cells/nameCell';
+import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 
 export const Consult = () => {
     const { userData } = useUserData();
@@ -27,6 +28,7 @@ export const Consult = () => {
     const courseOptions = toSelectOptions(courses, 'id', 'name');
 
     const changedConsults = useRef<Record<string, ChangedConsult>>({});
+    useBlockPageLeave(changedConsults.current);
 
     const onCellValueChange = (columnId: string, consult: ChangedConsult) => {
         changedConsults.current[columnId] = consult;
@@ -59,6 +61,9 @@ export const Consult = () => {
             return updateConsults({
                 consults: data
             });
+        },
+        onSuccess: () => {
+            changedConsults.current = {};
         }
     });
 
