@@ -1,4 +1,4 @@
-import type { DropdownOptionType } from "~/models/dropdownOption";
+import type { DropdownOptionType } from '~/models/dropdownOption';
 
 export const QUARTER_MARKS_OPTIONS: DropdownOptionType[] = [
     { value: '', text: 'Пусто' },
@@ -13,6 +13,7 @@ export const MARKS_OPTIONS: DropdownOptionType[] = [
     { value: '', text: 'Пусто' },
     { value: '.', text: '✓', short: true },
     { value: '2', text: '2', short: true },
+    { value: '3-', text: '3-', short: true },
     { value: '3', text: '3', short: true },
     { value: '4-', text: '4-', short: true },
     { value: '4', text: '4', short: true },
@@ -20,7 +21,7 @@ export const MARKS_OPTIONS: DropdownOptionType[] = [
     { value: '5-', text: '5-', short: true },
     { value: '5', text: '5', short: true },
     { value: '5+', text: '5+', short: true },
-    { value: 'Б', text: 'Б', short: true }
+    { value: 'Б', text: 'Б' }
 ];
 
 export const HOURS_OPTIONS: DropdownOptionType[] = [
