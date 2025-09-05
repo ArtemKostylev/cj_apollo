@@ -29,12 +29,15 @@ import { QuarterMarkCell } from './QuarterMarkCell';
 import { getJournal, updateJournal, type UpdateJournalParams } from '~/api/journal';
 import { format } from 'date-fns';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
+import { useFilter } from '~/hooks/useFilter';
 
 export const Journal = () => {
     const { userData } = useUserData();
 
-    const [month, setMonth] = useState<Months>(getCurrentAcademicMonth());
-    const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
+    const [month, setMonth] = useFilter<Months>(getCurrentAcademicMonth(), 'month', (value) => value as Months);
+    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (value) => {
+        return Number(value) as AcademicYears;
+    });
 
     const dates = useMemo(() => generateDatesForMonth(month, year), [month, year]);
     const quarters = useMemo(() => getQuartersInMonth(month), [month]);
@@ -43,7 +46,7 @@ export const Journal = () => {
     const { courses, coursesById } = currentVersion;
     const courseSelectOptions = useMemo(() => toSelectOptions(courses, 'id', 'name'), [courses]);
 
-    const [course, setCourse] = useState<number>(courses[0].id);
+    const [course, setCourse] = useFilter<number>(courses[0].id, 'course', Number);
 
     const courseHasOnlyHours = !!coursesById[course].onlyHours;
 
@@ -106,7 +109,7 @@ export const Journal = () => {
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
                     onSelect={(value) => {
-                        setYear(value as AcademicYears);
+                        setYear(Number(value) as AcademicYears);
                         setCourse(userData.versions[value].courses[0].id);
                     }}
                 />

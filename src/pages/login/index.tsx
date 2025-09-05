@@ -21,7 +21,7 @@ export const Login = () => {
         onSuccess: (data) => {
             logIn(data);
             setTimeout(() => {
-                navigate({ to: search.redirect || IndexRoute.fullPath });
+                navigate({ to: search.redirect || IndexRoute.fullPath, search: {} });
             }, 200);
         },
         onError: (_) => {

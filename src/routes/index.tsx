@@ -13,16 +13,12 @@ export const Route = createFileRoute('/')({
             if (role === ROLES.TEACHER) {
                 return redirect({
                     to: JournalRoute.fullPath,
-                    search: {
-                        redirect: location.href
-                    }
+                    search: {}
                 });
             } else if (role === ROLES.ADMIN) {
                 return redirect({
                     to: DataRoute.fullPath,
-                    search: {
-                        redirect: location.href
-                    }
+                    search: {}
                 });
             }
         } else {
