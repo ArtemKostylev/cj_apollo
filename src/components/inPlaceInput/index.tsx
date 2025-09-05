@@ -1,23 +1,28 @@
 import { ChangeEvent, useState } from 'react';
 import { FaCheckCircle, FaPen, FaTrashAlt } from 'react-icons/fa';
-import styles from './midtermExamInput.module.css';
-import { MidtermExamType } from '~/models/midtermExamType';
-import { deleteMidtermExamType, updateMidtermExamType } from '~/api/midtermExamType';
+import styles from './inPlaceInput.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+interface InPlaceInputInitialData {
+    id: number;
+    name: string;
+}
+
 interface Props {
-    initialData: MidtermExamType | undefined;
+    initialData: InPlaceInputInitialData | undefined;
+    updateMutationFn: (data: InPlaceInputInitialData) => Promise<void>;
+    deleteMutationFn: (id: number) => Promise<void>;
     isEnabled: boolean;
     placeholder: string;
 }
 
-export const Input = (props: Props) => {
-    const { initialData, isEnabled, placeholder } = props;
+export const InPlaceInput = (props: Props) => {
+    const { initialData, isEnabled, placeholder, updateMutationFn, deleteMutationFn } = props;
 
     const queryClient = useQueryClient();
 
     const { mutate: update, isPending: isUpdating } = useMutation({
-        mutationFn: updateMidtermExamType,
+        mutationFn: updateMutationFn,
         onSuccess: () => {
             setEnabled(false);
             queryClient.invalidateQueries({ queryKey: ['midtermExamType'] });
@@ -25,7 +30,7 @@ export const Input = (props: Props) => {
     });
 
     const { mutate: remove, isPending: isDeleting } = useMutation({
-        mutationFn: deleteMidtermExamType,
+        mutationFn: deleteMutationFn,
         onSuccess: () => {
             setEnabled(false);
             queryClient.invalidateQueries({ queryKey: ['midtermExamType'] });

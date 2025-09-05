@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ROLES } from '~/constants/roles';
 import { beforeProtectedRouteLoad } from '~/utils/beforeProtectedRouteLoad';
-import { Reports } from '~/pages/admin/ReportsPage/Reports';
+import { Reports } from '~/pages/reports';
 
 export const Route = createFileRoute('/_main/reports')({
     component: Reports,
