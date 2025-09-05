@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
 import { ClassCell } from '~/components/cells/classCell';
 import { DateSelectCell } from '~/components/cells/dateSelectCell';
@@ -16,15 +16,16 @@ import { toSelectOptions } from '~/utils/toSelectOptions';
 import type { ChangedConsult } from '~/models/consult';
 import { PageLoader } from '~/components/PageLoader';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
+import { useFilter } from '~/hooks/useFilter';
 
 export const GroupConsult = () => {
     const { userData } = useUserData();
-    const [year, setYear] = useState(getCurrentAcademicYear() as AcademicYears);
+    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (val) => Number(val) as AcademicYears);
 
     const currentVersion = userData.versions[year];
     const { coursesById, groupCourses } = currentVersion;
 
-    const [course, setCourse] = useState(groupCourses[0].id);
+    const [course, setCourse] = useFilter<number>(groupCourses[0].id, 'course', (val) => Number(val) as number);
     const courseOptions = toSelectOptions(groupCourses, 'id', 'name');
 
     const changedConsults = useRef<Record<string, ChangedConsult>>({});

@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getConsults, updateConsults } from '../../api/consult';
 import { useUserData } from '../../hooks/useUserData';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -16,15 +16,20 @@ import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { PageLoader } from '~/components/PageLoader';
 import { NameCell } from '~/components/cells/nameCell';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
+import { useFilter } from '~/hooks/useFilter';
 
 export const Consult = () => {
     const { userData } = useUserData();
-    const [year, setYear] = useState(getCurrentAcademicYear() as AcademicYears);
+    const [year, setYear] = useFilter<AcademicYears>(
+        getCurrentAcademicYear(),
+        'year',
+        (val) => Number(val) as AcademicYears
+    );
 
     const currentVersion = userData.versions[year];
     const { coursesById, courses } = currentVersion;
 
-    const [course, setCourse] = useState(courses[0].id);
+    const [course, setCourse] = useFilter<number>(courses[0].id, 'course', (val) => Number(val) as number);
     const courseOptions = toSelectOptions(courses, 'id', 'name');
 
     const changedConsults = useRef<Record<string, ChangedConsult>>({});

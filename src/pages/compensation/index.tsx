@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useMemo, useRef } from 'react';
 import { useUserData } from '~/hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { MONTHS_NAMES, MONTHS_RU, YEARS, YEARS_NAMES, type AcademicYears, type Months } from '~/constants/date';
@@ -19,12 +19,17 @@ import { ChangedReplacement } from '~/models/replacement';
 import { NameCell } from '~/components/cells/nameCell';
 import { DateCell } from '~/components/cells/dateCell';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
+import { useFilter } from '~/hooks/useFilter';
 
 export const Compensation = () => {
     let { userData } = useUserData();
 
-    const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
-    const [month, setMonth] = useState(getCurrentAcademicMonth());
+    const [year, setYear] = useFilter<AcademicYears>(
+        getCurrentAcademicYear(),
+        'year',
+        (val) => Number(val) as AcademicYears
+    );
+    const [month, setMonth] = useFilter<Months>(getCurrentAcademicMonth(), 'month', (val) => val as Months);
 
     const currentVersion = useMemo(() => userData.versions[year], [userData, year]);
     const courses = currentVersion.allCourses;
@@ -33,7 +38,7 @@ export const Compensation = () => {
     const changedReplacements = useRef<Record<number, ChangedReplacement>>({});
     useBlockPageLeave(changedReplacements.current);
 
-    const [course, setCourse] = useState(courses[0].id);
+    const [course, setCourse] = useFilter<number>(courses[0].id, 'course', (val) => Number(val) as number);
 
     const onYearChange = useCallback((year: string | number) => {
         setYear(year as AcademicYears);

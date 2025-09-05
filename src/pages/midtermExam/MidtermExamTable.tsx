@@ -1,9 +1,9 @@
 import { Table } from '~/components/table';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { PageLoader } from '~/components/PageLoader';
 import { useUserData } from '~/hooks/useUserData';
 import type { MidtermExamType } from '~/models/midtermExamType';
-import { getCurrentAcademicPeriod, getCurrentAcademicYear } from '~/utils/academicDate';
+import { getCurrentAcademicPeriod } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { TableControls } from '~/components/tableControls';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -15,6 +15,7 @@ import { NameHeader } from '~/components/table/nameHeader';
 import type { MidtermExam } from '~/models/midtermExam';
 import { deleteMidtermExam, getMidtermExams } from '~/api/midtermExam';
 import { MidtermExamRow } from './MidtermExamRow';
+import { useFilter } from '~/hooks/useFilter';
 
 interface Props {
     types: MidtermExamType[];
@@ -29,8 +30,8 @@ interface Props {
 
 export const MidtermExamTable = (props: Props) => {
     const { types, typesById, selectedRecord, year, setYear, setSelectedRecord, openCreateForm, openUpdateForm } = props;
-    const [period, setPeriod] = useState(getCurrentAcademicPeriod());
-    const [type, setType] = useState(types[0].id);
+    const [period, setPeriod] = useFilter<Periods>(getCurrentAcademicPeriod(), 'period', (val) => val as Periods);
+    const [type, setType] = useFilter<number>(types[0].id, 'type', (val) => Number(val) as number);
 
     const {
         userData: { versions }

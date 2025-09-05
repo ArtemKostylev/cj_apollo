@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useUserData } from '../../hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
@@ -12,10 +12,11 @@ import { PageWrapper } from '~/components/pageWrapper';
 import styles from './subgroups.module.css';
 import { PageLoader } from '~/components/PageLoader';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
+import { useFilter } from '~/hooks/useFilter';
 
 export const Subgroups = () => {
     const { userData } = useUserData();
-    const year = useMemo(() => getCurrentAcademicYear(), []);
+    const year = getCurrentAcademicYear();
 
     const changedSubgroups = useRef<Record<number, number>>({});
     useBlockPageLeave(changedSubgroups.current);
@@ -23,7 +24,7 @@ export const Subgroups = () => {
     const currentVersion = userData.versions[year];
     const { coursesById, groupCourses } = currentVersion;
 
-    const [course, setCourse] = useState(groupCourses[0].id);
+    const [course, setCourse] = useFilter<number>(groupCourses[0].id, 'course', (val) => Number(val) as number);
 
     const getCourse = (course: string | number) => {
         setCourse(course as number);

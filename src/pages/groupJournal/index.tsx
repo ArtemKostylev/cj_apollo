@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { PageLoader } from '~/components/PageLoader';
 import { PageWrapper } from '~/components/pageWrapper';
 import { TableControls } from '~/components/tableControls';
@@ -14,12 +14,13 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { getGroupJournal, updateJournal, type UpdateJournalParams } from '~/api/journal';
 import { GroupJournalTable } from './GroupJournalTable';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
+import { useFilter } from '~/hooks/useFilter';
 
 export const GroupJournal = () => {
     const { userData } = useUserData();
 
-    const [year, setYear] = useState<AcademicYears>(getCurrentAcademicYear());
-    const [period, setPeriod] = useState<Periods>(getCurrentAcademicPeriod());
+    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (val) => Number(val) as AcademicYears);
+    const [period, setPeriod] = useFilter<Periods>(getCurrentAcademicPeriod(), 'period', (val) => val as Periods);
 
     const changedMarks = useRef<Record<string, ChangedMark>>({});
     const changedQuarterMarks = useRef<Record<string, ChangedQuarterMark>>({});
@@ -30,7 +31,7 @@ export const GroupJournal = () => {
     const { groupCourses: courses, coursesById } = currentVersion;
     const courseSelectOptions = useMemo(() => toSelectOptions(courses, 'id', 'name'), [courses]);
 
-    const [course, setCourse] = useState<number>(courses[0].id);
+    const [course, setCourse] = useFilter<number>(courses[0].id, 'course', (val) => Number(val) as number);
 
     const courseHasOnlyHours = useMemo(() => {
         return !!coursesById[course].onlyHours;

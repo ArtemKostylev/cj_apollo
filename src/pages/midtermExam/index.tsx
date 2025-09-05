@@ -9,12 +9,14 @@ import { MidtermExamTable } from './MidtermExamTable';
 import type { MidtermExam as IMidtermExam } from '~/models/midtermExam';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { useUserData } from '~/hooks/useUserData';
+import { useFilter } from '~/hooks/useFilter';
+import type { AcademicYears } from '~/constants/date';
 
 export const MidtermExam = () => {
     const [createFormVisible, setCreateFormVisible] = useState(false);
     const [updateFormVisible, setUpdateFormVisible] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState<IMidtermExam | undefined>(undefined);
-    const [year, setYear] = useState(getCurrentAcademicYear());
+    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (val) => Number(val) as AcademicYears);
 
     const {
         userData: { versions }
