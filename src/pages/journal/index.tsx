@@ -92,6 +92,8 @@ export const Journal = () => {
         changedQuarterMarks.current = {};
     }, [updateJournalMt]);
 
+    const saveButtonDisabled = isPending || isLoading;
+
     return (
         <PageWrapper>
             <TableControls>
@@ -113,7 +115,7 @@ export const Journal = () => {
                         setCourse(userData.versions[value].courses[0].id);
                     }}
                 />
-                <ControlButton text="Сохранить" onClick={onSave} disabled={isPending} />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={saveButtonDisabled} loading={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <Table>

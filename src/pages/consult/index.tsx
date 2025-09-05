@@ -72,6 +72,8 @@ export const Consult = () => {
         }
     });
 
+    const saveButtonDisabled = isUpdatePending || isConsultsLoading;
+
     return (
         <PageWrapper>
             <TableControls>
@@ -85,7 +87,7 @@ export const Consult = () => {
                     buttonText={YEARS_NAMES[year]}
                     onSelect={(value) => setYear(value as AcademicYears)}
                 />
-                <ControlButton text="Сохранить" onClick={save} disabled={isUpdatePending} />
+                <ControlButton text="Сохранить" onClick={save} disabled={saveButtonDisabled} loading={isUpdatePending} />
             </TableControls>
             <PageLoader loading={isConsultsLoading} error={isConsultsError}>
                 <Table>

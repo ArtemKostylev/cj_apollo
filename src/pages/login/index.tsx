@@ -75,7 +75,7 @@ export const Login = () => {
                     />
                 </div>
                 {errorMessage && <span>{errorMessage}</span>}
-                <Button type="submit" disabled={isPending}>
+                <Button type="submit" disabled={isPending} loading={isPending}>
                     Войти
                 </Button>
             </form>

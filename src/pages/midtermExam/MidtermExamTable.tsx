@@ -81,7 +81,7 @@ export const MidtermExamTable = (props: Props) => {
                 />
                 <ControlButton text="Добавить" onClick={openCreateForm} />
                 <ControlButton text="Изменить" onClick={openUpdateForm} disabled={!selectedRecord} />
-                <ControlButton text="Удалить" onClick={onDeleteClick} disabled={!selectedRecord || isDeleting} />
+                <ControlButton text="Удалить" onClick={onDeleteClick} disabled={!selectedRecord || isDeleting} loading={isDeleting} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <Table>

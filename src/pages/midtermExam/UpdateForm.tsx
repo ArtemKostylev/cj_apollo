@@ -96,7 +96,9 @@ export const UpdateForm = (props: Props) => {
                     />
                     <div className={styles.buttonRow}>
                         <Button type="reset">Отмена</Button>
-                        <Button type="submit">Сохранить</Button>
+                        <Button type="submit" loading={isPending} disabled={isPending}>
+                            Сохранить
+                        </Button>
                     </div>
                 </div>
             </form>

@@ -54,6 +54,8 @@ export const Subgroups = () => {
         changedSubgroups.current[relationId] = subgroup;
     }, []);
 
+    const saveButtonDisabled = isPending || isLoading;
+
     return (
         <PageWrapper>
             <TableControls>
@@ -62,7 +64,7 @@ export const Subgroups = () => {
                     buttonText={coursesById[course].name}
                     onSelect={getCourse}
                 />
-                <ControlButton text="Сохранить" onClick={save} disabled={isPending} />
+                <ControlButton text="Сохранить" onClick={save} disabled={saveButtonDisabled} loading={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <div className={styles.groupWrapper}>

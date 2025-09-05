@@ -81,6 +81,8 @@ export const GroupJournal = () => {
         }
     }, []);
 
+    const saveButtonDisabled = isPending || isLoading;
+
     return (
         <PageWrapper>
             <TableControls>
@@ -102,7 +104,7 @@ export const GroupJournal = () => {
                         setCourse(userData.versions[value].groupCourses[0].id);
                     }}
                 />
-                <ControlButton text="Сохранить" onClick={onSave} disabled={isPending} />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={saveButtonDisabled} loading={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 {data?.map((table, index) => (

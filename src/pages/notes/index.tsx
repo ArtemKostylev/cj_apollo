@@ -70,6 +70,8 @@ export const Notes = () => {
         data?.text && setValue(data?.text);
     }, [data?.text]);
 
+    const saveButtonDisabled = isPending || isLoading;
+
     return (
         <PageWrapper>
             <TableControls>
@@ -79,7 +81,7 @@ export const Notes = () => {
                     onSelect={onCourseChange}
                 />
                 <ControlSelect options={YEARS} buttonText={YEARS_NAMES[year]} onSelect={onYearChange} />
-                <ControlButton text="Сохранить" onClick={onSave} disabled={isPending} />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={saveButtonDisabled} loading={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <textarea

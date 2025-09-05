@@ -1,0 +1,22 @@
+.default {
+    color: var(--color-asphalt-gray);
+    background-color: var(--color-shaded-white);
+}
+
+.default:hover {
+    background-color: var(--color-teeth-white);
+    box-shadow: 0 0 0 2px var(--color-cloud-gray);
+}
+
+.control {
+    color: var(--color-asphalt-gray);
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.control:hover {
+    background-color: var(--color-light-gray);
+}

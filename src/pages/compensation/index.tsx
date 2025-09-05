@@ -89,6 +89,8 @@ export const Compensation = () => {
         };
     }, []);
 
+    const saveButtonDisabled = isPending || isLoading;
+
     return (
         <PageWrapper>
             <TableControls>
@@ -99,7 +101,7 @@ export const Compensation = () => {
                     onSelect={onCourseChange}
                 />
                 <ControlSelect options={YEARS} buttonText={YEARS_NAMES[year]} onSelect={onYearChange} />
-                <ControlButton text="Сохранить" onClick={save} disabled={isPending} />
+                <ControlButton text="Сохранить" onClick={save} disabled={saveButtonDisabled} loading={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <Table>
