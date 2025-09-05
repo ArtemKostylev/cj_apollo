@@ -14,13 +14,17 @@ import { useUserData } from '~/hooks/useUserData';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import type { ChangedConsult } from '~/models/consult';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 import { useFilter } from '~/hooks/useFilter';
 
 export const GroupConsult = () => {
     const { userData } = useUserData();
-    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (val) => Number(val) as AcademicYears);
+    const [year, setYear] = useFilter<AcademicYears>(
+        getCurrentAcademicYear(),
+        'year',
+        (val) => Number(val) as AcademicYears
+    );
 
     const currentVersion = userData.versions[year];
     const { coursesById, groupCourses } = currentVersion;
@@ -86,38 +90,43 @@ export const GroupConsult = () => {
                     buttonText={YEARS_NAMES[year]}
                     onSelect={(value) => setYear(value as AcademicYears)}
                 />
-                <ControlButton text="Сохранить" onClick={save} disabled={saveButtonDisabled} loading={isUpdatePending} />
+                <ControlButton
+                    text="Сохранить"
+                    onClick={save}
+                    disabled={saveButtonDisabled}
+                    loading={isUpdatePending}
+                />
             </TableControls>
             <PageLoader loading={isConsultsLoading} error={isConsultsError}>
-            <Table>
-                <thead>
-                    <tr>
-                        <TableHeader width="30%">Группа</TableHeader>
-                        <TableHeader width="70%" colSpan={16}>
-                            Дата/Часы
-                        </TableHeader>
-                    </tr>
-                </thead>
-                <tbody>
-                    {consults?.map((group) => (
-                        <tr key={group.group}>
-                            <ClassCell classNum={group.class} program={group.program} subgroup={group.subgroup} />
-                            {Array.from({ length: 8 }, (_, index) => (
-                                <DateSelectCell
-                                    columnId={`${group}-${index}`}
-                                    onChange={onCellValueChange}
-                                    consultId={group.consults?.[index]?.id}
-                                    date={group.consults?.[index]?.date}
-                                    hours={group.consults?.[index]?.hours}
-                                    class={group.class}
-                                    program={group.program}
-                                    subgroup={group.subgroup}
-                                    year={year}
-                                    key={index}
-                                />
-                            ))}
+                <Table>
+                    <thead>
+                        <tr>
+                            <TableHeader width="30%">Группа</TableHeader>
+                            <TableHeader width="70%" colSpan={16}>
+                                Дата/Часы
+                            </TableHeader>
                         </tr>
-                    ))}
+                    </thead>
+                    <tbody>
+                        {consults?.map((group) => (
+                            <tr key={group.group}>
+                                <ClassCell classNum={group.class} program={group.program} subgroup={group.subgroup} />
+                                {Array.from({ length: 8 }, (_, index) => (
+                                    <DateSelectCell
+                                        columnId={`${group}-${index}`}
+                                        onChange={onCellValueChange}
+                                        consultId={group.consults?.[index]?.id}
+                                        date={group.consults?.[index]?.date}
+                                        hours={group.consults?.[index]?.hours}
+                                        class={group.class}
+                                        program={group.program}
+                                        subgroup={group.subgroup}
+                                        year={year}
+                                        key={index}
+                                    />
+                                ))}
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </PageLoader>

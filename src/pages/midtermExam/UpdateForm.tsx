@@ -8,7 +8,7 @@ import type { MidtermExam } from '~/models/midtermExam';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getStudents } from '~/api/student';
 import { updateMidtermExam, type UpdateMidtermExamRequest } from '~/api/midtermExam';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 
 interface Props {
     midtermExam: MidtermExam | undefined;

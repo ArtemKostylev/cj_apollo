@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
 import { TableControls } from '~/components/tableControls';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import {
     MONTHS_RU,

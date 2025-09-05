@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef } from 'react';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { PageWrapper } from '~/components/pageWrapper';
 import { TableControls } from '~/components/tableControls';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -19,7 +19,11 @@ import { useFilter } from '~/hooks/useFilter';
 export const GroupJournal = () => {
     const { userData } = useUserData();
 
-    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (val) => Number(val) as AcademicYears);
+    const [year, setYear] = useFilter<AcademicYears>(
+        getCurrentAcademicYear(),
+        'year',
+        (val) => Number(val) as AcademicYears
+    );
     const [period, setPeriod] = useFilter<Periods>(getCurrentAcademicPeriod(), 'period', (val) => val as Periods);
 
     const changedMarks = useRef<Record<string, ChangedMark>>({});

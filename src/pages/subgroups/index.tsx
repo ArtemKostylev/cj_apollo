@@ -10,7 +10,7 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { PageWrapper } from '~/components/pageWrapper';
 import styles from './subgroups.module.css';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 import { useFilter } from '~/hooks/useFilter';
 

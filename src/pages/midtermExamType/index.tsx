@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getMidtermExamTypes } from '~/api/midtermExamType';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Input } from './Input';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import styles from './midtermExam.module.css';
 
 export const MidtermExamType = () => {

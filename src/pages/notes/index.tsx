@@ -11,7 +11,7 @@ import styles from './notes.module.css';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 import { useFilter } from '~/hooks/useFilter';
 

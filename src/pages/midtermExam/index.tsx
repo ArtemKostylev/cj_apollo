@@ -4,7 +4,7 @@ import { UpdateForm } from './UpdateForm';
 import { useQuery } from '@tanstack/react-query';
 import { getMidtermExamTypes } from '~/api/midtermExamType';
 import { PageWrapper } from '~/components/pageWrapper';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { MidtermExamTable } from './MidtermExamTable';
 import type { MidtermExam as IMidtermExam } from '~/models/midtermExam';
 import { getCurrentAcademicYear } from '~/utils/academicDate';
@@ -16,7 +16,11 @@ export const MidtermExam = () => {
     const [createFormVisible, setCreateFormVisible] = useState(false);
     const [updateFormVisible, setUpdateFormVisible] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState<IMidtermExam | undefined>(undefined);
-    const [year, setYear] = useFilter<AcademicYears>(getCurrentAcademicYear(), 'year', (val) => Number(val) as AcademicYears);
+    const [year, setYear] = useFilter<AcademicYears>(
+        getCurrentAcademicYear(),
+        'year',
+        (val) => Number(val) as AcademicYears
+    );
 
     const {
         userData: { versions }

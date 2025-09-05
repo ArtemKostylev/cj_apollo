@@ -14,7 +14,7 @@ import { NameHeader } from '~/components/table/nameHeader';
 import { Table } from '~/components/table';
 import { getReplacementList, updateReplacements } from '~/api/replacement';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { ChangedReplacement } from '~/models/replacement';
 import { NameCell } from '~/components/cells/nameCell';
 import { DateCell } from '~/components/cells/dateCell';

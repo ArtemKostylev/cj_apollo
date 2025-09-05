@@ -1,6 +1,6 @@
 import { Table } from '~/components/table';
 import { useCallback, useMemo } from 'react';
-import { PageLoader } from '~/components/PageLoader';
+import { PageLoader } from '~/components/pageLoader';
 import { useUserData } from '~/hooks/useUserData';
 import type { MidtermExamType } from '~/models/midtermExamType';
 import { getCurrentAcademicPeriod } from '~/utils/academicDate';
@@ -29,7 +29,8 @@ interface Props {
 }
 
 export const MidtermExamTable = (props: Props) => {
-    const { types, typesById, selectedRecord, year, setYear, setSelectedRecord, openCreateForm, openUpdateForm } = props;
+    const { types, typesById, selectedRecord, year, setYear, setSelectedRecord, openCreateForm, openUpdateForm } =
+        props;
     const [period, setPeriod] = useFilter<Periods>(getCurrentAcademicPeriod(), 'period', (val) => val as Periods);
     const [type, setType] = useFilter<number>(types[0].id, 'type', (val) => Number(val) as number);
 
@@ -81,7 +82,12 @@ export const MidtermExamTable = (props: Props) => {
                 />
                 <ControlButton text="Добавить" onClick={openCreateForm} />
                 <ControlButton text="Изменить" onClick={openUpdateForm} disabled={!selectedRecord} />
-                <ControlButton text="Удалить" onClick={onDeleteClick} disabled={!selectedRecord || isDeleting} loading={isDeleting} />
+                <ControlButton
+                    text="Удалить"
+                    onClick={onDeleteClick}
+                    disabled={!selectedRecord || isDeleting}
+                    loading={isDeleting}
+                />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <Table>
