@@ -3,6 +3,6 @@
     border-collapse: collapse;
     min-height: 100px;
     width: 100%;
-    line-height: 0.9vw;
     empty-cells: show;
+    font-size: 14px;
 }

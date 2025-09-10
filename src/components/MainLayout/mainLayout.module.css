@@ -3,7 +3,7 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     overflow: hidden;
     font-size: 20px;
@@ -20,20 +20,19 @@
     right: 0;
     background-color: black;
     opacity: 50%;
-    transform: translateX(0vw);
     transition: all 0.5s;
 }
 
 .content {
     position: absolute;
+    width: 100vw;
+    height: 100vh;
     left: 0;
     right: 0;
-    transform: translateX(0vw);
-    transition: transform 0.5s;
     flex-grow: 1;
 }
 
 .visible {
     visibility: visible;
-    transform: translateX(20vw);
 }
+

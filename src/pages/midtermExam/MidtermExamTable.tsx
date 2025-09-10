@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { PageLoader } from '~/components/pageLoader';
 import { useUserData } from '~/hooks/useUserData';
 import type { MidtermExamType } from '~/models/midtermExamType';
-import { getCurrentAcademicPeriod } from '~/utils/academicDate';
+import { getCurrentAcademicPeriod, getCurrentAcademicYear } from '~/utils/academicDate';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { TableControls } from '~/components/tableControls';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -46,7 +46,7 @@ export const MidtermExamTable = (props: Props) => {
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['midterm-exams', year, period, type],
-        queryFn: () => getMidtermExams({ teacherId, year, period, type })
+        queryFn: () => getMidtermExams({ teacherId, year, period, typeId: type })
     });
 
     const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
@@ -61,6 +61,8 @@ export const MidtermExamTable = (props: Props) => {
             deleteMutation(selectedRecord.id);
         }
     }, [selectedRecord]);
+
+    const readonly = year !== getCurrentAcademicYear();
 
     return (
         <>
@@ -80,12 +82,12 @@ export const MidtermExamTable = (props: Props) => {
                     buttonText={YEARS_NAMES[year]}
                     onSelect={(value) => setYear(value as AcademicYears)}
                 />
-                <ControlButton text="Добавить" onClick={openCreateForm} />
-                <ControlButton text="Изменить" onClick={openUpdateForm} disabled={!selectedRecord} />
+                <ControlButton text="Добавить" onClick={openCreateForm} disabled={readonly} />
+                <ControlButton text="Изменить" onClick={openUpdateForm} disabled={!selectedRecord || readonly} />
                 <ControlButton
                     text="Удалить"
                     onClick={onDeleteClick}
-                    disabled={!selectedRecord || isDeleting}
+                    disabled={!selectedRecord || isDeleting || readonly}
                     loading={isDeleting}
                 />
             </TableControls>

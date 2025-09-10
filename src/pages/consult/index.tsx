@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getConsults, updateConsults } from '../../api/consult';
 import { useUserData } from '../../hooks/useUserData';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
@@ -17,6 +17,7 @@ import { PageLoader } from '~/components/pageLoader';
 import { NameCell } from '~/components/cells/nameCell';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 import { useFilter } from '~/hooks/useFilter';
+import { toast } from 'react-hot-toast';
 
 export const Consult = () => {
     const { userData } = useUserData();
@@ -44,7 +45,7 @@ export const Consult = () => {
         isLoading: isConsultsLoading,
         isError: isConsultsError
     } = useQuery({
-        queryKey: ['consults'],
+        queryKey: ['consults', year, course],
         queryFn: () =>
             getConsults({
                 courseId: coursesById[course].id,
@@ -72,7 +73,12 @@ export const Consult = () => {
         }
     });
 
+    const onDisabledClick = useCallback(() => {
+        toast.error('Необходимо выбрать дату консультации!');
+    }, []);
+
     const saveButtonDisabled = isUpdatePending || isConsultsLoading;
+    const readonly = year !== getCurrentAcademicYear();
 
     return (
         <PageWrapper>
@@ -85,7 +91,10 @@ export const Consult = () => {
                 <ControlSelect
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
-                    onSelect={(value) => setYear(value as AcademicYears)}
+                    onSelect={(value) => {
+                        setYear(Number(value) as AcademicYears);
+                        setCourse(userData.versions[Number(value) as AcademicYears].courses[0].id);
+                    }}
                 />
                 <ControlButton
                     text="Сохранить"
@@ -98,10 +107,8 @@ export const Consult = () => {
                 <Table>
                     <thead>
                         <tr>
-                            <TableHeader width="30%">Имя ученика</TableHeader>
-                            <TableHeader width="70%" colSpan={32}>
-                                Дата/Часы
-                            </TableHeader>
+                            <TableHeader width="250px">Имя ученика</TableHeader>
+                            <TableHeader colSpan={32}>Дата/Часы</TableHeader>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,6 +117,7 @@ export const Consult = () => {
                                 <NameCell name={row.studentName} archived={row.archived} />
                                 {Array.from({ length: 16 }, (_, index) => (
                                     <DateSelectCell
+                                        onDisabledClick={onDisabledClick}
                                         columnId={`${row.relationId}-${index}`}
                                         onChange={onCellValueChange}
                                         consultId={row.consults?.[index]?.id}
@@ -117,6 +125,7 @@ export const Consult = () => {
                                         hours={row.consults?.[index]?.hours}
                                         relationId={row.relationId}
                                         year={year}
+                                        readonly={readonly}
                                         key={index}
                                     />
                                 ))}

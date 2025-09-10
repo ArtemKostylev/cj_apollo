@@ -41,7 +41,5 @@ export async function getConsults(params: GetConsultsParams): Promise<GetConsult
 }
 
 export async function updateConsults(params: UpdateConsultParams) {
-    await httpClient.post('/consult', {
-        params
-    });
+    await httpClient.post('/consult', params);
 }

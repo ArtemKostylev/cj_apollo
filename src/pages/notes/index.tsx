@@ -34,6 +34,7 @@ export const Notes = () => {
 
     const onYearChange = useCallback((year: string | number) => {
         setYear(year as AcademicYears);
+        setCourse(userData.versions[year as AcademicYears].allCourses[0].id);
     }, []);
 
     const onCourseChange = useCallback((course: string | number) => {
@@ -54,10 +55,10 @@ export const Notes = () => {
             courseId: coursesById[course].id,
             year
         });
-    }, []);
+    }, [value, course, year, currentVersion.teacherId]);
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['note'],
+        queryKey: ['note', year, course],
         queryFn: () =>
             getNote({
                 courseId: coursesById[course].id,
@@ -71,6 +72,7 @@ export const Notes = () => {
     }, [data?.text]);
 
     const saveButtonDisabled = isPending || isLoading;
+    const readonly = year !== getCurrentAcademicYear();
 
     return (
         <PageWrapper>
@@ -81,15 +83,18 @@ export const Notes = () => {
                     onSelect={onCourseChange}
                 />
                 <ControlSelect options={YEARS} buttonText={YEARS_NAMES[year]} onSelect={onYearChange} />
-                <ControlButton text="Сохранить" onClick={onSave} disabled={saveButtonDisabled} loading={isPending} />
+                <ControlButton text="Сохранить" onClick={onSave} disabled={saveButtonDisabled || readonly} loading={isPending} />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
-                <textarea
-                    className={styles.notesTextarea}
-                    placeholder="Это - место для заметок..."
-                    value={value}
-                    onChange={onTextAreaValueChange}
-                />
+                <div className={styles.textAreaContainer}>
+                    <textarea
+                        disabled={readonly}
+                        className={styles.notesTextarea}
+                        placeholder="Это - место для заметок..."
+                        value={value}
+                        onChange={onTextAreaValueChange}
+                    />
+                </div>
             </PageLoader>
         </PageWrapper>
     );

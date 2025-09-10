@@ -1,8 +1,8 @@
 import { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
-import buttonStyles from './styles/button.module.css';
-import buttonThemes from './styles/theme.module.css';
-import loaderOverlayStyles from './styles/loaderOverlay.module.css';
+import buttonStyles from './button.module.css';
+import buttonThemes from './theme.module.css';
+import loaderOverlayStyles from './loaderOverlay.module.css';
 import { Spinner } from '../spinner';
 import { BUTTON_THEMES, type ButtonTheme } from './buttonTheme';
 
@@ -16,13 +16,17 @@ export const Button = (props: ButtonProps) => {
 
     const buttonClassName = classNames(className, buttonStyles.button, {
         [buttonThemes.default]: theme === BUTTON_THEMES.DEFAULT,
-        [buttonThemes.danger]: theme === BUTTON_THEMES.CONTROL
+        [buttonThemes.control]: theme === BUTTON_THEMES.CONTROL
+    });
+
+    const loaderOverlayClassName = classNames(loaderOverlayStyles.loaderOverlay, {
+        [loaderOverlayStyles.control]: theme === BUTTON_THEMES.CONTROL
     });
 
     return (
         <button className={buttonClassName} {...rest}>
             {loading && (
-                <div className={loaderOverlayStyles.loaderOverlay}>
+                <div className={loaderOverlayClassName}>
                     <Spinner />
                 </div>
             )}

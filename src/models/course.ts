@@ -10,3 +10,8 @@ export const courseSchema = z.object({
 });
 
 export type Course = z.infer<typeof courseSchema>;
+
+export interface CourseForRelations {
+    id: number;
+    courseName: string;
+}

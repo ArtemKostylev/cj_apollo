@@ -3,6 +3,7 @@ import { DateCell } from '~/components/cells/dateCell';
 import { TableCell } from '~/components/cells/tableCell';
 import type { ChangedConsult } from '~/models/consult';
 import type { AcademicYears } from '~/constants/date';
+import { SelectCell } from '../selectCell';
 
 type Props = {
     columnId: string;
@@ -15,13 +16,31 @@ type Props = {
     date: string | undefined;
     hours: number | undefined;
     onChange: (columnId: string, updatedConsult: ChangedConsult) => void;
+    onDisabledClick?: () => void;
+    readonly?: boolean;
 };
 
-const HOURS = [0, 1, 1.5, 2, 2.5, 3];
+const HOURS = [0, 1, 1.5, 2, 2.5, 3].map((it) => ({
+    value: it.toString(),
+    text: it.toString()
+}));
 
 export const DateSelectCell = (props: Props) => {
-    const { columnId, relationId, consultId, year, date, hours, onChange, class: classProp, program, subgroup } = props;
-    const [hoursValue, setHoursValue] = useState(hours);
+    const {
+        columnId,
+        relationId,
+        consultId,
+        year,
+        date,
+        hours,
+        onChange,
+        class: classProp,
+        program,
+        subgroup,
+        onDisabledClick,
+        readonly
+    } = props;
+    const [hoursValue, setHoursValue] = useState(hours || 0);
     const [dateValue, setDateValue] = useState(date);
 
     const onDateChange = useCallback(
@@ -49,8 +68,8 @@ export const DateSelectCell = (props: Props) => {
     );
 
     const onHoursChange = useCallback(
-        (event: ChangeEvent<HTMLSelectElement>) => {
-            const value = parseFloat(event.target.value);
+        (selectValue: string) => {
+            const value = parseFloat(selectValue);
             setHoursValue(value);
 
             if (!dateValue) {
@@ -79,18 +98,24 @@ export const DateSelectCell = (props: Props) => {
 
     return (
         <>
-            <TableCell>
-                <DateCell columnId={columnId} initialValue={dateValue} onChange={onDateChange} year={year} />
+            <TableCell style={{ width: '50px' }}>
+                <DateCell
+                    columnId={columnId}
+                    initialValue={dateValue}
+                    onChange={onDateChange}
+                    year={year}
+                    readonly={readonly}
+                />
             </TableCell>
-            <TableCell>
-                <select disabled={!dateValue} value={hoursValue} onChange={onHoursChange}>
-                    {HOURS.map((it) => (
-                        <option value={it} key={it}>
-                            {it}
-                        </option>
-                    ))}
-                </select>
-            </TableCell>
+            <SelectCell
+                style={{ width: '50px' }}
+                value={hoursValue?.toString()}
+                onSelect={onHoursChange}
+                options={HOURS}
+                disabled={!dateValue}
+                onDisabledClick={onDisabledClick}
+                readonly={readonly}
+            />
         </>
     );
 };

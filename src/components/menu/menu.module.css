@@ -1,14 +1,14 @@
 .menuWrapper {
-    width: 20vw;
+    width: 300px;
     height: 100%;
     background-color: #f4f7f6;
-    box-shadow: 4px 5px 5px lightgray;
     line-height: 78px;
-    transform: translateX(-21vw);
+    transform: translateX(-300px);
     transition: transform 0.5s;
     margin: 0;
     font-family: 'IBM Plex Serif', serif;
     user-select: none;
+    z-index: 100;
 }
 
 .visible {
@@ -16,12 +16,12 @@
 }
 
 .menuItemWrapper {
+    cursor: pointer;
     text-align: left;
     display: flex;
     width: 100%;
     background-color: #f4f7f6;
     border-bottom: 1px solid #e6eaea;
-    cursor: pointer;
     height: 78px;
     flex-direction: row;
     justify-content: space-between;
@@ -31,20 +31,26 @@
     background-color: white;
 }
 
+.disableHover:hover {
+    background-color: #f4f7f6;
+}
+
 .menuItemText {
     margin: 0;
     padding-left: 20px;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .menuItemLink {
     text-decoration: none;
     color: inherit;
     width: 100%;
+    cursor: pointer;
 }
 
 .menuCloseButton {
     float: right;
+    font-size: 16px;
     padding-right: 20px;
     cursor: pointer;
 }
@@ -52,4 +58,8 @@
 .menuCloseButton:hover {
     color: rgb(58, 58, 58);
     transition: color 0.5s;
+}
+
+.clickable {
+    cursor: pointer;
 }

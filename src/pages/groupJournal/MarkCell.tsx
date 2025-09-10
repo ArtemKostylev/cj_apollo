@@ -14,6 +14,7 @@ interface Props {
     mark: string | undefined;
     archived: boolean;
     onMarkChange: (columnId: string, value: string) => void;
+    readonly: boolean;
 }
 
 export const MarkCell = memo((props: Props) => {
@@ -27,7 +28,8 @@ export const MarkCell = memo((props: Props) => {
         tableIndex,
         month,
         onMarkChange: onMarkChangeProp,
-        archived
+        archived,
+        readonly
     } = props;
 
     const onMarkChange = useCallback(
@@ -52,6 +54,7 @@ export const MarkCell = memo((props: Props) => {
             value={mark}
             onSelect={onMarkChange}
             disabled={archived}
+            readonly={readonly}
         />
     );
 });

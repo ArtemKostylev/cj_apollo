@@ -42,10 +42,11 @@ export const Compensation = () => {
 
     const onYearChange = useCallback((year: string | number) => {
         setYear(year as AcademicYears);
+        setCourse(userData.versions[year as AcademicYears].courses[0].id);
     }, []);
 
     const onCourseChange = useCallback((course: string | number) => {
-        setCourse(course as number);
+        setCourse(Number(course) as number);
     }, []);
 
     const onMonthChange = useCallback((month: string | number) => {
@@ -74,22 +75,26 @@ export const Compensation = () => {
         updateReplacementsMutation(Object.values(changedReplacements.current));
     }, [updateReplacementsMutation]);
 
-    const onDateChange = useCallback((columnId: string, value: string) => {
-        const [rowIndex, journalEntryId] = columnId.split('-');
-        const journalEntry = data?.rows[Number(rowIndex)].replacements[Number(journalEntryId)];
+    const onDateChange = useCallback(
+        (columnId: string, value: string) => {
+            const [rowIndex, journalEntryId] = columnId.split('-');
+            const journalEntry = data?.rows[Number(rowIndex)].replacements[Number(journalEntryId)];
 
-        if (!journalEntry) {
-            throw new Error('Journal entry not found');
-        }
+            if (!journalEntry) {
+                throw new Error('Journal entry not found');
+            }
 
-        changedReplacements.current[Number(rowIndex)] = {
-            id: journalEntry.id ?? 0,
-            journalEntryId: journalEntry.journalEntryId,
-            date: value
-        };
-    }, []);
+            changedReplacements.current[Number(rowIndex)] = {
+                id: journalEntry.id ?? 0,
+                journalEntryId: journalEntry.journalEntryId,
+                date: value
+            };
+        },
+        [data]
+    );
 
     const saveButtonDisabled = isPending || isLoading;
+    const readonly = year !== getCurrentAcademicYear();
 
     return (
         <PageWrapper>
@@ -135,6 +140,7 @@ export const Compensation = () => {
                                                         onChange={onDateChange}
                                                         month={month}
                                                         year={year}
+                                                        readonly={readonly}
                                                     />
                                                 )}
                                             </TableCell>

@@ -19,22 +19,12 @@ export const MainLayout = () => {
         [styles.visible]: menuVisible
     });
 
-    const contentClassName = classNames(styles.content, {
-        [styles.visible]: menuVisible
-    });
-
     return (
         <div className={styles.appWrapper}>
             <ErrorBoundary FallbackComponent={ErrorScreen}>
-                <Menu
-                    isOpen={menuVisible}
-                    onClose={() => setMenuVisible((prev) => !prev)}
-                />
-                <div
-                    className={coverClassName}
-                    onClick={() => setMenuVisible((prev) => !prev)}
-                />
-                <div className={contentClassName}>
+                <Menu isOpen={menuVisible} onClose={() => setMenuVisible((prev) => !prev)} />
+                <div className={coverClassName} onClick={() => setMenuVisible((prev) => !prev)} />
+                <div className={styles.content}>
                     <Header onMenuClick={onMenuClick} menuRef={menuRef} />
                     <Outlet />
                 </div>

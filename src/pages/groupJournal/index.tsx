@@ -93,7 +93,7 @@ export const GroupJournal = () => {
                 <ControlSelect
                     options={courseSelectOptions}
                     buttonText={coursesById[course].name}
-                    onSelect={(value) => setCourse(value as number)}
+                    onSelect={(value) => setCourse(Number(value))}
                 />
                 <ControlSelect
                     options={PERIODS_RU}

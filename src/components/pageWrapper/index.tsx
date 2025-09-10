@@ -1,7 +1,12 @@
 import type { PropsWithChildren } from 'react';
 import styles from './pageWrapper.module.css';
+import classNames from 'classnames';
 
-export const PageWrapper = (props: PropsWithChildren) => {
-    const { children } = props;
-    return <div className={styles.pageWrapper}>{children}</div>;
+interface Props {
+    className?: string;
+}
+
+export const PageWrapper = (props: PropsWithChildren<Props>) => {
+    const { children, className } = props;
+    return <div className={classNames(styles.pageWrapper, className)}>{children}</div>;
 };

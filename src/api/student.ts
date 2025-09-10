@@ -1,6 +1,6 @@
 import type { DropdownOptionType } from '~/models/dropdownOption';
 import { httpClient } from './httpClient';
-import type { AcademicYears } from '~/constants/date';
+import type { StudentGroupForRelations } from '~/models/student';
 
 interface GetStudentsRequest {
     teacherId: number;
@@ -10,5 +10,10 @@ export async function getStudents(params: GetStudentsRequest): Promise<DropdownO
     const response = await httpClient.get('/student/forTeacher', {
         params
     });
+    return response.data;
+}
+
+export async function getStudentsForRelations(): Promise<StudentGroupForRelations[]> {
+    const response = await httpClient.get('/student/forRelations');
     return response.data;
 }

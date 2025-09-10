@@ -1,13 +1,12 @@
 .outer {
-    border: 1px solid #e6eaea;
+    border: 1px solid var(--color-light-gray);
     position: relative;
     padding: 0;
     height: inherit;
 }
 
 .weekend {
-    background-color: #eff0f0;
-    border-color: #e6eaea;
+    background-color: var(--color-shaded-white) !important;
 }
 
 .clickable {
@@ -15,11 +14,11 @@
 }
 
 .clickable:hover {
-    background-color: #e6eaea;
+    background-color: var(--color-light-gray);
 }
 
 .disabled {
-    background-color: #e6eaea;
+    background-color: #f5f5f5;
 }
 
 .inner {

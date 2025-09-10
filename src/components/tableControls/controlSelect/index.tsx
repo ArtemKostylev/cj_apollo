@@ -4,6 +4,7 @@ import styles from './controlSelect.module.css';
 import controlStyles from '../tableControls.module.css';
 import { Dropdown } from '~/components/dropdown';
 import type { DropdownOptionType } from '~/models/dropdownOption';
+import { DROPDOWN_THEMES } from '~/components/dropdown/dropdownTheme';
 
 export type SelectProps = {
     options?: DropdownOptionType[];
@@ -41,11 +42,7 @@ export const ControlSelect = (props: SelectProps) => {
             <button className={styles.selectButton} onClick={toggleOpened}>
                 {buttonText}
             </button>
-            <Dropdown
-                opened={opened}
-                options={options}
-                onSelect={onSelectInternal}
-            />
+            <Dropdown theme={DROPDOWN_THEMES.CONTROL} opened={opened} options={options} onSelect={onSelectInternal} />
         </div>
     );
 };

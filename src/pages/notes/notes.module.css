@@ -1,4 +1,16 @@
 .notesTextarea {
     border: 1px solid gray;
     border-radius: 5px;
+    min-width: 800px;
+    min-height: 800px;
+    width: 80%;
+    height: calc(80% - 80px);
+}
+
+.textAreaContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
 }

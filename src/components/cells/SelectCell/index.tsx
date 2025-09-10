@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ReactElement, memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { Dropdown } from '../../dropdown';
 import { TableCell } from '../tableCell';
@@ -10,11 +10,14 @@ type Props = {
     options: DropdownOptionType[];
     isWeekend?: boolean;
     onSelect: (value: string) => void;
+    onDisabledClick?: () => void;
     disabled?: boolean;
+    style?: React.CSSProperties;
+    readonly?: boolean;
 };
 
 export const SelectCell = memo((props: Props) => {
-    const { value = '', options, isWeekend, onSelect, disabled } = props;
+    const { value = '', options, isWeekend, onSelect, disabled, style, onDisabledClick, readonly } = props;
     const [dropdownValue, setDropdownValue] = useState<string>(value);
     const [opened, setOpened] = useState(false);
 
@@ -28,12 +31,19 @@ export const SelectCell = memo((props: Props) => {
 
     useOnClickOutside(ref, () => setOpened(false));
 
-    const onClick = () => setOpened((prev) => !prev);
+    const onClick = () => {
+        if (readonly) return;
+        if (disabled && onDisabledClick) {
+            onDisabledClick();
+        } else {
+            setOpened((prev) => !prev);
+        }
+    };
 
     return (
-        <TableCell ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled}>
+        <TableCell ref={ref} onClick={onClick} isWeekend={isWeekend} disabled={disabled} style={style}>
             <p className={styles.cellText}>{dropdownValue === '.' ? '✓' : dropdownValue}</p>
-            {!disabled && (
+            {!disabled && !readonly && (
                 <Dropdown
                     opened={opened}
                     options={options}

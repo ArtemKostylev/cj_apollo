@@ -5,7 +5,7 @@ interface GetMidtermExamsRequest {
     teacherId: number;
     year: number;
     period: string;
-    type: number;
+    typeId: number;
 }
 
 export async function getMidtermExams(params: GetMidtermExamsRequest): Promise<MidtermExam[]> {

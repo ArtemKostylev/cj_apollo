@@ -1,13 +1,13 @@
 .option {
     display: inline-block;
     grid-column: span 2;
-    line-height: 1.4rem;
     cursor: pointer;
     overflow: hidden;
     text-align: center;
     padding-inline: 10px;
-    padding-block: 25px;
+    padding-block: 20px;
     border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
 .option:hover {
@@ -16,4 +16,13 @@
 
 .short {
     grid-column: span 1;
+}
+
+.default {
+    padding-block: 10px;
+    min-width: 40px;
+}
+
+.control {
+    padding-block: 20px;
 }

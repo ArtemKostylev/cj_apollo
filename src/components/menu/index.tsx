@@ -37,11 +37,13 @@ export default function Menu({ onClose, isOpen }: Props) {
         [styles.visible]: isOpen
     });
 
+    const firstMenuItemClassName = classNames(styles.menuItemWrapper, styles.disableHover);
+
     if (!resources) return null;
 
     return (
         <div className={className}>
-            <div className={styles.menuItemWrapper}>
+            <div className={firstMenuItemClassName}>
                 <p className={styles.menuItemText}>МЕНЮ</p>
                 <div className={styles.menuCloseButton} onClick={onClose}>
                     Закрыть

@@ -11,10 +11,11 @@ interface Props {
     relationId: number;
     archived: boolean;
     onChange: (clientId: string, quarterMark: ChangedQuarterMark) => void;
+    readonly: boolean;
 }
 
 export const QuarterMarkCell = (props: Props) => {
-    const { mark, period, year, relationId, archived, onChange } = props;
+    const { mark, period, year, relationId, archived, onChange, readonly } = props;
 
     const options = MARKS_OPTIONS;
 
@@ -32,5 +33,5 @@ export const QuarterMarkCell = (props: Props) => {
         [onChange]
     );
 
-    return <SelectCell value={mark?.mark} options={options} onSelect={onSelect} disabled={archived} />;
+    return <SelectCell value={mark?.mark} options={options} onSelect={onSelect} disabled={archived} readonly={readonly} />;
 };

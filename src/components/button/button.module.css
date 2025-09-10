@@ -1,5 +1,6 @@
 .button {
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 8px;
     position: relative;
@@ -14,4 +15,8 @@
     border: none;
     outline: none;
     cursor: pointer;
+}
+
+.disabled {
+    cursor: not-allowed;
 }

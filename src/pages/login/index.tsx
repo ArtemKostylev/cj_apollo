@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useFormik } from 'formik';
+import { useCallback, useState } from 'react';
 import { Button } from '~/components/button';
 import { useUserData } from '~/hooks/useUserData';
 import styles from './login.module.css';
@@ -9,76 +8,65 @@ import { useMutation } from '@tanstack/react-query';
 import { Route as LoginRoute } from '~/routes/login';
 import { Route as IndexRoute } from '~/routes';
 import { PageWrapper } from '~/components/pageWrapper';
+import { Form, FormInput } from '~/components/form';
+
+interface LoginFormValues {
+    login: string;
+    password: string;
+}
+
+const defaultValues: LoginFormValues = {
+    login: '',
+    password: ''
+};
 
 export const Login = () => {
     const navigate = useNavigate();
     const search = LoginRoute.useSearch();
     const { logIn } = useUserData();
-    const [errorMessage, setErrorMessage] = useState('');
 
-    const { mutate: loginMutation, isPending } = useMutation({
+    const {
+        mutate: loginMutation,
+        isPending,
+        isError,
+        error
+    } = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
             logIn(data);
             setTimeout(() => {
                 navigate({ to: search.redirect || IndexRoute.fullPath, search: {} });
             }, 200);
-        },
-        onError: (_) => {
-            setErrorMessage('Неправильное имя пользователя или пароль');
         }
     });
 
-    const formik = useFormik({
-        initialValues: {
-            login: '',
-            password: ''
-        },
-        onSubmit: (values) =>
+    const onSubmit = useCallback(
+        (values: LoginFormValues) => {
             loginMutation({
                 login: values.login.trim().toLowerCase(),
                 password: values.password
-            })
-    });
+            });
+        },
+        [loginMutation]
+    );
 
     return (
-        <PageWrapper>
-            <form
-                className={styles.formLayout}
-                onSubmit={formik.handleSubmit}
-                onKeyDown={(e) => {
-                    if (e.code === 'Enter') formik.handleSubmit();
-                }}
-            >
-                <h1 className={styles.header}>Добро пожаловать!</h1>
-                <span>Пожалуйста, введите логин и пароль</span>
-                <div className={styles.formItem}>
-                    <input
-                        className={styles.input}
-                        id="login"
-                        name="login"
-                        type="text"
-                        onChange={formik.handleChange}
-                        value={formik.values.login}
-                        placeholder="Логин"
-                    />
-                </div>
-                <div className={styles.formItem}>
-                    <input
-                        className={styles.input}
-                        id="password"
-                        name="password"
-                        type="password"
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        placeholder="Пароль"
-                    />
-                </div>
-                {errorMessage && <span>{errorMessage}</span>}
-                <Button type="submit" disabled={isPending} loading={isPending}>
-                    Войти
-                </Button>
-            </form>
+        <PageWrapper className={styles.wrapper}>
+            <h1 className={styles.title}>Добро пожаловать!</h1>
+            <h2 className={styles.subtitle}>Для получения доступа к журналу введите ваш логин и пароль</h2>
+            <div className={styles.form}>
+                <Form<LoginFormValues>
+                    defaultValues={defaultValues}
+                    onSubmit={onSubmit}
+                    submitError={isError && error?.message}
+                >
+                    <FormInput name="login" label="Логин" type="text" />
+                    <FormInput name="password" label="Пароль" type="password" />
+                    <Button type="submit" loading={isPending}>
+                        Войти
+                    </Button>
+                </Form>
+            </div>
         </PageWrapper>
     );
 };

@@ -13,10 +13,11 @@ interface Props {
     onlyHours: boolean;
     archived: boolean;
     onChange: (columnId: string, mark: ChangedMark) => void;
+    readonly: boolean;
 }
 
 export const MarkCell = (props: Props) => {
-    const { mark, date, relationId, onlyHours, archived, onChange } = props;
+    const { mark, date, relationId, onlyHours, archived, onChange, readonly } = props;
 
     const options = onlyHours ? HOURS_OPTIONS : MARKS_OPTIONS;
     const isWeekend = getDay(date) === WEEKEND_DAY;

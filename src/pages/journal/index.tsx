@@ -92,7 +92,8 @@ export const Journal = () => {
         changedQuarterMarks.current = {};
     }, [updateJournalMt]);
 
-    const saveButtonDisabled = isPending || isLoading;
+    const readonly = year !== getCurrentAcademicYear();
+    const saveButtonDisabled = isPending || isLoading || readonly;
 
     return (
         <PageWrapper>
@@ -105,7 +106,7 @@ export const Journal = () => {
                 <ControlSelect
                     options={courseSelectOptions}
                     buttonText={coursesById[course].name}
-                    onSelect={(value) => setCourse(value as number)}
+                    onSelect={(value) => setCourse(Number(value))}
                 />
                 <ControlSelect
                     options={YEARS}
@@ -124,7 +125,7 @@ export const Journal = () => {
                         {data?.map((row) => (
                             <tr key={row.relationId}>
                                 <NameCell name={row.studentName} archived={row.archived} />
-                                <TableCell>{row.class}</TableCell>
+                                <TableCell disabled={row.archived}>{row.class}</TableCell>
                                 {dates.map((date) => (
                                     <MarkCell
                                         key={date.toISOString()}
@@ -134,6 +135,7 @@ export const Journal = () => {
                                         onlyHours={courseHasOnlyHours}
                                         archived={row.archived}
                                         onChange={onMarkChange}
+                                        readonly={readonly}
                                     />
                                 ))}
                                 {!courseHasOnlyHours &&
@@ -146,6 +148,7 @@ export const Journal = () => {
                                             relationId={row.relationId}
                                             archived={row.archived}
                                             onChange={onQuarterMarkChange}
+                                            readonly={readonly}
                                         />
                                     ))}
                             </tr>

@@ -2,7 +2,7 @@ import { endOfMonth, format, parse } from 'date-fns';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { DATE_FORMAT, type AcademicYears, type Months } from '~/constants/date';
-import { academicYearToCalendarByMonth } from '~/utils/academicDate';
+import { academicYearToCalendarByMonth, getCurrentMonth } from '~/utils/academicDate';
 import ru from 'date-fns/locale/ru';
 import { DateCellCustomInput } from '~/components/cells/dateCell/DateCellCustomInput';
 
@@ -14,21 +14,20 @@ interface Props {
     year: AcademicYears;
     disabled?: boolean;
     changedDates?: Record<string, string[]>;
+    readonly?: boolean;
 }
 
 export const DateCell = memo((props: Props) => {
-    const { initialValue, onChange: onChangeProp, columnId, month, year, disabled, changedDates } = props;
+    const { initialValue, onChange: onChangeProp, columnId, month, year, disabled, changedDates, readonly } = props;
 
     const [pickerValue, setPickerValue] = useState<Date | undefined>(undefined);
 
     const openToDate = useMemo(() => {
         if (pickerValue) return pickerValue;
 
-        const calendarYear = academicYearToCalendarByMonth(year, ('' + Number(month)) as Months);
-        if (month !== undefined) return new Date(calendarYear, Number(month), 1);
-        const date = new Date();
-        date.setFullYear(calendarYear);
-        return date;
+        const calendarMonth = month || getCurrentMonth();
+        const calendarYear = academicYearToCalendarByMonth(year, ('' + Number(calendarMonth)) as Months);
+        return new Date(calendarYear, Number(calendarMonth), 1);
     }, [pickerValue, month, year]);
 
     useEffect(() => {
@@ -76,7 +75,7 @@ export const DateCell = memo((props: Props) => {
             locale={ru}
             minDate={minDate}
             maxDate={maxDate}
-            disabled={disabled}
+            disabled={disabled || readonly}
         />
     );
 });

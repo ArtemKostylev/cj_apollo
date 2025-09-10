@@ -44,7 +44,7 @@ export const GroupConsult = () => {
         isLoading: isConsultsLoading,
         isError: isConsultsError
     } = useQuery({
-        queryKey: ['groupConsults'],
+        queryKey: ['groupConsults', year, course],
         queryFn: () =>
             getAllGroupConsults({
                 courseId: coursesById[course].id,
@@ -76,6 +76,7 @@ export const GroupConsult = () => {
     });
 
     const saveButtonDisabled = isUpdatePending || isConsultsLoading;
+    const readonly = year !== getCurrentAcademicYear();
 
     return (
         <PageWrapper>
@@ -88,7 +89,10 @@ export const GroupConsult = () => {
                 <ControlSelect
                     options={YEARS}
                     buttonText={YEARS_NAMES[year]}
-                    onSelect={(value) => setYear(value as AcademicYears)}
+                    onSelect={(value) => {
+                        setYear(value as AcademicYears);
+                        setCourse(userData.versions[value as AcademicYears].groupCourses[0].id);
+                    }}
                 />
                 <ControlButton
                     text="Сохранить"
@@ -113,6 +117,7 @@ export const GroupConsult = () => {
                                 <ClassCell classNum={group.class} program={group.program} subgroup={group.subgroup} />
                                 {Array.from({ length: 8 }, (_, index) => (
                                     <DateSelectCell
+                                        readonly={readonly}
                                         columnId={`${group}-${index}`}
                                         onChange={onCellValueChange}
                                         consultId={group.consults?.[index]?.id}

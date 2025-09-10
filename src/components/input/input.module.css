@@ -1,0 +1,21 @@
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--color-cloud-gray);
+    padding-inline: 8px;
+    color: var(--color-asphalt-gray);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-asphalt-gray);
+    border-width: 2px;
+}
+
+.error {
+    border-color: var(--color-scary-orange);
+}

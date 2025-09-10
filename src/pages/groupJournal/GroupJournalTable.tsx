@@ -52,6 +52,8 @@ export const GroupJournalTable = memo((props: Props) => {
         return year !== getCurrentAcademicYear();
     }, [year]);
 
+    const readonly = year !== getCurrentAcademicYear();
+
     const onDateChange = useCallback(
         (columnId: string, value: string) => {
             const { month, index } = parseGroupHeaderColumnId(columnId);
@@ -168,6 +170,7 @@ export const GroupJournalTable = memo((props: Props) => {
                                             relationId={row.relationId}
                                             tableIndex={tableIndex}
                                             month={month}
+                                            readonly={readonly}
                                         />
                                     ))
                                 )}
@@ -188,6 +191,7 @@ export const GroupJournalTable = memo((props: Props) => {
                                             )
                                         }
                                         disabled={row.archived}
+                                        readonly={readonly}
                                     />
                                 ))}
                         </tr>

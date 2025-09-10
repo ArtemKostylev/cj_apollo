@@ -1,0 +1,25 @@
+.formItem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: fit-content;
+
+    label {
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--color-asphalt-gray);
+    }
+}
+
+.errorText {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-scary-orange);
+    min-height: 16px;
+}
+
+.hiddenError {
+    color: transparent;
+}

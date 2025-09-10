@@ -1,20 +1,22 @@
 .controlsContainer {
+    height: 70px;
     width: 100%;
-    line-height: 40px;
     padding: 10px 0;
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    border-bottom: 1px solid #e6eaea;
+    border-bottom: 1px solid var(--color-light-gray);
 }
 
 .controlItem {
+    font-size: 14px;
     display: flex;
     justify-content: center;
-    width: 12vw;
+    width: 180px;
+    height: 100%;
     position: relative;
-    border-right: 1px solid #e6eaea;
+    border-right: 1px solid var(--color-light-gray);
 }
 
 .controlItem > div {
