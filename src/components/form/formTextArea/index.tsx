@@ -1,17 +1,17 @@
 import { FormItem } from '../formItem';
-import { Input } from '~/components/input';
 import { useFormContext } from 'react-hook-form';
+import { TextArea } from '~/components/textArea';
 
-interface FormInputProps {
+interface FormTextAreaProps {
     name: string;
     label: string;
     className?: string;
-    type: string;
+    rows?: number;
     required?: boolean;
 }
 
-export function FormInput(props: FormInputProps) {
-    const { label, type, name, className, required } = props;
+export function FormTextArea(props: FormTextAreaProps) {
+    const { label, name, className, rows, required } = props;
     const {
         register,
         formState: { errors }
@@ -25,7 +25,7 @@ export function FormInput(props: FormInputProps) {
 
     return (
         <FormItem label={label} error={error}>
-            <Input {...registerProps} type={type} className={className} />
+            <TextArea {...registerProps} rows={rows} className={className} />
         </FormItem>
     );
 }

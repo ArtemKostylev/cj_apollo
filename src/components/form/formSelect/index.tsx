@@ -1,17 +1,19 @@
+import type { DropdownOptionType } from '~/models/dropdownOption';
 import { FormItem } from '../formItem';
-import { Input } from '~/components/input';
 import { useFormContext } from 'react-hook-form';
+import { Select } from '~/components/select';
 
-interface FormInputProps {
+interface FormSelectProps {
     name: string;
     label: string;
     className?: string;
-    type: string;
+    options: DropdownOptionType[];
     required?: boolean;
 }
 
-export function FormInput(props: FormInputProps) {
-    const { label, type, name, className, required } = props;
+export const FormSelect = (props: FormSelectProps) => {
+    const { name, label, options, required, className } = props;
+
     const {
         register,
         formState: { errors }
@@ -25,7 +27,7 @@ export function FormInput(props: FormInputProps) {
 
     return (
         <FormItem label={label} error={error}>
-            <Input {...registerProps} type={type} className={className} />
+            <Select {...registerProps} options={options} className={className} />
         </FormItem>
     );
-}
+};

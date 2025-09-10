@@ -8,10 +8,11 @@ interface FormProps<T extends FieldValues> {
     className?: string;
     onSubmit: (values: T) => void;
     submitError?: string | false | undefined;
+    onReset?: () => void;
 }
 
 export function Form<T extends FieldValues>(props: PropsWithChildren<FormProps<T>>) {
-    const { className: externalClassName, onSubmit, children, defaultValues, submitError } = props;
+    const { className: externalClassName, onSubmit, children, defaultValues, submitError, onReset } = props;
 
     const formMethods = useForm({
         defaultValues: defaultValues
@@ -29,7 +30,7 @@ export function Form<T extends FieldValues>(props: PropsWithChildren<FormProps<T
     const className = classNames(styles.form, externalClassName);
 
     return (
-        <form className={className} onSubmit={internalOnSubmit}>
+        <form className={className} onSubmit={internalOnSubmit} onReset={onReset}>
             <FormProvider {...formMethods}>{children}</FormProvider>
             {submitError && <span className={styles.submitError}>{submitError}</span>}
         </form>
@@ -37,3 +38,5 @@ export function Form<T extends FieldValues>(props: PropsWithChildren<FormProps<T
 }
 
 export { FormInput } from './formInput';
+export { FormSelect } from './formSelect';
+export { FormTextArea } from './formTextArea';

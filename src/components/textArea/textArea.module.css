@@ -1,0 +1,20 @@
+.textArea {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid var(--color-cloud-gray);
+    padding: 8px;
+    color: var(--color-asphalt-gray);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.textArea:focus {
+    outline: none;
+    border-color: var(--color-asphalt-gray);
+    border-width: 2px;
+}
+
+.error {
+    border-color: var(--color-scary-orange);
+}
