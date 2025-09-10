@@ -23,7 +23,7 @@ export default function Menu({ onClose, isOpen }: Props) {
 
     const resources = useMemo(() => {
         if (!userData || !userData.role) return undefined;
-        const res = resourceMap[userData?.role];
+        const res = { ...resourceMap[userData?.role] };
 
         if (userData.versions[academicYear]?.groupCourses.length > 0 && userData.role === Number(ROLES.TEACHER)) {
             res.subgroups = SUBGROUPS_RESOURCE;

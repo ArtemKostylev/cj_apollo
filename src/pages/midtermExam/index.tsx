@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ReactModal from 'react-modal';
 import { UpdateForm } from './UpdateForm';
 import { useQuery } from '@tanstack/react-query';
 import { getMidtermExamTypes } from '~/api/midtermExamType';
@@ -11,6 +10,7 @@ import { getCurrentAcademicYear } from '~/utils/academicDate';
 import { useUserData } from '~/hooks/useUserData';
 import { useFilter } from '~/hooks/useFilter';
 import type { AcademicYears } from '~/constants/date';
+import { Modal } from '~/components/modal';
 
 export const MidtermExam = () => {
     const [createFormVisible, setCreateFormVisible] = useState(false);
@@ -50,20 +50,30 @@ export const MidtermExam = () => {
                     selectedRecord={selectedRecord}
                     setSelectedRecord={setSelectedRecord}
                 />
-                <ReactModal isOpen={createFormVisible}>
+                <Modal
+                    opened={createFormVisible}
+                    title="Добавление промежуточной аттестации"
+                    onClose={() => setCreateFormVisible(false)}
+                >
                     <UpdateForm
                         midtermExam={undefined}
+                        types={types?.midtermExamTypes || []}
                         teacherId={teacherId}
                         onClose={() => setCreateFormVisible(false)}
                     />
-                </ReactModal>
-                <ReactModal isOpen={updateFormVisible}>
+                </Modal>
+                <Modal
+                    opened={updateFormVisible}
+                    title="Редактирование промежуточной аттестации"
+                    onClose={() => setUpdateFormVisible(false)}
+                >
                     <UpdateForm
                         midtermExam={selectedRecord}
+                        types={types?.midtermExamTypes || []}
                         teacherId={teacherId}
                         onClose={() => setUpdateFormVisible(false)}
                     />
-                </ReactModal>
+                </Modal>
             </PageLoader>
         </PageWrapper>
     );

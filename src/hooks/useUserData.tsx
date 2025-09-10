@@ -1,10 +1,4 @@
-import {
-    useState,
-    useContext,
-    createContext,
-    useMemo,
-    type PropsWithChildren
-} from 'react';
+import { useState, useContext, createContext, useMemo, type PropsWithChildren } from 'react';
 import { USER_ALIAS } from '../constants/localStorageAliases';
 import { UserData, userDataSchema } from '~/models/userData';
 
@@ -35,7 +29,7 @@ export const UserDataProvider = ({ children }: PropsWithChildren) => {
     const isAuthenticated = !!userData;
 
     const logIn = (userData: UserData) => {
-        setUserData(userData);
+        setUserData({ ...userData });
         localStorage.setItem(USER_ALIAS, JSON.stringify(userData));
     };
 
@@ -51,11 +45,7 @@ export const UserDataProvider = ({ children }: PropsWithChildren) => {
         logOut
     };
 
-    return (
-        <AuthContext.Provider value={contextValue}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useUserData = () => {

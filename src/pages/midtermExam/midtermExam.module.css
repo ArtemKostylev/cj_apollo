@@ -12,12 +12,8 @@
 }
 
 .formWrapper {
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 30px;
-    align-items: center;
+    min-width: 900px;
+    min-height: 500px;
     width: 900px;
     height: fit-content;
 }
@@ -28,4 +24,6 @@
     flex-direction: row;
     justify-content: flex-end;
     gap: 20px;
+    padding-bottom: 10px;
+    padding-right: 10px;
 }

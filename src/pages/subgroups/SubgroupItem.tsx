@@ -21,8 +21,10 @@ export const SubgroupItem = (props: SubgroupItemProps) => {
     return (
         <div className={styles.item}>
             <span>{studentName}</span>
-            <span>Группа:</span>
-            <input value={value} onChange={handleChange} maxLength={1} />
+            <div>
+                <span>Группа:</span>
+                <input value={value} onChange={handleChange} maxLength={1} />
+            </div>
         </div>
     );
 };

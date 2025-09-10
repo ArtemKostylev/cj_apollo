@@ -1,0 +1,33 @@
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-teeth-white);
+    padding: 16px;
+    border-radius: 8px;
+    min-width: 600px;
+}
+
+.header {
+    height: 48px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+        padding: 0;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+        color: var(--color-asphalt-gray);
+    }
+}
+
+.content {
+    height: calc(100% - 48px);
+    width: 100%;
+    overflow-y: auto;
+}

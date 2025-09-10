@@ -91,6 +91,7 @@ export const YEARS: DropdownOptionType[] = [
     { value: '2025', text: YEARS_NAMES[2025] }
 ];
 
+export const INPUT_DATE_FORMAT = 'yyyy-MM-dd';
 export const DATE_FORMAT = 'dd.MM.yyyy';
 export const DATE_FORMAT_SHORT = 'dd.MM';
 export const DATE_FORMAT_WEEKDAY = 'EEEEEE';

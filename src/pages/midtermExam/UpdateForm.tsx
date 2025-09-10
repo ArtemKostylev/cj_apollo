@@ -6,15 +6,30 @@ import { getStudents } from '~/api/student';
 import { updateMidtermExam, type UpdateMidtermExamRequest } from '~/api/midtermExam';
 import { PageLoader } from '~/components/pageLoader';
 import { Form, FormSelect, FormTextArea, FormInput } from '~/components/form';
+import type { MidtermExamType } from '~/models/midtermExamType';
+import { toSelectOptions } from '~/utils/toSelectOptions';
+import { DATE_FORMAT, INPUT_DATE_FORMAT } from '~/constants/date';
+import { format } from 'date-fns';
 
 interface Props {
     midtermExam: MidtermExam | undefined;
+    types: MidtermExamType[];
     teacherId: number;
     onClose: () => void;
 }
 
+function toDefaultValues(midtermExam: MidtermExam) {
+    return {
+        typeId: midtermExam.typeId,
+        studentId: midtermExam.studentId,
+        date: format(new Date(midtermExam.date), INPUT_DATE_FORMAT),
+        contents: midtermExam.contents,
+        result: midtermExam.result
+    };
+}
+
 export const UpdateForm = (props: Props) => {
-    const { midtermExam, teacherId, onClose } = props;
+    const { midtermExam, types, teacherId, onClose } = props;
     const queryClient = useQueryClient();
 
     const {
@@ -39,7 +54,7 @@ export const UpdateForm = (props: Props) => {
 
     const onSubmit = (values: MidtermExam) => {
         updateMidtermExamMutation({
-            date: values.date,
+            date: format(new Date(values.date), DATE_FORMAT),
             id: midtermExam?.id || 0,
             typeId: values.typeId,
             teacherId,
@@ -49,20 +64,34 @@ export const UpdateForm = (props: Props) => {
         });
     };
 
+    const typeOptions = toSelectOptions(types, 'id', 'name');
+
     return (
-        <PageLoader loading={isLoadingStudents} error={isErrorStudents}>
-            <Form<MidtermExam> onSubmit={onSubmit} defaultValues={midtermExam ?? ({} as MidtermExam)} onReset={onClose}>
-                <FormSelect name="studentId" label="Имя ученика" options={students ?? []} required />
-                <FormInput name="date" label="Дата" type="date" required />
-                <FormTextArea name="contents" label="Программа" required rows={7} />
-                <FormTextArea name="result" label="Результат" required rows={5} />
-                <div className={styles.buttonRow}>
-                    <Button type="reset">Отмена</Button>
-                    <Button type="submit" loading={isPending} disabled={isPending}>
-                        Сохранить
-                    </Button>
-                </div>
-            </Form>
-        </PageLoader>
+        <div className={styles.formWrapper}>
+            <PageLoader loading={isLoadingStudents} error={isErrorStudents}>
+                <Form<MidtermExam>
+                    onSubmit={onSubmit}
+                    defaultValues={midtermExam ? toDefaultValues(midtermExam) : ({} as MidtermExam)}
+                    onReset={onClose}
+                >
+                    <FormSelect
+                        name="typeId"
+                        label="Тип промежуточной аттестации"
+                        options={typeOptions ?? []}
+                        required
+                    />
+                    <FormSelect name="studentId" label="Имя ученика" options={students ?? []} required />
+                    <FormInput name="date" label="Дата" type="date" required />
+                    <FormTextArea name="contents" label="Программа" required rows={7} />
+                    <FormTextArea name="result" label="Результат" required rows={5} />
+                    <div className={styles.buttonRow}>
+                        <Button type="reset">Отмена</Button>
+                        <Button type="submit" loading={isPending} disabled={isPending}>
+                            Сохранить
+                        </Button>
+                    </div>
+                </Form>
+            </PageLoader>
+        </div>
     );
 };
