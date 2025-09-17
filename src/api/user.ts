@@ -14,3 +14,8 @@ export async function login(request: LogInRequestDto): Promise<UserData> {
 export async function logout(): Promise<void> {
     await httpClient.post('/user/logout');
 }
+
+export async function getUserData(): Promise<UserData> {
+    const response = await httpClient.get('/user/data');
+    return response.data;
+}

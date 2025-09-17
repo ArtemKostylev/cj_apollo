@@ -5,7 +5,6 @@ import { Route as SubgroupsRoute } from '~/routes/_main.subgroups';
 import { Route as ReportsRoute } from '~/routes/_main.reports';
 import { Route as SpecializationsRoute } from '~/routes/_main.specializations';
 import { Route as JournalRoute } from '~/routes/_main.journal';
-import { Route as DataRoute } from '~/routes/_main.data';
 import { Route as ConsultRoute } from '~/routes/_main.consult';
 import { Route as GroupConsultRoute } from '~/routes/_main.groupConsult';
 import { Route as CompensationRoute } from '~/routes/_main.compensation';
@@ -47,11 +46,6 @@ export const USER_RESOURCES: Resources = {
 };
 
 export const ADMIN_RESOURCES: Resources = {
-    data: {
-        path: DataRoute.fullPath,
-        title: 'Изменение данных',
-        order: 0
-    },
     reports: {
         path: ReportsRoute.fullPath,
         title: 'Отчеты',

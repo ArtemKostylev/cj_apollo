@@ -22,7 +22,6 @@ import { Route as MainMidtermExamRouteImport } from './routes/_main.midtermExam'
 import { Route as MainJournalRouteImport } from './routes/_main.journal'
 import { Route as MainGroupJournalRouteImport } from './routes/_main.groupJournal'
 import { Route as MainGroupConsultRouteImport } from './routes/_main.groupConsult'
-import { Route as MainDataRouteImport } from './routes/_main.data'
 import { Route as MainConsultRouteImport } from './routes/_main.consult'
 import { Route as MainCompensationRouteImport } from './routes/_main.compensation'
 
@@ -90,11 +89,6 @@ const MainGroupConsultRoute = MainGroupConsultRouteImport.update({
   path: '/groupConsult',
   getParentRoute: () => MainRoute,
 } as any)
-const MainDataRoute = MainDataRouteImport.update({
-  id: '/data',
-  path: '/data',
-  getParentRoute: () => MainRoute,
-} as any)
 const MainConsultRoute = MainConsultRouteImport.update({
   id: '/consult',
   path: '/consult',
@@ -112,7 +106,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/compensation': typeof MainCompensationRoute
   '/consult': typeof MainConsultRoute
-  '/data': typeof MainDataRoute
   '/groupConsult': typeof MainGroupConsultRoute
   '/groupJournal': typeof MainGroupJournalRoute
   '/journal': typeof MainJournalRoute
@@ -129,7 +122,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/compensation': typeof MainCompensationRoute
   '/consult': typeof MainConsultRoute
-  '/data': typeof MainDataRoute
   '/groupConsult': typeof MainGroupConsultRoute
   '/groupJournal': typeof MainGroupJournalRoute
   '/journal': typeof MainJournalRoute
@@ -148,7 +140,6 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_main/compensation': typeof MainCompensationRoute
   '/_main/consult': typeof MainConsultRoute
-  '/_main/data': typeof MainDataRoute
   '/_main/groupConsult': typeof MainGroupConsultRoute
   '/_main/groupJournal': typeof MainGroupJournalRoute
   '/_main/journal': typeof MainJournalRoute
@@ -167,7 +158,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/compensation'
     | '/consult'
-    | '/data'
     | '/groupConsult'
     | '/groupJournal'
     | '/journal'
@@ -184,7 +174,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/compensation'
     | '/consult'
-    | '/data'
     | '/groupConsult'
     | '/groupJournal'
     | '/journal'
@@ -202,7 +191,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/_main/compensation'
     | '/_main/consult'
-    | '/_main/data'
     | '/_main/groupConsult'
     | '/_main/groupJournal'
     | '/_main/journal'
@@ -314,13 +302,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainGroupConsultRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/data': {
-      id: '/_main/data'
-      path: '/data'
-      fullPath: '/data'
-      preLoaderRoute: typeof MainDataRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/_main/consult': {
       id: '/_main/consult'
       path: '/consult'
@@ -341,7 +322,6 @@ declare module '@tanstack/react-router' {
 interface MainRouteChildren {
   MainCompensationRoute: typeof MainCompensationRoute
   MainConsultRoute: typeof MainConsultRoute
-  MainDataRoute: typeof MainDataRoute
   MainGroupConsultRoute: typeof MainGroupConsultRoute
   MainGroupJournalRoute: typeof MainGroupJournalRoute
   MainJournalRoute: typeof MainJournalRoute
@@ -356,7 +336,6 @@ interface MainRouteChildren {
 const MainRouteChildren: MainRouteChildren = {
   MainCompensationRoute: MainCompensationRoute,
   MainConsultRoute: MainConsultRoute,
-  MainDataRoute: MainDataRoute,
   MainGroupConsultRoute: MainGroupConsultRoute,
   MainGroupJournalRoute: MainGroupJournalRoute,
   MainJournalRoute: MainJournalRoute,

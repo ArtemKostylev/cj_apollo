@@ -21,7 +21,7 @@ export const MainLayout = () => {
 
     return (
         <div className={styles.appWrapper}>
-            <ErrorBoundary FallbackComponent={ErrorScreen}>
+            <ErrorBoundary fallbackRender={(props) => <ErrorScreen {...props} />}>
                 <Menu isOpen={menuVisible} onClose={() => setMenuVisible((prev) => !prev)} />
                 <div className={coverClassName} onClick={() => setMenuVisible((prev) => !prev)} />
                 <div className={styles.content}>

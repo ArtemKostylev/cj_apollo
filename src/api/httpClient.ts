@@ -4,7 +4,8 @@ import { Route as ForbiddenRoute } from '~/routes/forbidden';
 import { Route as LoginRoute } from '~/routes/login';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:4000/api'
+    baseURL: 'http://localhost:4000/api',
+    withCredentials: true
 });
 
 const errorInterceptor = (error: AxiosError) => {

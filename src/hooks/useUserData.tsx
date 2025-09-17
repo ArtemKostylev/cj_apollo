@@ -1,6 +1,8 @@
-import { useState, useContext, createContext, useMemo, type PropsWithChildren } from 'react';
-import { USER_ALIAS } from '../constants/localStorageAliases';
-import { UserData, userDataSchema } from '~/models/userData';
+import { useQuery } from '@tanstack/react-query';
+import { useState, useContext, createContext, useMemo, type PropsWithChildren, useLayoutEffect } from 'react';
+import { getUserData } from '~/api/user';
+import { PageLoader } from '~/components/pageLoader';
+import { UserData } from '~/models/userData';
 
 interface AuthContextType {
     userData: UserData;
@@ -12,40 +14,43 @@ interface AuthContextType {
 const AuthContext = createContext({} as AuthContextType);
 
 export const UserDataProvider = ({ children }: PropsWithChildren) => {
-    const cashedUser = useMemo(() => {
-        try {
-            const storageItem = localStorage.getItem(USER_ALIAS);
-            if (!storageItem) {
-                return undefined;
-            }
-            const userCache = JSON.parse(storageItem);
-            return userDataSchema.parse(userCache);
-        } catch (e) {
-            return undefined;
+    const [userData, setUserData] = useState<UserData | undefined>(undefined);
+    const [authenticated, setAuthenticated] = useState(false);
+
+    const { isLoading } = useQuery({
+        queryKey: ['userData'],
+        queryFn: async () => {
+            const data = await getUserData();
+            setUserData(data);
+            setAuthenticated(true);
         }
-    }, []);
+    });
 
-    const [userData, setUserData] = useState<UserData | undefined>(cashedUser);
-    const isAuthenticated = !!userData;
-
-    const logIn = (userData: UserData) => {
-        setUserData({ ...userData });
-        localStorage.setItem(USER_ALIAS, JSON.stringify(userData));
+    const logIn = (data: UserData) => {
+        setAuthenticated(true);
+        setUserData({ ...data });
     };
 
     const logOut = () => {
         setUserData(undefined);
-        localStorage.removeItem(USER_ALIAS);
+        setAuthenticated(false);
     };
 
-    const contextValue = {
-        userData: userData || ({} as UserData),
-        isAuthenticated,
-        logIn,
-        logOut
-    };
+    const contextValue = useMemo(
+        () => ({
+            userData: userData || ({} as UserData),
+            isAuthenticated: authenticated,
+            logIn,
+            logOut
+        }),
+        [userData, authenticated]
+    );
 
-    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+    return (
+        <PageLoader loading={isLoading} error={false}>
+            <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+        </PageLoader>
+    );
 };
 
 export const useUserData = () => {

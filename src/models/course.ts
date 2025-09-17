@@ -6,7 +6,8 @@ export const courseSchema = z.object({
     name: z.string(),
     group: z.boolean(),
     onlyHours: z.boolean().nullable(),
-    freezeVersion: freezeVersionSchema.optional()
+    freezeVersion: freezeVersionSchema.optional(),
+    excludeFromReport: z.boolean().optional()
 });
 
 export type Course = z.infer<typeof courseSchema>;

@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { ROLES, type Role } from '~/constants/roles';
 import { Route as JournalRoute } from './_main.journal';
-import { Route as DataRoute } from './_main.data';
+import { Route as SpecializationsRoute } from './_main.specializations';
 import { Route as LoginRoute } from './login';
 import { MainLayout } from '~/components/mainLayout';
 
@@ -16,8 +16,9 @@ export const Route = createFileRoute('/')({
                     search: {}
                 });
             } else if (role === ROLES.ADMIN) {
+                // TODO: replace redirect with correct route
                 return redirect({
-                    to: DataRoute.fullPath,
+                    to: SpecializationsRoute.fullPath,
                     search: {}
                 });
             }
