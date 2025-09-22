@@ -1,5 +1,7 @@
-import type { CourseForRelations } from '~/models/course';
+import type { Course, CourseForRelations } from '~/models/course';
 import { httpClient } from './httpClient';
+import type { OffsetResponse } from '~/models/offsetResponse';
+import type { OffsetRequest } from '~/models/offsetRequest';
 
 interface UpdateCourseRequestDto {
     id: number;
@@ -7,6 +9,13 @@ interface UpdateCourseRequestDto {
     group: boolean;
     excludeFromReport: boolean;
     onlyHours: boolean;
+}
+
+export async function getCourses(request: OffsetRequest): Promise<OffsetResponse<Course>> {
+    const response = await httpClient.get('/course/list', {
+        params: request
+    });
+    return response.data;
 }
 
 export async function getCoursesForRelations(): Promise<CourseForRelations[]> {

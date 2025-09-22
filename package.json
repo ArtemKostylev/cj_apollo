@@ -6,6 +6,7 @@
     "dependencies": {
         "@tanstack/react-query": "5.84.0",
         "@tanstack/react-router": "1.131.28",
+        "@tanstack/react-virtual": "^3.13.12",
         "axios": "1.12.2",
         "classnames": "2.5.1",
         "cross-env": "7.0.3",

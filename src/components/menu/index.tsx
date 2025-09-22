@@ -6,6 +6,8 @@ import { useMemo } from 'react';
 import { MenuItem } from '~/components/menu/MenuItem';
 import styles from './menu.module.css';
 import classNames from 'classnames';
+import { Route as SubgroupsRoute } from '~/routes/_main.subgroups';
+import { Route as GroupJournalRoute } from '~/routes/_main.groupJournal';
 
 const resourceMap: Record<string, any> = {
     [ROLES.ADMIN]: ADMIN_RESOURCES,
@@ -26,8 +28,8 @@ export default function Menu({ onClose, isOpen }: Props) {
         const res = { ...resourceMap[userData?.role] };
 
         if (userData.versions[academicYear]?.groupCourses.length > 0 && userData.role === Number(ROLES.TEACHER)) {
-            res.subgroups = SUBGROUPS_RESOURCE;
-            res.groupJournal = GROUP_JOURNAL_RESOURCE;
+            res[SubgroupsRoute.path] = SUBGROUPS_RESOURCE;
+            res[GroupJournalRoute.path] = GROUP_JOURNAL_RESOURCE;
         }
 
         return res;

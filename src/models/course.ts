@@ -5,7 +5,7 @@ export const courseSchema = z.object({
     id: z.number(),
     name: z.string(),
     group: z.boolean(),
-    onlyHours: z.boolean().nullable(),
+    onlyHours: z.boolean().optional(),
     freezeVersion: freezeVersionSchema.optional(),
     excludeFromReport: z.boolean().optional()
 });

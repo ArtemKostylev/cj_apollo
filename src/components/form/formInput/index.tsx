@@ -1,6 +1,6 @@
 import { FormItem } from '../formItem';
 import { Input } from '~/components/input';
-import { useFormContext } from 'react-hook-form';
+import { RegisterOptions, useFormContext } from 'react-hook-form';
 
 interface FormInputProps {
     name: string;
@@ -8,10 +8,13 @@ interface FormInputProps {
     className?: string;
     type: string;
     required?: boolean;
+    pattern?: RegisterOptions['pattern'];
+    minLength?: RegisterOptions['minLength'];
+    maxLength?: RegisterOptions['maxLength'];
 }
 
 export function FormInput(props: FormInputProps) {
-    const { label, type, name, className, required } = props;
+    const { label, type, name, className, required, pattern, minLength, maxLength } = props;
     const {
         register,
         formState: { errors }
@@ -20,7 +23,10 @@ export function FormInput(props: FormInputProps) {
     const error = errors[name]?.message?.toString();
 
     const registerProps = register(name, {
-        required: required
+        required: required,
+        pattern,
+        minLength,
+        maxLength
     });
 
     return (

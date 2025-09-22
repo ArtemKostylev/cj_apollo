@@ -1,0 +1,41 @@
+.scrollTableWrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.hasControls {
+    height: calc(100% - 90px) !important;
+}
+
+.scrollContainer {
+    height: calc(100% - 52px);
+    width: 100%;
+    overflow: auto;
+    position: relative;
+}
+
+.scrollTable {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.headerStyle {
+    height: 52px;
+    width: calc(100% - 5px);
+    border-collapse: collapse;
+    box-sizing: border-box;
+}
+
+.scrollTableBody {
+    position: relative;
+    width: 100%;
+}
+
+.selectedRow {
+    background-color: var(--color-shaded-white);
+}
+
+.selectable {
+    cursor: pointer;
+}

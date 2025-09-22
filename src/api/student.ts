@@ -1,6 +1,8 @@
 import type { DropdownOptionType } from '~/models/dropdownOption';
 import { httpClient } from './httpClient';
-import type { StudentGroupForRelations } from '~/models/student';
+import type { Student, StudentGroupForRelations, StudentFilter } from '~/models/student';
+import type { OffsetResponse } from '~/models/offsetResponse';
+import type { OffsetRequest } from '~/models/offsetRequest';
 
 interface GetStudentsRequest {
     teacherId: number;
@@ -24,6 +26,13 @@ export async function getStudents(params: GetStudentsRequest): Promise<DropdownO
 
 export async function getStudentsForRelations(): Promise<StudentGroupForRelations[]> {
     const response = await httpClient.get('/student/forRelations');
+    return response.data;
+}
+
+export async function getStudentsList(
+    params: OffsetRequest & { filters: StudentFilter | undefined }
+): Promise<OffsetResponse<Student>> {
+    const response = await httpClient.post(`/student/list`, params);
     return response.data;
 }
 

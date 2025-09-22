@@ -1,10 +1,6 @@
 import { MouseEventHandler, RefObject } from 'react';
 import { useUserData } from '~/hooks/useUserData';
-import {
-    ADMIN_RESOURCES,
-    SUBGROUPS_RESOURCE,
-    USER_RESOURCES
-} from '~/constants/resources';
+import { ALL_RESOURCES } from '~/constants/resources';
 import styles from './header.module.css';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Route as LoginRoute } from '~/routes/login';
@@ -13,9 +9,7 @@ import { logout } from '~/api/user';
 
 function getHeaderFromRoute(pathname: string) {
     const key = pathname.replace('/', '');
-
-    const route =
-        USER_RESOURCES[key] || ADMIN_RESOURCES[key] || SUBGROUPS_RESOURCE;
+    const route = ALL_RESOURCES[key];
     return route.title.toUpperCase() || 'КЛАССНЫЙ ЖУРНАЛ';
 }
 
@@ -39,11 +33,7 @@ export const Header = ({ onMenuClick, menuRef }: Props) => {
 
     return (
         <div className={styles.header}>
-            <div
-                onClick={onMenuClick}
-                className={styles.menuButton}
-                ref={menuRef}
-            >
+            <div onClick={onMenuClick} className={styles.menuButton} ref={menuRef}>
                 МЕНЮ
             </div>
             <div className={styles.headerTitle}>

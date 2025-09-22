@@ -13,7 +13,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as MainRouteImport } from './routes/_main'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MainUsersRouteImport } from './routes/_main.users'
+import { Route as MainTeachersRouteImport } from './routes/_main.teachers'
 import { Route as MainSubgroupsRouteImport } from './routes/_main.subgroups'
+import { Route as MainStudentsRouteImport } from './routes/_main.students'
 import { Route as MainSpecializationsRouteImport } from './routes/_main.specializations'
 import { Route as MainReportsRouteImport } from './routes/_main.reports'
 import { Route as MainNotesRouteImport } from './routes/_main.notes'
@@ -22,6 +25,7 @@ import { Route as MainMidtermExamRouteImport } from './routes/_main.midtermExam'
 import { Route as MainJournalRouteImport } from './routes/_main.journal'
 import { Route as MainGroupJournalRouteImport } from './routes/_main.groupJournal'
 import { Route as MainGroupConsultRouteImport } from './routes/_main.groupConsult'
+import { Route as MainCoursesRouteImport } from './routes/_main.courses'
 import { Route as MainConsultRouteImport } from './routes/_main.consult'
 import { Route as MainCompensationRouteImport } from './routes/_main.compensation'
 
@@ -44,9 +48,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MainUsersRoute = MainUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainTeachersRoute = MainTeachersRouteImport.update({
+  id: '/teachers',
+  path: '/teachers',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainSubgroupsRoute = MainSubgroupsRouteImport.update({
   id: '/subgroups',
   path: '/subgroups',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainStudentsRoute = MainStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
   getParentRoute: () => MainRoute,
 } as any)
 const MainSpecializationsRoute = MainSpecializationsRouteImport.update({
@@ -89,6 +108,11 @@ const MainGroupConsultRoute = MainGroupConsultRouteImport.update({
   path: '/groupConsult',
   getParentRoute: () => MainRoute,
 } as any)
+const MainCoursesRoute = MainCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainConsultRoute = MainConsultRouteImport.update({
   id: '/consult',
   path: '/consult',
@@ -106,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/compensation': typeof MainCompensationRoute
   '/consult': typeof MainConsultRoute
+  '/courses': typeof MainCoursesRoute
   '/groupConsult': typeof MainGroupConsultRoute
   '/groupJournal': typeof MainGroupJournalRoute
   '/journal': typeof MainJournalRoute
@@ -114,7 +139,10 @@ export interface FileRoutesByFullPath {
   '/notes': typeof MainNotesRoute
   '/reports': typeof MainReportsRoute
   '/specializations': typeof MainSpecializationsRoute
+  '/students': typeof MainStudentsRoute
   '/subgroups': typeof MainSubgroupsRoute
+  '/teachers': typeof MainTeachersRoute
+  '/users': typeof MainUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -122,6 +150,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/compensation': typeof MainCompensationRoute
   '/consult': typeof MainConsultRoute
+  '/courses': typeof MainCoursesRoute
   '/groupConsult': typeof MainGroupConsultRoute
   '/groupJournal': typeof MainGroupJournalRoute
   '/journal': typeof MainJournalRoute
@@ -130,7 +159,10 @@ export interface FileRoutesByTo {
   '/notes': typeof MainNotesRoute
   '/reports': typeof MainReportsRoute
   '/specializations': typeof MainSpecializationsRoute
+  '/students': typeof MainStudentsRoute
   '/subgroups': typeof MainSubgroupsRoute
+  '/teachers': typeof MainTeachersRoute
+  '/users': typeof MainUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,6 +172,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_main/compensation': typeof MainCompensationRoute
   '/_main/consult': typeof MainConsultRoute
+  '/_main/courses': typeof MainCoursesRoute
   '/_main/groupConsult': typeof MainGroupConsultRoute
   '/_main/groupJournal': typeof MainGroupJournalRoute
   '/_main/journal': typeof MainJournalRoute
@@ -148,7 +181,10 @@ export interface FileRoutesById {
   '/_main/notes': typeof MainNotesRoute
   '/_main/reports': typeof MainReportsRoute
   '/_main/specializations': typeof MainSpecializationsRoute
+  '/_main/students': typeof MainStudentsRoute
   '/_main/subgroups': typeof MainSubgroupsRoute
+  '/_main/teachers': typeof MainTeachersRoute
+  '/_main/users': typeof MainUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -158,6 +194,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/compensation'
     | '/consult'
+    | '/courses'
     | '/groupConsult'
     | '/groupJournal'
     | '/journal'
@@ -166,7 +203,10 @@ export interface FileRouteTypes {
     | '/notes'
     | '/reports'
     | '/specializations'
+    | '/students'
     | '/subgroups'
+    | '/teachers'
+    | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -174,6 +214,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/compensation'
     | '/consult'
+    | '/courses'
     | '/groupConsult'
     | '/groupJournal'
     | '/journal'
@@ -182,7 +223,10 @@ export interface FileRouteTypes {
     | '/notes'
     | '/reports'
     | '/specializations'
+    | '/students'
     | '/subgroups'
+    | '/teachers'
+    | '/users'
   id:
     | '__root__'
     | '/'
@@ -191,6 +235,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_main/compensation'
     | '/_main/consult'
+    | '/_main/courses'
     | '/_main/groupConsult'
     | '/_main/groupJournal'
     | '/_main/journal'
@@ -199,7 +244,10 @@ export interface FileRouteTypes {
     | '/_main/notes'
     | '/_main/reports'
     | '/_main/specializations'
+    | '/_main/students'
     | '/_main/subgroups'
+    | '/_main/teachers'
+    | '/_main/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -239,11 +287,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_main/users': {
+      id: '/_main/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof MainUsersRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/teachers': {
+      id: '/_main/teachers'
+      path: '/teachers'
+      fullPath: '/teachers'
+      preLoaderRoute: typeof MainTeachersRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/subgroups': {
       id: '/_main/subgroups'
       path: '/subgroups'
       fullPath: '/subgroups'
       preLoaderRoute: typeof MainSubgroupsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/students': {
+      id: '/_main/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof MainStudentsRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/specializations': {
@@ -302,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainGroupConsultRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/courses': {
+      id: '/_main/courses'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof MainCoursesRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/consult': {
       id: '/_main/consult'
       path: '/consult'
@@ -322,6 +398,7 @@ declare module '@tanstack/react-router' {
 interface MainRouteChildren {
   MainCompensationRoute: typeof MainCompensationRoute
   MainConsultRoute: typeof MainConsultRoute
+  MainCoursesRoute: typeof MainCoursesRoute
   MainGroupConsultRoute: typeof MainGroupConsultRoute
   MainGroupJournalRoute: typeof MainGroupJournalRoute
   MainJournalRoute: typeof MainJournalRoute
@@ -330,12 +407,16 @@ interface MainRouteChildren {
   MainNotesRoute: typeof MainNotesRoute
   MainReportsRoute: typeof MainReportsRoute
   MainSpecializationsRoute: typeof MainSpecializationsRoute
+  MainStudentsRoute: typeof MainStudentsRoute
   MainSubgroupsRoute: typeof MainSubgroupsRoute
+  MainTeachersRoute: typeof MainTeachersRoute
+  MainUsersRoute: typeof MainUsersRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
   MainCompensationRoute: MainCompensationRoute,
   MainConsultRoute: MainConsultRoute,
+  MainCoursesRoute: MainCoursesRoute,
   MainGroupConsultRoute: MainGroupConsultRoute,
   MainGroupJournalRoute: MainGroupJournalRoute,
   MainJournalRoute: MainJournalRoute,
@@ -344,7 +425,10 @@ const MainRouteChildren: MainRouteChildren = {
   MainNotesRoute: MainNotesRoute,
   MainReportsRoute: MainReportsRoute,
   MainSpecializationsRoute: MainSpecializationsRoute,
+  MainStudentsRoute: MainStudentsRoute,
   MainSubgroupsRoute: MainSubgroupsRoute,
+  MainTeachersRoute: MainTeachersRoute,
+  MainUsersRoute: MainUsersRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
