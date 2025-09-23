@@ -92,7 +92,7 @@ export const Students = () => {
         if (selectedRow && confirm('Вы уверены, что хотите удалить ученика?')) {
             deleteStudentMutation(selectedRow.id);
         }
-    }, [deleteStudentMutation]);
+    }, [deleteStudentMutation, selectedRow]);
 
     return (
         <PageWrapper>
