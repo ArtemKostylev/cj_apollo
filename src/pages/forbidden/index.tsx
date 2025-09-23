@@ -1,4 +1,4 @@
-import styles from './styles/forbidden.module.css';
+import styles from './forbidden.module.css';
 
 export function Forbidden() {
     return (
@@ -9,5 +9,5 @@ export function Forbidden() {
             </div>
             <h2>Данная страница недоступна для вашей роли!</h2>
         </div>
-    )
+    );
 }
