@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { TableHeader } from '~/components/table1/tableHeader';
+import { TableHeader } from '~/components/table/tableHeader';
 import { DATE_FORMAT_WEEKDAY, DATE_FORMAT_SHORT, QUARTERS_RU, type Quarters } from '~/constants/date';
 import { ru } from 'date-fns/locale';
 

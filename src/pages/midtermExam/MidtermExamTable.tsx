@@ -1,4 +1,4 @@
-import { Table } from '~/components/table1';
+import { Table } from '~/components/table';
 import { useCallback, useMemo } from 'react';
 import { PageLoader } from '~/components/pageLoader';
 import { useUserData } from '~/hooks/useUserData';
@@ -10,8 +10,8 @@ import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { PERIODS_NAMES, PERIODS_RU, YEARS, YEARS_NAMES, type AcademicYears, type Periods } from '~/constants/date';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { TableHeader } from '~/components/table1/tableHeader';
-import { NameHeader } from '~/components/table1/nameHeader';
+import { TableHeader } from '~/components/table/tableHeader';
+import { NameHeader } from '~/components/table/nameHeader';
 import type { MidtermExam } from '~/models/midtermExam';
 import { deleteMidtermExam, getMidtermExams } from '~/api/midtermExam';
 import { MidtermExamRow } from './MidtermExamRow';

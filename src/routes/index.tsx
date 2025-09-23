@@ -3,7 +3,7 @@ import { ROLES, type Role } from '~/constants/roles';
 import { Route as JournalRoute } from './_main.journal';
 import { Route as SpecializationsRoute } from './_main.specializations';
 import { Route as LoginRoute } from './login';
-import { MainLayout } from '~/components/mainLayout1';
+import { MainLayout } from '~/components/mainLayout';
 
 export const Route = createFileRoute('/')({
     component: MainLayout,

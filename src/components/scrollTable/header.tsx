@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { TableHeader } from '../table1/tableHeader';
+import { TableHeader } from '../table/tableHeader';
 import styles from './scrollTable.module.css';
 
 export interface ScrollTableColumn {
