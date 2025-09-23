@@ -7,7 +7,7 @@ import path from 'path';
 export default defineConfig({
     base: '/new',
     build: {
-        outDir: '/var/www/akostylev/html'
+        outDir: '/var/www/akostylev/html/new'
     },
     resolve: {
         alias: {
