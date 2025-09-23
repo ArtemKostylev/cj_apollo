@@ -104,7 +104,12 @@ export const Students = () => {
                     text="Редактировать ученика"
                 />
                 <ControlButton onClick={() => setModalState(MODAL_TYPES.FILTERS)} text="Фильтровать" />
-                <ControlButton onClick={onDeleteStudent} disabled={!selectedRow} text="Удалить ученика" />
+                <ControlButton
+                    onClick={onDeleteStudent}
+                    disabled={!selectedRow}
+                    loading={isDeleteStudentPending}
+                    text="Удалить ученика"
+                />
             </TableControls>
             <ScrollTable
                 data={data?.pages.flatMap((page) => page.rows) || []}

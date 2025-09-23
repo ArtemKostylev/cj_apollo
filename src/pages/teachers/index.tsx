@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getTeachers } from '~/api/teacher';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteTeacher, getTeachers } from '~/api/teacher';
 import { useCallback, useState } from 'react';
 import { PageWrapper } from '~/components/pageWrapper';
 import { TableControls } from '~/components/tableControls';
@@ -45,10 +45,25 @@ export const Teachers = () => {
         initialPageParam: 0
     });
 
+    const queryClient = useQueryClient();
+
+    const { mutate: deleteTeacherMutation, isPending: isDeleteTeacherPending } = useMutation({
+        mutationFn: (id: number) => deleteTeacher(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['teachers'] });
+        }
+    });
+
     const onCloseModal = useCallback(() => {
         setModalType(undefined);
         setSelectedTeacher(undefined);
     }, []);
+
+    const onDeleteTeacher = useCallback(() => {
+        if (selectedTeacher && confirm('Вы уверены, что хотите удалить преподавателя?')) {
+            deleteTeacherMutation(selectedTeacher.id);
+        }
+    }, [deleteTeacherMutation, selectedTeacher]);
 
     return (
         <PageWrapper>
@@ -58,6 +73,12 @@ export const Teachers = () => {
                     onClick={() => setModalType(MODAL_TYPES.EDIT)}
                     text="Редактировать преподавателя"
                     disabled={!selectedTeacher}
+                />
+                <ControlButton
+                    onClick={onDeleteTeacher}
+                    disabled={!selectedTeacher}
+                    loading={isDeleteTeacherPending}
+                    text="Удалить преподавателя"
                 />
             </TableControls>
             <ScrollTable
