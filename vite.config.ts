@@ -6,6 +6,9 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
     base: '/',
+    build: {
+        outDir: '/var/www/akostylev/html'
+    },
     resolve: {
         alias: {
             '~': path.resolve('src')
