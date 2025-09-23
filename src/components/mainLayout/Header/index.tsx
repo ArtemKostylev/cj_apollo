@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { logout } from '~/api/user';
 
 function getHeaderFromRoute(pathname: string) {
-    const key = pathname.replace('/', '');
+    const key = pathname.replace('/new', '');
     const route = ALL_RESOURCES[key];
     return route.title.toUpperCase() || 'КЛАССНЫЙ ЖУРНАЛ';
 }
