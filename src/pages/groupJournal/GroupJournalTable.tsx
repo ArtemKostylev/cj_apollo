@@ -1,4 +1,4 @@
-import { Table } from '~/components/table';
+import { Table } from '~/components/table1';
 import type { GroupJournalTable as GroupJournalTableType } from '~/models/groupJournal';
 import { GroupJournalHeader } from './GroupJournalHeader';
 import { Periods, type AcademicYears } from '~/constants/date';

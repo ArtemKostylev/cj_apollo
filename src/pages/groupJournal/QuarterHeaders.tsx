@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Periods, Quarters, QUARTERS_RU } from '../../constants/date';
 import styles from './quarterHeader.module.css';
-import { TableHeader } from '~/components/table/tableHeader';
+import { TableHeader } from '~/components/table1/tableHeader';
 
 type Props = {
     period: Periods;

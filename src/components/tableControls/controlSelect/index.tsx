@@ -2,9 +2,9 @@ import { useCallback, useRef, useState } from 'react';
 import { useOnClickOutside } from '~/hooks/useOnClickOutside';
 import styles from './controlSelect.module.css';
 import controlStyles from '../tableControls.module.css';
-import { Dropdown } from '~/components/dropdown';
+import { Dropdown } from '~/components/dropdown1';
 import type { DropdownOptionType } from '~/models/dropdownOption';
-import { DROPDOWN_THEMES } from '~/components/dropdown/dropdownTheme';
+import { DROPDOWN_THEMES } from '~/components/dropdown1/dropdownTheme';
 
 export type SelectProps = {
     options?: DropdownOptionType[];

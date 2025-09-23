@@ -1,5 +1,5 @@
-import { TableHeader } from '~/components/table/tableHeader';
-import { NameHeader } from '~/components/table/nameHeader';
+import { TableHeader } from '~/components/table1/tableHeader';
+import { NameHeader } from '~/components/table1/nameHeader';
 import { MONTHS_IN_PERIODS, Months, Periods, MONTHS_NAMES, type AcademicYears } from '~/constants/date';
 import { QuarterHeaders } from './QuarterHeaders';
 import { getGroupHeaderColumnId, sortMonths } from './utils';

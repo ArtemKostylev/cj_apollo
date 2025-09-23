@@ -1,7 +1,7 @@
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Fragment, useEffect, useMemo, useRef } from 'react';
 import styles from './scrollTable.module.css';
-import { Table } from '../table';
+import { Table } from '../table1';
 import { ScrollTableHeader, type ScrollTableColumn } from './header';
 import { TableCell } from '../cells/tableCell';
 import classNames from 'classnames';
