@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, memo } from 'react';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { Dropdown } from '../../dropdown';
-import { TableCell } from '../tableCell';
+import { TableCell } from '../tableCell1';
 import styles from './selectCell.module.css';
 import type { DropdownOptionType } from '~/models/dropdownOption';
 
