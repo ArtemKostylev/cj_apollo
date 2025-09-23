@@ -2,7 +2,7 @@ import type { DropdownOptionType } from './dropdownOption';
 
 export interface StudentForRelations {
     id: number;
-    studentName: string;
+    name: string;
 }
 
 export interface StudentGroupForRelations {

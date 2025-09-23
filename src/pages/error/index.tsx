@@ -15,7 +15,6 @@ export const ErrorScreen = ({ error }: FallbackProps) => {
             displayMessage = 'Ошибка';
             break;
     }
-    console.log(error.message);
     return (
         <div className={styles.errorContainer}>
             <h1 className={styles.errorCode}>{displayCode}</h1>

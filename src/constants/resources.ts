@@ -13,6 +13,7 @@ import { Route as UsersRoute } from '~/routes/_main.users';
 import { Route as TeachersRoute } from '~/routes/_main.teachers';
 import { Route as CoursesRoute } from '~/routes/_main.courses';
 import { Route as StudentsRoute } from '~/routes/_main.students';
+import { Route as RelationsRoute } from '~/routes/_main.relations';
 
 type Resources = Record<string, { path: string; title: string; order: number }>;
 
@@ -65,25 +66,30 @@ export const ADMIN_RESOURCES: Resources = {
         title: 'Ученики',
         order: 2
     },
+    [RelationsRoute.path]: {
+        path: RelationsRoute.fullPath,
+        title: 'Классы',
+        order: 3
+    },
     [ReportsRoute.path]: {
         path: ReportsRoute.fullPath,
         title: 'Отчеты',
-        order: 3
+        order: 4
     },
     [SpecializationsRoute.path]: {
         path: SpecializationsRoute.fullPath,
         title: 'Специальности',
-        order: 4
+        order: 5
     },
     [MidtermExamTypesRoute.path]: {
         path: MidtermExamTypesRoute.fullPath,
         title: 'Типы промежуточной аттестации',
-        order: 5
+        order: 6
     },
     [UsersRoute.path]: {
         path: UsersRoute.fullPath,
         title: 'Пользователи',
-        order: 6
+        order: 7
     }
 };
 

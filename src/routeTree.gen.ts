@@ -19,6 +19,7 @@ import { Route as MainSubgroupsRouteImport } from './routes/_main.subgroups'
 import { Route as MainStudentsRouteImport } from './routes/_main.students'
 import { Route as MainSpecializationsRouteImport } from './routes/_main.specializations'
 import { Route as MainReportsRouteImport } from './routes/_main.reports'
+import { Route as MainRelationsRouteImport } from './routes/_main.relations'
 import { Route as MainNotesRouteImport } from './routes/_main.notes'
 import { Route as MainMidtermExamTypesRouteImport } from './routes/_main.midtermExamTypes'
 import { Route as MainMidtermExamRouteImport } from './routes/_main.midtermExam'
@@ -76,6 +77,11 @@ const MainSpecializationsRoute = MainSpecializationsRouteImport.update({
 const MainReportsRoute = MainReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainRelationsRoute = MainRelationsRouteImport.update({
+  id: '/relations',
+  path: '/relations',
   getParentRoute: () => MainRoute,
 } as any)
 const MainNotesRoute = MainNotesRouteImport.update({
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/midtermExam': typeof MainMidtermExamRoute
   '/midtermExamTypes': typeof MainMidtermExamTypesRoute
   '/notes': typeof MainNotesRoute
+  '/relations': typeof MainRelationsRoute
   '/reports': typeof MainReportsRoute
   '/specializations': typeof MainSpecializationsRoute
   '/students': typeof MainStudentsRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/midtermExam': typeof MainMidtermExamRoute
   '/midtermExamTypes': typeof MainMidtermExamTypesRoute
   '/notes': typeof MainNotesRoute
+  '/relations': typeof MainRelationsRoute
   '/reports': typeof MainReportsRoute
   '/specializations': typeof MainSpecializationsRoute
   '/students': typeof MainStudentsRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/_main/midtermExam': typeof MainMidtermExamRoute
   '/_main/midtermExamTypes': typeof MainMidtermExamTypesRoute
   '/_main/notes': typeof MainNotesRoute
+  '/_main/relations': typeof MainRelationsRoute
   '/_main/reports': typeof MainReportsRoute
   '/_main/specializations': typeof MainSpecializationsRoute
   '/_main/students': typeof MainStudentsRoute
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/midtermExam'
     | '/midtermExamTypes'
     | '/notes'
+    | '/relations'
     | '/reports'
     | '/specializations'
     | '/students'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/midtermExam'
     | '/midtermExamTypes'
     | '/notes'
+    | '/relations'
     | '/reports'
     | '/specializations'
     | '/students'
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/_main/midtermExam'
     | '/_main/midtermExamTypes'
     | '/_main/notes'
+    | '/_main/relations'
     | '/_main/reports'
     | '/_main/specializations'
     | '/_main/students'
@@ -329,6 +341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainReportsRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/relations': {
+      id: '/_main/relations'
+      path: '/relations'
+      fullPath: '/relations'
+      preLoaderRoute: typeof MainRelationsRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/notes': {
       id: '/_main/notes'
       path: '/notes'
@@ -405,6 +424,7 @@ interface MainRouteChildren {
   MainMidtermExamRoute: typeof MainMidtermExamRoute
   MainMidtermExamTypesRoute: typeof MainMidtermExamTypesRoute
   MainNotesRoute: typeof MainNotesRoute
+  MainRelationsRoute: typeof MainRelationsRoute
   MainReportsRoute: typeof MainReportsRoute
   MainSpecializationsRoute: typeof MainSpecializationsRoute
   MainStudentsRoute: typeof MainStudentsRoute
@@ -423,6 +443,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainMidtermExamRoute: MainMidtermExamRoute,
   MainMidtermExamTypesRoute: MainMidtermExamTypesRoute,
   MainNotesRoute: MainNotesRoute,
+  MainRelationsRoute: MainRelationsRoute,
   MainReportsRoute: MainReportsRoute,
   MainSpecializationsRoute: MainSpecializationsRoute,
   MainStudentsRoute: MainStudentsRoute,

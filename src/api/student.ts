@@ -1,6 +1,6 @@
 import type { DropdownOptionType } from '~/models/dropdownOption';
 import { httpClient } from './httpClient';
-import type { Student, StudentGroupForRelations, StudentFilter } from '~/models/student';
+import type { Student, StudentFilter, StudentGroupForRelations } from '~/models/student';
 import type { OffsetResponse } from '~/models/offsetResponse';
 import type { OffsetRequest } from '~/models/offsetRequest';
 

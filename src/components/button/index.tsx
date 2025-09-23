@@ -12,11 +12,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = (props: ButtonProps) => {
-    const { loading, children, className, theme = BUTTON_THEMES.DEFAULT, ...rest } = props;
+    const { loading, children, className, disabled, theme = BUTTON_THEMES.DEFAULT, ...rest } = props;
 
     const buttonClassName = classNames(className, buttonStyles.button, {
         [buttonThemes.default]: theme === BUTTON_THEMES.DEFAULT,
-        [buttonThemes.control]: theme === BUTTON_THEMES.CONTROL
+        [buttonThemes.control]: theme === BUTTON_THEMES.CONTROL,
+        [buttonStyles.disabled]: disabled
     });
 
     const loaderOverlayClassName = classNames(loaderOverlayStyles.loaderOverlay, {
@@ -24,7 +25,7 @@ export const Button = (props: ButtonProps) => {
     });
 
     return (
-        <button className={buttonClassName} {...rest}>
+        <button className={buttonClassName} {...rest} disabled={disabled}>
             {loading && (
                 <div className={loaderOverlayClassName}>
                     <Spinner />

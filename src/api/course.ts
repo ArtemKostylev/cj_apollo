@@ -2,6 +2,7 @@ import type { Course, CourseForRelations } from '~/models/course';
 import { httpClient } from './httpClient';
 import type { OffsetResponse } from '~/models/offsetResponse';
 import type { OffsetRequest } from '~/models/offsetRequest';
+import type { ResponseWithIds } from '~/models/responseWithIds';
 
 interface UpdateCourseRequestDto {
     id: number;
@@ -18,7 +19,7 @@ export async function getCourses(request: OffsetRequest): Promise<OffsetResponse
     return response.data;
 }
 
-export async function getCoursesForRelations(): Promise<CourseForRelations[]> {
+export async function getCoursesForRelations(): Promise<ResponseWithIds<CourseForRelations>> {
     const response = await httpClient.get('/course/forRelations');
     return response.data;
 }

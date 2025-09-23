@@ -70,7 +70,11 @@ export const Courses = () => {
         <PageWrapper>
             <TableControls>
                 <ControlButton onClick={() => setModalType(MODAL_TYPES.ADD)} text="Добавить предмет" />
-                <ControlButton onClick={() => setModalType(MODAL_TYPES.EDIT)} text="Редактировать предмет" />
+                <ControlButton
+                    onClick={() => setModalType(MODAL_TYPES.EDIT)}
+                    text="Редактировать предмет"
+                    disabled={!selectedCourse}
+                />
             </TableControls>
             <ScrollTable
                 data={data?.pages.flatMap((page) => page.rows) ?? []}

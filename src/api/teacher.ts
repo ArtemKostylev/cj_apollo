@@ -28,7 +28,6 @@ export async function getTeachers(request: GetTeachersRequest): Promise<OffsetRe
 }
 
 export async function updateTeacher(teacher: UpdateTeacherRequestDto): Promise<void> {
-    console.log(teacher);
     await httpClient.post('/teacher', teacher);
 }
 

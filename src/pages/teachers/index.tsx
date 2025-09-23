@@ -76,9 +76,7 @@ export const Teachers = () => {
                 onClose={onCloseModal}
                 title={modalType === MODAL_TYPES.ADD ? 'Добавить преподавателя' : 'Редактировать преподавателя'}
             >
-                {modalType === MODAL_TYPES.ADD && (
-                        <TeacherEditModal onClose={onCloseModal} teacher={undefined} />
-                )}
+                {modalType === MODAL_TYPES.ADD && <TeacherEditModal onClose={onCloseModal} teacher={undefined} />}
                 {modalType === MODAL_TYPES.EDIT && (
                     <TeacherEditModal onClose={onCloseModal} teacher={selectedTeacher} />
                 )}

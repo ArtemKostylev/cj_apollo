@@ -55,6 +55,7 @@ export const Users = () => {
                 fetchNextPage={fetchNextPage}
                 rowSize={100}
                 columns={columns}
+                hasControls
             />
             <Modal opened={registerModalOpen} onClose={onClose} title="Регистрация пользователя">
                 <RegisterUser onClose={onClose} />
