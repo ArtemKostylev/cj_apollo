@@ -1,9 +1,9 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 import { DateCell } from '~/components/cells/dateCell';
-import { TableCell } from '~/components/cells/tableCell1';
+import { TableCell } from '~/components/cells/tableCell';
 import type { ChangedConsult } from '~/models/consult';
 import type { AcademicYears } from '~/constants/date';
-import { SelectCell } from '../selectCell1';
+import { SelectCell } from '../selectCell';
 
 type Props = {
     columnId: string;

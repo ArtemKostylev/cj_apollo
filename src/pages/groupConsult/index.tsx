@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { getAllGroupConsults, updateGroupConsults } from '~/api/groupConsult';
 import { ClassCell } from '~/components/cells/classCell';
-import { DateSelectCell } from '~/components/cells/dateSelectCell1';
+import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';

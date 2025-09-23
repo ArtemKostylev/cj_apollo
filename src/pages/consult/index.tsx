@@ -12,7 +12,7 @@ import { ControlButton } from '~/components/tableControls/controlButton';
 import { Table } from '~/components/table';
 import { TableHeader } from '~/components/table/tableHeader';
 import type { ChangedConsult } from '~/models/consult';
-import { DateSelectCell } from '~/components/cells/dateSelectCell1';
+import { DateSelectCell } from '~/components/cells/dateSelectCell';
 import { PageLoader } from '~/components/pageLoader';
 import { NameCell } from '~/components/cells/nameCell';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';

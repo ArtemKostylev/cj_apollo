@@ -2,7 +2,7 @@ import type { Quarters } from '~/constants/date';
 import type { ChangedQuarterMark, QuarterMark } from '~/models/quarterMark';
 import { MARKS_OPTIONS } from '~/constants/selectCellOptions';
 import { useCallback } from 'react';
-import { SelectCell } from '~/components/cells/selectCell1';
+import { SelectCell } from '~/components/cells/selectCell';
 
 interface Props {
     mark: QuarterMark | undefined;

@@ -3,7 +3,7 @@ import { useUserData } from '~/hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { MONTHS_NAMES, MONTHS_RU, YEARS, YEARS_NAMES, type AcademicYears, type Months } from '~/constants/date';
 import { getCurrentAcademicMonth, getCurrentAcademicYear } from '~/utils/academicDate';
-import { TableCell } from '~/components/cells/tableCell1';
+import { TableCell } from '~/components/cells/tableCell';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ControlSelect } from '~/components/tableControls/controlSelect';
 import { toSelectOptions } from '~/utils/toSelectOptions';

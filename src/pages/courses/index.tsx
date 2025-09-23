@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { getCourses } from '~/api/course';
-import { TableCell } from '~/components/cells/tableCell1';
+import { TableCell } from '~/components/cells/tableCell';
 import { Modal } from '~/components/modal';
 import { PageWrapper } from '~/components/pageWrapper';
 import { ScrollTable } from '~/components/scrollTable';

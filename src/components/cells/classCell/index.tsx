@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { PROGRAMS } from '~/constants/programs';
-import { TableCell } from '../tableCell1';
+import { TableCell } from '../tableCell';
 
 type Props = {
     classNum: number | undefined;

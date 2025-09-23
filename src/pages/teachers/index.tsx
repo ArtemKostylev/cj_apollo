@@ -6,7 +6,7 @@ import { TableControls } from '~/components/tableControls';
 import { ControlButton } from '~/components/tableControls/controlButton';
 import { ScrollTable } from '~/components/scrollTable';
 import type { ScrollTableColumn } from '~/components/scrollTable/header';
-import { TableCell } from '~/components/cells/tableCell1';
+import { TableCell } from '~/components/cells/tableCell';
 import { Modal } from '~/components/modal';
 import { TeacherEditModal } from './TeacherEditModal';
 import type { Teacher as TeacherModel } from '~/models/teacher';

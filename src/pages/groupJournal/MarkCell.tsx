@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import { SelectCell } from '~/components/cells/selectCell1';
+import { SelectCell } from '~/components/cells/selectCell';
 import { getMarkColumnId } from './utils';
 import type { DropdownOptionType } from '~/models/dropdownOption';
 

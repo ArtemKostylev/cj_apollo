@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { TableCell } from '~/components/cells/tableCell1';
+import { TableCell } from '~/components/cells/tableCell';
 import styles from './midtermExam.module.css';
 import type { MidtermExam } from '~/models/midtermExam';
 

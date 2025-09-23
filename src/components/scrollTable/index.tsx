@@ -3,7 +3,7 @@ import { Fragment, useEffect, useMemo, useRef } from 'react';
 import styles from './scrollTable.module.css';
 import { Table } from '../table';
 import { ScrollTableHeader, type ScrollTableColumn } from './header';
-import { TableCell } from '../cells/tableCell1';
+import { TableCell } from '../cells/tableCell';
 import classNames from 'classnames';
 import { Spinner } from '../spinner';
 
