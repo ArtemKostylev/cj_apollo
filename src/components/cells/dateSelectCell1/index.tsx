@@ -3,7 +3,7 @@ import { DateCell } from '~/components/cells/dateCell';
 import { TableCell } from '~/components/cells/tableCell';
 import type { ChangedConsult } from '~/models/consult';
 import type { AcademicYears } from '~/constants/date';
-import { SelectCell } from '../selectCell';
+import { SelectCell } from '../selectCell1';
 
 type Props = {
     columnId: string;
