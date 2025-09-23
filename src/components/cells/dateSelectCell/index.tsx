@@ -20,7 +20,7 @@ type Props = {
     readonly?: boolean;
 };
 
-const HOURS = [0, 1, 1.5, 2, 2.5, 3].map((it) => ({
+const HOURS = [0, 0.5, 1, 1.5, 2].map((it) => ({
     value: it.toString(),
     text: it.toString()
 }));

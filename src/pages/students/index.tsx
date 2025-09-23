@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
-import { getStudentsList } from '~/api/student';
+import { deleteStudent, getStudentsList } from '~/api/student';
 import { TableCell } from '~/components/cells/tableCell';
 import { Modal } from '~/components/modal';
 import { PageWrapper } from '~/components/pageWrapper';
@@ -50,12 +50,19 @@ const MODAL_TYPES = {
     FILTERS: 'filters'
 };
 
+const MODAL_TITLES = {
+    [MODAL_TYPES.ADD]: 'Добавить ученика',
+    [MODAL_TYPES.EDIT]: 'Редактировать ученика',
+    [MODAL_TYPES.FILTERS]: 'Фильтровать учеников'
+};
 type ModalType = (typeof MODAL_TYPES)[keyof typeof MODAL_TYPES];
 
 export const Students = () => {
     const [selectedRow, setSelectedRow] = useState<Student | undefined>(undefined);
     const [modalState, setModalState] = useState<ModalType | undefined>(undefined);
     const [filters, setFilters] = useState<StudentFilter | undefined>(undefined);
+
+    const queryClient = useQueryClient();
 
     const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
         queryKey: ['students', filters],
@@ -74,6 +81,19 @@ export const Students = () => {
         setModalState(undefined);
     }, []);
 
+    const { mutate: deleteStudentMutation, isPending: isDeleteStudentPending } = useMutation({
+        mutationFn: (id: number) => deleteStudent(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['students'] });
+        }
+    });
+
+    const onDeleteStudent = useCallback(() => {
+        if (selectedRow && confirm('Вы уверены, что хотите удалить ученика?')) {
+            deleteStudentMutation(selectedRow.id);
+        }
+    }, [deleteStudentMutation]);
+
     return (
         <PageWrapper>
             <TableControls>
@@ -84,6 +104,7 @@ export const Students = () => {
                     text="Редактировать ученика"
                 />
                 <ControlButton onClick={() => setModalState(MODAL_TYPES.FILTERS)} text="Фильтровать" />
+                <ControlButton onClick={onDeleteStudent} disabled={!selectedRow} text="Удалить ученика" />
             </TableControls>
             <ScrollTable
                 data={data?.pages.flatMap((page) => page.rows) || []}
@@ -96,11 +117,7 @@ export const Students = () => {
                 onRowClick={setSelectedRow}
                 selectedRow={selectedRow}
             />
-            <Modal
-                opened={!!modalState}
-                onClose={onClose}
-                title={modalState === MODAL_TYPES.ADD ? 'Добавить ученика' : 'Редактировать ученика'}
-            >
+            <Modal opened={!!modalState} onClose={onClose} title={MODAL_TITLES[modalState as ModalType]}>
                 {modalState === MODAL_TYPES.ADD && <StudentEditModal student={undefined} onClose={onClose} />}
                 {modalState === MODAL_TYPES.EDIT && <StudentEditModal student={selectedRow} onClose={onClose} />}
                 {modalState === MODAL_TYPES.FILTERS && <StudentsFilters filter={filters} onFilter={onFilter} />}
