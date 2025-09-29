@@ -8,7 +8,8 @@ import { useMutation } from '@tanstack/react-query';
 import { logout } from '~/api/user';
 
 function getHeaderFromRoute(pathname: string) {
-    const key = pathname.replace('/new/', '');
+    const baseUrl = import.meta.env.VITE_BASE_URL ? import.meta.env.VITE_BASE_URL + '/' : '/';
+    const key = pathname.replace(baseUrl, '');
     const route = ALL_RESOURCES[key];
     return route.title.toUpperCase() || 'КЛАССНЫЙ ЖУРНАЛ';
 }

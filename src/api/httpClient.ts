@@ -4,7 +4,7 @@ import { Route as ForbiddenRoute } from '~/routes/forbidden';
 import { Route as LoginRoute } from '~/routes/login';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://akostylev.com/api',
+    baseURL: import.meta.env.VITE_API_URL || 'https://akostylev.com/api',
     withCredentials: true
 });
 
