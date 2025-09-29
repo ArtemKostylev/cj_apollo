@@ -6,9 +6,9 @@ import path from 'path';
 // https://vite.dev/config/
 export default ({ mode }) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
-    
+
     return defineConfig({
-        base: process.env.VITE_BASE_URL || '/new',
+        base: process.env.VITE_BASE_URL || "/",
         build: {
             outDir: '/var/www/akostylev/html/new'
         },

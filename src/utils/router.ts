@@ -3,7 +3,7 @@ import { routeTree } from '~/routeTree.gen';
 
 export const router = createRouter({
     routeTree,
-    basepath: import.meta.env.VITE_BASE_URL || '/new',
+    basepath: import.meta.env.VITE_BASE_URL || '/',
     context: {
         isAuthenticated: false,
         role: undefined
