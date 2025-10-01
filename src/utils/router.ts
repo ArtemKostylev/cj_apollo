@@ -6,7 +6,7 @@ export const router = createRouter({
     basepath: import.meta.env.VITE_BASE_URL || '/',
     context: {
         isAuthenticated: false,
-        role: undefined
+        role: undefined,
     }
 });
 

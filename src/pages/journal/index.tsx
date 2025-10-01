@@ -30,6 +30,7 @@ import { getJournal, updateJournal, type UpdateJournalParams } from '~/api/journ
 import { format } from 'date-fns';
 import { useBlockPageLeave } from '~/hooks/useBlockPageLeave';
 import { useFilter } from '~/hooks/useFilter';
+import styles from './journal.module.css';
 
 export const Journal = () => {
     const { userData } = useUserData();
@@ -44,6 +45,15 @@ export const Journal = () => {
 
     const currentVersion = userData.versions[year];
     const { courses, coursesById } = currentVersion;
+
+    if (!courses.length) {
+        return <PageWrapper>
+            <div className={styles.noCourses}>
+                <h1>Нет индивидуальных занятий</h1>
+            </div>
+        </PageWrapper>
+    }
+
     const courseSelectOptions = useMemo(() => toSelectOptions(courses, 'id', 'name'), [courses]);
 
     const [course, setCourse] = useFilter<number>(courses[0].id, 'course', Number);
