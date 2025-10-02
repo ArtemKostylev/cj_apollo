@@ -10,7 +10,12 @@ export default ({ mode }) => {
     return defineConfig({
         base: process.env.VITE_BASE_URL || "/",
         build: {
-            outDir: '/var/www/akostylev/html/new'
+            outDir: '/var/www/akostylev/html/new',
+            rollupOptions: {
+                output: {
+                    chunkFileNames: () => `[name]-[hash]-${Date.now().toString()}.js`
+                }
+            },
         },
         resolve: {
             alias: {
