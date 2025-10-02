@@ -18,7 +18,7 @@ export const MidtermExamRow = (props: Props) => {
 
     return (
         <tr className={className} onClick={() => onRowClick(item)}>
-            <TableCell>{item.index + 1}</TableCell>
+            <TableCell>{item.index}</TableCell>
             <TableCell>{item.studentName}</TableCell>
             <TableCell>{item.studentClass}</TableCell>
             <TableCell>{item.date}</TableCell>
