@@ -19,5 +19,4 @@
 
 .disabled {
     color: var(--color-light-gray) !important;
-    cursor: not-allowed;
 }

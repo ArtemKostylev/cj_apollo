@@ -9,7 +9,7 @@ import { Form, FormSelect, FormTextArea, FormInput } from '~/components/form';
 import type { MidtermExamType } from '~/models/midtermExamType';
 import { toSelectOptions } from '~/utils/toSelectOptions';
 import { DATE_FORMAT, INPUT_DATE_FORMAT } from '~/constants/date';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 interface Props {
     midtermExam: MidtermExam | undefined;
@@ -19,10 +19,12 @@ interface Props {
 }
 
 function toDefaultValues(midtermExam: MidtermExam) {
+    const date = parse(midtermExam.date, DATE_FORMAT, new Date());
+    const formattedDate = format(date, INPUT_DATE_FORMAT);
     return {
         typeId: midtermExam.typeId,
         studentId: midtermExam.studentId,
-        date: format(new Date(midtermExam.date), INPUT_DATE_FORMAT),
+        date: formattedDate,
         contents: midtermExam.contents,
         result: midtermExam.result
     };
@@ -53,8 +55,9 @@ export const UpdateForm = (props: Props) => {
     });
 
     const onSubmit = (values: MidtermExam) => {
+        const date = parse(values.date, INPUT_DATE_FORMAT, new Date());
         updateMidtermExamMutation({
-            date: format(new Date(values.date), DATE_FORMAT),
+            date: format(date, DATE_FORMAT),
             id: midtermExam?.id || 0,
             typeId: values.typeId,
             teacherId,
