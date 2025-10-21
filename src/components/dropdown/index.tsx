@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const Dropdown = (props: Props) => {
-    const { opened, options, onSelect, width = '100%', theme = DROPDOWN_THEMES.DEFAULT, shrinkOutOfBounds = true } = props;
+    const { opened, options, onSelect, width = '100%', theme = DROPDOWN_THEMES.DEFAULT, shrinkOutOfBounds} = props;
     const [inverted, setInverted] = useState(false);
     const [outOfRightBounds, setOutOfRightBounds] = useState(false);
     const [visible, setVisible] = useState(opened);

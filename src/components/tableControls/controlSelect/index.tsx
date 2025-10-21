@@ -42,7 +42,7 @@ export const ControlSelect = (props: SelectProps) => {
             <button className={styles.selectButton} onClick={toggleOpened}>
                 {buttonText}
             </button>
-            <Dropdown theme={DROPDOWN_THEMES.CONTROL} opened={opened} options={options} onSelect={onSelectInternal} shrinkOutOfBounds={false} />
+            <Dropdown theme={DROPDOWN_THEMES.CONTROL} opened={opened} options={options} onSelect={onSelectInternal} shrinkOutOfBounds />
         </div>
     );
 };
