@@ -15,10 +15,11 @@ interface Props {
     disabled?: boolean;
     changedDates?: Record<string, string[]>;
     readonly?: boolean;
+    unlimited?: boolean;
 }
 
 export const DateCell = memo((props: Props) => {
-    const { initialValue, onChange: onChangeProp, columnId, month, year, disabled, changedDates, readonly } = props;
+    const { initialValue, onChange: onChangeProp, columnId, month, year, disabled, changedDates, readonly, unlimited } = props;
 
     const [pickerValue, setPickerValue] = useState<Date | undefined>(undefined);
 
@@ -44,7 +45,7 @@ export const DateCell = memo((props: Props) => {
     );
 
     const { minDate, maxDate } = useMemo(() => {
-        if (disabled || !month) {
+        if (disabled || !month || unlimited) {
             return { minDate: undefined, maxDate: undefined };
         }
 
@@ -56,7 +57,7 @@ export const DateCell = memo((props: Props) => {
             minDate: startDate,
             maxDate: endDate
         };
-    }, [disabled, month, year]);
+    }, [disabled, month, year, unlimited]);
 
     const shouldRerenderDates = !!changedDates && month !== undefined && JSON.stringify(changedDates[month]);
     const excludeDates = useMemo(() => {

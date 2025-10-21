@@ -7,6 +7,7 @@ import type { DropdownOptionType } from '~/models/dropdownOption';
 import { DROPDOWN_THEMES, type DropdownTheme } from './dropdownTheme';
 
 type Props = {
+    shrinkOutOfBounds?: boolean;
     opened: boolean;
     options: DropdownOptionType[];
     onSelect: (value: string) => void;
@@ -15,10 +16,11 @@ type Props = {
 };
 
 export const Dropdown = (props: Props) => {
-    const { opened, options, onSelect, width = '100%', theme = DROPDOWN_THEMES.DEFAULT } = props;
+    const { opened, options, onSelect, width = '100%', theme = DROPDOWN_THEMES.DEFAULT, shrinkOutOfBounds } = props;
     const [inverted, setInverted] = useState(false);
     const [outOfRightBounds, setOutOfRightBounds] = useState(false);
     const [visible, setVisible] = useState(opened);
+    const [dropdownHeight, setDropdownHeight] = useState('fit-content');
 
     const ref = useRef(null);
 
@@ -29,12 +31,16 @@ export const Dropdown = (props: Props) => {
         const height = window.innerHeight || document.documentElement.clientHeight;
         const width = window.innerWidth || document.documentElement.clientWidth;
 
-        if (bounds.bottom > height) {
+        if (bounds.bottom > height && !shrinkOutOfBounds) {
             setInverted(true);
         }
 
-        if (bounds.right > width) {
+        if (bounds.right > width && !shrinkOutOfBounds) {
             setOutOfRightBounds(true);
+        }
+
+        if (shrinkOutOfBounds && bounds.bottom > height) {
+            setDropdownHeight(`${height - bounds.top}px`);
         }
     }, [setInverted, visible]);
 
@@ -50,7 +56,7 @@ export const Dropdown = (props: Props) => {
     });
 
     return (
-        <div className={className} style={{ width }} ref={ref}>
+        <div className={className} style={{ width, height: dropdownHeight }} ref={ref}>
             {options.map((option) => (
                 <DropdownOption
                     theme={theme}

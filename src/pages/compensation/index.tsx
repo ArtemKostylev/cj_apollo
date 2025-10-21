@@ -135,6 +135,7 @@ export const Compensation = () => {
                                             <TableCell>
                                                 {replacement && (
                                                     <DateCell
+                                                        unlimited
                                                         initialValue={replacement.date}
                                                         columnId={`${rowIndex}-${replacement.journalEntryId}`}
                                                         onChange={onDateChange}
