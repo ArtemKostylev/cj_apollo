@@ -19,7 +19,7 @@
 
 .default {
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 0);
 }
 
 .opened {
@@ -27,10 +27,15 @@
 }
 
 .inverted {
-    transform: translateY(calc(-100% - 50px));
+    transform: translateY(-50%, calc(-100% - 50px));
 }
 
 .outOfRightBounds {
     left: 0;
-    transform: translateX(-25%);
+    transform: translateX(-25%, 0);
+}
+
+.outOfAllBounds {
+    left: 0;
+    transform: translate(-25%, calc(-100% - 50px));
 }
