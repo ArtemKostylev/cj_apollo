@@ -24,8 +24,9 @@ export const getCurrentAcademicPeriod = (): Periods => {
 };
 
 export const getCurrentAcademicYear = (): AcademicYears => {
+    debugger;
     const year = new Date().getFullYear();
-    return getCurrentMonth() > Months.AUGUST ? (year as AcademicYears) : ((year - 1) as AcademicYears);
+    return Number(getCurrentMonth()) > Number(Months.AUGUST) ? (year as AcademicYears) : ((year - 1) as AcademicYears);
 };
 
 export const academicYearToCalendarByMonth = (year: AcademicYears, month: Months): number => {
