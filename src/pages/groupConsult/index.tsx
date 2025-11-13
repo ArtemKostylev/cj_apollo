@@ -118,7 +118,7 @@ export const GroupConsult = () => {
                                 {Array.from({ length: 8 }, (_, index) => (
                                     <DateSelectCell
                                         readonly={readonly}
-                                        columnId={`${group}-${index}`}
+                                        columnId={`${group.group}-${index}`}
                                         onChange={onCellValueChange}
                                         consultId={group.consults?.[index]?.id}
                                         date={group.consults?.[index]?.date}

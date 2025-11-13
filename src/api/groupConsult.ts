@@ -45,5 +45,5 @@ export async function getAllGroupConsults(
 export async function updateGroupConsults(
     params: UpdateGroupConsultParams
 ): Promise<void> {
-    await httpClient.post('/groupConsults', params);
+    await httpClient.post('/groupConsult', params);
 }
