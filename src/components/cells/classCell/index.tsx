@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { PROGRAMS } from '~/constants/programs';
 import { TableCell } from '../tableCell';
+import styles from './classCell.module.css';
 
 type Props = {
     classNum: number | undefined;
@@ -15,5 +16,5 @@ export const ClassCell = memo(({ classNum, program, subgroup, archived }: Props)
     const subgroupStr = subgroup || '';
     const archivedStr = archived ? '(А)' : '';
 
-    return <TableCell disabled={archived}>{`${classNumStr} ${programStr} ${subgroupStr} ${archivedStr}`}</TableCell>;
+    return <TableCell className={styles.classCell} disabled={archived}>{`${classNumStr} ${programStr} ${subgroupStr} ${archivedStr}`}</TableCell>;
 });
