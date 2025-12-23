@@ -6,7 +6,7 @@
     padding-inline: 8px;
     height: 36px;
     color: var(--color-asphalt-gray);
-    font-size: 16px;
+    font-size: var(--font-size-s);
     font-weight: 400;
 }
 

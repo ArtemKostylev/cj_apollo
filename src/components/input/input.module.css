@@ -6,7 +6,7 @@
     border: 1px solid var(--color-cloud-gray);
     padding-inline: 8px;
     color: var(--color-asphalt-gray);
-    font-size: 16px;
+    font-size: var(--font-size-s);
     font-weight: 400;
 }
 

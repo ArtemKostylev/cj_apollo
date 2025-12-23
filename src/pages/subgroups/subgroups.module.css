@@ -24,7 +24,7 @@
 
 .item p {
     margin-right: 2rem;
-    font-size: 20px;
+    font-size: var(--font-size-m);
     width: 15vw;
     text-align: left;
 }

@@ -6,7 +6,7 @@
     border-collapse: collapse;
     background-color: #eff0f0;
     font-weight: 500;
-    font-size: 16px;
+    font-size: var(--font-size-s);
 }
 
 .hoverEnabled:hover {

@@ -10,7 +10,7 @@
 }
 
 .controlItem {
-    font-size: 14px;
+    font-size: var(--font-size-xs);
     display: flex;
     justify-content: center;
     width: 200px;
