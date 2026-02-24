@@ -72,7 +72,9 @@ export const Notes = () => {
     }, [data?.text]);
 
     const saveButtonDisabled = isPending || isLoading;
-    const readonly = year !== getCurrentAcademicYear();
+    //const readonly = year !== getCurrentAcademicYear();
+
+    const readonly = false;
 
     return (
         <PageWrapper>

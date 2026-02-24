@@ -41,7 +41,7 @@ export const MarkCell = (props: Props) => {
             options={options}
             onSelect={onSelect}
             isWeekend={isWeekend}
-            disabled={archived}
+            disabled={archived || readonly}
         />
     );
 };

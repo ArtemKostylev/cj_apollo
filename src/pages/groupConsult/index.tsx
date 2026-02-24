@@ -60,7 +60,7 @@ export const GroupConsult = () => {
                 consultId: consult.id ?? undefined,
                 class: consult.class as number,
                 program: consult.program as string,
-                subgroup: consult.subgroup as number || 0,
+                subgroup: (consult.subgroup as number) || 0,
                 year: year
             }));
 
@@ -76,7 +76,8 @@ export const GroupConsult = () => {
     });
 
     const saveButtonDisabled = isUpdatePending || isConsultsLoading;
-    const readonly = year !== getCurrentAcademicYear();
+    //const readonly = year !== getCurrentAcademicYear();
+    const readonly = false;
 
     return (
         <PageWrapper>

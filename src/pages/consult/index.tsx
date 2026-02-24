@@ -78,7 +78,8 @@ export const Consult = () => {
     }, []);
 
     const saveButtonDisabled = isUpdatePending || isConsultsLoading;
-    const readonly = year !== getCurrentAcademicYear();
+    //const readonly = year !== getCurrentAcademicYear();
+    const readonly = false;
 
     return (
         <PageWrapper>

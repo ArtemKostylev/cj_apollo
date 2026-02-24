@@ -47,11 +47,13 @@ export const Journal = () => {
     const { courses, coursesById } = currentVersion;
 
     if (!courses.length) {
-        return <PageWrapper>
-            <div className={styles.noCourses}>
-                <h1>Нет индивидуальных занятий</h1>
-            </div>
-        </PageWrapper>
+        return (
+            <PageWrapper>
+                <div className={styles.noCourses}>
+                    <h1>Нет индивидуальных занятий</h1>
+                </div>
+            </PageWrapper>
+        );
     }
 
     const courseSelectOptions = useMemo(() => toSelectOptions(courses, 'id', 'name'), [courses]);
@@ -102,8 +104,11 @@ export const Journal = () => {
         changedQuarterMarks.current = {};
     }, [updateJournalMt]);
 
-    const readonly = year !== getCurrentAcademicYear();
-    const saveButtonDisabled = isPending || isLoading || readonly;
+    //const readonly = year !== getCurrentAcademicYear();
+    //const saveButtonDisabled = isPending || isLoading || readonly;
+
+    const readonly = false;
+    const saveButtonDisabled = isPending || isLoading;
 
     return (
         <PageWrapper>
