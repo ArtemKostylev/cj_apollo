@@ -68,8 +68,8 @@ export const Notes = () => {
     });
 
     useEffect(() => {
-        data?.text && setValue(data?.text);
-    }, [data?.text]);
+        setValue(data?.text || '');
+    }, [data]);
 
     const saveButtonDisabled = isPending || isLoading;
     //const readonly = year !== getCurrentAcademicYear();
@@ -85,7 +85,12 @@ export const Notes = () => {
                     onSelect={onCourseChange}
                 />
                 <ControlSelect options={YEARS} buttonText={YEARS_NAMES[year]} onSelect={onYearChange} />
-                <ControlButton text="Сохранить" onClick={onSave} disabled={saveButtonDisabled || readonly} loading={isPending} />
+                <ControlButton
+                    text="Сохранить"
+                    onClick={onSave}
+                    disabled={saveButtonDisabled || readonly}
+                    loading={isPending}
+                />
             </TableControls>
             <PageLoader loading={isLoading} error={isError}>
                 <div className={styles.textAreaContainer}>
