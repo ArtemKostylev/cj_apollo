@@ -52,7 +52,8 @@ export const GroupJournalTable = memo((props: Props) => {
         return year !== getCurrentAcademicYear();
     }, [year]);
 
-    const readonly = year !== getCurrentAcademicYear();
+    //const readonly = year !== getCurrentAcademicYear();
+    const readonly = false;
 
     const onDateChange = useCallback(
         (columnId: string, value: string) => {
