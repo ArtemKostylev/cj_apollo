@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { PageLoader } from '~/components/pageLoader';
 import { PageWrapper } from '~/components/pageWrapper';
 import { TableControls } from '~/components/tableControls';
@@ -61,29 +61,29 @@ export const GroupJournal = () => {
         }
     });
 
-    const onSave = useCallback(() => {
+    const onSave = () => {
         updateJournalMt({
             marks: Object.values(changedMarks.current),
             quarterMarks: Object.values(changedQuarterMarks.current)
         });
-    }, [updateJournalMt]);
+    };
 
-    const onMarkChange = useCallback((columnId: string, mark: ChangedMark) => {
+    const onMarkChange = (columnId: string, mark: ChangedMark) => {
         changedMarks.current[columnId] = mark;
-    }, []);
+    }
 
-    const onQuarterMarkChange = useCallback((columnId: string, quarterMark: ChangedQuarterMark) => {
+    const onQuarterMarkChange = (columnId: string, quarterMark: ChangedQuarterMark) => {
         changedQuarterMarks.current[columnId] = quarterMark;
-    }, []);
+    }
 
-    const onMarkDateChange = useCallback((columnId: string, mark: ChangedMark) => {
+    const onMarkDateChange = (columnId: string, mark: ChangedMark) => {
         const changedMark = changedMarks.current[columnId];
         if (changedMark) {
             changedMark.date = mark.date;
         } else {
             changedMarks.current[columnId] = mark;
         }
-    }, []);
+    }
 
     const saveButtonDisabled = isPending || isLoading;
 

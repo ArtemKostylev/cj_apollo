@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { PageWrapper } from '~/components/pageWrapper';
 import { Table } from '~/components/table';
 import { TableControls } from '~/components/tableControls';
@@ -67,13 +67,13 @@ export const Journal = () => {
     useBlockPageLeave(changedMarks.current);
     useBlockPageLeave(changedQuarterMarks.current);
 
-    const onMarkChange = useCallback((clientId: string, mark: ChangedMark) => {
+    const onMarkChange = (clientId: string, mark: ChangedMark) => {
         changedMarks.current[clientId] = mark;
-    }, []);
+    };
 
-    const onQuarterMarkChange = useCallback((clientId: string, quarterMark: ChangedQuarterMark) => {
+    const onQuarterMarkChange = (clientId: string, quarterMark: ChangedQuarterMark) => {
         changedQuarterMarks.current[clientId] = quarterMark;
-    }, []);
+    };
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['journal', currentVersion.teacherId, course, year, month],
@@ -95,14 +95,14 @@ export const Journal = () => {
         }
     });
 
-    const onSave = useCallback(() => {
+    const onSave = () => {
         updateJournalMt({
             marks: Object.values(changedMarks.current),
             quarterMarks: Object.values(changedQuarterMarks.current)
         });
         changedMarks.current = {};
         changedQuarterMarks.current = {};
-    }, [updateJournalMt]);
+    };
 
     //const readonly = year !== getCurrentAcademicYear();
     //const saveButtonDisabled = isPending || isLoading || readonly;

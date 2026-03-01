@@ -8,14 +8,14 @@ export default ({ mode }) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
     return defineConfig({
-        base: process.env.VITE_BASE_URL || "/",
+        base: process.env.VITE_BASE_URL || '/',
         build: {
             outDir: '/var/www/akostylev/html/new',
             rollupOptions: {
                 output: {
                     chunkFileNames: () => `[name]-[hash]-${Date.now().toString()}.js`
                 }
-            },
+            }
         },
         resolve: {
             alias: {
@@ -33,9 +33,8 @@ export default ({ mode }) => {
             port: 3000,
             proxy: {
                 '/api': {
-                    target: 'http://127.0.0.1:8000',
-                    changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/api/, '')
+                    target: 'http://127.0.0.1:4000',
+                    changeOrigin: true
                 }
             }
         }

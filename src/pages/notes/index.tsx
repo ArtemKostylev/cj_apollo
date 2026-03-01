@@ -1,7 +1,7 @@
 import { useUserData } from '../../hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { PageWrapper } from '~/components/pageWrapper';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type AcademicYears, YEARS, YEARS_NAMES } from '../../constants/date';
 import { getCurrentAcademicYear } from '../../utils/academicDate';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -32,22 +32,22 @@ export const Notes = () => {
 
     useBlockPageLeave(value);
 
-    const onYearChange = useCallback((year: string | number) => {
+    const onYearChange = (year: string | number) => {
         setYear(year as AcademicYears);
         setCourse(userData.versions[year as AcademicYears].allCourses[0].id);
-    }, []);
+    };
 
-    const onCourseChange = useCallback((course: string | number) => {
+    const onCourseChange = (course: string | number) => {
         setCourse(course as number);
-    }, []);
+    };
 
-    const onTextAreaValueChange = useCallback((e: any) => {
+    const onTextAreaValueChange =(e: any) => {
         setValue(e.target.value);
-    }, []);
+    };
 
     const { mutate: update, isPending } = useMutation({ mutationFn: updateNote });
 
-    const onSave = useCallback(() => {
+    const onSave = () => {
         update({
             noteId: data?.id || 0,
             text: value,
@@ -55,7 +55,7 @@ export const Notes = () => {
             courseId: coursesById[course].id,
             year
         });
-    }, [value, course, year, currentVersion.teacherId]);
+    };
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['note', year, course],

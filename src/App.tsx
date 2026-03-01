@@ -1,8 +1,8 @@
 import { UserDataProvider, useUserData } from '~/hooks/useUserData';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MutationCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { router } from '~/utils/router';
 import { RouterProvider } from '@tanstack/react-router';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import '~/styles/index.css';
@@ -10,6 +10,11 @@ import '~/styles/colors.css';
 import '~/styles/typography.css';
 
 const queryClient = new QueryClient({
+    mutationCache: new MutationCache({
+        onError: () => {
+            toast.error('Ошибка сохранения данных');
+        }
+    }),
     defaultOptions: {
         queries: {
             refetchOnWindowFocus: false,

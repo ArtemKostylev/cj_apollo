@@ -48,9 +48,7 @@ export const GroupJournalTable = memo((props: Props) => {
     const [actualDates, setActualDates] = useState(dates.current);
     const quarters = useMemo(() => getQuartersInPeriod(period), [period]);
 
-    const datesDisabled = useMemo(() => {
-        return year !== getCurrentAcademicYear();
-    }, [year]);
+    const datesDisabled = false;
 
     //const readonly = year !== getCurrentAcademicYear();
     const readonly = false;

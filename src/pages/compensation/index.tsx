@@ -40,18 +40,18 @@ export const Compensation = () => {
 
     const [course, setCourse] = useFilter<number>(courses[0].id, 'course', (val) => Number(val) as number);
 
-    const onYearChange = useCallback((year: string | number) => {
+    const onYearChange = (year: string | number) => {
         setYear(year as AcademicYears);
         setCourse(userData.versions[year as AcademicYears].courses[0].id);
-    }, []);
+    };
 
-    const onCourseChange = useCallback((course: string | number) => {
+    const onCourseChange = (course: string | number) => {
         setCourse(Number(course) as number);
-    }, []);
+    };
 
-    const onMonthChange = useCallback((month: string | number) => {
+    const onMonthChange = (month: string | number) => {
         setMonth(month as Months);
-    }, []);
+    };
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['replacementList', year, month, course],
