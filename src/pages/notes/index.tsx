@@ -53,7 +53,7 @@ export const Notes = () => {
             text: value,
             teacherId: currentVersion.teacherId,
             courseId: coursesById[course].id,
-            year
+            year: Number(year)
         });
     };
 

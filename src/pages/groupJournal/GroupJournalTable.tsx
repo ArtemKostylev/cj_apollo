@@ -14,7 +14,7 @@ import {
     sortMonths
 } from './utils';
 import { HOURS_OPTIONS, MARKS_OPTIONS } from '~/constants/selectCellOptions';
-import { getCurrentAcademicYear, getQuartersInPeriod } from '~/utils/academicDate';
+import { getQuartersInPeriod } from '~/utils/academicDate';
 import type { ChangedQuarterMark } from '~/models/quarterMark';
 import styles from './groupJournal.module.css';
 import { NameCell } from '~/components/cells/nameCell';
