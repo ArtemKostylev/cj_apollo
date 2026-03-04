@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useMemo, useRef } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
 import { useUserData } from '~/hooks/useUserData';
 import { TableControls } from '~/components/tableControls';
 import { MONTHS_NAMES, MONTHS_RU, YEARS, YEARS_NAMES, type AcademicYears, type Months } from '~/constants/date';
@@ -35,7 +35,7 @@ export const Compensation = () => {
     const courses = currentVersion.allCourses;
     const coursesById = currentVersion.coursesById;
 
-    const changedReplacements = useRef<Record<number, ChangedReplacement>>({});
+    const changedReplacements = useRef<Record<string, ChangedReplacement>>({});
     useBlockPageLeave(changedReplacements.current);
 
     const [course, setCourse] = useFilter<number>(courses[0].id, 'course', (val) => Number(val) as number);
@@ -71,27 +71,24 @@ export const Compensation = () => {
         }
     });
 
-    const save = useCallback(() => {
+    const save = () => {
         updateReplacementsMutation(Object.values(changedReplacements.current));
-    }, [updateReplacementsMutation]);
+    };
 
-    const onDateChange = useCallback(
-        (columnId: string, value: string) => {
-            const [rowIndex, journalEntryId] = columnId.split('-');
-            const journalEntry = data?.rows[Number(rowIndex)].replacements[Number(journalEntryId)];
+    const onDateChange = (columnId: string, value: string) => {
+        const [rowIndex, journalEntryId] = columnId.split('-');
+        const journalEntry = data?.rows[Number(rowIndex)].replacements[Number(journalEntryId)];
 
-            if (!journalEntry) {
-                throw new Error('Journal entry not found');
-            }
+        if (!journalEntry) {
+            throw new Error('Journal entry not found');
+        }
 
-            changedReplacements.current[Number(rowIndex)] = {
-                id: journalEntry.id ?? 0,
-                journalEntryId: journalEntry.journalEntryId,
-                date: value
-            };
-        },
-        [data]
-    );
+        changedReplacements.current[columnId] = {
+            id: journalEntry.id ?? 0,
+            journalEntryId: journalEntry.journalEntryId,
+            date: value
+        };
+    };
 
     const saveButtonDisabled = isPending || isLoading;
     //const readonly = year !== getCurrentAcademicYear();
