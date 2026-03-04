@@ -62,7 +62,8 @@ export const MidtermExamTable = (props: Props) => {
         }
     }, [selectedRecord]);
 
-    const readonly = year !== getCurrentAcademicYear();
+    //const readonly = year !== getCurrentAcademicYear();
+    const readonly = false;
 
     return (
         <>
