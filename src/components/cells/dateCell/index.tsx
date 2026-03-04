@@ -32,7 +32,12 @@ export const DateCell = memo((props: Props) => {
     }, [pickerValue, month, year]);
 
     useEffect(() => {
-        initialValue && setPickerValue(parse(initialValue, DATE_FORMAT, new Date()));
+        if (!initialValue) {
+            setPickerValue(undefined);
+            return;
+        }
+
+        setPickerValue(parse(initialValue, DATE_FORMAT, new Date()));
     }, [initialValue]);
 
     const onChange = useCallback(
